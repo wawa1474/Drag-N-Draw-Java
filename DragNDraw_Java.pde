@@ -15,20 +15,54 @@ boolean noKeyboard = false;
 
 int mapN = 0;
 int totalImages = 39;
+int rowLength = 16;
+int tileRow = 0;
+int tileN = 1;
+
+int fullTotalImages = (int)(Math.ceil((double)(totalImages / rowLength)) * rowLength) - 1;
+
+int drawnTiles = 0;
+boolean drawAll = false;
+int FPSCutOff = 2;
+
+int tileGroupStep = 0;
+boolean tileGroupDeleting = false;
+int sx1, sy1, sx2, sy2;
+int tileGroupXLines = 0;
+int tileGroupYLines = 0;
+
+int tileBorderNumber = 0;
+
+int offsetX = 0, offsetY = 0;
 
 int scl = 32;
 
 int cols = 100;
 int rows = 100;
 
-int borderThickness = 4;
+int SX = 0, SY = 0;
+int mX, mY, pX, Py;
+int fV = 1;
+int UIRight = 22;
+int UIBottom = 2;
+
+int scrollAmount = 5;
+
+PImage[] img = new PImage[totalImages];
+mTile mapTiles[];
+mTile mapTilesCopy[];
 PImage BACKGROUND;
+PImage missingTexture;
 
 tileUI UI = new tileUI();
 canvasBG BG = new canvasBG();
+int borderThickness = 4;
 
 void setup(){
   BACKGROUND = loadImage("assets/background.png");
+  for(int i = 0; i <= totalImages; i++){
+    img[i] = loadImage("assets/" + i + ".png");
+  }
   size(960,540);//X, Y
   //fullScreen();
   surface.setResizable(true);
@@ -75,3 +109,21 @@ class canvasBG{
     stroke(0);//BLACK
   }
 }
+
+class mTile{//Tile Object
+  int x, y;
+  int image;
+  int r, g, b;
+  boolean clear;
+
+  public mTile(int x, int y, int image, int r, int g, int b, boolean clear){//Tile Object
+    this.x = x;//Store X Position
+    this.y = y;//Store Y Position
+    this.image = image;//Store Image Number
+    this.r = r;//Store Red Value
+    this.g = g;//Store Green Value
+    this.b = b;//Store Blue Value
+    this.clear = clear;//Is the tile clear
+    //this.lore = lore || 0;//The LORE? of the tile
+  }//mTile() END
+}//mTile() END
