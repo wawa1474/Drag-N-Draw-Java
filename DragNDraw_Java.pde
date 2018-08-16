@@ -18,6 +18,7 @@ int totalImages = 39;
 int rowLength = 16;
 int tileRow = 0;
 int tileN = 1;
+int totalTiles = 0;
 
 int fullTotalImages = (int)(Math.ceil((double)(totalImages / rowLength)) * rowLength) - 1;
 
@@ -48,8 +49,8 @@ int UIBottom = 2;
 
 int scrollAmount = 5;
 
-PImage[] img = new PImage[totalImages];
-mTile mapTiles[];
+PImage[] img = new PImage[totalImages + 1];
+mTile[] mapTiles = new mTile[25000];
 mTile mapTilesCopy[];
 PImage BACKGROUND;
 PImage missingTexture;
@@ -66,6 +67,7 @@ void setup(){
   size(960,540);//X, Y
   //fullScreen();
   surface.setResizable(true);
+  mapTiles[totalTiles++] = new mTile(256,256,3,127,127,127,false);
 }
 
 void draw(){
@@ -75,6 +77,8 @@ void draw(){
   UI.draw();
   popMatrix();
   line(100,0,0,100);
+  image(img[1], 0,0);
+  image(img[mapTiles[0].image],mapTiles[0].x,mapTiles[0].y);
 }
 
 class tileUI{
