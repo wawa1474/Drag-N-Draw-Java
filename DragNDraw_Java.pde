@@ -55,6 +55,9 @@ mTile[] mapTilesCopy = new mTile[0];
 PImage BACKGROUND;
 PImage missingTexture;
 
+Table mapTable;
+String fileName = "Map1";
+
 ControlP5 UIControls;
 Controller RSlider, GSlider, BSlider;
 
@@ -386,6 +389,10 @@ void keyTyped(){//We typed a key
         sx2 = mouseX;//set x1 to mouse x position
         sy2 = mouseY;//set y2 to mouse y position
       }
+    }else if(key == 'm'){//We pressed 'm'
+      FileSaveMap();
+    }else if(key == 'n'){
+      FileLoadMap();
     }
   }
 }//keyTyped() END
@@ -845,3 +852,105 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
   strokeWeight(1); // Default
   stroke(0);//BLACK
 }//drawTileGroupOutline() END
+
+void FileSaveCanvas(){//Save the Canvas to a file
+  BG.draw();//Draw the background and grid
+  //Display Map Tiles
+  for(int i = 1; i < mapTiles.length; i++){//Go through all the tiles
+    if(!mapTiles[i].clear){//Is the tile colored
+      fill(mapTiles[i].r,mapTiles[i].g,mapTiles[i].b);//Set Tile background color
+      rect(mapTiles[i].x,mapTiles[i].y,scl,scl);//Draw colored square behind tile
+    }
+    image(img[mapTiles[i].image], mapTiles[i].x, mapTiles[i].y);//Draw tile
+  }//Went through all the tiles
+  save("MapCanvas.png");//Save the map to a PNG file
+  FileSaveMap();//save map to file
+}//FileSaveCanvas() END
+
+void FileSaveMap(){//Save the Map to file
+  mapTable = new Table();//create new p5 table
+  mapTable.addColumn("x");//Tile X position
+  mapTable.addColumn("y");//Tile Y position
+  mapTable.addColumn("image");//Tile Image
+  mapTable.addColumn("r");//Tile Red amount
+  mapTable.addColumn("g");//Tile Green amount
+  mapTable.addColumn("b");//Tile Blue amount
+  mapTable.addColumn("clear");//Is Tile Clear
+  //mapTable.addColumn('lore');//Tile LORE?
+  TableRow newRow;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
+  newRow = mapTable.addRow();//Add a row to table
+  newRow.setInt("x",_FILEVERSION_);//File Version
+  newRow.setInt("y",0);//blank
+  newRow.setInt("image",0);//blank
+  newRow.setInt("r",0);//blank
+  newRow.setInt("g",0);//blank
+  newRow.setInt("b",0);//blank
+  newRow.setInt("clear",0);//blank
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
+  
+  for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
+    newRow = mapTable.addRow();//Add a row to table
+    newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
+    newRow.setInt("y",floor(mapTiles[i].y / scl));//Tile Y position
+    newRow.setInt("image",mapTiles[i].image);//Tile Image
+    newRow.setInt("r",floor(mapTiles[i].r / scl));//Tile Red amount
+    newRow.setInt("g",floor(mapTiles[i].g / scl));//Tile Green amount
+    newRow.setInt("b",floor(mapTiles[i].b / scl));//Tile Blue amount
+    int CLEAR = 1;//tile is clear
+    if(!mapTiles[i].clear){//Is Tile Clear
+      CLEAR = 0;//tile is not clear
+    }
+    newRow.setInt("clear",CLEAR);//Is Tile Clear
+    //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
+  }
+  saveTable(mapTable, fileName + ".csv");//Save the Map to a CSV file
+  mapTable = null;//Clear the Table
+}//FileSaveMap() END
+
+void FileLoadMap(){//load map from file
+  noLoop();
+  mapTable = loadTable(fileName + ".csv", "header");//Load the csv
+  
+  while(mapTiles.length > 0){//Clear the array
+    deleteTile(0);
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
+  int fileVersion = int(mapTable.getInt(0,"x"));//File Version
+  //int(mapTable.get(0,'y'));//blank
+  //int(mapTable.get(0,'image'));//blank
+  //int(mapTable.get(0,'r'));//blank
+  //int(mapTable.get(0,'g'));//blank
+  //int(mapTable.get(0,'b'));//blank
+  //int(mapTable.get(0,'clear'));//blank
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
+  
+  if(fileVersion == 0){//whats the file version
+    for(int i = 1; i < mapTable.getRowCount(); i++){//Loop through all the rows
+      boolean CLEAR = true;//tile is clear
+      if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
+        CLEAR = false;//tile is not clear
+      }
+      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+      mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x") * scl,//Tile X position
+                              mapTable.getInt(i,"y") * scl,//Tile Y position
+                              mapTable.getInt(i,"image"),//Tile Image
+                              mapTable.getInt(i,"r") * scl,//Tile Red amount
+                              mapTable.getInt(i,"g") * scl,//Tile Green amount
+                              mapTable.getInt(i,"b") * scl,//Tile Blue amount
+                              CLEAR);//,//Is Tile Clear
+                              //mapTable.get(i,'lore'));//Tile LORE?
+    }
+  }else{//we don't know that file version
+    println("File Version Error.");//throw error
+  }
+  
+  if(mapTiles == null){//Is the array null
+    while(mapTiles.length > 0){//Reset the map array
+      deleteTile(0);
+    }
+  }
+  loop();
+}//FileLoadMap() END
