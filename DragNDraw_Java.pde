@@ -650,17 +650,17 @@ void tileGroup(String button){//mess with tiles in square group
   
   if(sx1 < sx2){//if x1 is less than x2
     X1 = floor(sx1 / scl) * scl;//Adjust XY To Be On Tile Border
-    X2 = (int)(ceil((float)sx2 / scl) * scl);//Adjust XY To Be On Tile Border
+    X2 = (ceil((float)sx2 / scl) * scl);//Adjust XY To Be On Tile Border
   }else{//otherwise
-    X2 = (int)(ceil((float)sx1 / scl) * scl);//Adjust XY To Be On Tile Border
+    X2 = (ceil((float)sx1 / scl) * scl);//Adjust XY To Be On Tile Border
     X1 = floor(sx2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
   if(sy1 < sy2){//if y1 is less than y2
     Y1 = floor(sy1 / scl) * scl;//Adjust XY To Be On Tile Border
-    Y2 = (int)(ceil((float)sy2 / scl) * scl);//Adjust XY To Be On Tile Border
+    Y2 = (ceil((float)sy2 / scl) * scl);//Adjust XY To Be On Tile Border
   }else{//otherwise
-    Y2 = (int)(ceil((float)sy1 / scl) * scl);//Adjust XY To Be On Tile Border
+    Y2 = (ceil((float)sy1 / scl) * scl);//Adjust XY To Be On Tile Border
     Y1 = floor(sy2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
@@ -707,17 +707,17 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
   
   if(sx1 < sx2){//if x1 is less than x2
     X1 = floor(sx1 / scl) * scl;//Adjust XY To Be On Tile Border
-    X2 = (int)(ceil((float)sx2 / scl) * scl);//Adjust XY To Be On Tile Border
+    X2 = (ceil((float)sx2 / scl) * scl);//Adjust XY To Be On Tile Border
   }else{//otherwise
-    X2 = (int)(ceil((float)sx1 / scl) * scl);//Adjust XY To Be On Tile Border
+    X2 = (ceil((float)sx1 / scl) * scl);//Adjust XY To Be On Tile Border
     X1 = floor(sx2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
   if(sy1 < sy2){//if y1 is less than y2
     Y1 = floor(sy1 / scl) * scl;//Adjust XY To Be On Tile Border
-    Y2 = (int)(ceil((float)sy2 / scl) * scl);//Adjust XY To Be On Tile Border
+    Y2 = (ceil((float)sy2 / scl) * scl);//Adjust XY To Be On Tile Border
   }else{//otherwise
-    Y2 = (int)(ceil((float)sy1 / scl) * scl);//Adjust XY To Be On Tile Border
+    Y2 = (ceil((float)sy1 / scl) * scl);//Adjust XY To Be On Tile Border
     Y1 = floor(sy2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
@@ -789,9 +789,9 @@ void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Pl
   int X1,X2,Y1,Y2;//Setup Variables
   
   X1 = floor((mouseX - (floor(tileGroupXLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
-  X2 = (int)(floor((mouseX + (ceil((float)tileGroupXLines / 2) * scl)) / scl) * scl);//Adjust XY To Be On Tile Border
+  X2 = (floor((mouseX + (ceil((float)tileGroupXLines / 2) * scl)) / scl) * scl);//Adjust XY To Be On Tile Border
   Y1 = floor((mouseY - (floor(tileGroupYLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
-  Y2 = (int)(floor((mouseY + (ceil((float)tileGroupYLines / 2) * scl)) / scl) * scl);//Adjust XY To Be On Tile Border
+  Y2 = (floor((mouseY + (ceil((float)tileGroupYLines / 2) * scl)) / scl) * scl);//Adjust XY To Be On Tile Border
   
   //X2 += scl;
   //Y2 += scl;
@@ -819,22 +819,22 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
     
   if(sx1 < asx2){//if x1 is less than x2
     X1 = floor(sx1 / scl) * scl;//Adjust XY To Be On Tile Border
-    X2 = ceil(asx2 / scl) * scl;//Adjust XY To Be On Tile Border
+    X2 = ceil((float)asx2 / scl) * scl;//Adjust XY To Be On Tile Border
   }else{//otherwise
-    X2 = ceil(sx1 / scl) * scl;//Adjust XY To Be On Tile Border
+    X2 = ceil((float)sx1 / scl) * scl;//Adjust XY To Be On Tile Border
     X1 = floor(asx2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
   if(sy1 < asy2){//if y1 is less than y2
     Y1 = floor(sy1 / scl) * scl;//Adjust XY To Be On Tile Border
-    Y2 = ceil(asy2 / scl) * scl;//Adjust XY To Be On Tile Border
+    Y2 = ceil((float)asy2 / scl) * scl;//Adjust XY To Be On Tile Border
   }else{//otherwise
-    Y2 = ceil(sy1 / scl) * scl;//Adjust XY To Be On Tile Border
+    Y2 = ceil((float)sy1 / scl) * scl;//Adjust XY To Be On Tile Border
     Y1 = floor(asy2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
-  X2 += scl;
-  Y2 += scl;
+  //X2 += scl;
+  //Y2 += scl;
     
   strokeWeight(borderThickness); // Thicker
   stroke(255,0,0);//RED
