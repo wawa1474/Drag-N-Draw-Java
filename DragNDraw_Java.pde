@@ -388,11 +388,14 @@ void keyTyped(){//We typed a key
         sy2 = mouseY - SY;//set y2 to mouse y position
       }
     }else if(key == 'm'){//We pressed 'm'
-      FileSaveMap();
+      selectOutput("Select a PNG to write to:", "FileSaveMapSelect");
+      //FileSaveMap();
     }else if(key == 'n'){
-      FileLoadMap();
+      selectInput("Select a CSV to read from:", "FileLoadMapSelect");
+      //FileLoadMap();
     }else if(key == 'b'){
-      FileSaveCanvas();
+      selectOutput("Select a CSV to write to:", "FileSaveCanvasSelect");
+      //FileSaveCanvas();
     }
     
     if(key == 'w'){//We pressed 'W'
@@ -876,6 +879,36 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
   stroke(0);//BLACK
 }//drawTileGroupOutline() END
 
+void FileSaveCanvasSelect(File selection){
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    fileName = selection.getAbsolutePath();
+    FileSaveCanvas();
+  }
+}
+
+void FileSaveMapSelect(File selection){
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    fileName = selection.getAbsolutePath();
+    FileSaveMap();
+  }
+}
+
+void FileLoadMapSelect(File selection){
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    fileName = selection.getAbsolutePath();
+    FileLoadMap();
+  }
+}
+
 void FileSaveCanvas(){//Save the Canvas to a file
   PGraphics fullCanvas = createGraphics(3200, 3200);
   fullCanvas.beginDraw();
@@ -889,7 +922,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
     fullCanvas.image(img[mapTiles[i].image], mapTiles[i].x, mapTiles[i].y);//Draw tile
   }//Went through all the tiles
   fullCanvas.endDraw();
-  fullCanvas.save(fileName + ".png");//Save the map to a PNG file
+  fullCanvas.save(fileName);// + ".png");//Save the map to a PNG file
 }//FileSaveCanvas() END
 
 void FileSaveMap(){//Save the Map to file
@@ -948,13 +981,13 @@ void FileSaveMap(){//Save the Map to file
       //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
     }
   }
-  saveTable(mapTable, fileName + ".csv");//Save the Map to a CSV file
+  saveTable(mapTable, fileName);// + ".csv");//Save the Map to a CSV file
   mapTable = null;//Clear the Table
 }//FileSaveMap() END
 
 void FileLoadMap(){//load map from file
   noLoop();
-  mapTable = loadTable(fileName + ".csv", "header");//Load the csv
+  mapTable = loadTable(fileName, "header");// + ".csv", "header");//Load the csv
   
   while(mapTiles.length > 0){//Clear the array
     deleteTile(0);
