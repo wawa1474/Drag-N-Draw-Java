@@ -5,7 +5,7 @@ import controlP5.*;
 int _DEBUG_ = 0;
 int _DEBUGAMOUNT_ = 50000;
 
-int _FILEVERSION_ = 0;
+int _FILEVERSION_ = 1;
 
 boolean dragging = false;
 boolean deleting = false;
@@ -332,14 +332,6 @@ void keyTyped(){//We typed a key
       prevTileC();
     }else if(key == 'e'){//We pressed 'E'
       nextTileC();
-    }else if(key == 'w'){//We pressed 'W'
-      SY += /*window.pageYOffset - */(scl * scrollAmount);//Scroll Screen UP
-    }else if(key == 'a'){//We pressed 'A'
-      SX += /*window.pageXOffset - */(scl * scrollAmount);//Scroll Screen LEFT
-    }else if(key == 's'){//We pressed 'S'
-      SY -= /*window.pageYOffset + */(scl * scrollAmount);//Scroll Screen RIGHT
-    }else if(key == 'd'){//We pressed 'D'
-      SX -= /*window.pageXOffset + */(scl * scrollAmount);//Scroll Screen DOWN
     }else if(key == 'f'){//We pressed 'F'
       if(CClear){//Is it currently clear?
         CClear = false;//Set if not clear
@@ -400,13 +392,34 @@ void keyTyped(){//We typed a key
     }else if(key == 'n'){
       FileLoadMap();
     }
+    
+    if(key == 'w'){//We pressed 'W'
+      if(SY < scl * 5){
+        SY += /*window.pageYOffset - */(scl * scrollAmount);//Scroll Screen UP
+      }
+    }
+    if(key == 'a'){//We pressed 'A'
+      if(SX < scl * 5){
+        SX += /*window.pageXOffset - */(scl * scrollAmount);//Scroll Screen LEFT
+      }
+    }
+    if(key == 's'){//We pressed 'S'
+      if(SY > -((scl * 105) - height)){
+        SY -= /*window.pageYOffset + */(scl * scrollAmount);//Scroll Screen RIGHT
+      }
+    }
+    if(key == 'd'){//We pressed 'D'
+      if(SX > -((scl * 105) - width)){
+        SX -= /*window.pageXOffset + */(scl * scrollAmount);//Scroll Screen DOWN
+      }
+    }
   }
 }//keyTyped() END
 
 class tileUI{
   void draw(){
-    fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
-    rect(0, scl, scl*3, scl);//Display color behind RGB Sliders
+    //fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
+    //rect(0, scl, scl, scl);//Display color behind RGB Sliders
     
     fill(255);//Set background color to white
     rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
@@ -436,9 +449,9 @@ class tileUI{
   }
   
   void setup(){
-    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(4,scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setLabelVisible(false);
-    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(4,scl + 11.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setLabelVisible(false);
-    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(4,scl + 21.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setLabelVisible(false);
+    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(0,scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setCaptionLabel("");
+    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(0,scl + 12.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setCaptionLabel("");
+    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(0,scl + 23.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setCaptionLabel("");
     RSlider = UIControls.getController("RSlider");
     GSlider = UIControls.getController("GSlider");
     BSlider = UIControls.getController("BSlider");
@@ -900,12 +913,12 @@ void FileSaveMap(){//Save the Map to file
   
   for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
     newRow = mapTable.addRow();//Add a row to table
-    newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
-    newRow.setInt("y",floor(mapTiles[i].y / scl));//Tile Y position
+    newRow.setInt("x",floor(mapTiles[i].x));//Tile X position
+    newRow.setInt("y",floor(mapTiles[i].y));//Tile Y position
     newRow.setInt("image",mapTiles[i].image);//Tile Image
-    newRow.setInt("r",floor(mapTiles[i].r / scl));//Tile Red amount
-    newRow.setInt("g",floor(mapTiles[i].g / scl));//Tile Green amount
-    newRow.setInt("b",floor(mapTiles[i].b / scl));//Tile Blue amount
+    newRow.setInt("r",floor(mapTiles[i].r));//Tile Red amount
+    newRow.setInt("g",floor(mapTiles[i].g));//Tile Green amount
+    newRow.setInt("b",floor(mapTiles[i].b));//Tile Blue amount
     int CLEAR = 1;//tile is clear
     if(!mapTiles[i].clear){//Is Tile Clear
       CLEAR = 0;//tile is not clear
@@ -948,6 +961,22 @@ void FileLoadMap(){//load map from file
                               mapTable.getInt(i,"r") * scl,//Tile Red amount
                               mapTable.getInt(i,"g") * scl,//Tile Green amount
                               mapTable.getInt(i,"b") * scl,//Tile Blue amount
+                              CLEAR);//,//Is Tile Clear
+                              //mapTable.get(i,'lore'));//Tile LORE?
+    }
+  }else if(fileVersion == 1){//whats the file version
+    for(int i = 1; i < mapTable.getRowCount(); i++){//Loop through all the rows
+      boolean CLEAR = true;//tile is clear
+      if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
+        CLEAR = false;//tile is not clear
+      }
+      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+      mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x"),//Tile X position
+                              mapTable.getInt(i,"y"),//Tile Y position
+                              mapTable.getInt(i,"image"),//Tile Image
+                              mapTable.getInt(i,"r"),//Tile Red amount
+                              mapTable.getInt(i,"g"),//Tile Green amount
+                              mapTable.getInt(i,"b"),//Tile Blue amount
                               CLEAR);//,//Is Tile Clear
                               //mapTable.get(i,'lore'));//Tile LORE?
     }
