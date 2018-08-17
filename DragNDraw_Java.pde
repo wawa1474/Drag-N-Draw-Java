@@ -20,7 +20,7 @@ int tileRow = 0;
 int tileN = 1;
 boolean CClear = false;
 
-int fullTotalImages = (int)(Math.ceil((double)(totalImages / rowLength)) * rowLength) - 1;
+int fullTotalImages = ceil((((float)totalImages / (float)rowLength)) * (float)rowLength) - 1;
 
 int drawnTiles = 0;
 boolean drawAll = false;
@@ -124,6 +124,9 @@ void draw(){
   
   BG.border();//Draw the RED border
   
+  //Update and Draw the UI
+  UI.update();//Update the UI position
+  UI.draw();//Draw the UI
   
   if(tileGroupStep > 0 && tileGroupStep != 3){//selecting group and not pasteing
     drawTileGroupOutline();//draw the red outline
@@ -133,8 +136,8 @@ void draw(){
     drawGroupPasteOutline();//draw the red outline
   }
   
-  text(mapTiles.length, 200,200);
-  text(frameRate, 210,210);
+  //text(mapTiles.length, 200,200);
+  //text(frameRate, 210,210);
   //Update and Draw the UI
   //UI.update();//Update the UI position
   //UI.draw();//Draw the UI
@@ -389,8 +392,30 @@ void keyTyped(){//We typed a key
 
 class tileUI{
   void draw(){
-    line(0,0,100,100);
-    text(str(_FILEVERSION_), 10,10);
+    fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
+    rect(0 + pX, scl + pY, scl*3, scl);//Display color behind RGB Sliders
+    
+    fill(255);//Set background color to white
+    rect(pX, pY, scl*rowLength, scl);//Create rectangle behind tiles UI
+    for(int i = 0; i < rowLength; i++){//Go through all the tiles
+      if(rowLength*tileRow+i <= fullTotalImages/*totalImages*/){//If tile exists
+        if(rowLength*tileRow+i == tileN){//If displaying selected tile
+          fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
+          rect(scl*i + pX, pY, scl, scl);//Display color behind the tile
+        }
+        image(img[rowLength*tileRow+i], scl*i + pX, pY);//Draw tile
+      }
+    }//Went through all the tiles
+    
+    fill(255,0,0);//red text
+    stroke(0);//no outline
+    textSize(24);//larger text size
+    text("FPS: " + frameRate, ((scl * 22) + scl / 2.25) + pX, (scl / 1.25) + pY);//FPS: (fps.fp)
+    
+    text("Tiles: " + mapTiles.length, ((scl * 27) + scl / 2.25) + pX, (scl / 1.25) + pY);//Tiles: (tiles)
+  
+    text("Drawn: " + drawnTiles, ((scl * 27) + scl / 2.25) + pX, (scl * 1.75) + pY);//Drawn: (drawn)
+    textSize(12);//Default text size
   }
   
   void update(){
@@ -466,11 +491,11 @@ void placeTile(){//Place a tile at the mouses location
   if(mY > scl*UIBottom + pY + fV && mY < (height - (scl*1.5)) + pY + fV && mX < (width - (scl)) + pX + fV){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
       mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
-      mapTiles[mapTiles.length - 1] = new mTile((int)Math.floor(mX/scl)*scl,(int)Math.floor(mY/scl)*scl,tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false);//Place a colored tile with no image
+      mapTiles[mapTiles.length - 1] = new mTile(floor(mX/scl)*scl,floor(mY/scl)*scl,tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false);//Place a colored tile with no image
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //print(mouseButton);
       mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
-      mapTiles[mapTiles.length - 1] = new mTile((int)Math.floor(mX/scl)*scl,(int)Math.floor(mY/scl)*scl,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Place a tile
+      mapTiles[mapTiles.length - 1] = new mTile(floor(mX/scl)*scl,floor(mY/scl)*scl,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Place a tile
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
     }
@@ -506,24 +531,24 @@ void prevTileC(){//Move To Previous Tile
   tileN--;//Decrement the tile number
   if(tileN < 0){//Is the tile number less than zero?
     tileN = fullTotalImages/*totalImages + 1*/;//Loop the tile number back to the last tile
-    tileRow = (int)Math.floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
+    tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
   }
   if(tileN < rowLength*tileRow){//Is the tile number less than the lower end of the current row?
     tileRow--;//Decrement the tile row
     if(tileRow < 0){//Is the tile number less than zero?
-      tileRow = (int)Math.floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
+      tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
     }
   }
 }//prevTileC() END
 
 void updateTileRow(){//Get the row to whatever tile were on
-  while(Math.floor(tileN/rowLength)*rowLength < rowLength*tileRow){//Is tileN lower than the row were on?
+  while(floor(tileN/rowLength)*rowLength < rowLength*tileRow){//Is tileN lower than the row were on?
       tileRow--;//Decrement tileRow
       if(tileRow < 0){//Is the tile number less than zero?
-        tileRow = (int)Math.floor(totalImages/rowLength);//Loop the tile row back to the last row
+        tileRow = floor(totalImages/rowLength);//Loop the tile row back to the last row
       }
     }
-    while(Math.floor(tileN/rowLength)*rowLength > rowLength*tileRow){//Is tileN higher than the row were on?
+    while(floor(tileN/rowLength)*rowLength > rowLength*tileRow){//Is tileN higher than the row were on?
       tileRow++;//Increment tileRow
       if(tileRow > totalImages/rowLength){//Is the tile row greater than our total number of rows?
         tileRow = 0;//Loop the tile row back to the first row
@@ -557,7 +582,7 @@ void prevRowC(){//Previous Row
   }
   tileRow--;//Decrement the row number
   if(tileRow < 0){//If the row number is less than our zero
-    tileRow = (int)Math.floor(fullTotalImages / rowLength);//Loop the row number back to the last
+    tileRow = floor(fullTotalImages / rowLength);//Loop the row number back to the last
   }
 }//prevRowC() END
 
@@ -583,8 +608,8 @@ void updateTileLocation(int tile){//Adjust XY location of tile
 }//updateTileLocation() END
 
 void snapTileLocation(int tile){//Snap XY location of tile to grid
-  mapTiles[tile].x = (int)Math.floor(mouseX / scl) * scl;//Adjust X location of tile
-  mapTiles[tile].y = (int)Math.floor(mouseY / scl) * scl;//Adjust Y location of tile
+  mapTiles[tile].x = floor(mouseX / scl) * scl;//Adjust X location of tile
+  mapTiles[tile].y = floor(mouseY / scl) * scl;//Adjust Y location of tile
 }//snapTileLocation() END
 
 boolean checkImage(int tile){//check if tile about to place has same image as tile mouse is on
@@ -625,22 +650,22 @@ void tileGroup(String button){//mess with tiles in square group
   
   if(sx1 < sx2){//if x1 is less than x2
     X1 = floor(sx1 / scl) * scl;//Adjust XY To Be On Tile Border
-    X2 = ceil(sx2 / scl) * scl;//Adjust XY To Be On Tile Border
+    X2 = (int)(ceil((float)sx2 / scl) * scl);//Adjust XY To Be On Tile Border
   }else{//otherwise
-    X2 = ceil(sx1 / scl) * scl;//Adjust XY To Be On Tile Border
+    X2 = (int)(ceil((float)sx1 / scl) * scl);//Adjust XY To Be On Tile Border
     X1 = floor(sx2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
   if(sy1 < sy2){//if y1 is less than y2
     Y1 = floor(sy1 / scl) * scl;//Adjust XY To Be On Tile Border
-    Y2 = ceil(sy2 / scl) * scl;//Adjust XY To Be On Tile Border
+    Y2 = (int)(ceil((float)sy2 / scl) * scl);//Adjust XY To Be On Tile Border
   }else{//otherwise
-    Y2 = ceil(sy1 / scl) * scl;//Adjust XY To Be On Tile Border
+    Y2 = (int)(ceil((float)sy1 / scl) * scl);//Adjust XY To Be On Tile Border
     Y1 = floor(sy2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
-  X2 += scl;
-  Y2 += scl;
+  //X2 += scl;
+  //Y2 += scl;
   
   XLines = (X2 - X1) / scl;//how many x lines
   YLines = (Y2 - Y1) / scl;//how many y lines
@@ -682,22 +707,22 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
   
   if(sx1 < sx2){//if x1 is less than x2
     X1 = floor(sx1 / scl) * scl;//Adjust XY To Be On Tile Border
-    X2 = ceil(sx2 / scl) * scl;//Adjust XY To Be On Tile Border
+    X2 = (int)(ceil((float)sx2 / scl) * scl);//Adjust XY To Be On Tile Border
   }else{//otherwise
-    X2 = ceil(sx1 / scl) * scl;//Adjust XY To Be On Tile Border
+    X2 = (int)(ceil((float)sx1 / scl) * scl);//Adjust XY To Be On Tile Border
     X1 = floor(sx2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
   if(sy1 < sy2){//if y1 is less than y2
     Y1 = floor(sy1 / scl) * scl;//Adjust XY To Be On Tile Border
-    Y2 = ceil(sy2 / scl) * scl;//Adjust XY To Be On Tile Border
+    Y2 = (int)(ceil((float)sy2 / scl) * scl);//Adjust XY To Be On Tile Border
   }else{//otherwise
-    Y2 = ceil(sy1 / scl) * scl;//Adjust XY To Be On Tile Border
+    Y2 = (int)(ceil((float)sy1 / scl) * scl);//Adjust XY To Be On Tile Border
     Y1 = floor(sy2 / scl) * scl;//Adjust XY To Be On Tile Border
   }
   
-  X2 += scl;
-  Y2 += scl;
+  //X2 += scl;
+  //Y2 += scl;
   
   tileGroupXLines = (X2 - X1) / scl;//how many x lines
   tileGroupYLines = (Y2 - Y1) / scl;//how many y lines
@@ -764,12 +789,12 @@ void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Pl
   int X1,X2,Y1,Y2;//Setup Variables
   
   X1 = floor((mouseX - (floor(tileGroupXLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
-  X2 = floor((mouseX + (ceil(tileGroupXLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
+  X2 = (int)(floor((mouseX + (ceil((float)tileGroupXLines / 2) * scl)) / scl) * scl);//Adjust XY To Be On Tile Border
   Y1 = floor((mouseY - (floor(tileGroupYLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
-  Y2 = floor((mouseY + (ceil(tileGroupYLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
+  Y2 = (int)(floor((mouseY + (ceil((float)tileGroupYLines / 2) * scl)) / scl) * scl);//Adjust XY To Be On Tile Border
   
-  X2 += scl;
-  Y2 += scl;
+  //X2 += scl;
+  //Y2 += scl;
   
   strokeWeight(borderThickness); // Thicker
   stroke(255,0,0);//RED
