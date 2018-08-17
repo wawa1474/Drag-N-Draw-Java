@@ -20,7 +20,7 @@ int tileRow = 0;
 int tileN = 1;
 boolean CClear = false;
 
-int fullTotalImages = ceil((((float)totalImages / rowLength)) * rowLength) - 1;
+int fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;
 
 int drawnTiles = 0;
 boolean drawAll = false;
@@ -405,8 +405,8 @@ class tileUI{
     fill(255);//Set background color to white
     rect(pX, pY, scl*rowLength, scl);//Create rectangle behind tiles UI
     for(int i = 0; i < rowLength; i++){//Go through all the tiles
-      if(rowLength*tileRow+i <= fullTotalImages/*totalImages*/){//If tile exists
-        if(rowLength*tileRow+i == tileN){//If displaying selected tile
+      if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
+        if((rowLength*tileRow)+i == tileN){//If displaying selected tile
           fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
           rect(scl*i + pX, pY, scl, scl);//Display color behind the tile
         }
@@ -537,7 +537,7 @@ void prevTileC(){//Move To Previous Tile
   updateTileRow();//Get the row to whatever tile were on
   tileN--;//Decrement the tile number
   if(tileN < 0){//Is the tile number less than zero?
-    tileN = fullTotalImages/*totalImages + 1*/;//Loop the tile number back to the last tile
+    tileN = fullTotalImages;//Loop the tile number back to the last tile
     tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
   }
   if(tileN < rowLength*tileRow){//Is the tile number less than the lower end of the current row?
