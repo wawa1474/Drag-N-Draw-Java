@@ -20,7 +20,7 @@ int tileRow = 0;
 int tileN = 1;
 boolean CClear = false;
 
-int fullTotalImages = ceil((((float)totalImages / (float)rowLength)) * (float)rowLength) - 1;
+int fullTotalImages = ceil((((float)totalImages / rowLength)) * rowLength) - 1;
 
 int drawnTiles = 0;
 boolean drawAll = false;
