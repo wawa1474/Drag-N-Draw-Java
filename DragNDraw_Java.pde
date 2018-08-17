@@ -47,7 +47,7 @@ int fV = 1;
 int UIRight = 22;
 int UIBottom = 2;
 
-int scrollAmount = 5;
+int scrollAmount = 1;
 
 PImage[] img = new PImage[0];//totalImages + 1];
 mTile[] mapTiles = new mTile[0];//25000];
@@ -96,6 +96,10 @@ void setup(){
 }
 
 void draw(){
+  pushMatrix();
+  //translate(-scl * 10, -scl * 2);
+  translate(SX, SY);
+  
   drawnTiles = 0;//reset number of drawn tiles
 
   updateXY();//Update the XY position of the mouse and the page XY offset
@@ -111,7 +115,7 @@ void draw(){
   
   //Display Map Tiles
   for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
-    if(mapTiles[i].x > pX - scl && mapTiles[i].x  < width + pX && mapTiles[i].y > pY - 1 && mapTiles[i].y < height + pY || drawAll == true){//if tile is within screen bounds or drawAll is set
+    if(mapTiles[i].x > -scl - SX && mapTiles[i].x  < width - SX && mapTiles[i].y > -scl - SY && mapTiles[i].y < height - SY || drawAll == true){//if tile is within screen bounds or drawAll is set
       if(!mapTiles[i].clear || mapTiles[i].image == 0){//Is the tile colored
         fill(mapTiles[i].r,mapTiles[i].g,mapTiles[i].b);//Set Tile background color
         rect(mapTiles[i].x,mapTiles[i].y,scl,scl);//Draw colored square behind tile
@@ -127,10 +131,6 @@ void draw(){
   
   BG.border();//Draw the RED border
   
-  //Update and Draw the UI
-  UI.update();//Update the UI position
-  UI.draw();//Draw the UI
-  
   if(tileGroupStep > 0 && tileGroupStep != 3){//selecting group and not pasteing
     drawTileGroupOutline();//draw the red outline
   }
@@ -138,6 +138,12 @@ void draw(){
   if(tileGroupStep == 3){//pasteing group
     drawGroupPasteOutline();//draw the red outline
   }
+  
+  popMatrix();
+  
+  //Update and Draw the UI
+  UI.update();//Update the UI position
+  UI.draw();//Draw the UI
   
   //text(mapTiles.length, 200,200);
   //text(frameRate, 210,210);
@@ -197,16 +203,16 @@ void mousePressed(){//We pressed a mouse button
   }
 
   for(int i = 0; i < rowLength; i++){//Go through all the tiles in the row
-    if(mX > scl*i + pX + fV && mX < scl*(i+1) + pX - fV && mY > 0 + pY + fV && mY < scl + pY - fV){//Are we clicking on the tile UI
+    if(mX > scl*i - SX + fV && mX < scl*(i+1) - SX - fV && mY > 0 - SY + fV && mY < scl - SY - fV){//Are we clicking on the tile UI
       noTile = true;//Dont allow tile placement
       if(img[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
       tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on
       mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
-      mapTiles[mapTiles.length - 1] = new mTile(scl*i + pX,0 + pY,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Create a tile
+      mapTiles[mapTiles.length - 1] = new mTile(scl*i + pX - SX,0 + pY - SY,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Create a tile
     }
   }//Went through all the tiles in the row
   
-  if(mX > 0 + pX && mX < scl*UIRight + pX && mY > 0 /* scl */ + pY && mY < scl*UIBottom + pY){//Did we click on the UI
+  if(mX > 0 - SX && mX < scl*UIRight - SX && mY > 0 /* scl */ - SY && mY < scl*UIBottom - SY){//Did we click on the UI
     noTile = true;//Dont allow tile placement
     //return;//Don't do anything else
   }
@@ -327,13 +333,13 @@ void keyTyped(){//We typed a key
     }else if(key == 'e'){//We pressed 'E'
       nextTileC();
     }else if(key == 'w'){//We pressed 'W'
-      //SY = window.pageYOffset - (scl * scrollAmount);//Scroll Screen UP
+      SY += /*window.pageYOffset - */(scl * scrollAmount);//Scroll Screen UP
     }else if(key == 'a'){//We pressed 'A'
-      //SX = window.pageXOffset - (scl * scrollAmount);//Scroll Screen LEFT
+      SX += /*window.pageXOffset - */(scl * scrollAmount);//Scroll Screen LEFT
     }else if(key == 's'){//We pressed 'S'
-      //SY = window.pageYOffset + (scl * scrollAmount);//Scroll Screen RIGHT
+      SY -= /*window.pageYOffset + */(scl * scrollAmount);//Scroll Screen RIGHT
     }else if(key == 'd'){//We pressed 'D'
-      //SX = window.pageXOffset + (scl * scrollAmount);//Scroll Screen DOWN
+      SX -= /*window.pageXOffset + */(scl * scrollAmount);//Scroll Screen DOWN
     }else if(key == 'f'){//We pressed 'F'
       if(CClear){//Is it currently clear?
         CClear = false;//Set if not clear
@@ -382,12 +388,12 @@ void keyTyped(){//We typed a key
       //tileGroup(scl * 10, scl * 3, scl * 5, scl * 10)
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step
-        sx1 = mouseX;//set x1 to mouse x position
-        sy1 = mouseY;//set y1 to mouse y position
+        sx1 = mouseX - SX;//set x1 to mouse x position
+        sy1 = mouseY - SY;//set y1 to mouse y position
       }else if (tileGroupStep == 1){//set XY2
         tileGroupStep = 2;//ready to do group tiles stuff
-        sx2 = mouseX;//set x1 to mouse x position
-        sy2 = mouseY;//set y2 to mouse y position
+        sx2 = mouseX - SX;//set x1 to mouse x position
+        sy2 = mouseY - SY;//set y2 to mouse y position
       }
     }else if(key == 'm'){//We pressed 'm'
       FileSaveMap();
@@ -400,39 +406,39 @@ void keyTyped(){//We typed a key
 class tileUI{
   void draw(){
     fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
-    rect(0 + pX, scl + pY, scl*3, scl);//Display color behind RGB Sliders
+    rect(0, scl, scl*3, scl);//Display color behind RGB Sliders
     
     fill(255);//Set background color to white
-    rect(pX, pY, scl*rowLength, scl);//Create rectangle behind tiles UI
+    rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
     for(int i = 0; i < rowLength; i++){//Go through all the tiles
       if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
         if((rowLength*tileRow)+i == tileN){//If displaying selected tile
           fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
-          rect(scl*i + pX, pY, scl, scl);//Display color behind the tile
+          rect(scl*i, 0, scl, scl);//Display color behind the tile
         }
-        image(img[rowLength*tileRow+i], scl*i + pX, pY);//Draw tile
+        image(img[rowLength*tileRow+i], scl*i, 0);//Draw tile
       }
     }//Went through all the tiles
     
     fill(255,0,0);//red text
     stroke(0);//no outline
     textSize(24);//larger text size
-    text("FPS: " + frameRate, ((scl * 22) + scl / 2.25) + pX, (scl / 1.25) + pY);//FPS: (fps.fp)
+    text("FPS: " + frameRate, ((scl * 22) + scl / 2.25), (scl / 1.25));//FPS: (fps.fp)
     
-    text("Tiles: " + mapTiles.length, ((scl * 27) + scl / 2.25) + pX, (scl / 1.25) + pY);//Tiles: (tiles)
+    text("Tiles: " + mapTiles.length, ((scl * 27) + scl / 2.25), (scl / 1.25));//Tiles: (tiles)
   
-    text("Drawn: " + drawnTiles, ((scl * 27) + scl / 2.25) + pX, (scl * 1.75) + pY);//Drawn: (drawn)
+    text("Drawn: " + drawnTiles, ((scl * 27) + scl / 2.25), (scl * 1.75));//Drawn: (drawn)
     textSize(12);//Default text size
   }
   
   void update(){
-    
+
   }
   
   void setup(){
-    UIControls.addSlider("RSlider").setPosition(4,scl + 1.3).setSize(100,10).setRange(0,255).setValue(127).setCaptionLabel("");//.setNumberOfTickMarks(18);
-    UIControls.addSlider("GSlider").setPosition(4,scl + 11.3).setSize(100,10).setRange(0,255).setValue(127).setCaptionLabel("");
-    UIControls.addSlider("BSlider").setPosition(4,scl + 21.3).setSize(100,10).setRange(0,255).setValue(127).setCaptionLabel("");
+    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(4,scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setLabelVisible(false);
+    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(4,scl + 11.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setLabelVisible(false);
+    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(4,scl + 21.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setLabelVisible(false);
     RSlider = UIControls.getController("RSlider");
     GSlider = UIControls.getController("GSlider");
     BSlider = UIControls.getController("BSlider");
@@ -476,10 +482,12 @@ class mTile{//Tile Object
 }//mTile() END
 
 void updateXY(){//Update the XY position of the mouse and the page XY offset
-  mX = mouseX;//Update the X position of the mouse
-  mY = mouseY;//Update the Y position of the mouse
+  mX = mouseX - SX;//Update the X position of the mouse
+  mY = mouseY - SY;//Update the Y position of the mouse
   //pX = window.pageXOffset;//Update the page X offset
   //pY = window.pageYOffset;//Update the page Y offset
+  pX = SX;
+  pY = SY;
 }//updateXY() END
 
 void deleteTile(int tile){//Delete a tile and update the array
@@ -495,7 +503,7 @@ void deleteTile(int tile){//Delete a tile and update the array
 
 void placeTile(){//Place a tile at the mouses location
   //print(mouseButton);
-  if(mY > scl*UIBottom + pY + fV && mY < (height - (scl*1.5)) + pY + fV && mX < (width - (scl)) + pX + fV){//We're not on the UI and we're within the screen bounds
+  if(mY > scl*UIBottom - SY + fV && mY < (height - (scl*1.5)) - SY + fV && mX < (width - (scl)) - SX + fV){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
       mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
       mapTiles[mapTiles.length - 1] = new mTile(floor(mX/scl)*scl,floor(mY/scl)*scl,tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false);//Place a colored tile with no image
@@ -615,8 +623,8 @@ void updateTileLocation(int tile){//Adjust XY location of tile
 }//updateTileLocation() END
 
 void snapTileLocation(int tile){//Snap XY location of tile to grid
-  mapTiles[tile].x = floor(mouseX / scl) * scl;//Adjust X location of tile
-  mapTiles[tile].y = floor(mouseY / scl) * scl;//Adjust Y location of tile
+  mapTiles[tile].x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
+  mapTiles[tile].y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
 }//snapTileLocation() END
 
 boolean checkImage(int tile){//check if tile about to place has same image as tile mouse is on
@@ -772,8 +780,8 @@ void tileGroupPaste(){//Paste The Copied Tiles
   int X1,Y1;//Setup Variables
   int tileCount = 0;//how many tiles are there
   
-  X1 = floor((mouseX - (floor(tileGroupXLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGroupYLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGroupXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGroupYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
   
   for(int i = 0; i < tileGroupYLines; i++){//loop through all y lines
     for(int j = 0; j < tileGroupXLines; j++){//loop through all x lines
@@ -795,10 +803,10 @@ void tileGroupPaste(){//Paste The Copied Tiles
 void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Placed
   int X1,X2,Y1,Y2;//Setup Variables
   
-  X1 = floor((mouseX - (floor(tileGroupXLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
-  X2 = (floor((mouseX + (ceil((float)tileGroupXLines / 2) * scl)) / scl) * scl);//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGroupYLines / 2) * scl)) / scl) * scl;//Adjust XY To Be On Tile Border
-  Y2 = (floor((mouseY + (ceil((float)tileGroupYLines / 2) * scl)) / scl) * scl);//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGroupXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
+  X2 = (floor((mouseX + (ceil((float)tileGroupXLines / 2) * scl)) / scl) * scl) - SX;//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGroupYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
+  Y2 = (floor((mouseY + (ceil((float)tileGroupYLines / 2) * scl)) / scl) * scl) - SY;//Adjust XY To Be On Tile Border
   
   //X2 += scl;
   //Y2 += scl;
@@ -817,8 +825,8 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
   int X1,X2,Y1,Y2,asx2 = 0,asy2 = 0;//Setup Variables
     
   if(tileGroupStep == 1){//Are We On Step One
-    asx2 = mouseX;//Corner is tied to mouse
-    asy2 = mouseY;//Corner is tied to mouse
+    asx2 = mouseX - SX;//Corner is tied to mouse
+    asy2 = mouseY - SY;//Corner is tied to mouse
   }else if(tileGroupStep == 2){//Are We On Step Two
     asx2 = sx2;//Corner is tied to set XY
     asy2 = sy2;//Corner is tied to set XY
