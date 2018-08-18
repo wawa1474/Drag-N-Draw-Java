@@ -14,7 +14,7 @@ boolean noTile = false;
 boolean noKeyboard = false;
 
 int mapN = 0;
-int totalImages = 48 - 1;
+int totalImages = 40 - 1;
 int rowLength = 16;
 int tileRow = 0;
 int tileN = 1;
@@ -71,26 +71,20 @@ void preload(){
   PImage tileMap = loadImage("assets/tileMap.png");
   tileMap.loadPixels();
   
-  for(int i = 0;  i <= totalImages; i++){
+  for(int i = 0; i <= totalImages; i++){
     img = (PImage[]) expand(img, img.length + 1);
     img[i] = createImage(32, 32, RGB);
     img[i].loadPixels();
     for(int y = 0; y < 32; y++){
       for(int x = 0; x < 32; x++){
         img[i].set(x, y, tileMap.get(x + (scl * floor(i % 32)), y + (scl * floor(i / 32))));
-        //print("X: " + (x + (scl * floor(i % 32))));
       }
-      //println(", Y: " + (y + (scl * floor(i / 32))));
     }
     img[i].updatePixels();
   }
   
   missingTexture = loadImage("assets/missingTexture.png");
   
-  /*for(int i = 0; i <= totalImages; i++){
-    img = (PImage[]) expand(img, img.length + 1);
-    img[i] = loadImage("assets/" + i + ".png");
-  }*/
   println(totalImages + ": " + fullTotalImages);
   if(totalImages != fullTotalImages){
     for(int i = totalImages + 1; i <= fullTotalImages; i++){
@@ -106,7 +100,6 @@ void setup(){
   preload();
   
   size(960,540);//X, Y
-  //fullScreen();
   surface.setResizable(true);
   
   UIControls = new ControlP5(this);
@@ -118,7 +111,6 @@ void setup(){
 
 void draw(){
   pushMatrix();
-  //translate(-scl * 10, -scl * 2);
   translate(SX, SY);
   
   drawnTiles = 0;//reset number of drawn tiles
@@ -165,21 +157,6 @@ void draw(){
   //Update and Draw the UI
   UI.update();//Update the UI position
   UI.draw();//Draw the UI
-  
-  //text(mapTiles.length, 200,200);
-  //text(frameRate, 210,210);
-  //Update and Draw the UI
-  //UI.update();//Update the UI position
-  //UI.draw();//Draw the UI
-  /*pushMatrix();
-  translate(-30, -20);
-  BG.draw();
-  BG.border();
-  UI.draw();
-  popMatrix();
-  line(100,0,0,100);
-  image(img[1], 0,0);
-  image(img[mapTiles[0].image],mapTiles[0].x,mapTiles[0].y);*/
 }
 
 void mousePressed(){//We pressed a mouse button
