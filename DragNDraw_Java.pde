@@ -14,7 +14,7 @@ boolean noTile = false;
 boolean noKeyboard = false;
 
 int mapN = 0;
-int totalImages = 39;
+int totalImages = 40 - 1;
 int rowLength = 16;
 int tileRow = 0;
 int tileN = 1;
@@ -29,8 +29,8 @@ int FPSCutOff = 2;
 int tileGroupStep = 0;
 boolean tileGroupDeleting = false;
 int sx1, sy1, sx2, sy2;
-int tileGroupXLines = 0;
-int tileGroupYLines = 0;
+int tileGrouSXLines = 0;
+int tileGrouSYLines = 0;
 
 int tileBorderNumber = 0;
 
@@ -42,7 +42,7 @@ int cols = 100;
 int rows = 100;
 
 int SX = 0, SY = 0;
-int mX = 0, mY = 0, pX = 0, pY = 0;
+int mX = 0, mY = 0;
 int fV = 1;
 int UIRight = 22;
 int UIBottom = 2;
@@ -68,16 +68,29 @@ canvasBG BG = new canvasBG();
 int borderThickness = 4;
 
 void preload(){
-  missingTexture = loadImage("assets/missingTexture.png");
+  PImage tileMap = loadImage("assets/tileMap.png");
+  tileMap.loadPixels();
   
   for(int i = 0; i <= totalImages; i++){
     img = (PImage[]) expand(img, img.length + 1);
-    img[i] = loadImage("assets/" + i + ".png");
+    img[i] = createImage(32, 32, RGB);
+    img[i].loadPixels();
+    for(int y = 0; y < 32; y++){
+      for(int x = 0; x < 32; x++){
+        img[i].set(x, y, tileMap.get(x + (scl * floor(i % 32)), y + (scl * floor(i / 32))));
+      }
+    }
+    img[i].updatePixels();
   }
   
-  for(int i = totalImages + 1; i <= fullTotalImages; i++){
-    img = (PImage[]) expand(img, img.length + 1);
-    img[i] = missingTexture;
+  missingTexture = loadImage("assets/missingTexture.png");
+  
+  println(totalImages + ": " + fullTotalImages);
+  if(totalImages != fullTotalImages){
+    for(int i = totalImages + 1; i <= fullTotalImages; i++){
+      img = (PImage[]) expand(img, img.length + 1);
+      img[i] = missingTexture;
+    }
   }
   
   BACKGROUND = loadImage("assets/background.png");
@@ -87,7 +100,6 @@ void setup(){
   preload();
   
   size(960,540);//X, Y
-  //fullScreen();
   surface.setResizable(true);
   
   UIControls = new ControlP5(this);
@@ -99,7 +111,6 @@ void setup(){
 
 void draw(){
   pushMatrix();
-  //translate(-scl * 10, -scl * 2);
   translate(SX, SY);
   
   drawnTiles = 0;//reset number of drawn tiles
@@ -146,21 +157,6 @@ void draw(){
   //Update and Draw the UI
   UI.update();//Update the UI position
   UI.draw();//Draw the UI
-  
-  //text(mapTiles.length, 200,200);
-  //text(frameRate, 210,210);
-  //Update and Draw the UI
-  //UI.update();//Update the UI position
-  //UI.draw();//Draw the UI
-  /*pushMatrix();
-  translate(-30, -20);
-  BG.draw();
-  BG.border();
-  UI.draw();
-  popMatrix();
-  line(100,0,0,100);
-  image(img[1], 0,0);
-  image(img[mapTiles[0].image],mapTiles[0].x,mapTiles[0].y);*/
 }
 
 void mousePressed(){//We pressed a mouse button
@@ -210,7 +206,7 @@ void mousePressed(){//We pressed a mouse button
       if(img[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
       tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on
       mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
-      mapTiles[mapTiles.length - 1] = new mTile(scl*i + pX - SX,0 + pY - SY,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Create a tile
+      mapTiles[mapTiles.length - 1] = new mTile(scl*i + SX - SX,0 + SY - SY,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Create a tile
     }
   }//Went through all the tiles in the row
   
@@ -302,7 +298,7 @@ void mouseReleased(){//We released the mouse button
   noTile = false;//Allow tile placement
 
   if(mapN != -1 && mapTiles.length > mapN){//If tile exists
-    if(mapTiles[mapN].x >= pX && mapTiles[mapN].x < scl*rowLength + pX && mapTiles[mapN].y == pY){//Is the tile we just dropped on the UI
+    if(mapTiles[mapN].x >= SX && mapTiles[mapN].x < scl*rowLength + SX && mapTiles[mapN].y == SY){//Is the tile we just dropped on the UI
       deleteTile(mapN);//Delete a tile and update the array
       //return false;
     }
@@ -330,11 +326,7 @@ void keyPressed(){//We pressed a key
 
 void keyTyped(){//We typed a key
   if(noKeyboard == false){//are we blocking keyboard functions?
-    /*if(key == 'q'){//We pressed 'Q'
-      prevTileC();
-    }else if(key == 'e'){//We pressed 'E'
-      nextTileC();
-    }else */if(key == 'f'){//We pressed 'F'
+    if(key == 'f'){//We pressed 'F'
       if(CClear){//Is it currently clear?
         CClear = false;//Set if not clear
         //CCheckBox.checked(false);//Uncheck the checkbox
@@ -393,20 +385,11 @@ void keyTyped(){//We typed a key
         sx2 = mouseX - SX;//set x1 to mouse x position
         sy2 = mouseY - SY;//set y2 to mouse y position
       }
-    }/*else if(key == 'm'){//We pressed 'm'
-      selectOutput("Select a CSV to write to:", "FileSaveMapSelect");
-      //FileSaveMap();
-    }else if(key == 'n'){
-      selectInput("Select a CSV to read from:", "FileLoadMapSelect");
-      //FileLoadMap();
-    }else if(key == 'b'){
-      selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");
-      //FileSaveCanvas();
-    }*/
+    }
     
     if(key == 'w'){//We pressed 'W'
       if(SY < scl * 5){
-        SY += /*window.pageYOffset - */(scl * scrollAmount);//Scroll Screen UP
+        SY += (scl * scrollAmount);//Scroll Screen UP
       }
       if(SY > scl * 5){
         SY = scl * 5;
@@ -414,7 +397,7 @@ void keyTyped(){//We typed a key
     }
     if(key == 'a'){//We pressed 'A'
       if(SX < scl * 5){
-        SX += /*window.pageXOffset - */(scl * scrollAmount);//Scroll Screen LEFT
+        SX += (scl * scrollAmount);//Scroll Screen LEFT
       }
       if(SX > scl * 5){
         SX = scl * 5;
@@ -422,18 +405,18 @@ void keyTyped(){//We typed a key
     }
     if(key == 's'){//We pressed 'S'
       if(SY > -((scl * 105) - height)){
-        SY -= /*window.pageYOffset + */(scl * scrollAmount);//Scroll Screen RIGHT
+        SY -= (scl * scrollAmount);//Scroll Screen RIGHT
       }
       if(SY < -((scl * 105) - height)){
-        SY = -((scl * 105) - height);
+        SY = -((scl * 105) - (floor(height / scl) * scl));
       }
     }
     if(key == 'd'){//We pressed 'D'
       if(SX > -((scl * 105) - width)){
-        SX -= /*window.pageXOffset + */(scl * scrollAmount);//Scroll Screen DOWN
+        SX -= (scl * scrollAmount);//Scroll Screen DOWN
       }
       if(SX < -((scl * 105) - width)){
-        SX = -((scl * 105) - width);
+        SX = -((scl * 105) - (floor(width / scl) * scl));
       }
     }
   }
@@ -540,10 +523,8 @@ class mTile{//Tile Object
 void updateXY(){//Update the XY position of the mouse and the page XY offset
   mX = mouseX - SX;//Update the X position of the mouse
   mY = mouseY - SY;//Update the Y position of the mouse
-  //pX = window.pageXOffset;//Update the page X offset
-  //pY = window.pageYOffset;//Update the page Y offset
-  pX = SX;
-  pY = SY;
+  //SX = window.pageXOffset;//Update the page X offset
+  //SY = window.pageYOffset;//Update the page Y offset
 }//updateXY() END
 
 void deleteTile(int tile){//Delete a tile and update the array
@@ -616,12 +597,12 @@ void updateTileRow(){//Get the row to whatever tile were on
   while(floor(tileN/rowLength)*rowLength < rowLength*tileRow){//Is tileN lower than the row were on?
       tileRow--;//Decrement tileRow
       if(tileRow < 0){//Is the tile number less than zero?
-        tileRow = floor(totalImages/rowLength);//Loop the tile row back to the last row
+        tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
       }
     }
     while(floor(tileN/rowLength)*rowLength > rowLength*tileRow){//Is tileN higher than the row were on?
       tileRow++;//Increment tileRow
-      if(tileRow > totalImages/rowLength){//Is the tile row greater than our total number of rows?
+      if(tileRow > fullTotalImages/rowLength){//Is the tile row greater than our total number of rows?
         tileRow = 0;//Loop the tile row back to the first row
       }
     }
@@ -795,11 +776,11 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
   //X2 += scl;
   //Y2 += scl;
   
-  tileGroupXLines = (X2 - X1) / scl;//how many x lines
-  tileGroupYLines = (Y2 - Y1) / scl;//how many y lines
+  tileGrouSXLines = (X2 - X1) / scl;//how many x lines
+  tileGrouSYLines = (Y2 - Y1) / scl;//how many y lines
   
-  for(int i = 0; i < tileGroupYLines; i++){//loop through all y lines
-    for(int j = 0; j < tileGroupXLines; j++){//loop through all x lines
+  for(int i = 0; i < tileGrouSYLines; i++){//loop through all y lines
+    for(int j = 0; j < tileGrouSXLines; j++){//loop through all x lines
       hadTile = false;//square does not have tile
       if(button == 'x'){//we clicked middle button on a tile
         for(int k = 0; k <= mapTiles.length-1; k++){//loop through all tiles
@@ -836,11 +817,11 @@ void tileGroupPaste(){//Paste The Copied Tiles
   int X1,Y1;//Setup Variables
   int tileCount = 0;//how many tiles are there
   
-  X1 = floor((mouseX - (floor(tileGroupXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGroupYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
   
-  for(int i = 0; i < tileGroupYLines; i++){//loop through all y lines
-    for(int j = 0; j < tileGroupXLines; j++){//loop through all x lines
+  for(int i = 0; i < tileGrouSYLines; i++){//loop through all y lines
+    for(int j = 0; j < tileGrouSXLines; j++){//loop through all x lines
       if(tileCount < mapTilesCopy.length){//are there more tiles
         if(mapTilesCopy[tileCount] != null){//if tile is not null
           mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
@@ -859,10 +840,10 @@ void tileGroupPaste(){//Paste The Copied Tiles
 void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Placed
   int X1,X2,Y1,Y2;//Setup Variables
   
-  X1 = floor((mouseX - (floor(tileGroupXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
-  X2 = (floor((mouseX + (ceil((float)tileGroupXLines / 2) * scl)) / scl) * scl) - SX;//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGroupYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
-  Y2 = (floor((mouseY + (ceil((float)tileGroupYLines / 2) * scl)) / scl) * scl) - SY;//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
+  X2 = (floor((mouseX + (ceil((float)tileGrouSXLines / 2) * scl)) / scl) * scl) - SX;//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
+  Y2 = (floor((mouseY + (ceil((float)tileGrouSYLines / 2) * scl)) / scl) * scl) - SY;//Adjust XY To Be On Tile Border
   
   //X2 += scl;
   //Y2 += scl;
