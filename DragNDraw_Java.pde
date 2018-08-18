@@ -904,6 +904,13 @@ void FileSaveCanvasSelect(File selection){
   } else {
     println("User selected " + selection.getAbsolutePath());
     fileName = selection.getAbsolutePath();
+    String[] fileNameSplit = split(fileName, '.');
+    String[] fileNamePNG = {fileNameSplit[0], "png"};
+    if(fileNameSplit.length > 1){
+      //Already has file type
+    }else{
+      fileName = join(fileNamePNG, '.');
+    }
     FileSaveCanvas();
   }
 }
@@ -914,6 +921,13 @@ void FileSaveMapSelect(File selection){
   } else {
     println("User selected " + selection.getAbsolutePath());
     fileName = selection.getAbsolutePath();
+    String[] fileNameSplit = split(fileName, '.');
+    String[] fileNameCSV = {fileNameSplit[0], "csv"};
+    if(fileNameSplit.length > 1){
+      //Already has file type
+    }else{
+      fileName = join(fileNameCSV, '.');
+    }
     FileSaveMap();
   }
 }
@@ -951,6 +965,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
 
   PGraphics fullCanvas = createGraphics(highX - lowX + scl, highY - lowY + scl);
   fullCanvas.beginDraw();
+  fullCanvas.background(255);
   fullCanvas.image(BACKGROUND, 0, 0);//Draw the background
   //Display Map Tiles
   for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
@@ -1044,7 +1059,7 @@ void FileSaveMap(){//Save the Map to file
 
 void FileLoadMap(){//load map from file
   //noLoop();
-  mapTable = loadTable(fileName, "header");// + ".csv", "header");//Load the csv
+  mapTable = loadTable(fileName, "header, csv");// + ".csv", "header");//Load the csv
   
   while(mapTiles.length > 0){//Clear the array
     deleteTile(0);
