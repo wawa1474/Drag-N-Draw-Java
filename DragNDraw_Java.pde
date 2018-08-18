@@ -60,6 +60,8 @@ String fileName = "Map1";
 
 ControlP5 UIControls;
 Controller RSlider, GSlider, BSlider;
+Controller scrollSlider;
+Controller fileSaveMap, fileLoadMap, fileSaveCanvas;
 
 tileUI UI = new tileUI();
 canvasBG BG = new canvasBG();
@@ -328,11 +330,11 @@ void keyPressed(){//We pressed a key
 
 void keyTyped(){//We typed a key
   if(noKeyboard == false){//are we blocking keyboard functions?
-    if(key == 'q'){//We pressed 'Q'
+    /*if(key == 'q'){//We pressed 'Q'
       prevTileC();
     }else if(key == 'e'){//We pressed 'E'
       nextTileC();
-    }else if(key == 'f'){//We pressed 'F'
+    }else */if(key == 'f'){//We pressed 'F'
       if(CClear){//Is it currently clear?
         CClear = false;//Set if not clear
         //CCheckBox.checked(false);//Uncheck the checkbox
@@ -349,7 +351,11 @@ void keyTyped(){//We typed a key
         tileGroupCutCopy('c');//copy group selection
       }
     }else if(key == 'v'){//We pressed 'V'
-      tileGroupStep = 3;//paste step is 3
+      if(tileGroupStep != 3){
+        tileGroupStep = 3;//paste step is 3
+      }else if(tileGroupStep == 3){
+        tileGroupStep = 0;//paste step is 3
+      }
     }else if(key == 'i'){//We pressed 'I'
       for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
         mapTiles[i].y -= scl * scrollAmount;//Move tile up 1 space
@@ -376,7 +382,7 @@ void keyTyped(){//We typed a key
           //console.log('Tile Lore: ' + mapTiles[i].lore);
         }
       }
-    }else if(key == 'p'){//We pressed 'P'
+    }else if(key == 'q'){//We pressed 'P'
       //tileGroup(scl * 10, scl * 3, scl * 5, scl * 10)
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step
@@ -387,7 +393,7 @@ void keyTyped(){//We typed a key
         sx2 = mouseX - SX;//set x1 to mouse x position
         sy2 = mouseY - SY;//set y2 to mouse y position
       }
-    }else if(key == 'm'){//We pressed 'm'
+    }/*else if(key == 'm'){//We pressed 'm'
       selectOutput("Select a CSV to write to:", "FileSaveMapSelect");
       //FileSaveMap();
     }else if(key == 'n'){
@@ -396,26 +402,38 @@ void keyTyped(){//We typed a key
     }else if(key == 'b'){
       selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");
       //FileSaveCanvas();
-    }
+    }*/
     
     if(key == 'w'){//We pressed 'W'
       if(SY < scl * 5){
         SY += /*window.pageYOffset - */(scl * scrollAmount);//Scroll Screen UP
+      }
+      if(SY > scl * 5){
+        SY = scl * 5;
       }
     }
     if(key == 'a'){//We pressed 'A'
       if(SX < scl * 5){
         SX += /*window.pageXOffset - */(scl * scrollAmount);//Scroll Screen LEFT
       }
+      if(SX > scl * 5){
+        SX = scl * 5;
+      }
     }
     if(key == 's'){//We pressed 'S'
       if(SY > -((scl * 105) - height)){
         SY -= /*window.pageYOffset + */(scl * scrollAmount);//Scroll Screen RIGHT
       }
+      if(SY < -((scl * 105) - height)){
+        SY = -((scl * 105) - height);
+      }
     }
     if(key == 'd'){//We pressed 'D'
       if(SX > -((scl * 105) - width)){
         SX -= /*window.pageXOffset + */(scl * scrollAmount);//Scroll Screen DOWN
+      }
+      if(SX < -((scl * 105) - width)){
+        SX = -((scl * 105) - width);
       }
     }
   }
@@ -423,8 +441,8 @@ void keyTyped(){//We typed a key
 
 class tileUI{
   void draw(){
-    //fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
-    //rect(0, scl, scl, scl);//Display color behind RGB Sliders
+    fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
+    rect(scl * 3, scl, scl, scl);//Display color behind RGB Sliders
     
     fill(255);//Set background color to white
     rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
@@ -441,25 +459,45 @@ class tileUI{
     fill(255,0,0);//red text
     stroke(0);//no outline
     textSize(24);//larger text size
-    text("FPS: " + frameRate, ((scl * 22) + scl / 2.25), (scl / 1.25));//FPS: (fps.fp)
+    //String FPS = String.valueOf(frameRate);
+    //text("FPS: " + FPS.substring(0, 4), ((scl * 12) + scl / 8), (scl * 1.75));//FPS: (fps.fp)
     
-    text("Tiles: " + mapTiles.length, ((scl * 27) + scl / 2.25), (scl / 1.25));//Tiles: (tiles)
+    text("Tiles: " + mapTiles.length, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
   
-    text("Drawn: " + drawnTiles, ((scl * 27) + scl / 2.25), (scl * 1.75));//Drawn: (drawn)
+    text("Drawn: " + drawnTiles, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
     textSize(12);//Default text size
   }
   
   void update(){
-
+    scrollAmount = (int)scrollSlider.getValue();
   }
   
   void setup(){
-    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(0,scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setCaptionLabel("");
-    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(0,scl + 12.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setCaptionLabel("");
-    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(0,scl + 23.3).setSliderMode(Slider.FLEXIBLE).setSize(100,10).setRange(0,255).setValue(127).setCaptionLabel("");
+    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(0,scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
+    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(0,scl + 12.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
+    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(0,scl + 23.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
     RSlider = UIControls.getController("RSlider");
     GSlider = UIControls.getController("GSlider");
     BSlider = UIControls.getController("BSlider");
+    
+    UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 4,scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2,scl).setRange(1,10).setValue(5).setCaptionLabel("");
+    scrollSlider = UIControls.getController("scrollSlider");
+    
+    UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl);
+    fileSaveMap = UIControls.getController("fileSaveLoad");
+  }
+}
+
+void fileSaveLoad(int n){
+  //println(n);
+  if(n == 0){
+    selectOutput("Select a CSV to write to:", "FileSaveMapSelect");
+  }else if(n == 1){
+    selectInput("Select a CSV to read from:", "FileLoadMapSelect");
+  }else if(n == 2){
+    selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");
+  }else{
+    println("Button Does Not Exist");
   }
 }
 
@@ -1016,13 +1054,15 @@ void FileSaveMap(){//Save the Map to file
       newRow.setInt("clear",CLEAR);//Is Tile Clear
       //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
     }
+  }else{
+    println("File Version Error (Saving).");//throw error
   }
   saveTable(mapTable, fileName);// + ".csv");//Save the Map to a CSV file
   mapTable = null;//Clear the Table
 }//FileSaveMap() END
 
 void FileLoadMap(){//load map from file
-  noLoop();
+  //noLoop();
   mapTable = loadTable(fileName, "header");// + ".csv", "header");//Load the csv
   
   while(mapTiles.length > 0){//Clear the array
@@ -1088,7 +1128,7 @@ void FileLoadMap(){//load map from file
                               //mapTable.get(i,'lore'));//Tile LORE?
     }
   }else{//we don't know that file version
-    println("File Version Error.");//throw error
+    println("File Version Error (Loading).");//throw error
   }
   
   if(mapTiles == null){//Is the array null
@@ -1096,5 +1136,5 @@ void FileLoadMap(){//load map from file
       deleteTile(0);
     }
   }
-  loop();
+  //loop();
 }//FileLoadMap() END
