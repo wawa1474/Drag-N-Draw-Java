@@ -62,6 +62,8 @@ ControlP5 UIControls;
 Controller RSlider, GSlider, BSlider;
 Controller scrollSlider;
 Controller fileSaveMap, fileLoadMap, fileSaveCanvas;
+Controller colorSelect, colorInput;
+int oldR, oldG, oldB;
 
 tileUI UI = new tileUI();
 canvasBG BG = new canvasBG();
@@ -73,7 +75,7 @@ void preload(){
   
   for(int i = 0; i <= totalImages; i++){
     img = (PImage[]) expand(img, img.length + 1);
-    img[i] = createImage(32, 32, RGB);
+    img[i] = createImage(32, 32, ARGB);
     img[i].loadPixels();
     for(int y = 0; y < 32; y++){
       for(int x = 0; x < 32; x++){
@@ -110,6 +112,10 @@ void setup(){
 }
 
 void draw(){
+  if(UIControls.get(ColorWheel.class, "colorWheel").isVisible() || UIControls.get(Textfield.class, "colorInputR").isVisible()){
+    noTile = true;//Allow tile placement
+  }
+  
   pushMatrix();
   translate(SX, SY);
   
@@ -161,6 +167,10 @@ void draw(){
 
 void mousePressed(){//We pressed a mouse button
   //updateXY();
+  if(noTile){
+    return;
+  }
+  
   if(tileGroupStep == 3){//pasteing group of tiles
     if(mouseButton == LEFT){//We clicked with the left button
       tileGroupPaste();//paste group selection
@@ -295,7 +305,9 @@ void mouseReleased(){//We released the mouse button
   
   deleting = false;//Quit deleting
   dragging = false;//Quit dragging
-  noTile = false;//Allow tile placement
+  if(!UIControls.get(ColorWheel.class, "colorWheel").isVisible() && !UIControls.get(Textfield.class, "colorInputR").isVisible()){
+    noTile = false;//Allow tile placement
+  }
 
   if(mapN != -1 && mapTiles.length > mapN){//If tile exists
     if(mapTiles[mapN].x >= SX && mapTiles[mapN].x < scl*rowLength + SX && mapTiles[mapN].y == SY){//Is the tile we just dropped on the UI
@@ -424,8 +436,8 @@ void keyTyped(){//We typed a key
 
 class tileUI{
   void draw(){
-    fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
-    rect(scl * 3, scl, scl, scl);//Display color behind RGB Sliders
+    //fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
+    //rect(0, scl, scl, scl);//Display color behind RGB Sliders
     
     fill(255);//Set background color to white
     rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
@@ -453,22 +465,81 @@ class tileUI{
   
   void update(){
     scrollAmount = (int)scrollSlider.getValue();
+    
+    scrollSlider.setColorBackground(color(scrollSlider.getValue() * 10, scrollSlider.getValue() * 10, scrollSlider.getValue() * 10));
+    
+    if(UIControls.get(ColorWheel.class, "colorWheel").r() != oldR){
+      RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());
+      oldR = UIControls.get(ColorWheel.class, "colorWheel").r();
+    }
+    if(UIControls.get(ColorWheel.class, "colorWheel").g() != oldG){
+      GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());
+      oldG = UIControls.get(ColorWheel.class, "colorWheel").g();
+    }
+    if(UIControls.get(ColorWheel.class, "colorWheel").b() != oldB){
+      BSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").b());
+      oldB = UIControls.get(ColorWheel.class, "colorWheel").b();
+    }
+    
+    RSlider.setColorBackground(color(RSlider.getValue(), 0, 0));
+    GSlider.setColorBackground(color(0, GSlider.getValue(), 0));
+    BSlider.setColorBackground(color(0, 0, BSlider.getValue()));
+    
+    colorSelect.setColorBackground(color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+    colorInput.setColorBackground(color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
   }
   
   void setup(){
-    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(0,scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
-    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(0,scl + 12.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
-    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(0,scl + 23.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
+    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
+    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, scl + 12.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
+    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(scl, scl + 23.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
     RSlider = UIControls.getController("RSlider");
     GSlider = UIControls.getController("GSlider");
     BSlider = UIControls.getController("BSlider");
     
-    UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 4,scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2,scl).setRange(1,10).setValue(5).setCaptionLabel("");
+    UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 5,scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2,scl).setRange(1,10).setValue(5).setCaptionLabel("");
     scrollSlider = UIControls.getController("scrollSlider");
     
-    UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl);
+    UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl).setColorBackground(color(0, 127, 127));
     fileSaveMap = UIControls.getController("fileSaveLoad");
+    
+    UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127));
+    
+    UIControls.addButton("colorSelect").setSize(scl, scl).setPosition(0, scl).setCaptionLabel("");
+    colorSelect = UIControls.getController("colorSelect");
+    
+    UIControls.addTextfield("colorInputR").setPosition(scl * 4, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");
+    UIControls.addTextfield("colorInputG").setPosition(scl * 4, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");
+    UIControls.addTextfield("colorInputB").setPosition(scl * 4, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");
+    
+    UIControls.addButton("colorInput").setSize(scl, scl).setPosition(scl * 4, scl).setCaptionLabel("");
+    colorInput = UIControls.getController("colorInput");
   }
+}
+
+void colorSelect(){
+  UIControls.get(ColorWheel.class, "colorWheel").setVisible(!UIControls.get(ColorWheel.class, "colorWheel").isVisible());
+  noTile = !noTile;
+}
+
+void colorInput(){
+  UIControls.get(Textfield.class, "colorInputR").setVisible(!UIControls.get(Textfield.class, "colorInputR").isVisible());
+  UIControls.get(Textfield.class, "colorInputG").setVisible(!UIControls.get(Textfield.class, "colorInputG").isVisible());
+  UIControls.get(Textfield.class, "colorInputB").setVisible(!UIControls.get(Textfield.class, "colorInputB").isVisible());
+  noKeyboard = !noKeyboard;
+  noTile = !noTile;
+}
+
+void colorInputR(String value){
+  RSlider.setValue(int(value));
+}
+
+void colorInputG(String value){
+  GSlider.setValue(int(value));
+}
+
+void colorInputB(String value){
+  BSlider.setValue(int(value));
 }
 
 void fileSaveLoad(int n){
