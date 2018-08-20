@@ -7,6 +7,19 @@ int _DEBUGAMOUNT_ = 50000;
 
 int _FILEVERSION_ = 2;
 
+//File Version Map
+  //Version 0:
+    //0 = File MetaData
+    //Compressed Color/Position Tile Data
+  
+  //Version 1:
+    //0 = File MetaData
+    //No Compression
+  
+  //Version 2:
+    //0 = File MetaData
+    //Compressed Position
+
 boolean dragging = false;
 boolean deleting = false;
 boolean noTile = false;
@@ -14,7 +27,7 @@ boolean noTile = false;
 boolean noKeyboard = false;
 
 int mapN = 0;
-int totalImages = 40 - 1;
+int totalImages = 1024 - 1;//40
 int rowLength = 16;
 int tileRow = 0;
 int tileN = 1;
@@ -63,7 +76,8 @@ Controller RSlider, GSlider, BSlider;
 Controller scrollSlider;
 Controller fileSaveMap, fileLoadMap, fileSaveCanvas;
 Controller colorSelect, colorInput;
-int oldR, oldG, oldB;
+Controller colorInputR, colorInputG, colorInputB;
+Controller colorWheel;
 
 tileUI UI = new tileUI();
 canvasBG BG = new canvasBG();
@@ -165,8 +179,26 @@ void draw(){
   UI.draw();//Draw the UI
 }
 
+boolean checkOffset(){
+  //println("X: " + (floor(mouseX / scl) * scl) + ", Y: " + (floor(mouseY / scl) * scl) + ", SX: " + SX + ", SY: " + SY + ", H: " + height + ", W: " + width);
+  if(SX > 0 && (floor(mouseX / scl) * scl) < SX){
+    return true;
+  }else if(SY > 0 && (floor(mouseY / scl) * scl) < SY){
+    return true;
+  }if(SX < 0 && mouseX - width > abs(SX)){
+    return true;
+  }
+  
+  return false;
+}
+
 void mousePressed(){//We pressed a mouse button
   //updateXY();
+
+  /*if(checkOffset()){
+    return;
+  }*/
+  
   if(noTile){
     return;
   }
@@ -254,6 +286,10 @@ void mousePressed(){//We pressed a mouse button
 void mouseDragged(){//We dragged the mouse while holding a button
   //updateXY();
   
+  /*if(checkOffset()){
+    return;
+  }*/
+  
   if(mouseButton == RIGHT){//We clicked with the right button
     for(int i = 0; i <= mapTiles.length-1; i++){//loop through all the tiles
       if(isCursorOnTile(i)){//Are we clicking on the tile
@@ -305,7 +341,7 @@ void mouseReleased(){//We released the mouse button
   
   deleting = false;//Quit deleting
   dragging = false;//Quit dragging
-  if(!UIControls.get(ColorWheel.class, "colorWheel").isVisible() && !UIControls.get(Textfield.class, "colorInputR").isVisible()){
+  if(!colorWheel.isVisible() && !colorInputR.isVisible()){
     noTile = false;//Allow tile placement
   }
 
@@ -451,6 +487,11 @@ class tileUI{
       }
     }//Went through all the tiles
     
+    /*if(colorInputR.isVisible()){
+      fill(128);
+      rect(scl / 2, scl * 2, scl * 4, scl);
+    }*/
+    
     fill(255,0,0);//red text
     stroke(0);//no outline
     textSize(24);//larger text size
@@ -466,20 +507,7 @@ class tileUI{
   void update(){
     scrollAmount = (int)scrollSlider.getValue();
     
-    scrollSlider.setColorBackground(color(scrollSlider.getValue() * 10, scrollSlider.getValue() * 10, scrollSlider.getValue() * 10));
-    
-    if(UIControls.get(ColorWheel.class, "colorWheel").r() != oldR){
-      RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());
-      oldR = UIControls.get(ColorWheel.class, "colorWheel").r();
-    }
-    if(UIControls.get(ColorWheel.class, "colorWheel").g() != oldG){
-      GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());
-      oldG = UIControls.get(ColorWheel.class, "colorWheel").g();
-    }
-    if(UIControls.get(ColorWheel.class, "colorWheel").b() != oldB){
-      BSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").b());
-      oldB = UIControls.get(ColorWheel.class, "colorWheel").b();
-    }
+    scrollSlider.setColorBackground(color(50));//scrollSlider.getValue() * 10, scrollSlider.getValue() * 10, scrollSlider.getValue() * 10));
     
     RSlider.setColorBackground(color(RSlider.getValue(), 0, 0));
     GSlider.setColorBackground(color(0, GSlider.getValue(), 0));
@@ -503,14 +531,27 @@ class tileUI{
     UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl).setColorBackground(color(0, 127, 127));
     fileSaveMap = UIControls.getController("fileSaveLoad");
     
-    UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127));
+    UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")
+      .onChange(new CallbackListener(){
+        public void controlEvent(CallbackEvent theEvent){
+          //println(theEvent);
+          RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());
+          GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());
+          BSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").b());
+        }
+      });
+    colorWheel = UIControls.getController("colorWheel");
+    
     
     UIControls.addButton("colorSelect").setSize(scl, scl).setPosition(0, scl).setCaptionLabel("");
     colorSelect = UIControls.getController("colorSelect");
     
-    UIControls.addTextfield("colorInputR").setPosition(scl * 4, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");
-    UIControls.addTextfield("colorInputG").setPosition(scl * 4, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");
-    UIControls.addTextfield("colorInputB").setPosition(scl * 4, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");
+    UIControls.addTextfield("colorInputR").setPosition(scl * 4, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
+    UIControls.addTextfield("colorInputG").setPosition(scl * 4, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
+    UIControls.addTextfield("colorInputB").setPosition(scl * 4, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
+    colorInputR = UIControls.getController("colorInputR");
+    colorInputG = UIControls.getController("colorInputG");
+    colorInputB = UIControls.getController("colorInputB");
     
     UIControls.addButton("colorInput").setSize(scl, scl).setPosition(scl * 4, scl).setCaptionLabel("");
     colorInput = UIControls.getController("colorInput");
@@ -518,14 +559,15 @@ class tileUI{
 }
 
 void colorSelect(){
-  UIControls.get(ColorWheel.class, "colorWheel").setVisible(!UIControls.get(ColorWheel.class, "colorWheel").isVisible());
+  colorWheel.setVisible(!colorWheel.isVisible());
   noTile = !noTile;
 }
 
 void colorInput(){
-  UIControls.get(Textfield.class, "colorInputR").setVisible(!UIControls.get(Textfield.class, "colorInputR").isVisible());
-  UIControls.get(Textfield.class, "colorInputG").setVisible(!UIControls.get(Textfield.class, "colorInputG").isVisible());
-  UIControls.get(Textfield.class, "colorInputB").setVisible(!UIControls.get(Textfield.class, "colorInputB").isVisible());
+  //UIControls.get(Textfield.class, "colorInputR").setVisible(!UIControls.get(Textfield.class, "colorInputR").isVisible());
+  colorInputR.setVisible(!colorInputR.isVisible());
+  colorInputG.setVisible(!colorInputG.isVisible());
+  colorInputB.setVisible(!colorInputB.isVisible());
   noKeyboard = !noKeyboard;
   noTile = !noTile;
 }
@@ -1034,7 +1076,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
     }
   }//Went through all the tiles
 
-  PGraphics fullCanvas = createGraphics(highX - lowX + scl, highY - lowY + scl);
+  PGraphics fullCanvas = createGraphics(highX - lowX + scl + 1, highY - lowY + scl + 1);
   fullCanvas.beginDraw();
   fullCanvas.background(255);
   fullCanvas.image(BACKGROUND, 0, 0);//Draw the background
