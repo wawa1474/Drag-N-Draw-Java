@@ -81,11 +81,24 @@ Controller colorWheel;
 Controller clearToggle;
 
 tileUI UI = new tileUI();
+boolean UISetup = false;
 canvasBG BG = new canvasBG();
 int borderThickness = 4;
 
+Table tileInfoTable;
+PImage[] tileMaps = new PImage[0];
+boolean preloading = true;
+int tileMapShow = 0;
+String tileMapLocation;
+int tileMapHeight = 32;
+int tileMapWidth = 32;
+int tileMapTileX;
+int tileMapTileY;
+
 void preload(){
-  PImage tileMap = loadImage("assets/tileMap.png");
+  //FileLoadTileInfo();
+  
+  PImage tileMap = loadImage(tileMapLocation);//"assets/tileMap.png");
   tileMap.loadPixels();
   
   for(int i = 0; i <= totalImages; i++){
@@ -94,7 +107,7 @@ void preload(){
     img[i].loadPixels();
     for(int y = 0; y < 32; y++){
       for(int x = 0; x < 32; x++){
-        img[i].set(x, y, tileMap.get(x + (scl * floor(i % 32)), y + (scl * floor(i / 32))));
+        img[i].set(x, y, tileMap.get(x + (scl * floor(i % tileMapWidth)), y + (scl * floor(i / tileMapHeight))));
       }
     }
     img[i].updatePixels();
@@ -113,20 +126,96 @@ void preload(){
   BACKGROUND = loadImage("assets/background.png");
 }
 
-void setup(){
-  preload();
+void FileLoadTileInfo(){//load map from file
+  tileInfoTable = loadTable("assets/tileMapInfo.csv", "header, csv");// + ".csv", "header");//Load the csv
   
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
+  int fileVersion = int(tileInfoTable.getInt(0,"location"));//File Version
+  //int(mapTable.get(0,'y'));//blank
+  //int(mapTable.get(0,'image'));//blank
+  //int(mapTable.get(0,'r'));//blank
+  //int(mapTable.get(0,'g'));//blank
+  //int(mapTable.get(0,'b'));//blank
+  //int(mapTable.get(0,'clear'));//blank
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
+  
+  if(fileVersion == 0){//whats the file version
+    for(int i = 1; i < tileInfoTable.getRowCount(); i++){//Loop through all the rows
+      tileMaps = (PImage[]) expand(tileMaps, tileMaps.length + 1);
+      tileMaps[tileMaps.length - 1] = loadImage(tileInfoTable.getString(i,"location"));
+      println(tileInfoTable.getString(i,"location") + ", " +//Tile X position
+                              tileInfoTable.getInt(i,"tileMapHeight") + ", " +//Tile Y position
+                              tileInfoTable.getInt(i,"tileMapWidth") + ", " +//Tile Image
+                              tileInfoTable.getInt(i,"tileMapTileX") + ", " +//Tile Red amount
+                              tileInfoTable.getInt(i,"tileMapTileY") + ", " +//Tile Red amount
+                              tileInfoTable.getInt(i,"images") + ", " +//Tile Red amount
+                              tileInfoTable.getString(i,"name"));//,//Is Tile Clear
+    }
+  }else{//we don't know that file version
+    println("File Version Error (Loading).");//throw error
+  }
+  //image(tileMaps[1],0,0);
+}//FileLoadMap() END
+
+void setup(){
   size(960,540);//X, Y
   surface.setResizable(true);
   
+  FileLoadTileInfo();
+  //preload();
+  
   UIControls = new ControlP5(this);
-  UI.setup();
+  //UI.setup();
+  UIControls.addButton("nextMap").setSize(scl * 2, scl).setPosition(0, 0).setCaptionLabel("Next");
+  UIControls.addButton("prevMap").setSize(scl * 2, scl).setPosition(scl * 3, 0).setCaptionLabel("Previous");
+  UIControls.addButton("selectMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Select");
+  //UIControls.remove("nextMap");
   
   mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
   mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
 }
 
+void nextMap(){
+  tileMapShow++;
+  if(tileMapShow >= tileInfoTable.getRowCount() - 2){
+    tileMapShow = tileInfoTable.getRowCount() - 2;
+  }
+}
+
+void prevMap(){
+  tileMapShow--;
+  if(tileMapShow <= 0){
+    tileMapShow = 0;
+  }
+}
+
+void selectMap(){
+  tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");
+  totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;
+  tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");
+  tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");
+  fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;
+  preloading = false;
+}
+
 void draw(){
+  if(preloading == true){
+    pushMatrix();
+    background(255);
+    translate(SX, SY);
+    image(tileMaps[tileMapShow],0,scl);
+    //image(tileMaps[0],tileMaps[1].width,scl);
+    popMatrix();
+  }else{
+    if(UISetup == false){
+      preload();
+      UIControls.remove("nextMap");
+      UIControls.remove("prevMap");
+      UIControls.remove("selectMap");
+      UI.setup();
+      UISetup = true;
+    }
+  
   if(UIControls.get(ColorWheel.class, "colorWheel").isVisible() || UIControls.get(Textfield.class, "colorInputR").isVisible()){
     noTile = true;//Allow tile placement
   }
@@ -178,6 +267,7 @@ void draw(){
   //Update and Draw the UI
   UI.update();//Update the UI position
   UI.draw();//Draw the UI
+  }
 }
 
 boolean checkOffset(){
@@ -194,6 +284,7 @@ boolean checkOffset(){
 }
 
 void mousePressed(){//We pressed a mouse button
+  if(preloading == true || UISetup == false){}else{
   //updateXY();
 
   /*if(checkOffset()){
@@ -282,9 +373,11 @@ void mousePressed(){//We pressed a mouse button
   }//Went through all the tiles
   
   placeTile();//Place a tile at current mouse position
+  }
 }//mousePressed() END
 
 void mouseDragged(){//We dragged the mouse while holding a button
+  if(preloading == true || UISetup == false){}else{
   //updateXY();
   
   /*if(checkOffset()){
@@ -331,9 +424,11 @@ void mouseDragged(){//We dragged the mouse while holding a button
   placeTile();//Place a tile at current mouse position
   
   //return false;
+  }
 }//mouseDragged() END
 
 void mouseReleased(){//We released the mouse button
+  if(preloading == true || UISetup == false){}else{
   if(dragging){//Are we dragging a tile
     if(mapTiles[mapN] != null){//If tile exists
       snapTileLocation(mapN);//Snap XY location of tile to grid
@@ -351,6 +446,7 @@ void mouseReleased(){//We released the mouse button
       deleteTile(mapN);//Delete a tile and update the array
       //return false;
     }
+  }
   }
 }//mouseReleased() END
 
