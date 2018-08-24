@@ -5,7 +5,7 @@ import controlP5.*;
 int _DEBUG_ = 0;
 int _DEBUGAMOUNT_ = 50000;
 
-int _FILEVERSION_ = 2;
+int _FILEVERSION_ = 3;
 
 //File Version Map
   //Version 0:
@@ -94,6 +94,7 @@ int tileMapHeight = 32;
 int tileMapWidth = 32;
 int tileMapTileX;
 int tileMapTileY;
+String tileMapName = "Classic";
 
 void preload(){
   //FileLoadTileInfo();
@@ -150,6 +151,9 @@ void FileLoadTileInfo(){//load map from file
                               tileInfoTable.getInt(i,"tileMapTileY") + ", " +//Tile Red amount
                               tileInfoTable.getInt(i,"images") + ", " +//Tile Red amount
                               tileInfoTable.getString(i,"name"));//,//Is Tile Clear
+      if(tileInfoTable.getString(i,"name") == tileMapName){
+        tileMapLocation = tileInfoTable.getString(i,"location");
+      }
     }
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error
@@ -166,9 +170,10 @@ void setup(){
   
   UIControls = new ControlP5(this);
   //UI.setup();
-  UIControls.addButton("nextMap").setSize(scl * 2, scl).setPosition(0, 0).setCaptionLabel("Next");
-  UIControls.addButton("prevMap").setSize(scl * 2, scl).setPosition(scl * 3, 0).setCaptionLabel("Previous");
+  UIControls.addButton("prevMap").setSize(scl * 2, scl).setPosition(0, 0).setCaptionLabel("Previous");
+  UIControls.addButton("nextMap").setSize(scl * 2, scl).setPosition(scl * 3, 0).setCaptionLabel("Next");
   UIControls.addButton("selectMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Select");
+  UIControls.addButton("loadMap").setSize(scl * 2, scl).setPosition(scl * 9, 0).setCaptionLabel("Load Map");
   //UIControls.remove("nextMap");
   
   mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
@@ -194,7 +199,21 @@ void selectMap(){
   totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;
   tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");
   tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");
+  tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");
   fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;
+  preloading = false;
+}
+
+void loadMap(){
+  selectInput("Select a CSV to read from:", "FileLoadMapSelect");
+  FileLoadTileInfo();
+  preload();
+  UIControls.remove("nextMap");
+  UIControls.remove("prevMap");
+  UIControls.remove("selectMap");
+  UIControls.remove("loadMap");
+  UI.setup();
+  UISetup = true;
   preloading = false;
 }
 
@@ -205,6 +224,10 @@ void draw(){
     translate(SX, SY);
     image(tileMaps[tileMapShow],0,scl);
     //image(tileMaps[0],tileMaps[1].width,scl);
+    fill(0);
+    rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);
+    fill(255);
+    text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);
     popMatrix();
   }else{
     if(UISetup == false){
@@ -212,6 +235,7 @@ void draw(){
       UIControls.remove("nextMap");
       UIControls.remove("prevMap");
       UIControls.remove("selectMap");
+      UIControls.remove("loadMap");
       UI.setup();
       UISetup = true;
     }
@@ -1127,7 +1151,7 @@ void FileSaveCanvasSelect(File selection){
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
-    println("User selected " + selection.getAbsolutePath());
+    println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();
     String[] fileNameSplit = split(fileName, '.');
     String[] fileNamePNG = {fileNameSplit[0], "png"};
@@ -1144,7 +1168,7 @@ void FileSaveMapSelect(File selection){
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
-    println("User selected " + selection.getAbsolutePath());
+    println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();
     String[] fileNameSplit = split(fileName, '.');
     String[] fileNameCSV = {fileNameSplit[0], "csv"};
@@ -1161,7 +1185,7 @@ void FileLoadMapSelect(File selection){
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
-    println("User selected " + selection.getAbsolutePath());
+    println("User selected " + selection.getAbsolutePath() + " for loading");
     fileName = selection.getAbsolutePath();
     FileLoadMap();
   }
@@ -1219,7 +1243,7 @@ void FileSaveMap(){//Save the Map to file
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   newRow = mapTable.addRow();//Add a row to table
   newRow.setInt("x",_FILEVERSION_);//File Version
-  newRow.setInt("y",0);//blank
+  newRow.setString("y",tileMapName);//blank
   newRow.setInt("image",0);//blank
   newRow.setInt("r",0);//blank
   newRow.setInt("g",0);//blank
@@ -1259,7 +1283,23 @@ void FileSaveMap(){//Save the Map to file
       newRow.setInt("clear",CLEAR);//Is Tile Clear
       //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
     }
-  }else */if(_FILEVERSION_ == 2){
+  }else if(_FILEVERSION_ == 2){
+    for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
+      newRow = mapTable.addRow();//Add a row to table
+      newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
+      newRow.setInt("y",floor(mapTiles[i].y / scl));//Tile Y position
+      newRow.setInt("image",mapTiles[i].image);//Tile Image
+      newRow.setInt("r",floor(mapTiles[i].r));//Tile Red amount
+      newRow.setInt("g",floor(mapTiles[i].g));//Tile Green amount
+      newRow.setInt("b",floor(mapTiles[i].b));//Tile Blue amount
+      int CLEAR = 1;//tile is clear
+      if(!mapTiles[i].clear){//Is Tile Clear
+        CLEAR = 0;//tile is not clear
+      }
+      newRow.setInt("clear",CLEAR);//Is Tile Clear
+      //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
+    }
+  }else */if(_FILEVERSION_ == 3){
     for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
       newRow = mapTable.addRow();//Add a row to table
       newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
@@ -1292,7 +1332,11 @@ void FileLoadMap(){//load map from file
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   int fileVersion = int(mapTable.getInt(0,"x"));//File Version
-  //int(mapTable.get(0,'y'));//blank
+  /*if(mapTable.getString(0,'y') == "0"){
+    //Default To Classic Tile Map
+  }else{
+    tileMapName = mapTable.getString(0,'y');//Tile Map Name
+  }*/
   //int(mapTable.get(0,'image'));//blank
   //int(mapTable.get(0,'r'));//blank
   //int(mapTable.get(0,'g'));//blank
@@ -1333,6 +1377,22 @@ void FileLoadMap(){//load map from file
                               //mapTable.get(i,'lore'));//Tile LORE?
     }
   }else if(fileVersion == 2){//whats the file version
+    for(int i = 1; i < mapTable.getRowCount(); i++){//Loop through all the rows
+      boolean CLEAR = true;//tile is clear
+      if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
+        CLEAR = false;//tile is not clear
+      }
+      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+      mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x") * scl,//Tile X position
+                              mapTable.getInt(i,"y") * scl,//Tile Y position
+                              mapTable.getInt(i,"image"),//Tile Image
+                              mapTable.getInt(i,"r"),//Tile Red amount
+                              mapTable.getInt(i,"g"),//Tile Green amount
+                              mapTable.getInt(i,"b"),//Tile Blue amount
+                              CLEAR);//,//Is Tile Clear
+                              //mapTable.get(i,'lore'));//Tile LORE?
+    }
+  }else if(fileVersion == 3){//whats the file version
     for(int i = 1; i < mapTable.getRowCount(); i++){//Loop through all the rows
       boolean CLEAR = true;//tile is clear
       if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
