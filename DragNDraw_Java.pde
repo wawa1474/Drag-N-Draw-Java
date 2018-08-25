@@ -90,7 +90,7 @@ PImage[] tileMaps = new PImage[0];
 boolean preloading = true;
 boolean prepreloading = true;
 int tileMapShow = 0;
-String tileMapLocation;
+String tileMapLocation = "assets/tileMap.png";
 boolean loadMapLocaion = false;
 int tileMapHeight = 32;
 int tileMapWidth = 32;
@@ -152,6 +152,9 @@ void FileLoadTileInfo(){//load map from file
                               tileInfoTable.getInt(i,"tileMapTileY") + ", " +//Tile Red amount
                               tileInfoTable.getInt(i,"images") + ", " +//Tile Red amount
                               tileInfoTable.getString(i,"name"));//,//Is Tile Clear
+      if(tileMapName.equals(tileInfoTable.getString(i,"name"))){
+        tileMapLocation = tileInfoTable.getString(i,"location");
+      }
     }
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error
@@ -1311,7 +1314,7 @@ void FileSaveMap(){//Save the Map to file
 }//FileSaveMap() END
 
 void FileLoadMap(){//load map from file
-  //noLoop();
+  noLoop();
   mapTable = loadTable(fileName, "header, csv");// + ".csv", "header");//Load the csv
   
   while(mapTiles.length > 0){//Clear the array
@@ -1320,12 +1323,12 @@ void FileLoadMap(){//load map from file
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   int fileVersion = int(mapTable.getInt(0,"x"));//File Version
-  if(mapTable.getString(0,"y") == "0"){
-    //Default To Classic Tile Map
+  println(mapTable.getString(0,"y"));
+  if(!tileMapName.equals(mapTable.getString(0,"y"))){
+    println("Changing Tile Map");
+    tileMapName = mapTable.getString(0,"y");//Tile Map Name
   }else{
-    if(loadMapLocaion == true){
-      tileMapLocation = mapTable.getString(0,"y");//Tile Map Name
-    }
+    
   }
   //int(mapTable.get(0,'image'));//blank
   //int(mapTable.get(0,'r'));//blank
@@ -1391,7 +1394,6 @@ void FileLoadMap(){//load map from file
       deleteTile(0);
     }
   }
-  //loop();
-  println("FileLoadMap Done!");
+  loop();
   prepreloading = false;
 }//FileLoadMap() END
