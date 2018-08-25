@@ -5,7 +5,7 @@ import controlP5.*;
 int _DEBUG_ = 0;
 int _DEBUGAMOUNT_ = 50000;
 
-int _FILEVERSION_ = 3;
+int _FILEVERSION_ = 2;
 
 //File Version Map
   //Version 0:
@@ -88,8 +88,10 @@ int borderThickness = 4;
 Table tileInfoTable;
 PImage[] tileMaps = new PImage[0];
 boolean preloading = true;
+boolean prepreloading = true;
 int tileMapShow = 0;
 String tileMapLocation;
+boolean loadMapLocaion = false;
 int tileMapHeight = 32;
 int tileMapWidth = 32;
 int tileMapTileX;
@@ -98,7 +100,6 @@ String tileMapName = "Classic";
 
 void preload(){
   //FileLoadTileInfo();
-  
   PImage tileMap = loadImage(tileMapLocation);//"assets/tileMap.png");
   tileMap.loadPixels();
   
@@ -151,9 +152,6 @@ void FileLoadTileInfo(){//load map from file
                               tileInfoTable.getInt(i,"tileMapTileY") + ", " +//Tile Red amount
                               tileInfoTable.getInt(i,"images") + ", " +//Tile Red amount
                               tileInfoTable.getString(i,"name"));//,//Is Tile Clear
-      if(tileInfoTable.getString(i,"name") == tileMapName){
-        tileMapLocation = tileInfoTable.getString(i,"location");
-      }
     }
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error
@@ -205,7 +203,12 @@ void selectMap(){
 }
 
 void loadMap(){
+  noLoop();
+  loadMapLocaion = true;
   selectInput("Select a CSV to read from:", "FileLoadMapSelect");
+  println("File Selected!");
+  while(prepreloading == true){delay(500);}
+  println("File Loaded");
   FileLoadTileInfo();
   preload();
   UIControls.remove("nextMap");
@@ -215,6 +218,7 @@ void loadMap(){
   UI.setup();
   UISetup = true;
   preloading = false;
+  loop();
 }
 
 void draw(){
@@ -1243,7 +1247,7 @@ void FileSaveMap(){//Save the Map to file
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   newRow = mapTable.addRow();//Add a row to table
   newRow.setInt("x",_FILEVERSION_);//File Version
-  newRow.setString("y",tileMapName);//blank
+  newRow.setString("y",tileMapLocation);//blank
   newRow.setInt("image",0);//blank
   newRow.setInt("r",0);//blank
   newRow.setInt("g",0);//blank
@@ -1283,23 +1287,7 @@ void FileSaveMap(){//Save the Map to file
       newRow.setInt("clear",CLEAR);//Is Tile Clear
       //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
     }
-  }else if(_FILEVERSION_ == 2){
-    for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
-      newRow = mapTable.addRow();//Add a row to table
-      newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
-      newRow.setInt("y",floor(mapTiles[i].y / scl));//Tile Y position
-      newRow.setInt("image",mapTiles[i].image);//Tile Image
-      newRow.setInt("r",floor(mapTiles[i].r));//Tile Red amount
-      newRow.setInt("g",floor(mapTiles[i].g));//Tile Green amount
-      newRow.setInt("b",floor(mapTiles[i].b));//Tile Blue amount
-      int CLEAR = 1;//tile is clear
-      if(!mapTiles[i].clear){//Is Tile Clear
-        CLEAR = 0;//tile is not clear
-      }
-      newRow.setInt("clear",CLEAR);//Is Tile Clear
-      //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
-    }
-  }else */if(_FILEVERSION_ == 3){
+  }else*/ if(_FILEVERSION_ == 2){
     for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
       newRow = mapTable.addRow();//Add a row to table
       newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
@@ -1332,11 +1320,13 @@ void FileLoadMap(){//load map from file
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   int fileVersion = int(mapTable.getInt(0,"x"));//File Version
-  /*if(mapTable.getString(0,'y') == "0"){
+  if(mapTable.getString(0,"y") == "0"){
     //Default To Classic Tile Map
   }else{
-    tileMapName = mapTable.getString(0,'y');//Tile Map Name
-  }*/
+    if(loadMapLocaion == true){
+      tileMapLocation = mapTable.getString(0,"y");//Tile Map Name
+    }
+  }
   //int(mapTable.get(0,'image'));//blank
   //int(mapTable.get(0,'r'));//blank
   //int(mapTable.get(0,'g'));//blank
@@ -1392,22 +1382,6 @@ void FileLoadMap(){//load map from file
                               CLEAR);//,//Is Tile Clear
                               //mapTable.get(i,'lore'));//Tile LORE?
     }
-  }else if(fileVersion == 3){//whats the file version
-    for(int i = 1; i < mapTable.getRowCount(); i++){//Loop through all the rows
-      boolean CLEAR = true;//tile is clear
-      if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
-        CLEAR = false;//tile is not clear
-      }
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
-      mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x") * scl,//Tile X position
-                              mapTable.getInt(i,"y") * scl,//Tile Y position
-                              mapTable.getInt(i,"image"),//Tile Image
-                              mapTable.getInt(i,"r"),//Tile Red amount
-                              mapTable.getInt(i,"g"),//Tile Green amount
-                              mapTable.getInt(i,"b"),//Tile Blue amount
-                              CLEAR);//,//Is Tile Clear
-                              //mapTable.get(i,'lore'));//Tile LORE?
-    }
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error
   }
@@ -1418,4 +1392,6 @@ void FileLoadMap(){//load map from file
     }
   }
   //loop();
+  println("FileLoadMap Done!");
+  prepreloading = false;
 }//FileLoadMap() END
