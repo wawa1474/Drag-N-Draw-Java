@@ -180,16 +180,6 @@ void setup(){
   
   UIControls = new ControlP5(this);
   UI.setup();
-  
-  UIControls.addButton("prevMap").setSize(scl * 2, scl).setPosition(0, 0).setCaptionLabel("Previous");
-  UIControls.addButton("nextMap").setSize(scl * 2, scl).setPosition(scl * 3, 0).setCaptionLabel("Next");
-  UIControls.addButton("loadMap").setSize(scl * 2, scl).setPosition(scl * 9, 0).setCaptionLabel("Load Map");
-  UIControls.addButton("loadTileMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Load Tile Map");
-  prevMap = UIControls.getController("prevMap");
-  nextMap = UIControls.getController("nextMap");
-  loadMap = UIControls.getController("loadMap");
-  loadTileMap = UIControls.getController("loadTileMap");
-  
   changeVisibility(false);
   
   mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
@@ -218,6 +208,7 @@ void loadTileMap(){
   tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");
   fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;
   changeVisibility(true);
+  delay(100);
   preload();
   preloading = false;
 }
@@ -229,7 +220,6 @@ void changeTileMap(){
 }
 
 void loadMap(){
-  noLoop();
   loadMapLocaion = true;
   selectInput("Select a CSV to read from:", "FileLoadMapSelect");
   println("File Selected!");
@@ -238,18 +228,17 @@ void loadMap(){
   FileLoadTileInfo();
   preload();
   changeVisibility(true);
-  
+  delay(100);
   UISetup = true;
   preloading = false;
-  loop();
 }
 
 void changeVisibility(boolean visibility){
   if(visibility){
-    prevMap.setVisible(false);
-    nextMap.setVisible(false);
-    loadMap.setVisible(false);
-    loadTileMap.setVisible(false);
+    //prevMap.setVisible(false);
+    //nextMap.setVisible(false);
+    //loadMap.setVisible(false);
+    //loadTileMap.setVisible(false);
   
     changeTileMap.setVisible(true);
     clearToggle.setVisible(true);
@@ -279,10 +268,10 @@ void changeVisibility(boolean visibility){
     GSlider.setVisible(false);
     BSlider.setVisible(false);
   
-    prevMap.setVisible(true);
-    nextMap.setVisible(true);
-    loadMap.setVisible(true);
-    loadTileMap.setVisible(true);
+    //prevMap.setVisible(true);
+    //nextMap.setVisible(true);
+    //loadMap.setVisible(true);
+    //loadTileMap.setVisible(true);
   }
 }
 
@@ -749,6 +738,17 @@ class tileUI{
     
     UIControls.addButton("changeTileMap").setSize(scl * 3, scl).setPosition(scl * 13, scl).setCaptionLabel("Change Tile Map").setColorLabel(color(255, 255, 255)).setColorBackground(color(127, 0, 0));
     changeTileMap = UIControls.getController("changeTileMap");
+    
+    
+    
+    UIControls.addButton("prevMap").setSize(scl * 2, scl).setPosition(0, 0).setCaptionLabel("Previous");
+    UIControls.addButton("nextMap").setSize(scl * 2, scl).setPosition(scl * 3, 0).setCaptionLabel("Next");
+    UIControls.addButton("loadMap").setSize(scl * 2, scl).setPosition(scl * 9, 0).setCaptionLabel("Load Map");
+    UIControls.addButton("loadTileMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Load Tile Map");
+    prevMap = UIControls.getController("prevMap");
+    nextMap = UIControls.getController("nextMap");
+    loadMap = UIControls.getController("loadMap");
+    loadTileMap = UIControls.getController("loadTileMap");
   }
 }
 
