@@ -97,11 +97,16 @@ int tileMapWidth = 32;
 int tileMapTileX;
 int tileMapTileY;
 String tileMapName = "Classic";
+Controller loadTileMap;
 
 void preload(){
   //FileLoadTileInfo();
   PImage tileMap = loadImage(tileMapLocation);//"assets/tileMap.png");
   tileMap.loadPixels();
+  
+  for(int i = 0; i < img.length; i++){
+    img = (PImage[]) shorten(img);//Shorten the Tile Images Array by 1
+  }
   
   for(int i = 0; i <= totalImages; i++){
     img = (PImage[]) expand(img, img.length + 1);
@@ -173,8 +178,10 @@ void setup(){
   //UI.setup();
   UIControls.addButton("prevMap").setSize(scl * 2, scl).setPosition(0, 0).setCaptionLabel("Previous");
   UIControls.addButton("nextMap").setSize(scl * 2, scl).setPosition(scl * 3, 0).setCaptionLabel("Next");
-  UIControls.addButton("selectMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Select");
   UIControls.addButton("loadMap").setSize(scl * 2, scl).setPosition(scl * 9, 0).setCaptionLabel("Load Map");
+  
+  UIControls.addButton("loadTileMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Load Tile Map");
+  loadTileMap = UIControls.getController("loadTileMap");
   //UIControls.remove("nextMap");
   
   mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
@@ -195,7 +202,7 @@ void prevMap(){
   }
 }
 
-void selectMap(){
+void loadTileMap(){
   tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");
   totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;
   tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");
@@ -241,9 +248,10 @@ void draw(){
       preload();
       UIControls.remove("nextMap");
       UIControls.remove("prevMap");
-      UIControls.remove("selectMap");
+      //UIControls.remove("selectMap");
       UIControls.remove("loadMap");
       UI.setup();
+      loadTileMap.setPosition(scl * 14, scl);
       UISetup = true;
     }
   
@@ -1250,7 +1258,7 @@ void FileSaveMap(){//Save the Map to file
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   newRow = mapTable.addRow();//Add a row to table
   newRow.setInt("x",_FILEVERSION_);//File Version
-  newRow.setString("y",tileMapLocation);//blank
+  newRow.setString("y",tileMapName);//blank
   newRow.setInt("image",0);//blank
   newRow.setInt("r",0);//blank
   newRow.setInt("g",0);//blank
