@@ -74,7 +74,7 @@ String fileName = "Map1";
 ControlP5 UIControls;
 Controller RSlider, GSlider, BSlider;
 Controller scrollSlider;
-Controller fileSaveMap, fileLoadMap, fileSaveCanvas;
+Controller fileSaveLoad, fileLoadMap, fileSaveCanvas;
 Controller colorSelect, colorInput;
 Controller colorInputR, colorInputG, colorInputB;
 Controller colorWheel;
@@ -98,6 +98,10 @@ int tileMapTileX;
 int tileMapTileY;
 String tileMapName = "Classic";
 Controller loadTileMap;
+Controller changeTileMap;
+Controller prevMap;
+Controller nextMap;
+Controller loadMap;
 
 void preload(){
   //FileLoadTileInfo();
@@ -175,14 +179,18 @@ void setup(){
   //preload();
   
   UIControls = new ControlP5(this);
-  //UI.setup();
+  UI.setup();
+  
   UIControls.addButton("prevMap").setSize(scl * 2, scl).setPosition(0, 0).setCaptionLabel("Previous");
   UIControls.addButton("nextMap").setSize(scl * 2, scl).setPosition(scl * 3, 0).setCaptionLabel("Next");
   UIControls.addButton("loadMap").setSize(scl * 2, scl).setPosition(scl * 9, 0).setCaptionLabel("Load Map");
-  
   UIControls.addButton("loadTileMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Load Tile Map");
+  prevMap = UIControls.getController("prevMap");
+  nextMap = UIControls.getController("nextMap");
+  loadMap = UIControls.getController("loadMap");
   loadTileMap = UIControls.getController("loadTileMap");
-  //UIControls.remove("nextMap");
+  
+  changeVisibility(false);
   
   mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
   mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
@@ -209,7 +217,15 @@ void loadTileMap(){
   tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");
   tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");
   fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;
+  changeVisibility(true);
+  preload();
   preloading = false;
+}
+
+void changeTileMap(){
+  preloading = true;
+  UISetup = false;
+  changeVisibility(false);
 }
 
 void loadMap(){
@@ -221,14 +237,53 @@ void loadMap(){
   println("File Loaded");
   FileLoadTileInfo();
   preload();
-  UIControls.remove("nextMap");
-  UIControls.remove("prevMap");
-  UIControls.remove("selectMap");
-  UIControls.remove("loadMap");
-  UI.setup();
+  changeVisibility(true);
+  
   UISetup = true;
   preloading = false;
   loop();
+}
+
+void changeVisibility(boolean visibility){
+  if(visibility){
+    prevMap.setVisible(false);
+    nextMap.setVisible(false);
+    loadMap.setVisible(false);
+    loadTileMap.setVisible(false);
+  
+    changeTileMap.setVisible(true);
+    clearToggle.setVisible(true);
+    colorInput.setVisible(true);
+    //colorInputR.setVisible(true);
+    //colorInputG.setVisible(true);
+    //colorInputB.setVisible(true);
+    colorSelect.setVisible(true);
+    //colorWheel.setVisible(true);
+    fileSaveLoad.setVisible(true);
+    scrollSlider.setVisible(true);
+    RSlider.setVisible(true);
+    GSlider.setVisible(true);
+    BSlider.setVisible(true);
+  }else{
+    changeTileMap.setVisible(false);
+    clearToggle.setVisible(false);
+    colorInput.setVisible(false);
+    //colorInputR.setVisible(false);
+    //colorInputG.setVisible(false);
+    //colorInputB.setVisible(false);
+    colorSelect.setVisible(false);
+    //colorWheel.setVisible(false);
+    fileSaveLoad.setVisible(false);
+    scrollSlider.setVisible(false);
+    RSlider.setVisible(false);
+    GSlider.setVisible(false);
+    BSlider.setVisible(false);
+  
+    prevMap.setVisible(true);
+    nextMap.setVisible(true);
+    loadMap.setVisible(true);
+    loadTileMap.setVisible(true);
+  }
 }
 
 void draw(){
@@ -245,17 +300,13 @@ void draw(){
     popMatrix();
   }else{
     if(UISetup == false){
-      preload();
-      UIControls.remove("nextMap");
-      UIControls.remove("prevMap");
-      //UIControls.remove("selectMap");
-      UIControls.remove("loadMap");
-      UI.setup();
-      loadTileMap.setPosition(scl * 14, scl);
-      UISetup = true;
+      /*preload();
+      changeVisibility(true);
+      
+      UISetup = true;*/
     }
   
-  if(UIControls.get(ColorWheel.class, "colorWheel").isVisible() || UIControls.get(Textfield.class, "colorInputR").isVisible()){
+  if(colorWheel.isVisible() || colorInputR.isVisible()){
     noTile = true;//Allow tile placement
   }
   
@@ -666,7 +717,7 @@ class tileUI{
     scrollSlider = UIControls.getController("scrollSlider");
     
     UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl).setColorBackground(color(0, 127, 127));
-    fileSaveMap = UIControls.getController("fileSaveLoad");
+    fileSaveLoad = UIControls.getController("fileSaveLoad");
     
     UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")
       .onChange(new CallbackListener(){
@@ -695,6 +746,9 @@ class tileUI{
     
     UIControls.addButton("clearToggle").setSize(scl, scl).setPosition(scl * 11, scl).setCaptionLabel("Clear").setColorLabel(color(0, 0, 0)).setColorBackground(color(127, 127, 127));
     clearToggle = UIControls.getController("clearToggle");
+    
+    UIControls.addButton("changeTileMap").setSize(scl * 3, scl).setPosition(scl * 13, scl).setCaptionLabel("Change Tile Map").setColorLabel(color(255, 255, 255)).setColorBackground(color(127, 0, 0));
+    changeTileMap = UIControls.getController("changeTileMap");
   }
 }
 
@@ -738,7 +792,7 @@ void colorInputB(String value){
 void fileSaveLoad(int n){
   //println(n);
   if(n == 0){
-    selectOutput("Select a CSV to write to:", "FileSaveMapSelect");
+    selectOutput("Select a CSV to write to:", "fileSaveLoadSelect");
   }else if(n == 1){
     selectInput("Select a CSV to read from:", "FileLoadMapSelect");
   }else if(n == 2){
@@ -1179,7 +1233,7 @@ void FileSaveCanvasSelect(File selection){
   }
 }
 
-void FileSaveMapSelect(File selection){
+void fileSaveLoadSelect(File selection){
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
@@ -1192,7 +1246,7 @@ void FileSaveMapSelect(File selection){
     }else{
       fileName = join(fileNameCSV, '.');
     }
-    FileSaveMap();
+    fileSaveLoad();
   }
 }
 
@@ -1243,7 +1297,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
   fullCanvas.save(fileName);// + ".png");//Save the map to a PNG file
 }//FileSaveCanvas() END
 
-void FileSaveMap(){//Save the Map to file
+void fileSaveLoad(){//Save the Map to file
   mapTable = new Table();//create new p5 table
   mapTable.addColumn("x");//Tile X position
   mapTable.addColumn("y");//Tile Y position
@@ -1319,7 +1373,7 @@ void FileSaveMap(){//Save the Map to file
   }
   saveTable(mapTable, fileName);// + ".csv");//Save the Map to a CSV file
   mapTable = null;//Clear the Table
-}//FileSaveMap() END
+}//fileSaveLoad() END
 
 void FileLoadMap(){//load map from file
   noLoop();
