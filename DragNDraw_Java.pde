@@ -1,11 +1,12 @@
-import controlP5.*;
+import controlP5.*;//import the library
 
-//Started August 16, 2018 at ~4:30 PM
+//Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
+//Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
 
-int _DEBUG_ = 0;
-int _DEBUGAMOUNT_ = 50000;
+int _DEBUG_ = 0;//what are we debugging
+int _DEBUGAMOUNT_ = 50000;//how many are we debugging
 
-int _FILEVERSION_ = 2;
+int _FILEVERSION_ = 2;//what version of file saving and loading
 
 //File Version Map
   //Version 0:
@@ -20,120 +21,118 @@ int _FILEVERSION_ = 2;
     //0 = File MetaData
     //Compressed Position
 
-boolean dragging = false;
-boolean deleting = false;
-boolean noTile = false;
+boolean dragging = false;// Is a tile being dragged?
+boolean deleting = false;//Are we deleting tiles?
+boolean noTile = false;//Are we blocking placement of tiles?
 
-boolean noKeyboard = false;
+boolean noKeyboard = false;//Are We Blocking keyTyped() and keyPressed()?
 
-int mapN = 0;
-int totalImages = 32 * 4 - 1;//40
-int rowLength = 16;
-int tileRow = 0;
-int tileN = 1;
-boolean CClear = false;
+int mapN = 0;//Which map peice are we messing with
+int totalImages = 32 * 4 - 1;//Total Images
+int rowLength = 16;//How many tiles per row?
+int tileRow = 0;//Which row of tiles are we looking at?
+int tileN = 1;//Which tile is the cursor over?
+boolean CClear = false;//Ar ewe placing clear tiles
 
-int fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;
+int fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//make sure all tile rows are full
 
-int drawnTiles = 0;
-boolean drawAll = false;
-int FPSCutOff = 2;
+int drawnTiles = 0;//how many tiles are on the screen
+boolean drawAll = false;//draw all tiles even if not on screen?
 
-int tileGroupStep = 0;
-boolean tileGroupDeleting = false;
-int sx1, sy1, sx2, sy2;
-int tileGrouSXLines = 0;
-int tileGrouSYLines = 0;
+int tileGroupStep = 0;//what step are we in setting tile group
+boolean tileGroupDeleting = false;//are we deleting the tile group
+int sx1, sy1, sx2, sy2;//tileGroup XY corners
+int tileGrouSXLines = 0;//how many X lines of copied tiles
+int tileGrouSYLines = 0;//how many Y lines of copied tiles
 
-int tileBorderNumber = 0;
+int tileBorderNumber = 0;//What number in img[] is the border (its just a null tile)
 
-int offsetX = 0, offsetY = 0;
+int offsetX = 0, offsetY = 0;//Mouseclick offset
 
-int scl = 32;
+int scl = 32;//Square Scale
 
-int cols = 100;
-int rows = 100;
+int cols = 100;//Columns
+int rows = 100;//Rows
 
-int SX = 0, SY = 0;
-int mX = 0, mY = 0;
-int fV = 1;
-int UIRight = 22;
-int UIBottom = 2;
+int SX = 0, SY = 0;//Screen XY
+int mX = 0, mY = 0;//Mouse XY
+int fV = 1;//Fudge Value
+int UIRight = 22;//How many tiles long is the UI?
+int UIBottom = 2;//How many tiles tall is the UI?
 
-int scrollAmount = 1;
+int scrollAmount = 1;//How many squares to scroll when pressing WASD
 
-PImage[] img = new PImage[0];//totalImages + 1];
-mTile[] mapTiles = new mTile[0];//25000];
-mTile[] mapTilesCopy = new mTile[0];
-PImage BACKGROUND;
-PImage missingTexture;
+PImage[] img = new PImage[0];//Tile Images Array
+mTile[] mapTiles = new mTile[0];//Map Tiles Array
+mTile[] mapTilesCopy = new mTile[0];//copied tiles
+PImage BACKGROUND;//background image
+PImage missingTexture;//missingTexture Image
 
-Table mapTable;
-String fileName = "Map1";
+Table mapTable;//Map Table
+String fileName = "Map1";//File Name
 
-ControlP5 UIControls;
-Controller RSlider, GSlider, BSlider;
-Controller scrollSlider;
-ButtonBar fileSaveLoad;
-Controller fileLoadMap, fileSaveCanvas;
-Controller colorSelect, colorInput;
-Controller colorInputR, colorInputG, colorInputB;
-Controller colorWheel;
-Controller clearToggle;
+ControlP5 UIControls;//ui controls
+Controller RSlider, GSlider, BSlider;//sliders
+Controller scrollSlider;//slider
+ButtonBar fileSaveLoad;//button bar
+Controller colorSelect, colorInput;//buttons
+Controller colorInputR, colorInputG, colorInputB;//number input
+Controller colorWheel;//color whee;
+Controller clearToggle;//button
 
-tileUI UI = new tileUI();
-boolean UISetup = false;
-canvasBG BG = new canvasBG();
-int borderThickness = 4;
+tileUI UI = new tileUI();//Create a UI
+boolean UISetup = false;//Are we setting up the ui?
+canvasBG BG = new canvasBG();//Create a background
+int borderThickness = 4;//how thick is the canvas border
 
-Table tileInfoTable;
-PImage[] tileMaps = new PImage[0];
-boolean preloading = true;
-boolean prepreloading = true;
-int tileMapShow = 0;
-String tileMapLocation = "assets/tileMap.png";
-boolean loadMapLocaion = false;
-int tileMapHeight = 32;
-int tileMapWidth = 32;
-int tileMapTileX = 32;
-int tileMapTileY = 32;
-String tileMapName = "Classic";
-Controller loadMap;
-boolean loadingTileMap = true;
+Table tileInfoTable;//tile map info table
+PImage[] tileMaps = new PImage[0];//tile maps images
+boolean preloading = true;//are we preloading
+boolean prepreloading = true;//are we prepreloading
+int tileMapShow = 0;//display which tile map
+String tileMapLocation = "assets/tileMap.png";//wheres the tilemap located
+boolean loadMapLocaion = false;//load tile map location
+int tileMapHeight = 32;//how tiles high
+int tileMapWidth = 32;//how many tile wide
+int tileMapTileX = 32;//tile width
+int tileMapTileY = 32;//tile height
+String tileMapName = "Classic";//tile map name
+Controller loadMap;//button
+boolean loadingTileMap = true;//are we loading the tile map
 
-void preload(){
+void preload(){//Preload all of the images
   //FileLoadTileInfo();
-  PImage tileMap = loadImage(tileMapLocation);//"assets/tileMap.png");
-  tileMap.loadPixels();
+  PImage tileMap = loadImage(tileMapLocation);//load the tile map image
+  tileMap.loadPixels();//load the images pixels
   
-  for(int i = 0; i < img.length; i++){
+  for(int i = 0; i < img.length; i++){//delete all the images
     img = (PImage[]) shorten(img);//Shorten the Tile Images Array by 1
   }
   
-  for(int i = 0; i <= totalImages; i++){
-    img = (PImage[]) expand(img, img.length + 1);
-    img[i] = createImage(32, 32, ARGB);
-    img[i].loadPixels();
-    for(int y = 0; y < 32; y++){
-      for(int x = 0; x < 32; x++){
-        img[i].set(x, y, tileMap.get(x + (scl * floor(i % tileMapWidth)), y + (scl * floor(i / tileMapHeight))));
+  for(int i = 0; i <= totalImages; i++){//Go through all the images
+    img = (PImage[]) expand(img, img.length + 1);//make sure we have room
+    img[i] = createImage(32, 32, ARGB);//create a new image
+    img[i].loadPixels();//load the images pixels
+    for(int y = 0; y < 32; y++){//for tile height
+      for(int x = 0; x < 32; x++){//for tile width
+        img[i].set(x, y, tileMap.get(x + (scl * floor(i % tileMapWidth)), y + (scl * floor(i / tileMapHeight))));//set pixel
       }
     }
-    img[i].updatePixels();
+    img[i].updatePixels();//update the image pixels
   }
   
-  missingTexture = loadImage("assets/missingTexture.png");
+  missingTexture = loadImage("assets/missingTexture.png");//load missing texture image
   
   println(totalImages + ": " + fullTotalImages);
-  if(totalImages != fullTotalImages){
-    for(int i = totalImages + 1; i <= fullTotalImages; i++){
-      img = (PImage[]) expand(img, img.length + 1);
-      img[i] = missingTexture;
+  if(totalImages != fullTotalImages){//is there empty sapce
+    for(int i = totalImages + 1; i <= fullTotalImages; i++){//fill the empty space
+      img = (PImage[]) expand(img, img.length + 1);//make sure we have room
+      img[i] = missingTexture;//make the empty spaces be missing textures
     }
   }
   
-  BACKGROUND = loadImage("assets/background.png");
-}
+  BACKGROUND = loadImage("assets/background.png");//load background image
+}//void preload() END
 
 void FileLoadTileInfo(){//load map from file
   tileInfoTable = loadTable("assets/tileMapInfo.csv", "header, csv");// + ".csv", "header");//Load the csv
@@ -150,8 +149,8 @@ void FileLoadTileInfo(){//load map from file
   
   if(fileVersion == 0){//whats the file version
     for(int i = 1; i < tileInfoTable.getRowCount(); i++){//Loop through all the rows
-      tileMaps = (PImage[]) expand(tileMaps, tileMaps.length + 1);
-      tileMaps[tileMaps.length - 1] = loadImage(tileInfoTable.getString(i,"location"));
+      tileMaps = (PImage[]) expand(tileMaps, tileMaps.length + 1);//make sure we have room
+      tileMaps[tileMaps.length - 1] = loadImage(tileInfoTable.getString(i,"location"));//load tile map image
       println(tileInfoTable.getString(i,"location") + ", " +//Tile X position
                               tileInfoTable.getInt(i,"tileMapHeight") + ", " +//Tile Y position
                               tileInfoTable.getInt(i,"tileMapWidth") + ", " +//Tile Image
@@ -159,8 +158,8 @@ void FileLoadTileInfo(){//load map from file
                               tileInfoTable.getInt(i,"tileMapTileY") + ", " +//Tile Red amount
                               tileInfoTable.getInt(i,"images") + ", " +//Tile Red amount
                               tileInfoTable.getString(i,"name"));//,//Is Tile Clear
-      if(tileMapName.equals(tileInfoTable.getString(i,"name"))){
-        tileMapLocation = tileInfoTable.getString(i,"location");
+      if(tileMapName.equals(tileInfoTable.getString(i,"name"))){//does the map name and tile map name match
+        tileMapLocation = tileInfoTable.getString(i,"location");//update tile map location
       }
     }
   }else{//we don't know that file version
@@ -169,109 +168,109 @@ void FileLoadTileInfo(){//load map from file
   //image(tileMaps[1],0,0);
 }//FileLoadMap() END
 
-void setup(){
-  size(960,540);//X, Y
-  surface.setResizable(true);
+void setup(){//Setup everything
+  size(960,540);//make a canvas (X, Y)
+  surface.setResizable(true);//allow resizing of the window
   
-  FileLoadTileInfo();
+  FileLoadTileInfo();//load tile map info file
   //preload();
   
-  UIControls = new ControlP5(this);
-  UI.setup();
+  UIControls = new ControlP5(this);//set up all the control stuff
+  UI.setup();//Setup all of the UI stuff
   
   //changeVisibility(false);
   
-  mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
-  mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
-}
+  //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+  //mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
+}//void setup() END
 
-void loadMap(){
-  if(loadingTileMap == true){
-    noLoop();
-    loadMapLocaion = true;
-    selectInput("Select a CSV to read from:", "FileLoadMapSelect");
+void loadMap(){//called when loadMap is pressed
+  if(loadingTileMap == true){//if loading tile map
+    noLoop();//don't allow drawing
+    loadMapLocaion = true;//make sure to update the map location
+    selectInput("Select a CSV to read from:", "FileLoadMapSelect");//load a map
     println("File Selected!");
-    while(prepreloading == true){delay(500);}
+    while(prepreloading == true){delay(500);}//small delay
     println("File Loaded");
-    FileLoadTileInfo();
-    preload();
-    tileN = 1;
-    noTile = false;
-    changeVisibility(false);
-    loadingTileMap = false;
-    preloading = false;
-    loop();
+    FileLoadTileInfo();//load tile map info file
+    preload();//preload stuff
+    tileN = 1;//make sure we're on the first tile
+    noTile = false;//allowed to place tiles
+    changeVisibility(false);//normal screen
+    loadingTileMap = false;//not loading tile map
+    preloading = false;//no longer preloading
+    loop();//allow drawing
   }else{
-    preloading = true;
-    prepreloading = true;
-    UISetup = false;
-    loadingTileMap = true;
-    changeVisibility(true);
+    preloading = true;//now preloading
+    prepreloading = true;//now prepreloading
+    UISetup = false;//ui is setup
+    loadingTileMap = true;//loading tile map
+    changeVisibility(true);//tile map loading screen
   }
-}
+}//void loadMap() END
 
-void changeVisibility(boolean visibility){
-  if(visibility){
-    loadMap.setPosition(scl * 5, 0);
-    loadMap.setLabel("Load Map");
+void changeVisibility(boolean visibility){//change screen
+  if(visibility){//are we going to the tile map loading screen
+    loadMap.setPosition(scl * 5, 0);//change position
+    loadMap.setLabel("Load Map");//change label
     
-    fileSaveLoad.setPosition(0,0);
+    fileSaveLoad.setPosition(0,0);//change position
     fileSaveLoad.changeItem("Save","text","Prev");//"Prev Next Load"
-    fileSaveLoad.changeItem("Load","text","Next");
-    fileSaveLoad.changeItem("Image","text","Load");
+    fileSaveLoad.changeItem("Load","text","Next");//"Prev Next Load"
+    fileSaveLoad.changeItem("Image","text","Load");//"Prev Next Load"
     
-    clearToggle.setVisible(false);
-    colorInput.setVisible(false);
-    colorSelect.setVisible(false);
-    scrollSlider.setVisible(false);
-    RSlider.setVisible(false);
-    GSlider.setVisible(false);
-    BSlider.setVisible(false);
+    clearToggle.setVisible(false);//clearToggle is not visible
+    colorInput.setVisible(false);//colorInput is not visible
+    colorSelect.setVisible(false);//colorSelect is not visible
+    scrollSlider.setVisible(false);//scrollSlider is not visible
+    RSlider.setVisible(false);//RSlider is not visible
+    GSlider.setVisible(false);//GSlider is not visible
+    BSlider.setVisible(false);//BSlider is not visible
   }else{
-    loadMap.setPosition(scl * 14, scl);
-    loadMap.setLabel("Change Tileset");
+    loadMap.setPosition(scl * 14, scl);//change position
+    loadMap.setLabel("Change Tileset");//change label
     
-    fileSaveLoad.setPosition(scl * 7,scl);
+    fileSaveLoad.setPosition(scl * 7,scl);//change position
     fileSaveLoad.changeItem("Save","text","Save");//"Save Load Image"
-    fileSaveLoad.changeItem("Load","text","Load");
-    fileSaveLoad.changeItem("Image","text","Image");
+    fileSaveLoad.changeItem("Load","text","Load");//"Save Load Image"
+    fileSaveLoad.changeItem("Image","text","Image");//"Save Load Image"
     
-    clearToggle.setVisible(true);
-    colorInput.setVisible(true);
-    colorSelect.setVisible(true);
-    scrollSlider.setVisible(true);
-    RSlider.setVisible(true);
-    GSlider.setVisible(true);
-    BSlider.setVisible(true);
+    clearToggle.setVisible(true);//clearToggle is visible
+    colorInput.setVisible(true);//colorInput is visible
+    colorSelect.setVisible(true);//colorSelect is visible
+    scrollSlider.setVisible(true);//scrollSlider is visible
+    RSlider.setVisible(true);//RSlider is visible
+    GSlider.setVisible(true);//GSlider is visible
+    BSlider.setVisible(true);//BSlider is visible
   }
-}
+}//void changeVisibility(boolean visibility) END
 
-void draw(){
-  if(preloading == true){
-    pushMatrix();
-    background(255);
-    translate(SX, SY);
-    image(tileMaps[tileMapShow],0,scl);
+void draw(){//Draw the canvas
+  if(preloading == true){//if preloading
+    pushMatrix();//go back to crazy space?
+    background(255);//white background
+    translate(SX, SY);//shift screen around
+    image(tileMaps[tileMapShow],0,scl);//display tile map
     //image(tileMaps[0],tileMaps[1].width,scl);
-    fill(0);
-    rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);
-    fill(255);
-    text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);
-    popMatrix();
+    fill(0);//black box
+    rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);//text box background
+    fill(255);//white text
+    text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
+    popMatrix();//go back to normal space?
   }else{
-    if(UISetup == false){
+    if(UISetup == false){//is ui not setup
       //preload();
       //changeVisibility(true);
       //UI.setup();
-      UISetup = true;
+      UISetup = true;//ui is setup
     }
   
-  if(colorWheel.isVisible() || colorInputR.isVisible()){
+  if(colorWheel.isVisible() || colorInputR.isVisible()){//if not using color wheel or color inputs
     noTile = true;//Allow tile placement
   }
   
-  pushMatrix();
-  translate(SX, SY);
+  pushMatrix();//go back to crazy space?
+  translate(SX, SY);//shift screen around
   
   drawnTiles = 0;//reset number of drawn tiles
 
@@ -312,15 +311,15 @@ void draw(){
     drawGroupPasteOutline();//draw the red outline
   }
   
-  popMatrix();
+  popMatrix();//go back to normal space?
   
   //Update and Draw the UI
   UI.update();//Update the UI position
   UI.draw();//Draw the UI
   }
-}
+}//void draw() END
 
-boolean checkOffset(){
+boolean checkOffset(){//not used
   //println("X: " + (floor(mouseX / scl) * scl) + ", Y: " + (floor(mouseY / scl) * scl) + ", SX: " + SX + ", SY: " + SY + ", H: " + height + ", W: " + width);
   if(SX > 0 && (floor(mouseX / scl) * scl) < SX){
     return true;
@@ -331,10 +330,10 @@ boolean checkOffset(){
   }
   
   return false;
-}
+}//boolean checkOffset() END
 
 void mousePressed(){//We pressed a mouse button
-  if(preloading == true || UISetup == false){}else{
+  if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
 
   /*if(checkOffset()){
@@ -424,10 +423,10 @@ void mousePressed(){//We pressed a mouse button
   
   placeTile();//Place a tile at current mouse position
   }
-}//mousePressed() END
+}//void mousePressed() END
 
 void mouseDragged(){//We dragged the mouse while holding a button
-  if(preloading == true || UISetup == false){}else{
+  if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
   
   /*if(checkOffset()){
@@ -475,10 +474,10 @@ void mouseDragged(){//We dragged the mouse while holding a button
   
   //return false;
   }
-}//mouseDragged() END
+}//void mouseDragged() END
 
 void mouseReleased(){//We released the mouse button
-  if(preloading == true || UISetup == false){}else{
+  if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   if(dragging){//Are we dragging a tile
     if(mapTiles[mapN] != null){//If tile exists
       snapTileLocation(mapN);//Snap XY location of tile to grid
@@ -487,7 +486,7 @@ void mouseReleased(){//We released the mouse button
   
   deleting = false;//Quit deleting
   dragging = false;//Quit dragging
-  if(!colorWheel.isVisible() && !colorInputR.isVisible()){
+  if(!colorWheel.isVisible() && !colorInputR.isVisible()){//if not using color wheel or color inputs
     noTile = false;//Allow tile placement
   }
 
@@ -498,7 +497,7 @@ void mouseReleased(){//We released the mouse button
     }
   }
   }
-}//mouseReleased() END
+}//void mouseReleased() END
 
 void mouseWheel(MouseEvent event){//We Scrolled The Mouse Wheel
   if(event.getCount() < 0){//If Scrolling Up
@@ -506,7 +505,7 @@ void mouseWheel(MouseEvent event){//We Scrolled The Mouse Wheel
   }else{
     prevTileC();//Move To Previous Tile
   }
-}//mouseWheel(event) END
+}//void mouseWheel(event) END
 
 void keyPressed(){//We pressed a key
   if(noKeyboard == false){//are we blocking keyboard functions?
@@ -517,7 +516,7 @@ void keyPressed(){//We pressed a key
       nextRowC();//Next Tile Row
     }
   }
-}
+}//void keyPressed() END
 
 void keyTyped(){//We typed a key
   if(noKeyboard == false){//are we blocking keyboard functions?
@@ -583,39 +582,39 @@ void keyTyped(){//We typed a key
     }
     
     if(key == 'w'){//We pressed 'W'
-      if(SY < scl * 5){
+      if(SY < scl * 5){//if we're not outside of the boundaries
         SY += (scl * scrollAmount);//Scroll Screen UP
       }
-      if(SY > scl * 5){
-        SY = scl * 5;
+      if(SY > scl * 5){//we're outside of the boundaries
+        SY = scl * 5;//get back inside of the boundaries
       }
     }
     if(key == 'a'){//We pressed 'A'
-      if(SX < scl * 5){
+      if(SX < scl * 5){//if we're not outside of the boundaries
         SX += (scl * scrollAmount);//Scroll Screen LEFT
       }
-      if(SX > scl * 5){
-        SX = scl * 5;
+      if(SX > scl * 5){//we're outside of the boundaries
+        SX = scl * 5;//get back inside of the boundaries
       }
     }
     if(key == 's'){//We pressed 'S'
-      if(SY > -((scl * 105) - height)){
+      if(SY > -((scl * 105) - height)){//if we're not outside of the boundaries
         SY -= (scl * scrollAmount);//Scroll Screen RIGHT
       }
-      if(SY < -((scl * 105) - height)){
-        SY = -((scl * 105) - (floor(height / scl) * scl));
+      if(SY < -((scl * 105) - height)){//we're outside of the boundaries
+        SY = -((scl * 105) - (floor(height / scl) * scl));//get back inside of the boundaries
       }
     }
     if(key == 'd'){//We pressed 'D'
-      if(SX > -((scl * 105) - width)){
+      if(SX > -((scl * 105) - width)){//if we're not outside of the boundaries
         SX -= (scl * scrollAmount);//Scroll Screen DOWN
       }
-      if(SX < -((scl * 105) - width)){
-        SX = -((scl * 105) - (floor(width / scl) * scl));
+      if(SX < -((scl * 105) - width)){//we're outside of the boundaries
+        SX = -((scl * 105) - (floor(width / scl) * scl));//get back inside of the boundaries
       }
     }
   }
-}//keyTyped() END
+}//void keyTyped() END
 
 class tileUI{
   void draw(){
@@ -649,157 +648,157 @@ class tileUI{
   
     text("Drawn: " + drawnTiles, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
     textSize(12);//Default text size
-  }
+  }//void draw() END
   
   void update(){
-    scrollAmount = (int)scrollSlider.getValue();
+    scrollAmount = (int)scrollSlider.getValue();//update scroll amount
     
-    RSlider.setColorBackground(color(RSlider.getValue(), 0, 0));
-    GSlider.setColorBackground(color(0, GSlider.getValue(), 0));
-    BSlider.setColorBackground(color(0, 0, BSlider.getValue()));
+    RSlider.setColorBackground(color(RSlider.getValue(), 0, 0));//update background color (Red)
+    GSlider.setColorBackground(color(0, GSlider.getValue(), 0));//update background color (Green)
+    BSlider.setColorBackground(color(0, 0, BSlider.getValue()));//update background color (Blue)
     
-    colorSelect.setColorBackground(color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-    colorInput.setColorBackground(color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+    colorSelect.setColorBackground(color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));//update background color
+    colorInput.setColorBackground(color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));//update background color
     
-    colorSelect.setColorLabel(color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));
-    colorInput.setColorLabel(color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));
-  }
+    colorSelect.setColorLabel(color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));//update inverted label color
+    colorInput.setColorLabel(color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));//update inverted label color
+  }//void update() END
   
   void setup(){
-    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
-    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, scl + 12.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
-    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(scl, scl + 23.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");
-    RSlider = UIControls.getController("RSlider");
-    GSlider = UIControls.getController("GSlider");
-    BSlider = UIControls.getController("BSlider");
+    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
+    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, scl + 12.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
+    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(scl, scl + 23.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
+    RSlider = UIControls.getController("RSlider");//make it easier to use Slider
+    GSlider = UIControls.getController("GSlider");//make it easier to use Slider
+    BSlider = UIControls.getController("BSlider");//make it easier to use Slider
     
-    UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 5,scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2,scl).setRange(1,10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");
-    scrollSlider = UIControls.getController("scrollSlider");
+    UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 5,scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2,scl).setRange(1,10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+    scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
     
-    fileSaveLoad = UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl).setColorBackground(color(0, 127, 127));
+    fileSaveLoad = UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl).setColorBackground(color(0, 127, 127));//create ButtonBar
     //fileSaveLoad = UIControls.getController("fileSaveLoad");
     
-    UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")
-      .onChange(new CallbackListener(){
+    UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
+      .onChange(new CallbackListener(){//when changed
         public void controlEvent(CallbackEvent theEvent){
           //println(theEvent);
-          RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());
-          GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());
-          BSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").b());
+          RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());//make sure all values are the same
+          GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());//make sure all values are the same
+          BSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").b());//make sure all values are the same
         }
       });
-    colorWheel = UIControls.getController("colorWheel");
+    colorWheel = UIControls.getController("colorWheel");//make it easier to use ColorWheel
     
     
-    UIControls.addButton("colorSelect").setSize(scl, scl).setPosition(0, scl).setCaptionLabel("Wheel");
-    colorSelect = UIControls.getController("colorSelect");
+    UIControls.addButton("colorSelect").setSize(scl, scl).setPosition(0, scl).setCaptionLabel("Wheel");//create button
+    colorSelect = UIControls.getController("colorSelect");//make it easier to use button
     
     UIControls.addTextfield("colorInputR").setPosition(scl * 4, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
     UIControls.addTextfield("colorInputG").setPosition(scl * 4, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
     UIControls.addTextfield("colorInputB").setPosition(scl * 4, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
-    colorInputR = UIControls.getController("colorInputR");
-    colorInputG = UIControls.getController("colorInputG");
-    colorInputB = UIControls.getController("colorInputB");
+    colorInputR = UIControls.getController("colorInputR");//make it easier to use Textfield
+    colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
+    colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
     
-    UIControls.addButton("colorInput").setSize(scl, scl).setPosition(scl * 4, scl).setCaptionLabel("RGB");
-    colorInput = UIControls.getController("colorInput");
+    UIControls.addButton("colorInput").setSize(scl, scl).setPosition(scl * 4, scl).setCaptionLabel("RGB");//create button
+    colorInput = UIControls.getController("colorInput");//make it easier to use button
     
-    UIControls.addButton("clearToggle").setSize(scl, scl).setPosition(scl * 11, scl).setCaptionLabel("Clear").setColorLabel(color(0, 0, 0)).setColorBackground(color(127, 127, 127));
-    clearToggle = UIControls.getController("clearToggle");
+    UIControls.addButton("clearToggle").setSize(scl, scl).setPosition(scl * 11, scl).setCaptionLabel("Clear").setColorLabel(color(0, 0, 0)).setColorBackground(color(127, 127, 127));//create button
+    clearToggle = UIControls.getController("clearToggle");//make it easier to use button
     
-    UIControls.addButton("loadMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Load Map");
-    loadMap = UIControls.getController("loadMap");
+    UIControls.addButton("loadMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Load Map");//create button
+    loadMap = UIControls.getController("loadMap");//make it easier to use button
     
-    changeVisibility(true);
-  }
-}
+    changeVisibility(true);//go to tile map selection display
+  }//void setup() END
+}//class tileUI END
 
-void clearToggle(){
-  if(CClear){
-    CClear = false;
-    clearToggle.setColorLabel(color(0, 0, 0));
+void clearToggle(){//called when clearToggle is clicked
+  if(CClear){//is variable set
+    CClear = false;//don't place clear tiles
+    clearToggle.setColorLabel(color(0, 0, 0));//make text black
   }else{
-    CClear = true;
-    clearToggle.setColorLabel(color(255, 255, 255));
+    CClear = true;//place clear tiles
+    clearToggle.setColorLabel(color(255, 255, 255));//make text white
   }
   
-}
+}//void clearToggle() END
 
-void colorSelect(){
-  colorWheel.setVisible(!colorWheel.isVisible());
-  noTile = !noTile;
-}
+void colorSelect(){//called when colorSelect is clicked
+  colorWheel.setVisible(!colorWheel.isVisible());//invert visibility
+  noTile = !noTile;//ivert whether tiles can be placed
+}//void colorSelect() END
 
-void colorInput(){
+void colorInput(){//called when colorInput is clicked
   //UIControls.get(Textfield.class, "colorInputR").setVisible(!UIControls.get(Textfield.class, "colorInputR").isVisible());
-  colorInputR.setVisible(!colorInputR.isVisible());
-  colorInputG.setVisible(!colorInputG.isVisible());
-  colorInputB.setVisible(!colorInputB.isVisible());
-  noKeyboard = !noKeyboard;
-  noTile = !noTile;
-}
+  colorInputR.setVisible(!colorInputR.isVisible());//invert visibility
+  colorInputG.setVisible(!colorInputG.isVisible());//invert visibility
+  colorInputB.setVisible(!colorInputB.isVisible());//invert visibility
+  noKeyboard = !noKeyboard;//invert whether keyboard keys work
+  noTile = !noTile;//ivert whether tiles can be placed
+}//void colorInput() END
 
-void colorInputR(String value){
-  RSlider.setValue(int(value));
-}
+void colorInputR(String value){//called when colorInputR updates
+  RSlider.setValue(int(value));//make sure all values are the same
+}//void colorInputR(String value) END
 
-void colorInputG(String value){
-  GSlider.setValue(int(value));
-}
+void colorInputG(String value){//called when colorInputG updates
+  GSlider.setValue(int(value));//make sure all values are the same
+}//void colorInputG(String value) END
 
-void colorInputB(String value){
-  BSlider.setValue(int(value));
-}
+void colorInputB(String value){//called when colorInputB updates
+  BSlider.setValue(int(value));//make sure all values are the same
+}//void colorInputB(String value) END
 
 void fileSaveLoad(int n){
   //println(n);
   if(loadingTileMap == true){
-    if(n == 0){
-      tileMapShow--;
-      if(tileMapShow <= 0){
-        tileMapShow = 0;
+    if(n == 0){//Prev
+      tileMapShow--;//go to previous tile map
+      if(tileMapShow <= 0){//make sure we don't go below zero
+        tileMapShow = 0;//set to 0
       }
-    }else if(n == 1){
-      tileMapShow++;
-      if(tileMapShow >= tileInfoTable.getRowCount() - 2){
-        tileMapShow = tileInfoTable.getRowCount() - 2;
+    }else if(n == 1){//Next
+      tileMapShow++;//go to next tile map
+      if(tileMapShow >= tileInfoTable.getRowCount() - 2){//make sure we dont go above maximum tile map
+        tileMapShow = tileInfoTable.getRowCount() - 2;//set to maxixmum tile map
       }
-    }else if(n == 2){
-      tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");
-      totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;
-      tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");
-      tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");
-      tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");
-      fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;
-      changeVisibility(false);
-      preload();
-      tileN = 1;
-      noTile = false;
-      loadingTileMap = false;
-      preloading = false;
+    }else if(n == 2){//Load
+      tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");//load location
+      totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
+      tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");//load number of tiles wide
+      tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
+      tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
+      fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
+      changeVisibility(false);//go to normal display
+      preload();//preload stuff
+      tileN = 1;//make sure were on tile 1
+      noTile = false;//allowed to place tiles
+      loadingTileMap = false;//no longer loading map
+      preloading = false;//no longer preloading
     }else{
-      println("Button Does Not Exist");
+      println("Button Does Not Exist");//Tell me your secrets
     }
   }else{
-    if(n == 0){
-      selectOutput("Select a CSV to write to:", "fileSaveLoadSelect");
-    }else if(n == 1){
-      selectInput("Select a CSV to read from:", "FileLoadMapSelect");
-    }else if(n == 2){
-      selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");
+    if(n == 0){//Save
+      selectOutput("Select a CSV to write to:", "fileSaveLoadSelect");//map save dialog
+    }else if(n == 1){//Load
+      selectInput("Select a CSV to read from:", "FileLoadMapSelect");//map load dialog
+    }else if(n == 2){//Image
+      selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
     }else{
-      println("Button Does Not Exist");
+      println("Button Does Not Exist");//Tell me your secrets
     }
   }
-}
+}//void fileSaveLoad(int n) END
 
 class canvasBG{//The background
   void draw(){//Draw the background
     background(255);//Draw the white background
     image(BACKGROUND, 0, 0);//Draw background
-  }//draw() END
+  }//void draw() END
   
-  void border(){
+  void border(){//draw the red border
     strokeWeight(borderThickness); // Thicker
     stroke(255,0,0);//RED
     line(1, 0, 1, rows*scl);//Draw Verticle lines
@@ -808,14 +807,14 @@ class canvasBG{//The background
     line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Horizontal Lines
     strokeWeight(1); // Default
     stroke(0);//BLACK
-  }//border() END
-}//canvasBG END
+  }//void border() END
+}//class canvasBG END
 
 class mTile{//Tile Object
-  int x, y;
-  int image;
-  int r, g, b;
-  boolean clear;
+  int x, y;//Store XY Position
+  int image;//Store Image Number
+  int r, g, b;//Store RGB Value
+  boolean clear;//Is the tile clear
 
   public mTile(int x, int y, int image, int r, int g, int b, boolean clear){//Tile Object
     this.x = x;//Store X Position
@@ -826,51 +825,51 @@ class mTile{//Tile Object
     this.b = b;//Store Blue Value
     this.clear = clear;//Is the tile clear
     //this.lore = lore || 0;//The LORE? of the tile
-  }//mTile() END
-}//mTile() END
+  }//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
+}//class mTile() END
 
 void updateXY(){//Update the XY position of the mouse and the page XY offset
   mX = mouseX - SX;//Update the X position of the mouse
   mY = mouseY - SY;//Update the Y position of the mouse
   //SX = window.pageXOffset;//Update the page X offset
   //SY = window.pageYOffset;//Update the page Y offset
-}//updateXY() END
+}//void updateXY() END
 
 void deleteTile(int tile){//Delete a tile and update the array
-  if(mapTiles.length > 0){//If there is more than 1 tile
-    if(mapTiles.length > 1){
+  if(mapTiles.length > 0){//if there are tiles
+    if(mapTiles.length > 1){//If there is more than 1 tile
       for(int i = tile; i < mapTiles.length - 1; i++){//Go through all tiles after the one we're deleting
         mapTiles[i] = mapTiles[i + 1];//Shift the tile down 1
       }
     }
     mapTiles = (mTile[]) shorten(mapTiles);//Shorten the Map Tiles Array by 1
   }
-}//deleteTile() END
+}//void deleteTile() END
 
 void placeTile(){//Place a tile at the mouses location
   //print(mouseButton);
   if(mY > scl*UIBottom - SY + fV && mY < (height - (scl*1.5)) - SY + fV && mX < (width - (scl)) - SX + fV){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
       mapTiles[mapTiles.length - 1] = new mTile(floor(mX/scl)*scl,floor(mY/scl)*scl,tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false);//Place a colored tile with no image
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //print(mouseButton);
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
       mapTiles[mapTiles.length - 1] = new mTile(floor(mX/scl)*scl,floor(mY/scl)*scl,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Place a tile
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
     }
   }
-}//placeTile() END
+}//void placeTile() END
 
 void loadTile(int tile){//Set current image to tile image
   tileN = mapTiles[tile].image;//Set current image to tile image
-}//loadTile() END
+}//void loadTile() END
 
 void updateOffset(int tile){//Update mouse XY offset relative to upper-left corner of tile
   offsetX = mapTiles[tile].x-mX;//keep track of relative X location of click to corner of rectangle
   offsetY = mapTiles[tile].y-mY;//keep track of relative Y location of click to corner of rectangle
-}//updateOffset() END
+}//void updateOffset() END
 
 void nextTileC(){//Move To Next Tile
   updateTileRow();//Get the row to whatever tile were on
@@ -885,7 +884,7 @@ void nextTileC(){//Move To Next Tile
       tileRow = 0;//Loop the tile row back to the first row
     }
   }
-}//nextTileC() END
+}//void nextTileC() END
 
 void prevTileC(){//Move To Previous Tile
   updateTileRow();//Get the row to whatever tile were on
@@ -900,7 +899,7 @@ void prevTileC(){//Move To Previous Tile
       tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
     }
   }
-}//prevTileC() END
+}//void prevTileC() END
 
 void updateTileRow(){//Get the row to whatever tile were on
   while(floor(tileN/rowLength)*rowLength < rowLength*tileRow){//Is tileN lower than the row were on?
@@ -915,7 +914,7 @@ void updateTileRow(){//Get the row to whatever tile were on
         tileRow = 0;//Loop the tile row back to the first row
       }
     }
-}//updateTileRow() END
+}//void updateTileRow() END
 
 void nextRowC(){//Next Row
   if(tileN < rowLength * tileRow || tileN > rowLength * tileRow + rowLength){//Is tileN outside of our current row
@@ -930,7 +929,7 @@ void nextRowC(){//Next Row
   if(tileRow > fullTotalImages / rowLength){//If the row number is greater than our total number of rows
     tileRow = 0;//Loop the row number back to the first
   }
-}//nextRowC() END
+}//void nextRowC() END
 
 void prevRowC(){//Previous Row
   if(tileN < rowLength * tileRow || tileN > rowLength * tileRow + rowLength){//Is tileN outside of our current row
@@ -945,33 +944,33 @@ void prevRowC(){//Previous Row
   if(tileRow < 0){//If the row number is less than our zero
     tileRow = floor(fullTotalImages / rowLength);//Loop the row number back to the last
   }
-}//prevRowC() END
+}//void prevRowC() END
 
 boolean isCursorOnTile(int tile){//Is the mouse cursor on the tile we're checking?
   return(mX > mapTiles[tile].x - fV && mX < mapTiles[tile].x + scl + fV && mY > mapTiles[tile].y - fV && mY < mapTiles[tile].y + scl + fV);//Are we clicking on the tile
-}//isCursorOnTile() END
+}//boolean isCursorOnTile(int tile) END
 
 boolean isCursorOnTileXY(int tile, int tX, int tY){//Is the mouse cursor on the tile we're checking?
   return(tX > mapTiles[tile].x - fV && tX < mapTiles[tile].x + scl + fV && tY > mapTiles[tile].y - fV && tY < mapTiles[tile].y + scl + fV);//Are we clicking on the tile
-}//isCursorOnTile() END
+}//boolean isCursorOnTileXY(int tile, int tX, int tY) END
 
 boolean isCursorOnTileNoFV(int tile){//Is the mouse cursor on the tile we're checking?
   return(mX > mapTiles[tile].x && mX < mapTiles[tile].x + scl && mY > mapTiles[tile].y && mY < mapTiles[tile].y + scl);//Are we clicking on the tile
-}//isCursorOnTileNoFV() END
+}//boolean isCursorOnTileNoFV(int tile) END
 
 boolean isCursorOnTileNoFVXY(int tile, int tX, int tY){//Is the mouse cursor on the tile we're checking?
   return(tX > mapTiles[tile].x && tX < mapTiles[tile].x + scl && tY > mapTiles[tile].y && tY < mapTiles[tile].y + scl);//Are we clicking on the tile
-}//isCursorOnTileNoFV() END
+}//boolean isCursorOnTileNoFVXY(int tile, int tX, int tY) END
 
 void updateTileLocation(int tile){//Adjust XY location of tile
   mapTiles[tile].x = mX + offsetX;//Adjust X location of tile
   mapTiles[tile].y = mY + offsetY;//Adjust Y location of tile
-}//updateTileLocation() END
+}//void updateTileLocation(int tile) END
 
 void snapTileLocation(int tile){//Snap XY location of tile to grid
   mapTiles[tile].x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
   mapTiles[tile].y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
-}//snapTileLocation() END
+}//void snapTileLocation(int tile) END
 
 boolean checkImage(int tile){//check if tile about to place has same image as tile mouse is on
   for(int i = mapTiles.length - 1; i >= 0; i--){//Go through all tiles
@@ -984,7 +983,7 @@ boolean checkImage(int tile){//check if tile about to place has same image as ti
   }
   //console.log("True");
   return true;//Place tile
-}//checkImage() END
+}//boolean checkImage(int tile) END
 
 boolean checkImageXY(int tile, int x, int y){//check if tile about to place has same image as tile mouse is on
   for(int i = mapTiles.length - 1; i >= 0; i--){//Go through all tiles
@@ -997,13 +996,13 @@ boolean checkImageXY(int tile, int x, int y){//check if tile about to place has 
   }
   //console.log("True");
   return true;//Place tile
-}//checkImageXY() END
+}//boolean checkImageXY(int tile, int x, int y) END
 
 void loadColors(int tile){//Load RGB Sliders and RGB Inputs with value from tile
   RSlider.setValue(mapTiles[tile].r);//Set Red Slider value to Red value of the tile
   GSlider.setValue(mapTiles[tile].g);//Set Green Slider value to Green value of the tile
   BSlider.setValue(mapTiles[tile].b);//Set Blue Slider value to Blue value of the tile
-}//loadColors() END
+}//void loadColors(int tile) END
 
 void tileGroup(String button){//mess with tiles in square group
   int X1, X2, Y1, Y2;//define XY positions
@@ -1034,7 +1033,7 @@ void tileGroup(String button){//mess with tiles in square group
   for(int i = 0; i < YLines; i++){//loop through all y lines
     for(int j = 0; j < XLines; j++){//loop through all x lines
       if(button == "left"){//we clicked left button
-        mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+        mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
         mapTiles[mapTiles.length - 1] = new mTile(X1 + (scl * j),Y1 + (scl * i),tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Place a tile
       }else if(button == "center" && tileGroupDeleting == true){//we clicked middle button on a tile
         for(int k = 0; k <= mapTiles.length - 1; k++){//loop through all tiles
@@ -1044,7 +1043,7 @@ void tileGroup(String button){//mess with tiles in square group
           }
         }
       }else if(button == "center"){//we clicked middle button
-        mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+        mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
         mapTiles[mapTiles.length - 1] = new mTile(X1 + (scl * j),Y1 + (scl * i),tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Place a tile
       }else if(button == "right"){//we clicked right button
         for(int k = 0; k <= mapTiles.length-1; k++){//loop through all tiles
@@ -1059,7 +1058,7 @@ void tileGroup(String button){//mess with tiles in square group
   }
   tileGroupStep = 0;//reset step count
   tileGroupDeleting = false;//no longer deleting
-}//placeTile() END
+}//void tileGroup(String button) END
 
 void tileGroupCutCopy(char button){//mess with tiles in square group
   int X1, X2, Y1, Y2;//define XY positions
@@ -1094,7 +1093,7 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
       if(button == 'x'){//we clicked middle button on a tile
         for(int k = 0; k <= mapTiles.length-1; k++){//loop through all tiles
           if(isCursorOnTileXY(k, (X1 + (scl * j)) + 4, (Y1 + (scl * i)) + 4)){//Are we clicking on the tile
-            mapTilesCopy = (mTile[]) expand(mapTilesCopy, mapTilesCopy.length + 1);
+            mapTilesCopy = (mTile[]) expand(mapTilesCopy, mapTilesCopy.length + 1);//make sure we have room
             mapTilesCopy[tileCount] = mapTiles[k];//copy the tile
             tileCount++;//next tile
             deleteTile(k);//delete the tile
@@ -1105,7 +1104,7 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
       }else if(button == 'c'){//we clicked right button
         for(int k = 0; k <= mapTiles.length-1; k++){//loop through all tiles
           if(isCursorOnTileXY(k, (X1 + (scl * j)) + 4, (Y1 + (scl * i)) + 4)){//Are we clicking on the tile
-            mapTilesCopy = (mTile[]) expand(mapTilesCopy, mapTilesCopy.length + 1);
+            mapTilesCopy = (mTile[]) expand(mapTilesCopy, mapTilesCopy.length + 1);//make sure we have room
             mapTilesCopy[tileCount] = mapTiles[k];//copy the tile
             tileCount++;//next tile
             hadTile = true;//square has tile
@@ -1113,14 +1112,14 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
         }
       }
       if(hadTile == false){//if square did not have tile
-        mapTilesCopy = (mTile[]) expand(mapTilesCopy, mapTilesCopy.length + 1);
+        mapTilesCopy = (mTile[]) expand(mapTilesCopy, mapTilesCopy.length + 1);//make sure we have room
         mapTilesCopy[tileCount] = null;//insert null tile
         tileCount++;//next tile
       }
     }
   }
   tileGroupStep = 0;//reset step count
-}//tileGroupCutCopy() END
+}//void tileGroupCutCopy(char button) END
 
 void tileGroupPaste(){//Paste The Copied Tiles
   int X1,Y1;//Setup Variables
@@ -1144,7 +1143,7 @@ void tileGroupPaste(){//Paste The Copied Tiles
       }
     }
   }
-}//tileGroupPaste() END
+}//void tileGroupPaste() END
 
 void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Placed
   int X1,X2,Y1,Y2;//Setup Variables
@@ -1165,7 +1164,7 @@ void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Pl
   line(X1, Y2, X2, Y2);//Draw Bottom
   strokeWeight(1); // Default
   stroke(0);//BLACK
-}//drawGroupPasteOutline() END
+}//void drawGroupPasteOutline() END
 
 void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
   int X1,X2,Y1,Y2,asx2 = 0,asy2 = 0;//Setup Variables
@@ -1205,76 +1204,76 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
   line(X1, Y2, X2, Y2);//Draw Bottom
   strokeWeight(1); // Default
   stroke(0);//BLACK
-}//drawTileGroupOutline() END
+}//void drawTileGroupOutline() END
 
-void FileSaveCanvasSelect(File selection){
-  if (selection == null) {
+void FileSaveCanvasSelect(File selection){//map canvas save select callback
+  if (selection == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
-  } else {
+  } else {//we selected a file
     println("User selected " + selection.getAbsolutePath() + " for saving");
-    fileName = selection.getAbsolutePath();
-    String[] fileNameSplit = split(fileName, '.');
-    String[] fileNamePNG = {fileNameSplit[0], "png"};
-    if(fileNameSplit.length > 1){
+    fileName = selection.getAbsolutePath();//get the path to the file
+    String[] fileNameSplit = split(fileName, '.');//split the filename into parts
+    String[] fileNamePNG = {fileNameSplit[0], "png"};//array of filename and png
+    if(fileNameSplit.length > 1){//does the file have an extension
       //Already has file type
     }else{
-      fileName = join(fileNamePNG, '.');
+      fileName = join(fileNamePNG, '.');//make sure the filename ends with .png
     }
-    FileSaveCanvas();
+    FileSaveCanvas();//save the canvas
   }
-}
+}//void FileSaveCanvasSelect(File selection) END
 
-void fileSaveLoadSelect(File selection){
-  if (selection == null) {
+void fileSaveLoadSelect(File selection){//map file save select callback
+  if (selection == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
-  } else {
+  } else {//we selected a file
     println("User selected " + selection.getAbsolutePath() + " for saving");
-    fileName = selection.getAbsolutePath();
-    String[] fileNameSplit = split(fileName, '.');
-    String[] fileNameCSV = {fileNameSplit[0], "csv"};
-    if(fileNameSplit.length > 1){
+    fileName = selection.getAbsolutePath();//get the path to the file
+    String[] fileNameSplit = split(fileName, '.');//split the filename into parts
+    String[] fileNameCSV = {fileNameSplit[0], "csv"};//array of filename and csv
+    if(fileNameSplit.length > 1){//does the file have an extension
       //Already has file type
     }else{
-      fileName = join(fileNameCSV, '.');
+      fileName = join(fileNameCSV, '.');//make sure the filename ends with .csv
     }
-    fileSaveLoad();
+    fileSaveLoad();//save the map
   }
-}
+}//void fileSaveLoadSelect(File selection) END
 
-void FileLoadMapSelect(File selection){
-  if (selection == null) {
+void FileLoadMapSelect(File selection){//map file load select callback
+  if (selection == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
-  } else {
+  } else {//we selected a file
     println("User selected " + selection.getAbsolutePath() + " for loading");
-    fileName = selection.getAbsolutePath();
-    FileLoadMap();
+    fileName = selection.getAbsolutePath();//get the path to the file
+    FileLoadMap();//load the map
   }
-}
+}//void FileLoadMapSelect(File selection) END
 
 void FileSaveCanvas(){//Save the Canvas to a file
-  int lowX = scl * cols;
-  int highX = 0;
-  int lowY = scl * rows;
-  int highY = 0;
+  int lowX = scl * cols;//make it all the way to the right
+  int highX = 0;//make it all the way to the left
+  int lowY = scl * rows;//make it all the way down
+  int highY = 0;//make it all the way up
   
   for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
-    if(mapTiles[i].x < lowX){
-      lowX = mapTiles[i].x;
+    if(mapTiles[i].x < lowX){//if theres a tile further left
+      lowX = mapTiles[i].x;//set that as the left
     }
-    if(mapTiles[i].x > highX){
-      highX = mapTiles[i].x;
+    if(mapTiles[i].x > highX){//if theres a tile further right
+      highX = mapTiles[i].x;//set that as the right
     }
-    if(mapTiles[i].y < lowY){
-      lowY = mapTiles[i].y;
+    if(mapTiles[i].y < lowY){//if theres a tile further up
+      lowY = mapTiles[i].y;//set that as the up
     }
-    if(mapTiles[i].y > highY){
-      highY = mapTiles[i].y;
+    if(mapTiles[i].y > highY){//if theres a tile further down
+      highY = mapTiles[i].y;//set that as the down
     }
   }//Went through all the tiles
 
-  PGraphics fullCanvas = createGraphics(highX - lowX + scl + 1, highY - lowY + scl + 1);
-  fullCanvas.beginDraw();
-  fullCanvas.background(255);
+  PGraphics fullCanvas = createGraphics(highX - lowX + scl + 1, highY - lowY + scl + 1);//make the canvas slightly larger than needed
+  fullCanvas.beginDraw();//start drawing the canvas
+  fullCanvas.background(255);//make the background white
   fullCanvas.image(BACKGROUND, 0, 0);//Draw the background
   //Display Map Tiles
   for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
@@ -1284,9 +1283,9 @@ void FileSaveCanvas(){//Save the Canvas to a file
     }
     fullCanvas.image(img[mapTiles[i].image], mapTiles[i].x - lowX, mapTiles[i].y - lowY);//Draw tile
   }//Went through all the tiles
-  fullCanvas.endDraw();
+  fullCanvas.endDraw();//stop drawing the canvas
   fullCanvas.save(fileName);// + ".png");//Save the map to a PNG file
-}//FileSaveCanvas() END
+}//void FileSaveCanvas() END
 
 void fileSaveLoad(){//Save the Map to file
   mapTable = new Table();//create new p5 table
@@ -1298,12 +1297,12 @@ void fileSaveLoad(){//Save the Map to file
   mapTable.addColumn("b");//Tile Blue amount
   mapTable.addColumn("clear");//Is Tile Clear
   //mapTable.addColumn('lore');//Tile LORE?
-  TableRow newRow;
+  TableRow newRow;//create a new row
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   newRow = mapTable.addRow();//Add a row to table
   newRow.setInt("x",_FILEVERSION_);//File Version
-  newRow.setString("y",tileMapName);//blank
+  newRow.setString("y",tileMapName);//tile map name
   newRow.setInt("image",0);//blank
   newRow.setInt("r",0);//blank
   newRow.setInt("g",0);//blank
@@ -1311,7 +1310,7 @@ void fileSaveLoad(){//Save the Map to file
   newRow.setInt("clear",0);//blank
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
-  /*if(_FILEVERSION_ == 0){
+  /*if(_FILEVERSION_ == 0){//whats the file version
     for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
       newRow = mapTable.addRow();//Add a row to table
       newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
@@ -1327,7 +1326,7 @@ void fileSaveLoad(){//Save the Map to file
       newRow.setInt("clear",CLEAR);//Is Tile Clear
       //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
     }
-  }else if(_FILEVERSION_ == 1){
+  }else if(_FILEVERSION_ == 1){//whats the file version
     for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
       newRow = mapTable.addRow();//Add a row to table
       newRow.setInt("x",floor(mapTiles[i].x));//Tile X position
@@ -1343,7 +1342,7 @@ void fileSaveLoad(){//Save the Map to file
       newRow.setInt("clear",CLEAR);//Is Tile Clear
       //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
     }
-  }else*/ if(_FILEVERSION_ == 2){
+  }else*/ if(_FILEVERSION_ == 2){//whats the file version
     for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
       newRow = mapTable.addRow();//Add a row to table
       newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
@@ -1364,20 +1363,20 @@ void fileSaveLoad(){//Save the Map to file
   }
   saveTable(mapTable, fileName);// + ".csv");//Save the Map to a CSV file
   mapTable = null;//Clear the Table
-}//fileSaveLoad() END
+}//void fileSaveLoad() END
 
 void FileLoadMap(){//load map from file
-  noLoop();
+  noLoop();//dont allow drawing
   mapTable = loadTable(fileName, "header, csv");// + ".csv", "header");//Load the csv
   
   while(mapTiles.length > 0){//Clear the array
-    deleteTile(0);
+    deleteTile(0);//shorten the array
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   int fileVersion = int(mapTable.getInt(0,"x"));//File Version
   println(mapTable.getString(0,"y"));
-  if(!tileMapName.equals(mapTable.getString(0,"y"))){
+  if(!tileMapName.equals(mapTable.getString(0,"y"))){//if map names aren't equal
     println("Changing Tile Map");
     tileMapName = mapTable.getString(0,"y");//Tile Map Name
   }else{
@@ -1396,7 +1395,7 @@ void FileLoadMap(){//load map from file
       if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
         CLEAR = false;//tile is not clear
       }
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
       mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x") * scl,//Tile X position
                               mapTable.getInt(i,"y") * scl,//Tile Y position
                               mapTable.getInt(i,"image"),//Tile Image
@@ -1412,7 +1411,7 @@ void FileLoadMap(){//load map from file
       if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
         CLEAR = false;//tile is not clear
       }
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
       mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x"),//Tile X position
                               mapTable.getInt(i,"y"),//Tile Y position
                               mapTable.getInt(i,"image"),//Tile Image
@@ -1428,7 +1427,7 @@ void FileLoadMap(){//load map from file
       if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
         CLEAR = false;//tile is not clear
       }
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
       mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x") * scl,//Tile X position
                               mapTable.getInt(i,"y") * scl,//Tile Y position
                               mapTable.getInt(i,"image"),//Tile Image
@@ -1444,9 +1443,9 @@ void FileLoadMap(){//load map from file
   
   if(mapTiles == null){//Is the array null
     while(mapTiles.length > 0){//Reset the map array
-      deleteTile(0);
+      deleteTile(0);//shorten the array
     }
   }
-  loop();
-  prepreloading = false;
-}//FileLoadMap() END
+  loop();//allow drawing
+  prepreloading = false;//no longer prepreloading
+}//void FileLoadMap() END
