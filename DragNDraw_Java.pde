@@ -74,19 +74,41 @@ String fileName = "Map1";
 ControlP5 UIControls;
 Controller RSlider, GSlider, BSlider;
 Controller scrollSlider;
-Controller fileSaveMap, fileLoadMap, fileSaveCanvas;
+ButtonBar fileSaveLoad;
+Controller fileLoadMap, fileSaveCanvas;
 Controller colorSelect, colorInput;
 Controller colorInputR, colorInputG, colorInputB;
 Controller colorWheel;
 Controller clearToggle;
 
 tileUI UI = new tileUI();
+boolean UISetup = false;
 canvasBG BG = new canvasBG();
 int borderThickness = 4;
 
+Table tileInfoTable;
+PImage[] tileMaps = new PImage[0];
+boolean preloading = true;
+boolean prepreloading = true;
+int tileMapShow = 0;
+String tileMapLocation = "assets/tileMap.png";
+boolean loadMapLocaion = false;
+int tileMapHeight = 32;
+int tileMapWidth = 32;
+int tileMapTileX = 32;
+int tileMapTileY = 32;
+String tileMapName = "Classic";
+Controller loadMap;
+boolean loadingTileMap = true;
+
 void preload(){
-  PImage tileMap = loadImage("assets/tileMap.png");
+  //FileLoadTileInfo();
+  PImage tileMap = loadImage(tileMapLocation);//"assets/tileMap.png");
   tileMap.loadPixels();
+  
+  for(int i = 0; i < img.length; i++){
+    img = (PImage[]) shorten(img);//Shorten the Tile Images Array by 1
+  }
   
   for(int i = 0; i <= totalImages; i++){
     img = (PImage[]) expand(img, img.length + 1);
@@ -94,7 +116,7 @@ void preload(){
     img[i].loadPixels();
     for(int y = 0; y < 32; y++){
       for(int x = 0; x < 32; x++){
-        img[i].set(x, y, tileMap.get(x + (scl * floor(i % 32)), y + (scl * floor(i / 32))));
+        img[i].set(x, y, tileMap.get(x + (scl * floor(i % tileMapWidth)), y + (scl * floor(i / tileMapHeight))));
       }
     }
     img[i].updatePixels();
@@ -113,21 +135,138 @@ void preload(){
   BACKGROUND = loadImage("assets/background.png");
 }
 
-void setup(){
-  preload();
+void FileLoadTileInfo(){//load map from file
+  tileInfoTable = loadTable("assets/tileMapInfo.csv", "header, csv");// + ".csv", "header");//Load the csv
   
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
+  int fileVersion = int(tileInfoTable.getInt(0,"location"));//File Version
+  //int(mapTable.get(0,'y'));//blank
+  //int(mapTable.get(0,'image'));//blank
+  //int(mapTable.get(0,'r'));//blank
+  //int(mapTable.get(0,'g'));//blank
+  //int(mapTable.get(0,'b'));//blank
+  //int(mapTable.get(0,'clear'));//blank
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
+  
+  if(fileVersion == 0){//whats the file version
+    for(int i = 1; i < tileInfoTable.getRowCount(); i++){//Loop through all the rows
+      tileMaps = (PImage[]) expand(tileMaps, tileMaps.length + 1);
+      tileMaps[tileMaps.length - 1] = loadImage(tileInfoTable.getString(i,"location"));
+      println(tileInfoTable.getString(i,"location") + ", " +//Tile X position
+                              tileInfoTable.getInt(i,"tileMapHeight") + ", " +//Tile Y position
+                              tileInfoTable.getInt(i,"tileMapWidth") + ", " +//Tile Image
+                              tileInfoTable.getInt(i,"tileMapTileX") + ", " +//Tile Red amount
+                              tileInfoTable.getInt(i,"tileMapTileY") + ", " +//Tile Red amount
+                              tileInfoTable.getInt(i,"images") + ", " +//Tile Red amount
+                              tileInfoTable.getString(i,"name"));//,//Is Tile Clear
+      if(tileMapName.equals(tileInfoTable.getString(i,"name"))){
+        tileMapLocation = tileInfoTable.getString(i,"location");
+      }
+    }
+  }else{//we don't know that file version
+    println("File Version Error (Loading).");//throw error
+  }
+  //image(tileMaps[1],0,0);
+}//FileLoadMap() END
+
+void setup(){
   size(960,540);//X, Y
   surface.setResizable(true);
   
+  FileLoadTileInfo();
+  //preload();
+  
   UIControls = new ControlP5(this);
   UI.setup();
+  
+  //changeVisibility(false);
   
   mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
   mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
 }
 
+void loadMap(){
+  if(loadingTileMap == true){
+    noLoop();
+    loadMapLocaion = true;
+    selectInput("Select a CSV to read from:", "FileLoadMapSelect");
+    println("File Selected!");
+    while(prepreloading == true){delay(500);}
+    println("File Loaded");
+    FileLoadTileInfo();
+    preload();
+    tileN = 1;
+    noTile = false;
+    changeVisibility(false);
+    loadingTileMap = false;
+    preloading = false;
+    loop();
+  }else{
+    preloading = true;
+    prepreloading = true;
+    UISetup = false;
+    loadingTileMap = true;
+    changeVisibility(true);
+  }
+}
+
+void changeVisibility(boolean visibility){
+  if(visibility){
+    loadMap.setPosition(scl * 5, 0);
+    loadMap.setLabel("Load Map");
+    
+    fileSaveLoad.setPosition(0,0);
+    fileSaveLoad.changeItem("Save","text","Prev");//"Prev Next Load"
+    fileSaveLoad.changeItem("Load","text","Next");
+    fileSaveLoad.changeItem("Image","text","Load");
+    
+    clearToggle.setVisible(false);
+    colorInput.setVisible(false);
+    colorSelect.setVisible(false);
+    scrollSlider.setVisible(false);
+    RSlider.setVisible(false);
+    GSlider.setVisible(false);
+    BSlider.setVisible(false);
+  }else{
+    loadMap.setPosition(scl * 14, scl);
+    loadMap.setLabel("Change Tileset");
+    
+    fileSaveLoad.setPosition(scl * 7,scl);
+    fileSaveLoad.changeItem("Save","text","Save");//"Save Load Image"
+    fileSaveLoad.changeItem("Load","text","Load");
+    fileSaveLoad.changeItem("Image","text","Image");
+    
+    clearToggle.setVisible(true);
+    colorInput.setVisible(true);
+    colorSelect.setVisible(true);
+    scrollSlider.setVisible(true);
+    RSlider.setVisible(true);
+    GSlider.setVisible(true);
+    BSlider.setVisible(true);
+  }
+}
+
 void draw(){
-  if(UIControls.get(ColorWheel.class, "colorWheel").isVisible() || UIControls.get(Textfield.class, "colorInputR").isVisible()){
+  if(preloading == true){
+    pushMatrix();
+    background(255);
+    translate(SX, SY);
+    image(tileMaps[tileMapShow],0,scl);
+    //image(tileMaps[0],tileMaps[1].width,scl);
+    fill(0);
+    rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);
+    fill(255);
+    text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);
+    popMatrix();
+  }else{
+    if(UISetup == false){
+      //preload();
+      //changeVisibility(true);
+      //UI.setup();
+      UISetup = true;
+    }
+  
+  if(colorWheel.isVisible() || colorInputR.isVisible()){
     noTile = true;//Allow tile placement
   }
   
@@ -178,6 +317,7 @@ void draw(){
   //Update and Draw the UI
   UI.update();//Update the UI position
   UI.draw();//Draw the UI
+  }
 }
 
 boolean checkOffset(){
@@ -194,6 +334,7 @@ boolean checkOffset(){
 }
 
 void mousePressed(){//We pressed a mouse button
+  if(preloading == true || UISetup == false){}else{
   //updateXY();
 
   /*if(checkOffset()){
@@ -282,9 +423,11 @@ void mousePressed(){//We pressed a mouse button
   }//Went through all the tiles
   
   placeTile();//Place a tile at current mouse position
+  }
 }//mousePressed() END
 
 void mouseDragged(){//We dragged the mouse while holding a button
+  if(preloading == true || UISetup == false){}else{
   //updateXY();
   
   /*if(checkOffset()){
@@ -331,9 +474,11 @@ void mouseDragged(){//We dragged the mouse while holding a button
   placeTile();//Place a tile at current mouse position
   
   //return false;
+  }
 }//mouseDragged() END
 
 void mouseReleased(){//We released the mouse button
+  if(preloading == true || UISetup == false){}else{
   if(dragging){//Are we dragging a tile
     if(mapTiles[mapN] != null){//If tile exists
       snapTileLocation(mapN);//Snap XY location of tile to grid
@@ -351,6 +496,7 @@ void mouseReleased(){//We released the mouse button
       deleteTile(mapN);//Delete a tile and update the array
       //return false;
     }
+  }
   }
 }//mouseReleased() END
 
@@ -530,8 +676,8 @@ class tileUI{
     UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 5,scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2,scl).setRange(1,10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");
     scrollSlider = UIControls.getController("scrollSlider");
     
-    UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl).setColorBackground(color(0, 127, 127));
-    fileSaveMap = UIControls.getController("fileSaveLoad");
+    fileSaveLoad = UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl).setColorBackground(color(0, 127, 127));
+    //fileSaveLoad = UIControls.getController("fileSaveLoad");
     
     UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")
       .onChange(new CallbackListener(){
@@ -560,6 +706,11 @@ class tileUI{
     
     UIControls.addButton("clearToggle").setSize(scl, scl).setPosition(scl * 11, scl).setCaptionLabel("Clear").setColorLabel(color(0, 0, 0)).setColorBackground(color(127, 127, 127));
     clearToggle = UIControls.getController("clearToggle");
+    
+    UIControls.addButton("loadMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Load Map");
+    loadMap = UIControls.getController("loadMap");
+    
+    changeVisibility(true);
   }
 }
 
@@ -602,14 +753,43 @@ void colorInputB(String value){
 
 void fileSaveLoad(int n){
   //println(n);
-  if(n == 0){
-    selectOutput("Select a CSV to write to:", "FileSaveMapSelect");
-  }else if(n == 1){
-    selectInput("Select a CSV to read from:", "FileLoadMapSelect");
-  }else if(n == 2){
-    selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");
+  if(loadingTileMap == true){
+    if(n == 0){
+      tileMapShow--;
+      if(tileMapShow <= 0){
+        tileMapShow = 0;
+      }
+    }else if(n == 1){
+      tileMapShow++;
+      if(tileMapShow >= tileInfoTable.getRowCount() - 2){
+        tileMapShow = tileInfoTable.getRowCount() - 2;
+      }
+    }else if(n == 2){
+      tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");
+      totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;
+      tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");
+      tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");
+      tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");
+      fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;
+      changeVisibility(false);
+      preload();
+      tileN = 1;
+      noTile = false;
+      loadingTileMap = false;
+      preloading = false;
+    }else{
+      println("Button Does Not Exist");
+    }
   }else{
-    println("Button Does Not Exist");
+    if(n == 0){
+      selectOutput("Select a CSV to write to:", "fileSaveLoadSelect");
+    }else if(n == 1){
+      selectInput("Select a CSV to read from:", "FileLoadMapSelect");
+    }else if(n == 2){
+      selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");
+    }else{
+      println("Button Does Not Exist");
+    }
   }
 }
 
@@ -1031,7 +1211,7 @@ void FileSaveCanvasSelect(File selection){
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
-    println("User selected " + selection.getAbsolutePath());
+    println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();
     String[] fileNameSplit = split(fileName, '.');
     String[] fileNamePNG = {fileNameSplit[0], "png"};
@@ -1044,11 +1224,11 @@ void FileSaveCanvasSelect(File selection){
   }
 }
 
-void FileSaveMapSelect(File selection){
+void fileSaveLoadSelect(File selection){
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
-    println("User selected " + selection.getAbsolutePath());
+    println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();
     String[] fileNameSplit = split(fileName, '.');
     String[] fileNameCSV = {fileNameSplit[0], "csv"};
@@ -1057,7 +1237,7 @@ void FileSaveMapSelect(File selection){
     }else{
       fileName = join(fileNameCSV, '.');
     }
-    FileSaveMap();
+    fileSaveLoad();
   }
 }
 
@@ -1065,7 +1245,7 @@ void FileLoadMapSelect(File selection){
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
-    println("User selected " + selection.getAbsolutePath());
+    println("User selected " + selection.getAbsolutePath() + " for loading");
     fileName = selection.getAbsolutePath();
     FileLoadMap();
   }
@@ -1108,7 +1288,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
   fullCanvas.save(fileName);// + ".png");//Save the map to a PNG file
 }//FileSaveCanvas() END
 
-void FileSaveMap(){//Save the Map to file
+void fileSaveLoad(){//Save the Map to file
   mapTable = new Table();//create new p5 table
   mapTable.addColumn("x");//Tile X position
   mapTable.addColumn("y");//Tile Y position
@@ -1123,7 +1303,7 @@ void FileSaveMap(){//Save the Map to file
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   newRow = mapTable.addRow();//Add a row to table
   newRow.setInt("x",_FILEVERSION_);//File Version
-  newRow.setInt("y",0);//blank
+  newRow.setString("y",tileMapName);//blank
   newRow.setInt("image",0);//blank
   newRow.setInt("r",0);//blank
   newRow.setInt("g",0);//blank
@@ -1163,7 +1343,7 @@ void FileSaveMap(){//Save the Map to file
       newRow.setInt("clear",CLEAR);//Is Tile Clear
       //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
     }
-  }else */if(_FILEVERSION_ == 2){
+  }else*/ if(_FILEVERSION_ == 2){
     for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
       newRow = mapTable.addRow();//Add a row to table
       newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
@@ -1184,10 +1364,10 @@ void FileSaveMap(){//Save the Map to file
   }
   saveTable(mapTable, fileName);// + ".csv");//Save the Map to a CSV file
   mapTable = null;//Clear the Table
-}//FileSaveMap() END
+}//fileSaveLoad() END
 
 void FileLoadMap(){//load map from file
-  //noLoop();
+  noLoop();
   mapTable = loadTable(fileName, "header, csv");// + ".csv", "header");//Load the csv
   
   while(mapTiles.length > 0){//Clear the array
@@ -1196,7 +1376,13 @@ void FileLoadMap(){//load map from file
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   int fileVersion = int(mapTable.getInt(0,"x"));//File Version
-  //int(mapTable.get(0,'y'));//blank
+  println(mapTable.getString(0,"y"));
+  if(!tileMapName.equals(mapTable.getString(0,"y"))){
+    println("Changing Tile Map");
+    tileMapName = mapTable.getString(0,"y");//Tile Map Name
+  }else{
+    
+  }
   //int(mapTable.get(0,'image'));//blank
   //int(mapTable.get(0,'r'));//blank
   //int(mapTable.get(0,'g'));//blank
@@ -1261,5 +1447,6 @@ void FileLoadMap(){//load map from file
       deleteTile(0);
     }
   }
-  //loop();
+  loop();
+  prepreloading = false;
 }//FileLoadMap() END
