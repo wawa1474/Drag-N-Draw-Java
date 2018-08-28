@@ -195,6 +195,8 @@ void loadMap(){
     println("File Loaded");
     FileLoadTileInfo();
     preload();
+    tileN = 1;
+    noTile = false;
     changeVisibility(false);
     loadingTileMap = false;
     preloading = false;
@@ -214,18 +216,13 @@ void changeVisibility(boolean visibility){
     loadMap.setLabel("Load Map");
     
     fileSaveLoad.setPosition(0,0);
-    fileSaveLoad.changeItem("Save","text","Prev");//"Save Load Image"
+    fileSaveLoad.changeItem("Save","text","Prev");//"Prev Next Load"
     fileSaveLoad.changeItem("Load","text","Next");
     fileSaveLoad.changeItem("Image","text","Load");
     
     clearToggle.setVisible(false);
     colorInput.setVisible(false);
-    //colorInputR.setVisible(false);
-    //colorInputG.setVisible(false);
-    //colorInputB.setVisible(false);
     colorSelect.setVisible(false);
-    //colorWheel.setVisible(false);
-    //fileSaveLoad.setVisible(false);
     scrollSlider.setVisible(false);
     RSlider.setVisible(false);
     GSlider.setVisible(false);
@@ -241,12 +238,7 @@ void changeVisibility(boolean visibility){
     
     clearToggle.setVisible(true);
     colorInput.setVisible(true);
-    //colorInputR.setVisible(true);
-    //colorInputG.setVisible(true);
-    //colorInputB.setVisible(true);
     colorSelect.setVisible(true);
-    //colorWheel.setVisible(true);
-    //fileSaveLoad.setVisible(true);
     scrollSlider.setVisible(true);
     RSlider.setVisible(true);
     GSlider.setVisible(true);
@@ -781,6 +773,8 @@ void fileSaveLoad(int n){
       fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;
       changeVisibility(false);
       preload();
+      tileN = 1;
+      noTile = false;
       loadingTileMap = false;
       preloading = false;
     }else{
