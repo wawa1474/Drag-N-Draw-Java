@@ -160,6 +160,10 @@ void FileLoadTileInfo(){//load map from file
                               tileInfoTable.getString(i,"name"));//,//Is Tile Clear
       if(tileMapName.equals(tileInfoTable.getString(i,"name"))){//does the map name and tile map name match
         tileMapLocation = tileInfoTable.getString(i,"location");//update tile map location
+        tileMapHeight = tileInfoTable.getInt(i,"tileMapHeight");//how tiles high
+        tileMapWidth = tileInfoTable.getInt(i,"tileMapWidth");//how many tile wide
+        //tileMapTileX = 32;//tile width
+        //tileMapTileY = 32;//tile height
       }
     }
   }else{//we don't know that file version
@@ -311,6 +315,8 @@ void draw(){//Draw the canvas
     drawGroupPasteOutline();//draw the red outline
   }
   
+  rect(scl * 5, scl * 5, scl, scl);
+  
   popMatrix();//go back to normal space?
   
   //Update and Draw the UI
@@ -335,7 +341,12 @@ boolean checkOffset(){//not used
 void mousePressed(){//We pressed a mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
-
+  
+  if(mouseX > scl * 5 && mouseY > scl * 5 && mouseX < scl * 5 + scl && mouseY < scl * 5 + scl){
+    fileName = "F:/Programming/DragNDraw_Java/map3.csv";
+    FileLoadMap();
+  }
+  
   /*if(checkOffset()){
     return;
   }*/
@@ -1379,6 +1390,8 @@ void FileLoadMap(){//load map from file
   if(!tileMapName.equals(mapTable.getString(0,"y"))){//if map names aren't equal
     println("Changing Tile Map");
     tileMapName = mapTable.getString(0,"y");//Tile Map Name
+    FileLoadTileInfo();
+    preload();
   }else{
     
   }
