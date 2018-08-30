@@ -69,7 +69,7 @@ PImage BACKGROUND;//background image
 PImage missingTexture;//missingTexture Image
 
 Table mapTable;//Map Table
-String fileName = "Map1";//File Name
+String fileName = "Error";//File Name
 
 ControlP5 UIControls;//ui controls
 Controller RSlider, GSlider, BSlider;//sliders
@@ -315,7 +315,15 @@ void draw(){//Draw the canvas
     drawGroupPasteOutline();//draw the red outline
   }
   
-  rect(scl * 5, scl * 5, scl, scl);
+  stroke(255,0,0);
+  //rect(scl * 5, scl * 5, scl, scl);
+  strokeWeight(borderThickness); // Thicker
+  line(scl * 5, scl * 5, scl * 5 + scl, scl * 5);
+  line(scl * 5, scl * 5, scl * 5, scl * 5 + scl);
+  line(scl * 5, scl * 5 + scl, scl * 5 + scl, scl * 5 + scl);
+  line(scl * 5 + scl, scl * 5 + scl, scl * 5 + scl, scl * 5);
+  strokeWeight(1); // Thicker
+  stroke(0);
   
   popMatrix();//go back to normal space?
   
@@ -781,12 +789,12 @@ void fileSaveLoad(int n){
       tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
       tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
       fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
-      changeVisibility(false);//go to normal display
       preload();//preload stuff
       tileN = 1;//make sure were on tile 1
       noTile = false;//allowed to place tiles
       loadingTileMap = false;//no longer loading map
       preloading = false;//no longer preloading
+      changeVisibility(false);//go to normal display
     }else{
       println("Button Does Not Exist");//Tell me your secrets
     }
@@ -1299,6 +1307,22 @@ void FileSaveCanvas(){//Save the Canvas to a file
 }//void FileSaveCanvas() END
 
 void fileSaveLoad(){//Save the Map to file
+  if(loadingTileMap == true){
+    tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");//load location
+    totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
+    tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");//load number of tiles wide
+    tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
+    tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
+    fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
+    preload();//preload stuff
+    tileN = 1;//make sure were on tile 1
+    noTile = false;//allowed to place tiles
+    loadingTileMap = false;//no longer loading map
+    preloading = false;//no longer preloading
+    changeVisibility(false);//go to normal display
+    return;
+  }
+
   mapTable = new Table();//create new p5 table
   mapTable.addColumn("x");//Tile X position
   mapTable.addColumn("y");//Tile Y position
