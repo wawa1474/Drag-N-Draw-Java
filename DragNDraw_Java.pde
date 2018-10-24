@@ -16,7 +16,7 @@ void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   
-  FileLoadTileInfo();//load tile map info file
+  FileLoadTileMapInfo();//load tile map info file
   //preload();
   
   UIControls = new ControlP5(this);//set up all the control stuff

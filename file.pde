@@ -74,7 +74,7 @@ void preload(){//Preload all of the images
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void FileLoadTileInfo(){//load map from file
+void FileLoadTileMapInfo(){//load map from file
   tileInfoTable = loadTable("assets/tileMapInfo.csv", "header, csv");// + ".csv", "header");//Load the csv
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
@@ -122,7 +122,7 @@ void loadMap(){//called when loadMap is pressed
     println("File Selected!");
     while(prepreloading == true){delay(500);}//small delay
     println("File Loaded");
-    FileLoadTileInfo();//load tile map info file
+    FileLoadTileMapInfo();//load tile map info file
     preload();//preload stuff
     tileN = 1;//make sure we're on the first tile
     noTile = false;//allowed to place tiles
@@ -141,7 +141,7 @@ void loadMap(){//called when loadMap is pressed
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void fileSaveLoad(int n){
+void fileTileMapLoad(int n){
   //println(n);
   if(loadingTileMap == true){
     if(n == 0){//Prev
@@ -204,7 +204,7 @@ void FileSaveCanvasSelect(File selection){//map canvas save select callback
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void fileSaveLoadSelect(File selection){//map file save select callback
+void fileSaveMapSelect(File selection){//map file save select callback
   if (selection == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
   } else {//we selected a file
@@ -217,7 +217,7 @@ void fileSaveLoadSelect(File selection){//map file save select callback
     }else{
       fileName = join(fileNameCSV, '.');//make sure the filename ends with .csv
     }
-    fileSaveLoad();//save the map
+    fileSaveMap();//save the map
   }
 }//void fileSaveLoadSelect(File selection) END
 
@@ -274,7 +274,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void fileSaveLoad(){//Save the Map to file
+void fileSaveMap(){//Save the Map to file
   if(loadingTileMap == true){
     tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");//load location
     totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
@@ -392,7 +392,7 @@ void FileLoadMap(){//load map from file
   if(!tileMapName.equals(mapTable.getString(0,"y"))){//if map names aren't equal
     println("Changing Tile Map");
     tileMapName = mapTable.getString(0,"y");//Tile Map Name
-    FileLoadTileInfo();
+    FileLoadTileMapInfo();
     preload();
   }else{
     
