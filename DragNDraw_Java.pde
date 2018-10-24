@@ -351,8 +351,9 @@ void mousePressed(){//We pressed a mouse button
   //updateXY();
   
   if(mouseX > scl * 5 && mouseY > scl * 5 && mouseX < scl * 5 + scl && mouseY < scl * 5 + scl){
-    fileName = "F:/Programming/DragNDraw_Java/map3.csv";
+    fileName = "E:/Programming/DragNDraw_Java/map3.csv";
     FileLoadMap();
+    return;
   }
   
   /*if(checkOffset()){
@@ -448,6 +449,12 @@ void mouseDragged(){//We dragged the mouse while holding a button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
   
+  if(mouseX > scl * 5 - 5 && mouseY > scl * 5 - 5 && mouseX < scl * 5 + scl + 5 && mouseY < scl * 5 + scl + 5){
+    //fileName = "E:/Programming/DragNDraw_Java/map3.csv";
+    //FileLoadMap();
+    return;
+  }
+  
   /*if(checkOffset()){
     return;
   }*/
@@ -520,15 +527,25 @@ void mouseReleased(){//We released the mouse button
 
 void mouseWheel(MouseEvent event){//We Scrolled The Mouse Wheel
   if(event.getCount() < 0){//If Scrolling Up
-    nextTileC();//Move To Next Tile
+    if(keyCode == /*CTRL*/17){//holding Control
+      nextRowC();//Move To Next Row
+      keyCode = 0;
+    }else{
+      nextTileC();//Move To Next Tile
+    }
   }else{
-    prevTileC();//Move To Previous Tile
+    if(keyCode == /*CTRL*/17){//holding Control
+      prevRowC();//Move To Previous Row
+      keyCode = 0;
+    }else{
+      prevTileC();//Move To Previous Tile
+    }
   }
 }//void mouseWheel(event) END
 
 void keyPressed(){//We pressed a key
   if(noKeyboard == false){//are we blocking keyboard functions?
-    //console.log(keyCode);//What key did we press?
+    //println(keyCode);//What key did we press?
     if (keyCode == /*SHIFT*/16){//We pressed shift
       prevRowC();//Previous Tile row
     }else if (keyCode == /*SPACE*/32){//We pressed space
@@ -1322,6 +1339,10 @@ void fileSaveLoad(){//Save the Map to file
     changeVisibility(false);//go to normal display
     return;
   }
+  
+  if(fileName.equals("Error")){
+    return;
+  }
 
   mapTable = new Table();//create new p5 table
   mapTable.addColumn("x");//Tile X position
@@ -1401,6 +1422,10 @@ void fileSaveLoad(){//Save the Map to file
 }//void fileSaveLoad() END
 
 void FileLoadMap(){//load map from file
+  if(fileName.equals("Error")){
+    return;
+  }
+
   noLoop();//dont allow drawing
   mapTable = loadTable(fileName, "header, csv");// + ".csv", "header");//Load the csv
   
