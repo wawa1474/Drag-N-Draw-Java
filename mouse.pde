@@ -14,10 +14,10 @@ void mousePressed(){//We pressed a mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
   
-  if(mouseX > scl * 5 && mouseY > scl * 5 && mouseX < scl * 5 + scl && mouseY < scl * 5 + scl){
-    fileName = "maps/map3.csv";
-    FileLoadMap();
-    return;
+  for(int i = 0; i < icons.length; i++){
+    if(icons[i].wasClicked()){
+      return;
+    }
   }
   
   /*if(checkOffset()){
@@ -115,10 +115,10 @@ void mouseDragged(){//We dragged the mouse while holding a button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
   
-  if(mouseX > scl * 5 - 5 && mouseY > scl * 5 - 5 && mouseX < scl * 5 + scl + 5 && mouseY < scl * 5 + scl + 5){
-    //fileName = "E:/Programming/DragNDraw_Java/map3.csv";
-    //FileLoadMap();
-    return;
+  for(int i = 0; i < icons.length; i++){
+    if(icons[i].wasClicked()){
+      return;
+    }
   }
   
   /*if(checkOffset()){

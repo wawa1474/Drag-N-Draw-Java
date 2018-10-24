@@ -1,9 +1,9 @@
-
-
 int mapN = 0;//Which map peice are we messing with
 int tileBorderNumber = 0;//What number in img[] is the border (its just a null tile)
 
 int scl = 32;//Square Scale
+
+mTile[] mapTiles = new mTile[0];//Map Tiles Array
 
 
 class mTile{//Tile Object

@@ -14,7 +14,6 @@ int _FILEVERSION_ = 2;//what version of file saving and loading
     //Compressed Position
 
 PImage[] img = new PImage[0];//Tile Images Array
-mTile[] mapTiles = new mTile[0];//Map Tiles Array
 mTile[] mapTilesCopy = new mTile[0];//copied tiles
 PImage BACKGROUND;//background image
 PImage missingTexture;//missingTexture Image

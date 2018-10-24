@@ -26,6 +26,9 @@ void setup(){//Setup everything
   
   //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
   //mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
+  
+  icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
+  icons[icons.length - 1] = new clickableIcon(scl * 15, scl * 15, "maps/map3.csv");//Place a colored tile with no image
 }//void setup() END
 
 void draw(){//Draw the canvas
@@ -94,15 +97,9 @@ void draw(){//Draw the canvas
     drawGroupPasteOutline();//draw the red outline
   }
   
-  stroke(255,0,0);
-  //rect(scl * 5, scl * 5, scl, scl);
-  strokeWeight(borderThickness); // Thicker
-  line(scl * 5, scl * 5, scl * 5 + scl, scl * 5);
-  line(scl * 5, scl * 5, scl * 5, scl * 5 + scl);
-  line(scl * 5, scl * 5 + scl, scl * 5 + scl, scl * 5 + scl);
-  line(scl * 5 + scl, scl * 5 + scl, scl * 5 + scl, scl * 5);
-  strokeWeight(1); // Thicker
-  stroke(0);
+  for(int i = 0; i < icons.length; i++){
+    icons[i].draw();
+  }
   
   popMatrix();//go back to normal space?
   
