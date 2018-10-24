@@ -15,7 +15,7 @@ void mousePressed(){//We pressed a mouse button
   //updateXY();
   
   if(mouseX > scl * 5 && mouseY > scl * 5 && mouseX < scl * 5 + scl && mouseY < scl * 5 + scl){
-    fileName = "E:/Programming/DragNDraw_Java/map3.csv";
+    fileName = "maps/map3.csv";
     FileLoadMap();
     return;
   }
