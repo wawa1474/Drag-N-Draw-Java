@@ -79,7 +79,7 @@ void mousePressed(){//We pressed a mouse button
   
   if(mX > 0 - SX && mX < scl*UIRight - SX && mY > 0 /* scl */ - SY && mY < scl*UIBottom - SY){//Did we click on the UI
     noTile = true;//Dont allow tile placement
-    //return;//Don't do anything else
+    return;//Don't do anything else
   }
 
   // Did I click on the rectangle?
@@ -115,6 +115,7 @@ void mouseDragged(){//We dragged the mouse while holding a button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
   
+  clickdrag = true;
   for(int i = 0; i < icons.length; i++){
     if(icons[i].wasClicked()){
       return;
@@ -172,6 +173,14 @@ void mouseDragged(){//We dragged the mouse while holding a button
 
 void mouseReleased(){//We released the mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
+  
+  clickdrag = false;
+  //for(int i = 0; i < icons.length; i++){
+  //  if(icons[i].wasClicked()){
+  //    return;
+  //  }
+  //}
+  
   if(dragging){//Are we dragging a tile
     if(mapTiles[mapN] != null){//If tile exists
       snapTileLocation(mapN);//Snap XY location of tile to grid

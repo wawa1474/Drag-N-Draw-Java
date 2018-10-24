@@ -184,6 +184,50 @@ void changeVisibility(boolean visibility){//change screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
+void fileSaveLoad(int n){
+  //println(n);
+  if(loadingTileMap == true){
+    if(n == 0){//Prev
+      tileMapShow--;//go to previous tile map
+      if(tileMapShow <= 0){//make sure we don't go below zero
+        tileMapShow = 0;//set to 0
+      }
+    }else if(n == 1){//Next
+      tileMapShow++;//go to next tile map
+      if(tileMapShow >= tileInfoTable.getRowCount() - 2){//make sure we dont go above maximum tile map
+        tileMapShow = tileInfoTable.getRowCount() - 2;//set to maxixmum tile map
+      }
+    }else if(n == 2){//Load
+      tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");//load location
+      totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
+      tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");//load number of tiles wide
+      tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
+      tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
+      fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
+      preload();//preload stuff
+      tileN = 1;//make sure were on tile 1
+      noTile = false;//allowed to place tiles
+      loadingTileMap = false;//no longer loading map
+      preloading = false;//no longer preloading
+      changeVisibility(false);//go to normal display
+    }else{
+      println("Button Does Not Exist");//Tell me your secrets
+    }
+  }else{
+    if(n == 0){//Save
+      selectOutput("Select a CSV to write to:", "fileSaveLoadSelect");//map save dialog
+    }else if(n == 1){//Load
+      selectInput("Select a CSV to read from:", "FileLoadMapSelect");//map load dialog
+    }else if(n == 2){//Image
+      selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
+    }else{
+      println("Button Does Not Exist");//Tell me your secrets
+    }
+  }
+}//void fileSaveLoad(int n) END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
 void clearToggle(){//called when clearToggle is clicked
   if(CClear){//is variable set
     CClear = false;//don't place clear tiles
