@@ -69,7 +69,7 @@ PImage BACKGROUND;//background image
 PImage missingTexture;//missingTexture Image
 
 Table mapTable;//Map Table
-String fileName = "Map1";//File Name
+String fileName = "Error";//File Name
 
 ControlP5 UIControls;//ui controls
 Controller RSlider, GSlider, BSlider;//sliders
@@ -160,6 +160,10 @@ void FileLoadTileInfo(){//load map from file
                               tileInfoTable.getString(i,"name"));//,//Is Tile Clear
       if(tileMapName.equals(tileInfoTable.getString(i,"name"))){//does the map name and tile map name match
         tileMapLocation = tileInfoTable.getString(i,"location");//update tile map location
+        tileMapHeight = tileInfoTable.getInt(i,"tileMapHeight");//how tiles high
+        tileMapWidth = tileInfoTable.getInt(i,"tileMapWidth");//how many tile wide
+        //tileMapTileX = 32;//tile width
+        //tileMapTileY = 32;//tile height
       }
     }
   }else{//we don't know that file version
@@ -311,6 +315,16 @@ void draw(){//Draw the canvas
     drawGroupPasteOutline();//draw the red outline
   }
   
+  stroke(255,0,0);
+  //rect(scl * 5, scl * 5, scl, scl);
+  strokeWeight(borderThickness); // Thicker
+  line(scl * 5, scl * 5, scl * 5 + scl, scl * 5);
+  line(scl * 5, scl * 5, scl * 5, scl * 5 + scl);
+  line(scl * 5, scl * 5 + scl, scl * 5 + scl, scl * 5 + scl);
+  line(scl * 5 + scl, scl * 5 + scl, scl * 5 + scl, scl * 5);
+  strokeWeight(1); // Thicker
+  stroke(0);
+  
   popMatrix();//go back to normal space?
   
   //Update and Draw the UI
@@ -335,7 +349,12 @@ boolean checkOffset(){//not used
 void mousePressed(){//We pressed a mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
-
+  
+  if(mouseX > scl * 5 && mouseY > scl * 5 && mouseX < scl * 5 + scl && mouseY < scl * 5 + scl){
+    fileName = "F:/Programming/DragNDraw_Java/map3.csv";
+    FileLoadMap();
+  }
+  
   /*if(checkOffset()){
     return;
   }*/
@@ -770,12 +789,12 @@ void fileSaveLoad(int n){
       tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
       tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
       fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
-      changeVisibility(false);//go to normal display
       preload();//preload stuff
       tileN = 1;//make sure were on tile 1
       noTile = false;//allowed to place tiles
       loadingTileMap = false;//no longer loading map
       preloading = false;//no longer preloading
+      changeVisibility(false);//go to normal display
     }else{
       println("Button Does Not Exist");//Tell me your secrets
     }
@@ -1288,6 +1307,22 @@ void FileSaveCanvas(){//Save the Canvas to a file
 }//void FileSaveCanvas() END
 
 void fileSaveLoad(){//Save the Map to file
+  if(loadingTileMap == true){
+    tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");//load location
+    totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
+    tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");//load number of tiles wide
+    tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
+    tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
+    fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
+    preload();//preload stuff
+    tileN = 1;//make sure were on tile 1
+    noTile = false;//allowed to place tiles
+    loadingTileMap = false;//no longer loading map
+    preloading = false;//no longer preloading
+    changeVisibility(false);//go to normal display
+    return;
+  }
+
   mapTable = new Table();//create new p5 table
   mapTable.addColumn("x");//Tile X position
   mapTable.addColumn("y");//Tile Y position
@@ -1379,6 +1414,8 @@ void FileLoadMap(){//load map from file
   if(!tileMapName.equals(mapTable.getString(0,"y"))){//if map names aren't equal
     println("Changing Tile Map");
     tileMapName = mapTable.getString(0,"y");//Tile Map Name
+    FileLoadTileInfo();
+    preload();
   }else{
     
   }
