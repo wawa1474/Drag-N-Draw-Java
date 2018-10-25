@@ -77,6 +77,8 @@ void keyTyped(){//We typed a key
         tileGroupStep = 2;//ready to do group tiles stuff
         sx2 = mouseX - SX;//set x1 to mouse x position
         sy2 = mouseY - SY;//set y2 to mouse y position
+      }else if (tileGroupStep == 2){//set XY2
+        tileGroupStep = 0;//ready to do group tiles stuff
       }
     }
     

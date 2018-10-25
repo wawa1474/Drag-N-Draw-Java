@@ -45,13 +45,7 @@ void deleteTile(int tile){//Delete a tile and update the array
     mapTiles = (mTile[]) shorten(mapTiles);//Shorten the Map Tiles Array by 1
   }
   //-2,147,483,648 -> 2,147,483,647
-  lowerx = 2147483647;
-  lowery = 2147483647;
-  upperx = -2147483648;
-  uppery = -2147483648;
-  for(int i = 0; i < mapTiles.length; i++){
-    updateLHXY(mapTiles[i].x, mapTiles[i].y);
-  }
+  resetLHXY();
 }//void deleteTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -95,6 +89,18 @@ void updateLHXY(int x, int y){//update the lower/higher xy for background drawin
   }
   if(y > uppery){
     uppery = y;
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void resetLHXY(){//update the lower/higher xy for background drawing
+  lowerx = 2147483647;
+  lowery = 2147483647;
+  upperx = -2147483648;
+  uppery = -2147483648;
+  for(int i = 0; i < mapTiles.length; i++){
+    updateLHXY(mapTiles[i].x, mapTiles[i].y);
   }
 }
 

@@ -60,6 +60,8 @@ void tileGroup(String button){//mess with tiles in square group
   }
   tileGroupStep = 0;//reset step count
   tileGroupDeleting = false;//no longer deleting
+  
+  resetLHXY();
 }//void tileGroup(String button) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -123,6 +125,8 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
     }
   }
   tileGroupStep = 0;//reset step count
+  
+  resetLHXY();
 }//void tileGroupCutCopy(char button) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------

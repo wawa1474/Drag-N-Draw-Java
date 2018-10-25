@@ -24,8 +24,8 @@ boolean UISetup = false;//Are we setting up the ui?
 canvasBG BG = new canvasBG();//Create a background
 int borderThickness = 4;//how thick is the canvas border
 
-int lowerx, lowery;//store lowest xy of tiles
-int upperx, uppery;//store highest xy of tiles
+int lowerx = 2147483647, lowery = 2147483647;//store lowest xy of tiles
+int upperx = -2147483648, uppery = -2147483648;//store highest xy of tiles
 
 
 class canvasBG{//The background
@@ -33,11 +33,11 @@ class canvasBG{//The background
     background(255);//Draw the white background
     //image(BACKGROUND, 0, 0);//Draw background
     if(upperx != -2147483648 && lowerx != 2147483647){
-      for(int i = lowerx - (scl * 10); i < upperx + (10 * scl); i+=scl){
-        line(i,lowery - (scl * 10), i, uppery + (scl * 10));
+      for(int i = lowerx - (scl * 20); i < upperx + (scl * 20); i+=scl){
+        line(i,lowery - (scl * 20), i, uppery + (scl * 20));
       }
-      for(int i = lowery - (scl * 10); i < uppery + (10 * scl); i+=scl){
-        line(lowerx - (scl * 10), i, upperx + (scl * 10), i);
+      for(int i = lowery - (scl * 20); i < uppery + (scl * 20); i+=scl){
+        line(lowerx - (scl * 20), i, upperx + (scl * 20), i);
       }
     }
   }//void draw() END

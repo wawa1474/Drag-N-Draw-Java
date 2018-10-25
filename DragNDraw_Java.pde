@@ -18,7 +18,7 @@ void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   
-  surface.setTitle("Drag 'N' Draw Java: " + VERSION);
+  //surface.setTitle("Drag 'N' Draw Java: " + VERSION);
   
   FileLoadTileMapInfo();//load tile map info file
   //preload();
@@ -36,6 +36,16 @@ void setup(){//Setup everything
 }//void setup() END
 
 void draw(){//Draw the canvas
+  String FPS = String.valueOf(frameRate);
+  if(FPS.length() > 4){
+    FPS = FPS.substring(0, 5);
+  }else if(FPS.length() > 3){
+    FPS = FPS.substring(0, 4);
+  }else{
+    FPS = FPS.substring(0, 2);
+  }
+  surface.setTitle("Drag 'N' Draw Java - V" + VERSION + " - FPS:" + FPS);
+  
   if(preloading == true){//if preloading
     pushMatrix();//go back to crazy space?
     background(255);//white background
