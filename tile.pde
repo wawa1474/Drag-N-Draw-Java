@@ -44,6 +44,14 @@ void deleteTile(int tile){//Delete a tile and update the array
     }
     mapTiles = (mTile[]) shorten(mapTiles);//Shorten the Map Tiles Array by 1
   }
+  //-2,147,483,648 -> 2,147,483,647
+  lowerx = 2147483647;
+  lowery = 2147483647;
+  upperx = -2147483648;
+  uppery = -2147483648;
+  for(int i = 0; i < mapTiles.length; i++){
+    updateLHXY(mapTiles[i].x, mapTiles[i].y);
+  }
 }//void deleteTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -62,7 +70,33 @@ void placeTile(){//Place a tile at the mouses location
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
     }
   }
+  updateLHXY(mapTiles[mapTiles.length - 1].x, mapTiles[mapTiles.length - 1].y);
 }//void placeTile() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void snapTileLocation(int tile){//Snap XY location of tile to grid
+  mapTiles[tile].x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
+  mapTiles[tile].y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
+  updateLHXY(mapTiles[tile].x, mapTiles[tile].y);
+}//void snapTileLocation(int tile) END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void updateLHXY(int x, int y){//update the lower/higher xy for background drawing
+  if(x < lowerx){
+    lowerx = x;
+  }
+  if(y < lowery){
+    lowery = y;
+  }
+  if(x > upperx){
+    upperx = x;
+  }
+  if(y > uppery){
+    uppery = y;
+  }
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -107,13 +141,6 @@ void updateTileLocation(int tile){//Adjust XY location of tile
   mapTiles[tile].x = mX + offsetX;//Adjust X location of tile
   mapTiles[tile].y = mY + offsetY;//Adjust Y location of tile
 }//void updateTileLocation(int tile) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void snapTileLocation(int tile){//Snap XY location of tile to grid
-  mapTiles[tile].x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
-  mapTiles[tile].y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
-}//void snapTileLocation(int tile) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 

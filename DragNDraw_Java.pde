@@ -9,12 +9,16 @@ int rows = 100;//Rows
 int _DEBUG_ = 0;//what are we debugging
 int _DEBUGAMOUNT_ = 50000;//how many are we debugging
 
+String VERSION = "0.0.1";
+
 int drawnTiles = 0;//how many tiles are on the screen
 boolean drawAll = false;//draw all tiles even if not on screen?
 
 void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
+  
+  surface.setTitle("Drag 'N' Draw Java: " + VERSION);
   
   FileLoadTileMapInfo();//load tile map info file
   //preload();

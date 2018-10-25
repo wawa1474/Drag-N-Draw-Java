@@ -24,24 +24,33 @@ boolean UISetup = false;//Are we setting up the ui?
 canvasBG BG = new canvasBG();//Create a background
 int borderThickness = 4;//how thick is the canvas border
 
-
+int lowerx, lowery;//store lowest xy of tiles
+int upperx, uppery;//store highest xy of tiles
 
 
 class canvasBG{//The background
   void draw(){//Draw the background
     background(255);//Draw the white background
-    image(BACKGROUND, 0, 0);//Draw background
+    //image(BACKGROUND, 0, 0);//Draw background
+    if(upperx != -2147483648 && lowerx != 2147483647){
+      for(int i = lowerx - (scl * 10); i < upperx + (10 * scl); i+=scl){
+        line(i,lowery - (scl * 10), i, uppery + (scl * 10));
+      }
+      for(int i = lowery - (scl * 10); i < uppery + (10 * scl); i+=scl){
+        line(lowerx - (scl * 10), i, upperx + (scl * 10), i);
+      }
+    }
   }//void draw() END
   
   void border(){//draw the red border
-    strokeWeight(borderThickness); // Thicker
-    stroke(255,0,0);//RED
-    line(1, 0, 1, rows*scl);//Draw Verticle lines
-    line((scl * cols) - 1, 0, (scl * cols) - 1, rows*scl);//Draw Verticle lines
-    line(0, 1, cols*scl, 1);//Draw Horizontal Lines
-    line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Horizontal Lines
-    strokeWeight(1); // Default
-    stroke(0);//BLACK
+    //strokeWeight(borderThickness); // Thicker
+    //stroke(255,0,0);//RED
+    //line(1, 0, 1, rows*scl);//Draw Verticle lines
+    //line((scl * cols) - 1, 0, (scl * cols) - 1, rows*scl);//Draw Verticle lines
+    //line(0, 1, cols*scl, 1);//Draw Horizontal Lines
+    //line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Horizontal Lines
+    //strokeWeight(1); // Default
+    //stroke(0);//BLACK
   }//void border() END
 }//class canvasBG END
 
