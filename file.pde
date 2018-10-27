@@ -146,12 +146,14 @@ void FileSaveCanvasSelect(File selection){//map canvas save select callback
   } else {//we selected a file
     println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();//get the path to the file
-    String[] fileNameSplit = split(fileName, '.');//split the filename into parts
-    String[] fileNamePNG = {fileNameSplit[0], "png"};//array of filename and png
-    if(fileNameSplit.length > 1){//does the file have an extension
+    //String[] fileNameSplit = split(fileName, '.');//split the filename into parts
+    //String[] fileNamePNG = {fileNameSplit[0], "png"};//array of filename and png
+    //if(fileNameSplit.length > 1){//does the file have an extension
+    if(split(fileName, '.').length > 1){//does the file have an extension
       //Already has file type
     }else{
-      fileName = join(fileNamePNG, '.');//make sure the filename ends with .png
+      //fileName = join(fileNamePNG, '.');//make sure the filename ends with .png
+      fileName = join(new String[] {fileName, "png"}, '.');//make sure the filename ends with .png
     }
     FileSaveCanvas();//save the canvas
   }
@@ -165,12 +167,14 @@ void fileSaveMapSelect(File selection){//map file save select callback
   } else {//we selected a file
     println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();//get the path to the file
-    String[] fileNameSplit = split(fileName, '.');//split the filename into parts
-    String[] fileNameCSV = {fileNameSplit[0], "csv"};//array of filename and csv
-    if(fileNameSplit.length > 1){//does the file have an extension
+    //String[] fileNameSplit = split(fileName, '.');//split the filename into parts
+    //String[] fileNameCSV = {fileNameSplit[0], "csv"};//array of filename and csv
+    //if(fileNameSplit.length > 1){//does the file have an extension
+    if(split(fileName, '.').length > 1){//does the file have an extension
       //Already has file type
     }else{
-      fileName = join(fileNameCSV, '.');//make sure the filename ends with .csv
+      //fileName = join(fileNamePNG, '.');//make sure the filename ends with .png
+      fileName = join(new String[] {fileName, "csv"}, '.');//make sure the filename ends with .png
     }
     fileSaveMap();//save the map
   }

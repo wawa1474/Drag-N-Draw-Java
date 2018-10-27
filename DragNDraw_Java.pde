@@ -9,7 +9,7 @@ int rows = 100;//Rows
 int _DEBUG_ = 0;//what are we debugging
 int _DEBUGAMOUNT_ = 50000;//how many are we debugging
 
-String VERSION = "0.0.1";
+String VERSION = "PRE_ALPHA V0.0.1";
 
 int drawnTiles = 0;//how many tiles are on the screen
 boolean drawAll = false;//draw all tiles even if not on screen?
@@ -44,7 +44,7 @@ void draw(){//Draw the canvas
   }else{
     FPS = FPS.substring(0, 2);
   }
-  surface.setTitle("Drag 'N' Draw Java - V" + VERSION + " - FPS:" + FPS);
+  surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + FPS);
   
   if(preloading == true){//if preloading
     pushMatrix();//go back to crazy space?

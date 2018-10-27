@@ -224,7 +224,7 @@ void fileSaveLoad(int n){
     }
   }else{
     if(n == 0){//Save
-      selectOutput("Select a CSV to write to:", "fileSaveLoadSelect");//map save dialog
+      selectOutput("Select a CSV to write to:", "fileSaveMapSelect");//map save dialog
     }else if(n == 1){//Load
       selectInput("Select a CSV to read from:", "FileLoadMapSelect");//map load dialog
     }else if(n == 2){//Image
