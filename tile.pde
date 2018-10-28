@@ -64,7 +64,7 @@ void placeTile(){//Place a tile at the mouses location
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
     }
   }
-  updateLHXY(mapTiles[mapTiles.length - 1].x, mapTiles[mapTiles.length - 1].y);
+  updateLHXY(mapTiles.length - 1);
 }//void placeTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -89,6 +89,26 @@ void updateLHXY(int x, int y){//update the lower/higher xy for background drawin
   }
   if(y > uppery){
     uppery = y;
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void updateLHXY(int tile){//update the lower/higher xy for background drawing
+  if(tile == -1){
+    return;
+  }
+  if(mapTiles[tile].x < lowerx){
+    lowerx = mapTiles[tile].x;
+  }
+  if(mapTiles[tile].y < lowery){
+    lowery = mapTiles[tile].y;
+  }
+  if(mapTiles[tile].x > upperx){
+    upperx = mapTiles[tile].x;
+  }
+  if(mapTiles[tile].y > uppery){
+    uppery = mapTiles[tile].y;
   }
 }
 

@@ -3,6 +3,7 @@ boolean tileGroupDeleting = false;//are we deleting the tile group
 int sx1, sy1, sx2, sy2;//tileGroup XY corners
 int tileGrouSXLines = 0;//how many X lines of copied tiles
 int tileGrouSYLines = 0;//how many Y lines of copied tiles
+mTile[] mapTilesCopy = new mTile[0];//copied tiles
 
 
 

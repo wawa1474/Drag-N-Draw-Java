@@ -1,4 +1,4 @@
-int _FILEVERSION_ = 2;//what version of file saving and loading
+int _FILEVERSION_ = 3;//what version of file saving and loading
 
 //File Version Map
   //Version 0:
@@ -14,11 +14,10 @@ int _FILEVERSION_ = 2;//what version of file saving and loading
     //Compressed Position
 
 PImage[] img = new PImage[0];//Tile Images Array
-mTile[] mapTilesCopy = new mTile[0];//copied tiles
 PImage BACKGROUND;//background image
 PImage missingTexture;//missingTexture Image
 
-Table mapTable;//Map Table
+//Table mapTable;//Map Table
 String fileName = "Error";//File Name
 
 Table tileInfoTable;//tile map info table
@@ -253,82 +252,79 @@ void fileSaveMap(){//Save the Map to file
   if(fileName.equals("Error")){
     return;
   }
-
-  mapTable = new Table();//create new p5 table
-  mapTable.addColumn("x");//Tile X position
-  mapTable.addColumn("y");//Tile Y position
-  mapTable.addColumn("image");//Tile Image
-  mapTable.addColumn("r");//Tile Red amount
-  mapTable.addColumn("g");//Tile Green amount
-  mapTable.addColumn("b");//Tile Blue amount
-  mapTable.addColumn("clear");//Is Tile Clear
-  //mapTable.addColumn('lore');//Tile LORE?
-  TableRow newRow;//create a new row
+  
+  byte[] mapFile = new byte[32];//Save Meta Data
+  int mapFlags = 0;
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
-  newRow = mapTable.addRow();//Add a row to table
-  newRow.setInt("x",_FILEVERSION_);//File Version
-  newRow.setString("y",tileMapName);//tile map name
-  newRow.setInt("image",0);//blank
-  newRow.setInt("r",0);//blank
-  newRow.setInt("g",0);//blank
-  newRow.setInt("b",0);//blank
-  newRow.setInt("clear",0);//blank
+  //File Version
+  mapFile[0] = (byte)(_FILEVERSION_ >> 8);
+  mapFile[1] = (byte)_FILEVERSION_;
+  
+  //Map Tiles Amount
+  mapFile[2] = (byte)(mapTiles.length >> 24);
+  mapFile[3] = (byte)(mapTiles.length >> 16);
+  mapFile[4] = (byte)(mapTiles.length >> 8);
+  mapFile[5] = (byte)mapTiles.length;
+  
+  //Clickable Icons Amount
+  mapFile[6] = (byte)(icons.length >> 24);
+  mapFile[7] = (byte)(icons.length >> 16);
+  mapFile[8] = (byte)(icons.length >> 8);
+  mapFile[9] = (byte)icons.length;
+  
+  //Tile Map Name (Location 22 Character Limit)
+  mapFile[10] = (byte)255;
+  mapFile[11] = (byte)255;
+  mapFile[12] = (byte)255;
+  mapFile[13] = (byte)255;
+  mapFile[14] = (byte)255;
+  mapFile[15] = (byte)255;
+  mapFile[16] = (byte)255;
+  mapFile[17] = (byte)255;
+  mapFile[18] = (byte)255;
+  mapFile[19] = (byte)255;
+  mapFile[20] = (byte)255;
+  mapFile[21] = (byte)255;
+  mapFile[22] = (byte)255;
+  mapFile[23] = (byte)255;
+  mapFile[24] = (byte)255;
+  mapFile[25] = (byte)255;
+  mapFile[26] = (byte)255;
+  mapFile[27] = (byte)255;
+  mapFile[28] = (byte)255;
+  mapFile[29] = (byte)255;
+  mapFile[30] = (byte)255;
+  mapFile[31] = (byte)255;
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
-  /*if(_FILEVERSION_ == 0){//whats the file version
+  if(_FILEVERSION_ == 3){//whats the file version
     for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
-      newRow = mapTable.addRow();//Add a row to table
-      newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
-      newRow.setInt("y",floor(mapTiles[i].y / scl));//Tile Y position
-      newRow.setInt("image",mapTiles[i].image);//Tile Image
-      newRow.setInt("r",floor(mapTiles[i].r / scl));//Tile Red amount
-      newRow.setInt("g",floor(mapTiles[i].g / scl));//Tile Green amount
-      newRow.setInt("b",floor(mapTiles[i].b / scl));//Tile Blue amount
-      int CLEAR = 1;//tile is clear
-      if(!mapTiles[i].clear){//Is Tile Clear
-        CLEAR = 0;//tile is not clear
+      mapFile = (byte[]) expand(mapFile, mapFile.length + 8);//make sure we have room
+      //XY
+      mapFile[mapFile.length - 8] = (byte)(mapTiles[i].x / scl);
+      mapFile[mapFile.length - 7] = (byte)(mapTiles[i].y / scl);
+      
+      //Image Number
+      mapFile[mapFile.length - 6] = (byte)(mapTiles[i].image >> 8);
+      mapFile[mapFile.length - 5] = (byte)mapTiles[i].image;
+      
+      //Red/Green
+      mapFile[mapFile.length - 4] = (byte)mapTiles[i].r;
+      mapFile[mapFile.length - 3] = (byte)mapTiles[i].g;
+      
+      //Blue/Flags
+      mapFile[mapFile.length - 2] = (byte)mapTiles[i].b;
+      if(mapTiles[i].clear){
+        mapFlags |= 1;
       }
-      newRow.setInt("clear",CLEAR);//Is Tile Clear
-      //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
-    }
-  }else if(_FILEVERSION_ == 1){//whats the file version
-    for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
-      newRow = mapTable.addRow();//Add a row to table
-      newRow.setInt("x",floor(mapTiles[i].x));//Tile X position
-      newRow.setInt("y",floor(mapTiles[i].y));//Tile Y position
-      newRow.setInt("image",mapTiles[i].image);//Tile Image
-      newRow.setInt("r",floor(mapTiles[i].r));//Tile Red amount
-      newRow.setInt("g",floor(mapTiles[i].g));//Tile Green amount
-      newRow.setInt("b",floor(mapTiles[i].b));//Tile Blue amount
-      int CLEAR = 1;//tile is clear
-      if(!mapTiles[i].clear){//Is Tile Clear
-        CLEAR = 0;//tile is not clear
-      }
-      newRow.setInt("clear",CLEAR);//Is Tile Clear
-      //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
-    }
-  }else*/ if(_FILEVERSION_ == 2){//whats the file version
-    for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
-      newRow = mapTable.addRow();//Add a row to table
-      newRow.setInt("x",floor(mapTiles[i].x / scl));//Tile X position
-      newRow.setInt("y",floor(mapTiles[i].y / scl));//Tile Y position
-      newRow.setInt("image",mapTiles[i].image);//Tile Image
-      newRow.setInt("r",floor(mapTiles[i].r));//Tile Red amount
-      newRow.setInt("g",floor(mapTiles[i].g));//Tile Green amount
-      newRow.setInt("b",floor(mapTiles[i].b));//Tile Blue amount
-      int CLEAR = 1;//tile is clear
-      if(!mapTiles[i].clear){//Is Tile Clear
-        CLEAR = 0;//tile is not clear
-      }
-      newRow.setInt("clear",CLEAR);//Is Tile Clear
-      //newRow.set('lore',mapTiles[i].lore);//Tile LORE?
+      mapFile[mapFile.length - 1] = (byte)mapFlags;
     }
   }else{
     println("File Version Error (Saving).");//throw error
   }
-  saveTable(mapTable, fileName);// + ".csv");//Save the Map to a CSV file
-  mapTable = null;//Clear the Table
+  
+  saveBytes(fileName, mapFile);
 }//void fileSaveLoad() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -339,78 +335,115 @@ void FileLoadMap(){//load map from file
   }
 
   noLoop();//dont allow drawing
-  mapTable = loadTable(fileName, "header, csv");// + ".csv", "header");//Load the csv
+  byte[] mapFile = loadBytes(fileName);
+  int fileVersion;
+  int mapTilesAmount;
+  int iconsAmount;
   
   while(mapTiles.length > 0){//Clear the array
     deleteTile(0);//shorten the array
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
-  int fileVersion = int(mapTable.getInt(0,"x"));//File Version
-  println(mapTable.getString(0,"y"));
-  if(!tileMapName.equals(mapTable.getString(0,"y"))){//if map names aren't equal
-    println("Changing Tile Map");
-    tileMapName = mapTable.getString(0,"y");//Tile Map Name
-    FileLoadTileMapInfo();
-    preload();
-  }else{
+  //File Version
+  fileVersion = (int)(mapFile[0] << 8);
+  fileVersion |= (int)mapFile[1];
+  
+  //Map Tiles Amount
+  mapTilesAmount = (int)(mapFile[2] << 24);
+  mapTilesAmount |= (int)(mapFile[3] << 16);
+  mapTilesAmount |= (int)(mapFile[4] << 8);
+  mapTilesAmount |= (int)(mapFile[5]);
+  
+  //Clickable Icons Amount
+  iconsAmount = (int)(mapFile[6] << 24);
+  iconsAmount |= (int)(mapFile[7] << 16);
+  iconsAmount |= (int)(mapFile[8] << 8);
+  iconsAmount |= (int)(mapFile[9]);
+  
+  //Tile Map Name (Location 22 Character Limit)
+  //mapFile[10] = (byte)255;
+  //mapFile[11] = (byte)255;
+  //mapFile[12] = (byte)255;
+  //mapFile[13] = (byte)255;
+  //mapFile[14] = (byte)255;
+  //mapFile[15] = (byte)255;
+  //mapFile[16] = (byte)255;
+  //mapFile[17] = (byte)255;
+  //mapFile[18] = (byte)255;
+  //mapFile[19] = (byte)255;
+  //mapFile[20] = (byte)255;
+  //mapFile[21] = (byte)255;
+  //mapFile[22] = (byte)255;
+  //mapFile[23] = (byte)255;
+  //mapFile[24] = (byte)255;
+  //mapFile[25] = (byte)255;
+  //mapFile[26] = (byte)255;
+  //mapFile[27] = (byte)255;
+  //mapFile[28] = (byte)255;
+  //mapFile[29] = (byte)255;
+  //mapFile[30] = (byte)255;
+  //mapFile[31] = (byte)255;
+  //println(mapTable.getString(0,"y"));
+  //if(!tileMapName.equals(mapTable.getString(0,"y"))){//if map names aren't equal
+  //  println("Changing Tile Map");
+  //  tileMapName = mapTable.getString(0,"y");//Tile Map Name
+  //  FileLoadTileMapInfo();
+  //  preload();
+  //}else{
     
-  }
-  //int(mapTable.get(0,'image'));//blank
-  //int(mapTable.get(0,'r'));//blank
-  //int(mapTable.get(0,'g'));//blank
-  //int(mapTable.get(0,'b'));//blank
-  //int(mapTable.get(0,'clear'));//blank
+  //}
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
-  if(fileVersion == 0){//whats the file version
-    for(int i = 1; i < mapTable.getRowCount(); i++){//Loop through all the rows
-      boolean CLEAR = true;//tile is clear
-      if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
-        CLEAR = false;//tile is not clear
+  if(fileVersion == 3){//whats the file version
+    //println(mapTilesAmount);
+    
+    //Load Map Tiles
+    for(int i = 0; i < mapTilesAmount; i++){//Loop through all the rows
+      //println(i - 32);
+      boolean CLEAR = false;//tile is not clear
+      if((mapFile[(i * 8) + 32 + 7] & 0x01) == 1){//Is Tile Clear
+        CLEAR = true;//tile is clear
       }
+      
+      int imageNumber = (mapFile[(i * 8) + 32 + 2] << 8) & 0xFF;
+      imageNumber |= (mapFile[(i * 8) + 32 + 3]) & 0xFF;
+      //println(imageNumber);
+      
       mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
-      mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x") * scl,//Tile X position
-                              mapTable.getInt(i,"y") * scl,//Tile Y position
-                              mapTable.getInt(i,"image"),//Tile Image
-                              mapTable.getInt(i,"r") * scl,//Tile Red amount
-                              mapTable.getInt(i,"g") * scl,//Tile Green amount
-                              mapTable.getInt(i,"b") * scl,//Tile Blue amount
-                              CLEAR);//,//Is Tile Clear
-                              //mapTable.get(i,'lore'));//Tile LORE?
+      mapTiles[mapTiles.length - 1] = new mTile((mapFile[(i * 8) + 32] & 0xFF) * scl,//Tile X position
+                                                (mapFile[(i * 8) + 32 + 1] & 0xFF) * scl,//Tile Y position
+                                                imageNumber,//Tile Image
+                                                mapFile[(i * 8) + 32 + 4],//Tile Red amount
+                                                mapFile[(i * 8) + 32 + 5],//Tile Green amount
+                                                mapFile[(i * 8) + 32 + 6],//Tile Blue amount
+                                                CLEAR);//Is Tile Clear
+      //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }
-  }else if(fileVersion == 1){//whats the file version
-    for(int i = 1; i < mapTable.getRowCount(); i++){//Loop through all the rows
-      boolean CLEAR = true;//tile is clear
-      if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
-        CLEAR = false;//tile is not clear
+    
+    
+    //Load Clickable Tiles
+    /*for(int i = 0; i < iconsAmount; i++){//Loop through all the rows
+      //println(i - 32);
+      boolean CLEAR = false;//tile is not clear
+      if((mapFile[(i * 8) + 32 + 7] & 0x01) == 1){//Is Tile Clear
+        CLEAR = true;//tile is clear
       }
+      
+      int imageNumber = (mapFile[(i * 8) + 32 + 2] << 8) & 0xFF;
+      imageNumber |= (mapFile[(i * 8) + 32 + 3]) & 0xFF;
+      //println(imageNumber);
+      
       mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
-      mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x"),//Tile X position
-                              mapTable.getInt(i,"y"),//Tile Y position
-                              mapTable.getInt(i,"image"),//Tile Image
-                              mapTable.getInt(i,"r"),//Tile Red amount
-                              mapTable.getInt(i,"g"),//Tile Green amount
-                              mapTable.getInt(i,"b"),//Tile Blue amount
-                              CLEAR);//,//Is Tile Clear
-                              //mapTable.get(i,'lore'));//Tile LORE?
-    }
-  }else if(fileVersion == 2){//whats the file version
-    for(int i = 1; i < mapTable.getRowCount(); i++){//Loop through all the rows
-      boolean CLEAR = true;//tile is clear
-      if(mapTable.getInt(i,"clear") == 0){//Is Tile Clear
-        CLEAR = false;//tile is not clear
-      }
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
-      mapTiles[i - 1] = new mTile(mapTable.getInt(i,"x") * scl,//Tile X position
-                              mapTable.getInt(i,"y") * scl,//Tile Y position
-                              mapTable.getInt(i,"image"),//Tile Image
-                              mapTable.getInt(i,"r"),//Tile Red amount
-                              mapTable.getInt(i,"g"),//Tile Green amount
-                              mapTable.getInt(i,"b"),//Tile Blue amount
-                              CLEAR);//,//Is Tile Clear
-                              //mapTable.get(i,'lore'));//Tile LORE?
-    }
+      mapTiles[mapTiles.length - 1] = new mTile((mapFile[(i * 8) + 32] & 0xFF) * scl,//Tile X position
+                                                (mapFile[(i * 8) + 32 + 1] & 0xFF) * scl,//Tile Y position
+                                                imageNumber,//Tile Image
+                                                mapFile[(i * 8) + 32 + 4],//Tile Red amount
+                                                mapFile[(i * 8) + 32 + 5],//Tile Green amount
+                                                mapFile[(i * 8) + 32 + 6],//Tile Blue amount
+                                                CLEAR);//Is Tile Clear
+      //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
+    }*/
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error
   }
@@ -422,4 +455,5 @@ void FileLoadMap(){//load map from file
   }
   loop();//allow drawing
   prepreloading = false;//no longer prepreloading
+  resetLHXY();
 }//void FileLoadMap() END
