@@ -1,5 +1,5 @@
 location,tileMapHeight,tileMapWidth,tileMapTileX,tileMapTileY,images,name
 0,0,0,0,0,0,Info
-E:/Programming/DragNDraw_Java/assets/tileMap.png,32,32,32,32,1024,Classic
-E:/Programming/DragNDraw_Java/assets/tileMap2.png,16,16,32,32,256,Small
-E:/Programming/DragNDraw_Java/assets/tileMap3.png,1,16,32,32,16,Hexadecimal
+assets/tileMap.png,32,32,32,32,1024,Classic
+assets/tileMap2.png,16,16,32,32,256,Small
+assets/tileMap3.png,1,16,32,32,16,Hexadecimal

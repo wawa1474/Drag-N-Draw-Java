@@ -4,7 +4,7 @@ int tileRow = 0;//Which row of tiles are we looking at?
 int tileN = 1;//Which tile is the cursor over?
 boolean CClear = false;//Are we placing clear tiles
 
-int fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//make sure all tile rows are full
+int fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
 
 int UIRight = 22;//How many tiles long is the UI?
 int UIBottom = 2;//How many tiles tall is the UI?
@@ -215,6 +215,7 @@ void fileSaveLoad(int n){
       fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
       preload();//preload stuff
       tileN = 1;//make sure were on tile 1
+      updateTileRow();//make sure we're on the correct row
       noTile = false;//allowed to place tiles
       loadingTileMap = false;//no longer loading map
       preloading = false;//no longer preloading
@@ -330,17 +331,17 @@ void prevTileC(){//Move To Previous Tile
 
 void updateTileRow(){//Get the row to whatever tile were on
   while(floor(tileN/rowLength)*rowLength < rowLength*tileRow){//Is tileN lower than the row were on?
-      tileRow--;//Decrement tileRow
-      if(tileRow < 0){//Is the tile number less than zero?
-        tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
-      }
+    tileRow--;//Decrement tileRow
+    if(tileRow < 0){//Is the tile number less than zero?
+      tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
     }
-    while(floor(tileN/rowLength)*rowLength > rowLength*tileRow){//Is tileN higher than the row were on?
-      tileRow++;//Increment tileRow
-      if(tileRow > fullTotalImages/rowLength){//Is the tile row greater than our total number of rows?
-        tileRow = 0;//Loop the tile row back to the first row
-      }
+  }
+  while(floor(tileN/rowLength)*rowLength > rowLength*tileRow){//Is tileN higher than the row were on?
+    tileRow++;//Increment tileRow
+    if(tileRow > fullTotalImages/rowLength){//Is the tile row greater than our total number of rows?
+      tileRow = 0;//Loop the tile row back to the first row
     }
+  }
 }//void updateTileRow() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
