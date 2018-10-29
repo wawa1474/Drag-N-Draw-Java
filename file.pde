@@ -253,7 +253,7 @@ void fileSaveMap(){//Save the Map to file
     return;
   }
   
-  byte[] mapFile = new byte[32];//Save Meta Data
+  byte[] mapFile = new byte[14];//Save Meta Data
   int mapFlags = 0;
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
@@ -261,44 +261,49 @@ void fileSaveMap(){//Save the Map to file
   mapFile[0] = (byte)(_FILEVERSION_ >> 8);
   mapFile[1] = (byte)_FILEVERSION_;
   
+  //mapFile[2] = 0;//Header Length
+  //mapFile[3] = 0;//Header Length
+  
+  mapFile[4] = (byte)tileMapName.length();
+  mapFile[5] = (byte)tileMapLocation.length();
+  
   //Map Tiles Amount
-  mapFile[2] = (byte)(mapTiles.length >> 24);
-  mapFile[3] = (byte)(mapTiles.length >> 16);
-  mapFile[4] = (byte)(mapTiles.length >> 8);
-  mapFile[5] = (byte)mapTiles.length;
+  mapFile[6] = (byte)(mapTiles.length >> 24);
+  mapFile[7] = (byte)(mapTiles.length >> 16);
+  mapFile[8] = (byte)(mapTiles.length >> 8);
+  mapFile[9] = (byte)mapTiles.length;
   
   //Clickable Icons Amount
-  mapFile[6] = (byte)(icons.length >> 24);
-  mapFile[7] = (byte)(icons.length >> 16);
-  mapFile[8] = (byte)(icons.length >> 8);
-  mapFile[9] = (byte)icons.length;
+  mapFile[10] = (byte)(icons.length >> 24);
+  mapFile[11] = (byte)(icons.length >> 16);
+  mapFile[12] = (byte)(icons.length >> 8);
+  mapFile[13] = (byte)icons.length;
   
-  //Tile Map Name (Location 22 Character Limit)
-  mapFile[10] = (byte)255;
-  mapFile[11] = (byte)255;
-  mapFile[12] = (byte)255;
-  mapFile[13] = (byte)255;
-  mapFile[14] = (byte)255;
-  mapFile[15] = (byte)255;
-  mapFile[16] = (byte)255;
-  mapFile[17] = (byte)255;
-  mapFile[18] = (byte)255;
-  mapFile[19] = (byte)255;
-  mapFile[20] = (byte)255;
-  mapFile[21] = (byte)255;
-  mapFile[22] = (byte)255;
-  mapFile[23] = (byte)255;
-  mapFile[24] = (byte)255;
-  mapFile[25] = (byte)255;
-  mapFile[26] = (byte)255;
-  mapFile[27] = (byte)255;
-  mapFile[28] = (byte)255;
-  mapFile[29] = (byte)255;
-  mapFile[30] = (byte)255;
-  mapFile[31] = (byte)255;
+  //Tile Map Name
+  for(int i = 0; i < tileMapName.length(); i++){
+    mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+    mapFile[mapFile.length - 1] = (byte)tileMapName.charAt(i);
+  }
+  
+  //Tile Map Location
+  for(int i = 0; i < tileMapLocation.length(); i++){
+    mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+    mapFile[mapFile.length - 1] = (byte)tileMapLocation.charAt(i);
+  }
+  
+  //int padding = floor(mapFile.length / 16) * 16;
+  int padding = 16 - floor(mapFile.length % 16);
+  for(int i = 0; i < padding; i++){
+    mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+    mapFile[mapFile.length - 1] = (byte)0xA5;
+  }
+  
+  mapFile[2] = (byte)(mapFile.length >> 8);//Header Length
+  mapFile[3] = (byte)mapFile.length;//Header Length
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
   if(_FILEVERSION_ == 3){//whats the file version
+    //Map Tiles
     for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
       mapFile = (byte[]) expand(mapFile, mapFile.length + 8);//make sure we have room
       //XY
@@ -320,6 +325,31 @@ void fileSaveMap(){//Save the Map to file
       }
       mapFile[mapFile.length - 1] = (byte)mapFlags;
     }
+    
+    
+    
+    //Clickable Icons
+    /*for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
+      mapFile = (byte[]) expand(mapFile, mapFile.length + 8);//make sure we have room
+      //XY
+      mapFile[mapFile.length - 8] = (byte)(mapTiles[i].x / scl);
+      mapFile[mapFile.length - 7] = (byte)(mapTiles[i].y / scl);
+      
+      //Image Number
+      mapFile[mapFile.length - 6] = (byte)(mapTiles[i].image >> 8);
+      mapFile[mapFile.length - 5] = (byte)mapTiles[i].image;
+      
+      //Red/Green
+      mapFile[mapFile.length - 4] = (byte)mapTiles[i].r;
+      mapFile[mapFile.length - 3] = (byte)mapTiles[i].g;
+      
+      //Blue/Flags
+      mapFile[mapFile.length - 2] = (byte)mapTiles[i].b;
+      if(mapTiles[i].clear){
+        mapFlags |= 1;
+      }
+      mapFile[mapFile.length - 1] = (byte)mapFlags;
+    }*/
   }else{
     println("File Version Error (Saving).");//throw error
   }
@@ -337,6 +367,11 @@ void FileLoadMap(){//load map from file
   noLoop();//dont allow drawing
   byte[] mapFile = loadBytes(fileName);
   int fileVersion;
+  int headerLength;
+  String headerTileName;
+  int nameLength;
+  String headerTileLocation;
+  int locationLength;
   int mapTilesAmount;
   int iconsAmount;
   
@@ -349,50 +384,45 @@ void FileLoadMap(){//load map from file
   fileVersion = (int)(mapFile[0] << 8);
   fileVersion |= (int)mapFile[1];
   
+  headerLength = (int)(mapFile[2] << 8);//Header Length
+  headerLength |= (int)mapFile[3];//Header Length
+  
+  nameLength = (int)mapFile[4];
+  locationLength = (int)mapFile[5];
+  
   //Map Tiles Amount
-  mapTilesAmount = (int)(mapFile[2] << 24);
-  mapTilesAmount |= (int)(mapFile[3] << 16);
-  mapTilesAmount |= (int)(mapFile[4] << 8);
-  mapTilesAmount |= (int)(mapFile[5]);
+  mapTilesAmount = (int)(mapFile[6] << 24);
+  mapTilesAmount |= (int)(mapFile[7] << 16);
+  mapTilesAmount |= (int)(mapFile[8] << 8);
+  mapTilesAmount |= (int)(mapFile[9]);
   
   //Clickable Icons Amount
-  iconsAmount = (int)(mapFile[6] << 24);
-  iconsAmount |= (int)(mapFile[7] << 16);
-  iconsAmount |= (int)(mapFile[8] << 8);
-  iconsAmount |= (int)(mapFile[9]);
+  iconsAmount = (int)(mapFile[10] << 24);
+  iconsAmount |= (int)(mapFile[11] << 16);
+  iconsAmount |= (int)(mapFile[12] << 8);
+  iconsAmount |= (int)(mapFile[13]);
   
-  //Tile Map Name (Location 22 Character Limit)
-  //mapFile[10] = (byte)255;
-  //mapFile[11] = (byte)255;
-  //mapFile[12] = (byte)255;
-  //mapFile[13] = (byte)255;
-  //mapFile[14] = (byte)255;
-  //mapFile[15] = (byte)255;
-  //mapFile[16] = (byte)255;
-  //mapFile[17] = (byte)255;
-  //mapFile[18] = (byte)255;
-  //mapFile[19] = (byte)255;
-  //mapFile[20] = (byte)255;
-  //mapFile[21] = (byte)255;
-  //mapFile[22] = (byte)255;
-  //mapFile[23] = (byte)255;
-  //mapFile[24] = (byte)255;
-  //mapFile[25] = (byte)255;
-  //mapFile[26] = (byte)255;
-  //mapFile[27] = (byte)255;
-  //mapFile[28] = (byte)255;
-  //mapFile[29] = (byte)255;
-  //mapFile[30] = (byte)255;
-  //mapFile[31] = (byte)255;
-  //println(mapTable.getString(0,"y"));
-  //if(!tileMapName.equals(mapTable.getString(0,"y"))){//if map names aren't equal
-  //  println("Changing Tile Map");
-  //  tileMapName = mapTable.getString(0,"y");//Tile Map Name
-  //  FileLoadTileMapInfo();
-  //  preload();
-  //}else{
+  //Tile Map Name
+  headerTileName = "";
+  for(int i = 0; i < nameLength; i++){
+    headerTileName += str((char)mapFile[14 + i]);
+  }
+  println(headerTileName);
+  
+  headerTileLocation = "";
+  for(int i = 0; i < locationLength; i++){
+    headerTileLocation += str((char)mapFile[14 + nameLength + i]);
+  }
+  println(headerTileLocation);
+  
+  if(!tileMapName.equals(headerTileName)){//if map names aren't equal
+    println("Changing Tile Map");
+    tileMapName = headerTileName;//Tile Map Name
+    FileLoadTileMapInfo();
+    preload();
+  }else{
     
-  //}
+  }
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
   if(fileVersion == 3){//whats the file version
@@ -402,21 +432,21 @@ void FileLoadMap(){//load map from file
     for(int i = 0; i < mapTilesAmount; i++){//Loop through all the rows
       //println(i - 32);
       boolean CLEAR = false;//tile is not clear
-      if((mapFile[(i * 8) + 32 + 7] & 0x01) == 1){//Is Tile Clear
+      if((mapFile[(i * 8) + headerLength + 7] & 0x01) == 1){//Is Tile Clear
         CLEAR = true;//tile is clear
       }
       
-      int imageNumber = (mapFile[(i * 8) + 32 + 2] << 8) & 0xFF;
-      imageNumber |= (mapFile[(i * 8) + 32 + 3]) & 0xFF;
+      int imageNumber = (mapFile[(i * 8) + headerLength + 2] << 8) & 0xFF;
+      imageNumber |= (mapFile[(i * 8) + headerLength + 3]) & 0xFF;
       //println(imageNumber);
       
       mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
-      mapTiles[mapTiles.length - 1] = new mTile((mapFile[(i * 8) + 32] & 0xFF) * scl,//Tile X position
-                                                (mapFile[(i * 8) + 32 + 1] & 0xFF) * scl,//Tile Y position
+      mapTiles[mapTiles.length - 1] = new mTile((mapFile[(i * 8) + headerLength] & 0xFF) * scl,//Tile X position
+                                                (mapFile[(i * 8) + headerLength + 1] & 0xFF) * scl,//Tile Y position
                                                 imageNumber,//Tile Image
-                                                mapFile[(i * 8) + 32 + 4],//Tile Red amount
-                                                mapFile[(i * 8) + 32 + 5],//Tile Green amount
-                                                mapFile[(i * 8) + 32 + 6],//Tile Blue amount
+                                                mapFile[(i * 8) + headerLength + 4],//Tile Red amount
+                                                mapFile[(i * 8) + headerLength + 5],//Tile Green amount
+                                                mapFile[(i * 8) + headerLength + 6],//Tile Blue amount
                                                 CLEAR);//Is Tile Clear
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }
