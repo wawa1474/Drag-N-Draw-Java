@@ -1,4 +1,4 @@
-int _FILEVERSION_ = 3;//what version of file saving and loading
+int _FILEVERSION_ = 4;//what version of file saving and loading
 
 //File Version Map
   //Version 0:
@@ -12,6 +12,10 @@ int _FILEVERSION_ = 3;//what version of file saving and loading
   //Version 2:
     //0 = File MetaData
     //Compressed Position
+  
+  //Version 4:
+    //0 = File MetaData
+    //Compressed Everything
 
 PImage[] img = new PImage[0];//Tile Images Array
 PImage BACKGROUND;//background image
@@ -102,6 +106,10 @@ void FileLoadTileMapInfo(){//load map from file
         tileMapWidth = tileInfoTable.getInt(i,"tileMapWidth");//how many tile wide
         //tileMapTileX = 32;//tile width
         //tileMapTileY = 32;//tile height
+        totalImages = tileInfoTable.getInt(i,"images") - 1;//Total Images
+        fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
+        tileN = 1;//make sure were on tile 1
+        updateTileRow();//make sure we're on the correct row
       }
     }
   }else{//we don't know that file version
@@ -123,6 +131,7 @@ void loadMap(){//called when loadMap is pressed
     FileLoadTileMapInfo();//load tile map info file
     preload();//preload stuff
     tileN = 1;//make sure we're on the first tile
+    updateTileRow();//make sure we're on the correct row
     noTile = false;//allowed to place tiles
     changeVisibility(false);//normal screen
     loadingTileMap = false;//not loading tile map
@@ -242,6 +251,7 @@ void fileSaveMap(){//Save the Map to file
     fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
     preload();//preload stuff
     tileN = 1;//make sure were on tile 1
+    updateTileRow();//make sure we're on the correct row
     noTile = false;//allowed to place tiles
     loadingTileMap = false;//no longer loading map
     preloading = false;//no longer preloading
@@ -302,7 +312,7 @@ void fileSaveMap(){//Save the Map to file
   mapFile[3] = (byte)mapFile.length;//Header Length
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
-  if(_FILEVERSION_ == 3){//whats the file version
+  if(_FILEVERSION_ == 4){// || _FILEVERSION_ == 3){//whats the file version
     //Map Tiles
     for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
       mapFile = (byte[]) expand(mapFile, mapFile.length + 8);//make sure we have room
@@ -425,7 +435,7 @@ void FileLoadMap(){//load map from file
   }
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
-  if(fileVersion == 3){//whats the file version
+  if(fileVersion == 4){//whats the file version
     //println(mapTilesAmount);
     
     //Load Map Tiles
