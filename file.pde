@@ -182,7 +182,7 @@ void fileSaveMapSelect(File selection){//map file save select callback
       //Already has file type
     }else{
       //fileName = join(fileNamePNG, '.');//make sure the filename ends with .png
-      fileName = join(new String[] {fileName, "csv"}, '.');//make sure the filename ends with .png
+      fileName = join(new String[] {fileName, "ddj"}, '.');//make sure the filename ends with .png
     }
     fileSaveMap();//save the map
   }

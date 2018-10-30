@@ -4,7 +4,7 @@ boolean noTile = false;//Are we blocking placement of tiles?
 
 int offsetX = 0, offsetY = 0;//Mouseclick offset
 
-int SX = 0, SY = 0;//Screen XY
+int SX = 0, SY = 64;//Screen XY
 int mX = 0, mY = 0;//Mouse XY
 int fV = 1;//Fudge Value
 

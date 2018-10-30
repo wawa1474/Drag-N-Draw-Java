@@ -3,8 +3,8 @@ import controlP5.*;//import the library
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
 
-int cols = 100;//Columns
-int rows = 100;//Rows
+int cols = 256;//Columns
+int rows = 256;//Rows
 
 int _DEBUG_ = 0;//what are we debugging
 int _DEBUGAMOUNT_ = 50000;//how many are we debugging
@@ -32,7 +32,7 @@ void setup(){//Setup everything
   //mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
   
   icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
-  icons[icons.length - 1] = new clickableIcon(scl * 15, scl * 15, "maps/map3.csv");//Place a colored tile with no image
+  icons[icons.length - 1] = new clickableIcon(scl * 15, scl * 15, "maps/map5.ddj", "TEST");//Place a colored tile with no image
 }//void setup() END
 
 void draw(){//Draw the canvas
@@ -113,9 +113,21 @@ void draw(){//Draw the canvas
   
   for(int i = 0; i < icons.length; i++){
     icons[i].draw();
+    if(icons[i].hoveringOver()){
+      fill(0);//black
+      textSize(24);//larger
+      text(icons[i].hoverText, mouseX, mouseY);
+    }
   }
   
+  //strokeWeight(5);
+  //line(0,0,width,0);
+  //line(0,0,0,height);
+  
   popMatrix();//go back to normal space?
+  
+  fill(0);//red
+  rect(0,0,width,scl * 2);
   
   //Update and Draw the UI
   UI.update();//Update the UI position

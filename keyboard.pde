@@ -90,6 +90,10 @@ void keyTyped(){//We typed a key
       //  SY = scl * 5;//get back inside of the boundaries
       //}
       SY += (scl * scrollAmount);
+      
+      if(SY > 64){
+        SY = 64;
+      }
     }
     if(key == 'a'){//We pressed 'A'
       //if(SX < scl * 5){//if we're not outside of the boundaries
@@ -99,6 +103,10 @@ void keyTyped(){//We typed a key
       //  SX = scl * 5;//get back inside of the boundaries
       //}
       SX += (scl * scrollAmount);
+      
+      if(SX > 0){
+        SX = 0;
+      }
     }
     if(key == 's'){//We pressed 'S'
       //if(SY > -((scl * 105) - height)){//if we're not outside of the boundaries
@@ -108,6 +116,11 @@ void keyTyped(){//We typed a key
       //  SY = -((scl * 105) - (floor(height / scl) * scl));//get back inside of the boundaries
       //}
       SY -= (scl * scrollAmount);
+      
+      if(SY < -((scl * 256) - height)){
+        SY = -((scl * 256) - height);
+      }
+      //println(SY);
     }
     if(key == 'd'){//We pressed 'D'
       //if(SX > -((scl * 105) - width)){//if we're not outside of the boundaries
@@ -117,6 +130,10 @@ void keyTyped(){//We typed a key
       //  SX = -((scl * 105) - (floor(width / scl) * scl));//get back inside of the boundaries
       //}
       SX -= (scl * scrollAmount);
+      
+      if(SX < -((scl * 256) - width)){
+        SX = -((scl * 256) - width);
+      }
     }
   }
 }//void keyTyped() END
