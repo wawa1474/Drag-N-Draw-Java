@@ -29,7 +29,7 @@ class clickableIcon{//clickableIcon Object
     if(dragging || deleting || clickdrag){
       return false;
     }
-    if(mouseX > this.x - 5 && mouseY > this.y - 5 && mouseX < this.x + scl + 5 && mouseY < this.y + scl + 5){
+    if(mouseX - SX > this.x - 5 && mouseY - SY > this.y - 5 && mouseX - SX < this.x + scl + 5 && mouseY - SY < this.y + scl + 5){
       fileName = file;
       FileLoadMap();
       return true;
@@ -38,7 +38,7 @@ class clickableIcon{//clickableIcon Object
   }
   
   boolean hoveringOver(){
-    if(mouseX > this.x - 5 && mouseY > this.y - 5 && mouseX < this.x + scl + 5 && mouseY < this.y + scl + 5){
+    if(mouseX - SX > this.x - 5 && mouseY - SY > this.y - 5 && mouseX - SX < this.x + scl + 5 && mouseY - SY < this.y + scl + 5){
       return true;
     }
     return false;

@@ -116,7 +116,7 @@ void draw(){//Draw the canvas
     if(icons[i].hoveringOver()){
       fill(0);//black
       textSize(24);//larger
-      text(icons[i].hoverText, mouseX, mouseY);
+      text(icons[i].hoverText, mouseX - SX, mouseY - SY);
     }
   }
   
