@@ -26,14 +26,28 @@ int borderThickness = 4;//how thick is the canvas border
 
 int lowerx = 2147483647, lowery = 2147483647;//store lowest xy of tiles
 int upperx = -2147483648, uppery = -2147483648;//store highest xy of tiles
+boolean drawLines = true;
 
 
 class canvasBG{//The background
+  int r = 255;
+  int g = 255;
+  int b = 255;
+  int gUpper = 150;
+  int gLower = 90;
+  
   void draw(){//Draw the background
     strokeWeight(1);
-    background(255);//Draw the white background
+    background(this.r, this.g, this.b);//Draw the white background
     //image(BACKGROUND, 0, 0);//Draw background
-    if(upperx != -2147483648 && lowerx != 2147483647){
+    
+    if(this.r > gLower && this.r < gUpper && this.g > gLower && this.g < gUpper && this.b > gLower && this.b < gUpper){
+      stroke(0);//Invert Background
+    }else{
+      stroke(255-this.r, 255-this.g, 255-this.b);//Invert Background
+    }
+    
+    if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){
       for(int i = lowerx - (scl * 20); i < upperx + (scl * 20); i+=scl){
         line(i,lowery - (scl * 20), i, uppery + (scl * 20));
       }

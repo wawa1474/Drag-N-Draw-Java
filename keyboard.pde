@@ -67,7 +67,7 @@ void keyTyped(){//We typed a key
           //console.log('Tile Lore: ' + mapTiles[i].lore);
         }
       }
-    }else if(key == 'q'){//We pressed 'P'
+    }else if(key == 'q'){//We pressed 'Q'
       //tileGroup(scl * 10, scl * 3, scl * 5, scl * 10)
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step
@@ -80,6 +80,12 @@ void keyTyped(){//We typed a key
       }else if (tileGroupStep == 2){//set XY2
         tileGroupStep = 0;//ready to do group tiles stuff
       }
+    }else if(key == 'p'){//We pressed 'P'
+      BG.r = (int)RSlider.getValue();
+      BG.g = (int)GSlider.getValue();
+      BG.b = (int)BSlider.getValue();
+    }else if(key == 'o'){//We pressed 'O'
+      drawLines = !drawLines;
     }
     
     if(key == 'w'){//We pressed 'W'

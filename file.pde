@@ -369,6 +369,22 @@ void fileSaveMap(){//Save the Map to file
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
+int convertFourBytesToInt(byte a, byte b, byte c, byte d){
+  int returnValue = 0;
+  
+  returnValue = a & 0xFF;
+  returnValue = returnValue << 8;
+  returnValue |= b & 0xFF;
+  returnValue = returnValue << 8;
+  returnValue |= c & 0xFF;
+  returnValue = returnValue << 8;
+  returnValue |= d & 0xFF;
+  
+  return returnValue;
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
 void FileLoadMap(){//load map from file
   if(fileName.equals("Error")){
     return;
@@ -401,29 +417,24 @@ void FileLoadMap(){//load map from file
   locationLength = (int)mapFile[5];
   
   //Map Tiles Amount
-  mapTilesAmount = (int)(mapFile[6] << 24);
-  mapTilesAmount |= (int)(mapFile[7] << 16);
-  mapTilesAmount |= (int)(mapFile[8] << 8);
-  mapTilesAmount |= (int)(mapFile[9]);
+  mapTilesAmount = convertFourBytesToInt(mapFile[6], mapFile[7], mapFile[8], mapFile[9]);
+  println(mapTilesAmount + " Tiles Loaded");
   
   //Clickable Icons Amount
-  iconsAmount = (int)(mapFile[10] << 24);
-  iconsAmount |= (int)(mapFile[11] << 16);
-  iconsAmount |= (int)(mapFile[12] << 8);
-  iconsAmount |= (int)(mapFile[13]);
+  iconsAmount = convertFourBytesToInt(mapFile[10], mapFile[11], mapFile[12], mapFile[13]);
   
   //Tile Map Name
   headerTileName = "";
   for(int i = 0; i < nameLength; i++){
     headerTileName += str((char)mapFile[14 + i]);
   }
-  println(headerTileName);
+  println("Tile Map Name: " + headerTileName);
   
   headerTileLocation = "";
   for(int i = 0; i < locationLength; i++){
     headerTileLocation += str((char)mapFile[14 + nameLength + i]);
   }
-  println(headerTileLocation);
+  println("Tile Map Location: " + headerTileLocation);
   
   if(!tileMapName.equals(headerTileName)){//if map names aren't equal
     println("Changing Tile Map");

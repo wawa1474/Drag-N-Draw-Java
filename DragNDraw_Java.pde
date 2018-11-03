@@ -6,7 +6,7 @@ import controlP5.*;//import the library
 int cols = 256;//Columns
 int rows = 256;//Rows
 
-int _DEBUG_ = 0;//what are we debugging
+int _DEBUG_ = -1;//what are we debugging
 int _DEBUGAMOUNT_ = 50000;//how many are we debugging
 
 String VERSION = "PRE_ALPHA V0.0.1";
@@ -33,6 +33,13 @@ void setup(){//Setup everything
   
   icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
   icons[icons.length - 1] = new clickableIcon(scl * 15, scl * 15, "maps/map5.ddj", "TEST");//Place a colored tile with no image
+  
+  if(_DEBUG_ == 0){
+    for(int i = 0; i < _DEBUGAMOUNT_; i++){
+      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
+      mapTiles[mapTiles.length - 1] = new mTile(200*scl,200*scl,1,127,127,127, false);//test tiles
+    }
+  }
 }//void setup() END
 
 void draw(){//Draw the canvas
@@ -40,9 +47,9 @@ void draw(){//Draw the canvas
   if(FPS.length() > 4){
     FPS = FPS.substring(0, 5);
   }else if(FPS.length() > 3){
-    FPS = FPS.substring(0, 4);
+    FPS = FPS.substring(0, 4) + "0";
   }else{
-    FPS = FPS.substring(0, 2);
+    FPS = FPS.substring(0, 2) + ".00";
   }
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + FPS);
   
@@ -66,7 +73,7 @@ void draw(){//Draw the canvas
     }
   
   if(colorWheel.isVisible() || colorInputR.isVisible()){//if not using color wheel or color inputs
-    noTile = true;//Allow tile placement
+    noTile = true;//disallow tile placement
   }
   
   pushMatrix();//go back to crazy space?
