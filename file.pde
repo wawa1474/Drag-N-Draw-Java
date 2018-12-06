@@ -108,7 +108,7 @@ void FileLoadTileMapInfo(){//load map from file
         tileMapWidth = tileInfoTable.getInt(i,"tileMapWidth");//how many tile wide
         //tileMapTileX = 32;//tile width
         //tileMapTileY = 32;//tile height
-        colorTile = tileInfoTable.getInt(i,"color");//Is Tile Clear
+        colorTile = tileInfoTable.getInt(i,"colortile");//Is Tile Clear
         totalImages = tileInfoTable.getInt(i,"images") - 1;//Total Images
         fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
         tileN = 1;//make sure were on tile 1
@@ -270,6 +270,10 @@ void fileSaveMap(){//Save the Map to file
   byte[] mapFile = new byte[14];//Save Meta Data
   int mapFlags = 0;
   
+  //mTile[] clickTiles = new mTile[0];
+  String[] clickLoc = new String[0];
+  String[] hoveText = new String[0];
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   //File Version
   mapFile[0] = (byte)(_FILEVERSION_ >> 8);
@@ -340,30 +344,43 @@ void fileSaveMap(){//Save the Map to file
       mapFile[mapFile.length - 1] = (byte)mapFlags;
     }
     
-    
+    //int padding = floor(mapFile.length / 16) * 16;
+    padding = 16 - floor(mapFile.length % 16);
+    for(int l = 0; l < padding; l++){
+      mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+      mapFile[mapFile.length - 1] = (byte)0xA5;
+    }
     
     //Clickable Icons
-    /*for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
-      mapFile = (byte[]) expand(mapFile, mapFile.length + 8);//make sure we have room
+    for(int i = 0; i <= icons.length - 1; i++){//loop through all tiles
+      mapFile = (byte[]) expand(mapFile, mapFile.length + 4);//make sure we have room
       //XY
-      mapFile[mapFile.length - 8] = (byte)(mapTiles[i].x / scl);
-      mapFile[mapFile.length - 7] = (byte)(mapTiles[i].y / scl);
+      mapFile[mapFile.length - 4] = (byte)(icons[i].x / scl);
+      mapFile[mapFile.length - 3] = (byte)(icons[i].y / scl);
       
       //Image Number
-      mapFile[mapFile.length - 6] = (byte)(mapTiles[i].image >> 8);
-      mapFile[mapFile.length - 5] = (byte)mapTiles[i].image;
+      mapFile[mapFile.length - 2] = (byte)icons[i].file.length();
+      mapFile[mapFile.length - 1] = (byte)icons[i].hoverText.length();
       
-      //Red/Green
-      mapFile[mapFile.length - 4] = (byte)mapTiles[i].r;
-      mapFile[mapFile.length - 3] = (byte)mapTiles[i].g;
-      
-      //Blue/Flags
-      mapFile[mapFile.length - 2] = (byte)mapTiles[i].b;
-      if(mapTiles[i].clear){
-        mapFlags |= 1;
+      //Tile Map Name
+      for(int j = 0; j < icons[i].file.length(); j++){
+        mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+        mapFile[mapFile.length - 1] = (byte)icons[i].file.charAt(j);
       }
-      mapFile[mapFile.length - 1] = (byte)mapFlags;
-    }*/
+  
+      //Tile Map Location
+      for(int k = 0; k < icons[i].hoverText.length(); k++){
+        mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+        mapFile[mapFile.length - 1] = (byte)icons[i].hoverText.charAt(k);
+      }
+      
+      //int padding = floor(mapFile.length / 16) * 16;
+      padding = 16 - floor(mapFile.length % 16);
+      for(int l = 0; l < padding; l++){
+        mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+        mapFile[mapFile.length - 1] = (byte)0xA5;
+      }
+    }
   }else{
     println("File Version Error (Saving).");//throw error
   }
