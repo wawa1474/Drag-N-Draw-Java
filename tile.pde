@@ -23,6 +23,26 @@ class mTile{//Tile Object
     //this.lore = lore || 0;//The LORE? of the tile
   }//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
   
+  void draw(){
+    if(!this.clear || this.image == colorTile){//Is the tile colored
+      fill(this.r,this.g,this.b);//Set Tile background color
+      rect(this.x,this.y,scl,scl);//Draw colored square behind tile
+    }
+    
+    if(this.image != colorTile && this.image <= totalImages){//if tile image is not 0 and tile image exists
+      image(img[this.image], this.x, this.y);//Draw tile
+    }else if(this.image != 0){//image is not blank
+      image(missingTexture, this.x, this.y);//Draw tile
+    }
+  }
+  
+  boolean tileOnScreen(){
+    if(this.x > -scl - SX && this.x  < width - SX && this.y > -scl - SY && this.y < height - SY){
+      return true;
+    }
+    return false;
+  }
+  
   void updateLocation(){//Adjust XY location of tile
     this.x = mX + offsetX;//Adjust X location of tile
     this.y = mY + offsetY;//Adjust Y location of tile

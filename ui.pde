@@ -231,6 +231,7 @@ void fileSaveLoad(int n){
       totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
       tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");//load number of tiles wide
       tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
+      colorTile = tileInfoTable.getInt(tileMapShow + 1,"colortile");//load number of tiles tall
       tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
       fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
       preload();//preload stuff

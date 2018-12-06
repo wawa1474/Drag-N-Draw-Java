@@ -35,6 +35,7 @@ int tileMapHeight = 32;//how tiles high
 int tileMapWidth = 32;//how many tile wide
 int tileMapTileX = 32;//tile width
 int tileMapTileY = 32;//tile height
+int colorTile = 0;//Which tile is the clear colored tile
 String tileMapName = "Classic";//tile map name
 boolean loadingTileMap = true;//are we loading the tile map
 
@@ -99,6 +100,7 @@ void FileLoadTileMapInfo(){//load map from file
                               tileInfoTable.getInt(i,"tileMapTileX") + ", " +//Tile Red amount
                               tileInfoTable.getInt(i,"tileMapTileY") + ", " +//Tile Red amount
                               tileInfoTable.getInt(i,"images") + ", " +//Tile Red amount
+                              tileInfoTable.getInt(i,"colortile"),//Is Tile Clear
                               tileInfoTable.getString(i,"name"));//,//Is Tile Clear
       if(tileMapName.equals(tileInfoTable.getString(i,"name"))){//does the map name and tile map name match
         tileMapLocation = tileInfoTable.getString(i,"location");//update tile map location
@@ -106,6 +108,7 @@ void FileLoadTileMapInfo(){//load map from file
         tileMapWidth = tileInfoTable.getInt(i,"tileMapWidth");//how many tile wide
         //tileMapTileX = 32;//tile width
         //tileMapTileY = 32;//tile height
+        colorTile = tileInfoTable.getInt(i,"color");//Is Tile Clear
         totalImages = tileInfoTable.getInt(i,"images") - 1;//Total Images
         fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
         tileN = 1;//make sure were on tile 1
@@ -247,6 +250,7 @@ void fileSaveMap(){//Save the Map to file
     totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
     tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");//load number of tiles wide
     tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
+    colorTile = tileInfoTable.getInt(tileMapShow + 1,"colortile");//load number of tiles tall
     tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
     fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
     preload();//preload stuff
@@ -365,6 +369,8 @@ void fileSaveMap(){//Save the Map to file
   }
   
   saveBytes(fileName, mapFile);
+  
+  fileName = "Error";
 }//void fileSaveLoad() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -507,4 +513,6 @@ void FileLoadMap(){//load map from file
   loop();//allow drawing
   prepreloading = false;//no longer prepreloading
   resetLHXY();
+  
+  fileName = "Error";
 }//void FileLoadMap() END

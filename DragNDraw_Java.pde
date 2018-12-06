@@ -94,16 +94,8 @@ void draw(){//Draw the canvas
   
   //Display Map Tiles
   for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
-    if(mapTiles[i].x > -scl - SX && mapTiles[i].x  < width - SX && mapTiles[i].y > -scl - SY && mapTiles[i].y < height - SY || drawAll == true){//if tile is within screen bounds or drawAll is set
-      if(!mapTiles[i].clear || mapTiles[i].image == 0){//Is the tile colored
-        fill(mapTiles[i].r,mapTiles[i].g,mapTiles[i].b);//Set Tile background color
-        rect(mapTiles[i].x,mapTiles[i].y,scl,scl);//Draw colored square behind tile
-      }
-      if(mapTiles[i].image != 0 && mapTiles[i].image <= totalImages){//if tile image is not 0 and tile image exists
-        image(img[mapTiles[i].image], mapTiles[i].x, mapTiles[i].y);//Draw tile
-      }else if(mapTiles[i].image != 0){//image is not blank
-        image(missingTexture, mapTiles[i].x, mapTiles[i].y);//Draw tile
-      }
+    if(mapTiles[i].tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
+      mapTiles[i].draw();
       drawnTiles++;//how many tiles are being drawn?
     }
   }
@@ -121,9 +113,7 @@ void draw(){//Draw the canvas
   for(int i = 0; i < icons.length; i++){
     icons[i].draw();
     if(icons[i].hoveringOver()){
-      fill(0);//black
-      textSize(24);//larger
-      text(icons[i].hoverText, mouseX - SX, mouseY - SY);
+      icons[i].drawText();
     }
   }
   

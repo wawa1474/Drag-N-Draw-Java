@@ -25,6 +25,12 @@ class clickableIcon{//clickableIcon Object
     stroke(0);
   }
   
+  void drawText(){
+    fill(0);//black
+    textSize(24);//larger
+    text(this.hoverText, mouseX - SX, mouseY - SY);
+  }
+  
   boolean wasClicked(){
     if(dragging || deleting || clickdrag){
       return false;

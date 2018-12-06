@@ -1,5 +1,5 @@
-location,tileMapHeight,tileMapWidth,tileMapTileX,tileMapTileY,images,name
-0,0,0,0,0,0,Info
-assets/tileMap.png,32,32,32,32,1024,Classic
-assets/tileMap2.png,16,16,32,32,256,Small
-assets/tileMap3.png,1,16,32,32,16,Hexadecimal
+location,tileMapHeight,tileMapWidth,tileMapTileX,tileMapTileY,images,colortile,name
+0,0,0,0,0,0,0,Info
+assets/tileMap.png,32,32,32,32,1024,0,Classic
+assets/tileMap2.png,16,16,32,32,256,0,Small
+assets/tileMap3.png,16,16,32,32,16,16,Hexadecimal

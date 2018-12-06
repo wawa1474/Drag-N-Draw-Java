@@ -95,6 +95,7 @@ void mousePressed(){//We pressed a mouse button
         dragging = true;//We dragging
         updateOffset(i);//Update the mouse offset of the tile
         loadColors(i);//Load the color inputs and sliders with the color from the tile
+        loadTile(i);//load tile image
         return;//Block normal action
       }/*else if(mouseButton == RIGHT){//We clicked with the right button
         mylog.log("Right");
