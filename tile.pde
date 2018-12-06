@@ -22,6 +22,12 @@ class mTile{//Tile Object
     this.clear = clear;//Is the tile clear
     //this.lore = lore || 0;//The LORE? of the tile
   }//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
+  
+  void snapLocation(){//Snap XY location of tile to grid
+    this.x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
+    this.y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
+    updateLHXY(this.x, this.y);
+  }//void snapTileLocation(int tile) END
 }//class mTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -69,11 +75,7 @@ void placeTile(){//Place a tile at the mouses location
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void snapTileLocation(int tile){//Snap XY location of tile to grid
-  mapTiles[tile].x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
-  mapTiles[tile].y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
-  updateLHXY(mapTiles[tile].x, mapTiles[tile].y);
-}//void snapTileLocation(int tile) END
+
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 

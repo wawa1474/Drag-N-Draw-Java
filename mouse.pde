@@ -183,7 +183,7 @@ void mouseReleased(){//We released the mouse button
   
   if(dragging){//Are we dragging a tile
     if(mapTiles[mapN] != null){//If tile exists
-      snapTileLocation(mapN);//Snap XY location of tile to grid
+      mapTiles[mapN].snapLocation();//Snap XY location of tile to grid
     }
   }
   
