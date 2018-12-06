@@ -88,7 +88,7 @@ void draw(){//Draw the canvas
   //If dragging a tile: update location
   if (dragging){//Are we dragging a tile
     if(mapTiles[mapN] != null){//If tile exists
-      updateTileLocation(mapN);//Adjust XY location of tile
+      mapTiles[mapN].updateLocation();//Adjust XY location of tile
     }
   }
   

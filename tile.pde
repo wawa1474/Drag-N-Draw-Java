@@ -23,6 +23,11 @@ class mTile{//Tile Object
     //this.lore = lore || 0;//The LORE? of the tile
   }//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
   
+  void updateLocation(){//Adjust XY location of tile
+    this.x = mX + offsetX;//Adjust X location of tile
+    this.y = mY + offsetY;//Adjust Y location of tile
+  }//void updateTileLocation(int tile) END
+  
   void snapLocation(){//Snap XY location of tile to grid
     this.x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
     this.y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
@@ -165,10 +170,7 @@ boolean isCursorOnTileNoFVXY(int tile, int tX, int tY){//Is the mouse cursor on 
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void updateTileLocation(int tile){//Adjust XY location of tile
-  mapTiles[tile].x = mX + offsetX;//Adjust X location of tile
-  mapTiles[tile].y = mY + offsetY;//Adjust Y location of tile
-}//void updateTileLocation(int tile) END
+
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
