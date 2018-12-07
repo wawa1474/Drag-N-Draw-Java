@@ -311,9 +311,11 @@ void fileSaveMap(){//Save the Map to file
   
   //int padding = floor(mapFile.length / 16) * 16;
   int padding = 16 - floor(mapFile.length % 16);
-  for(int i = 0; i < padding; i++){
-    mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
-    mapFile[mapFile.length - 1] = (byte)0xA5;
+  if(padding < 16){
+    for(int l = 0; l < padding; l++){
+      mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+      mapFile[mapFile.length - 1] = (byte)0xA5;
+    }
   }
   
   mapFile[2] = (byte)(mapFile.length >> 8);//Header Length
@@ -346,9 +348,11 @@ void fileSaveMap(){//Save the Map to file
     
     //int padding = floor(mapFile.length / 16) * 16;
     padding = 16 - floor(mapFile.length % 16);
-    for(int l = 0; l < padding; l++){
-      mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
-      mapFile[mapFile.length - 1] = (byte)0xA5;
+    if(padding < 16){
+      for(int l = 0; l < padding; l++){
+        mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+        mapFile[mapFile.length - 1] = (byte)0xA5;
+      }
     }
     
     //Clickable Icons
@@ -376,9 +380,11 @@ void fileSaveMap(){//Save the Map to file
       
       //int padding = floor(mapFile.length / 16) * 16;
       padding = 16 - floor(mapFile.length % 16);
-      for(int l = 0; l < padding; l++){
-        mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
-        mapFile[mapFile.length - 1] = (byte)0xA5;
+      if(padding < 16){
+        for(int l = 0; l < padding; l++){
+          mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+          mapFile[mapFile.length - 1] = (byte)0xA5;
+        }
       }
     }
   }else{
@@ -495,27 +501,28 @@ void FileLoadMap(){//load map from file
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }
     
+    int mapTilesLength = (mapTilesAmount * 8) + (16 - floor(mapTilesAmount * 8) % 16) + headerLength;
     
     //Load Clickable Tiles
     /*for(int i = 0; i < iconsAmount; i++){//Loop through all the rows
-      //println(i - 32);
-      boolean CLEAR = false;//tile is not clear
-      if((mapFile[(i * 8) + 32 + 7] & 0x01) == 1){//Is Tile Clear
-        CLEAR = true;//tile is clear
+      
+      String clickableHover = "";
+      for(int j = 0; j < mapFile[(i * 8) + mapTilesLength + 3]; j++){
+        clickableHover += str((char)mapFile[mapTilesLength + j]);
       }
+      println("Tile Map Location: " + clickableHover);
       
-      int imageNumber = (mapFile[(i * 8) + 32 + 2] << 8) & 0xFF;
-      imageNumber |= (mapFile[(i * 8) + 32 + 3]) & 0xFF;
-      //println(imageNumber);
-      
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
-      mapTiles[mapTiles.length - 1] = new mTile((mapFile[(i * 8) + 32] & 0xFF) * scl,//Tile X position
-                                                (mapFile[(i * 8) + 32 + 1] & 0xFF) * scl,//Tile Y position
-                                                imageNumber,//Tile Image
-                                                mapFile[(i * 8) + 32 + 4],//Tile Red amount
-                                                mapFile[(i * 8) + 32 + 5],//Tile Green amount
-                                                mapFile[(i * 8) + 32 + 6],//Tile Blue amount
-                                                CLEAR);//Is Tile Clear
+      String clickableFile = "";
+      for(int j = 0; j < mapFile[(i * 8) + mapTilesLength + 2]; j++){
+        clickableFile += str((char)mapFile[mapTilesLength + mapFile[(i * 8) + mapTilesLength + 2] + j]);
+      }
+      println("Clickable Tile File: " + clickableFile);
+    
+      icons = (clickableIcon[]) expand(icons, icons.length + 1);//Make sure we have room
+      icons[icons.length - 1] = new clickableIcon((mapFile[(i * 8) + mapTilesLength] & 0xFF) * scl,//Tile X position
+                                                (mapFile[(i * 8) + mapTilesLength + 1] & 0xFF) * scl,//Tile Y position
+                                                clickableFile,//Tile Image
+                                                clickableHover);//Is Tile Clear
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }*/
   }else{//we don't know that file version
