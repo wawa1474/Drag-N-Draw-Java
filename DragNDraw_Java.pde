@@ -31,11 +31,11 @@ void setup(){//Setup everything
   //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
   //mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
   
-  icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
-  icons[icons.length - 1] = new clickableIcon(scl * 15, scl * 15, "maps/map5.ddj", "TEST");//Place a colored tile with no image
+  //icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
+  //icons[icons.length - 1] = new clickableIcon(scl * 15, scl * 15, "maps/map5.ddj", "TEST");//Place a colored tile with no image
   
-  icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
-  icons[icons.length - 1] = new clickableIcon(scl * 17, scl * 15, "maps/map5.ddj", "TEST2");//Place a colored tile with no image
+  //icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
+  //icons[icons.length - 1] = new clickableIcon(scl * 17, scl * 15, "maps/map5.ddj", "TEST2");//Place a colored tile with no image
   
   if(_DEBUG_ == 0){
     for(int i = 0; i < _DEBUGAMOUNT_; i++){

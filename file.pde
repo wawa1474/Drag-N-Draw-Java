@@ -504,27 +504,37 @@ void FileLoadMap(){//load map from file
     int mapTilesLength = (mapTilesAmount * 8) + (16 - floor(mapTilesAmount * 8) % 16) + headerLength;
     
     //Load Clickable Tiles
-    /*for(int i = 0; i < iconsAmount; i++){//Loop through all the rows
-      
-      String clickableHover = "";
-      for(int j = 0; j < mapFile[(i * 8) + mapTilesLength + 3]; j++){
-        clickableHover += str((char)mapFile[mapTilesLength + j]);
-      }
-      println("Tile Map Location: " + clickableHover);
+    
+    int iconsAddress = mapTilesLength;
+    println("Starting Icons Address: " + iconsAddress);
+    
+    for(int i = 0; i < iconsAmount; i++){//Loop through all the rows
+    
+      int clickFileAddress = iconsAddress + 4;
+      int clickTextAddress = clickFileAddress + (int)mapFile[iconsAddress + 2];
       
       String clickableFile = "";
-      for(int j = 0; j < mapFile[(i * 8) + mapTilesLength + 2]; j++){
-        clickableFile += str((char)mapFile[mapTilesLength + mapFile[(i * 8) + mapTilesLength + 2] + j]);
+      for(int j = 0; j < mapFile[iconsAddress + 2]; j++){
+        clickableFile += str((char)mapFile[clickFileAddress + j]);
       }
       println("Clickable Tile File: " + clickableFile);
+      
+      String clickableHover = "";
+      for(int j = 0; j < mapFile[iconsAddress + 3]; j++){
+        clickableHover += str((char)mapFile[clickTextAddress + j]);
+      }
+      println("Clickable Tile Text: " + clickableHover);
     
       icons = (clickableIcon[]) expand(icons, icons.length + 1);//Make sure we have room
-      icons[icons.length - 1] = new clickableIcon((mapFile[(i * 8) + mapTilesLength] & 0xFF) * scl,//Tile X position
-                                                (mapFile[(i * 8) + mapTilesLength + 1] & 0xFF) * scl,//Tile Y position
+      icons[icons.length - 1] = new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl,//Tile X position
+                                                (mapFile[iconsAddress + 1] & 0xFF) * scl,//Tile Y position
                                                 clickableFile,//Tile Image
                                                 clickableHover);//Is Tile Clear
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
-    }*/
+      
+      iconsAddress = clickTextAddress + (16 - (clickTextAddress % 16));
+      println("Sequential Icons Address: " + iconsAddress);
+    }
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error
   }
