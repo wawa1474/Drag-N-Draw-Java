@@ -271,8 +271,10 @@ void fileSaveMap(){//Save the Map to file
   int mapFlags = 0;
   
   //mTile[] clickTiles = new mTile[0];
-  String[] clickLoc = new String[0];
-  String[] hoveText = new String[0];
+  
+  //Do we compress clickable icon text?
+  String[] clickLoc = new String[0];//Array of clickable icon file locations
+  String[] hoveText = new String[0];//Array of clickable icon hover texts
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   //File Version
