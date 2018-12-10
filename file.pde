@@ -432,9 +432,8 @@ void FileLoadMap(){//load map from file
   int mapTilesAmount;
   int iconsAmount;
   
-  while(mapTiles.length > 0){//Clear the array
-    deleteTile(0);//shorten the array
-  }
+  clearMapTilesArray();
+  clearClickableTilesArray();
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   //File Version
@@ -542,10 +541,13 @@ void FileLoadMap(){//load map from file
   }
   
   if(mapTiles == null){//Is the array null
-    while(mapTiles.length > 0){//Reset the map array
-      deleteTile(0);//shorten the array
-    }
+    clearMapTilesArray();
   }
+  
+  if(icons == null){//Is the array null
+    clearClickableTilesArray();
+  }
+  
   loop();//allow drawing
   prepreloading = false;//no longer prepreloading
   resetLHXY();

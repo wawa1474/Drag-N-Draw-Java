@@ -50,3 +50,11 @@ class clickableIcon{//clickableIcon Object
     return false;
   }
 }//class mTile() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void clearClickableTilesArray(){
+  while(icons.length > 0){//Clear the array
+    icons = (clickableIcon[]) shorten(icons);
+  }
+}
