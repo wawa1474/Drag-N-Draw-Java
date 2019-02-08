@@ -51,13 +51,13 @@ void setup(){//Setup everything
 void draw(){//Draw the canvas
   String FPS = String.valueOf(frameRate);
   if(FPS.length() > 4){
-    FPS = FPS.substring(0, 5);
+    FPS = FPS.substring(0, 5);//XX.XX
   }else if(FPS.length() > 3){
-    FPS = FPS.substring(0, 4) + "0";
+    FPS = FPS.substring(0, 4) + "0";//XX.X0
   }else{
-    FPS = FPS.substring(0, 2) + ".00";
+    FPS = FPS.substring(0, 2) + ".00";//XX.00
   }
-  surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + FPS);
+  surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + FPS + " : " + mapTiles.length);
   
   if(preloading == true){//if preloading
     pushMatrix();//go back to crazy space?
@@ -101,7 +101,7 @@ void draw(){//Draw the canvas
   //Display Map Tiles
   for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
     if(mapTiles[i].tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
-      mapTiles[i].draw();
+      mapTiles[i].draw();//Draw the tile
       drawnTiles++;//how many tiles are being drawn?
     }
   }
@@ -116,10 +116,10 @@ void draw(){//Draw the canvas
     drawGroupPasteOutline();//draw the red outline
   }
   
-  for(int i = 0; i < icons.length; i++){
-    icons[i].draw();
-    if(icons[i].hoveringOver()){
-      icons[i].drawText();
+  for(int i = 0; i < icons.length; i++){//Go through all the clickable icons
+    icons[i].draw();//draw the icon
+    if(icons[i].hoveringOver()){//if mouse hovering over icon
+      icons[i].drawText();//draw the icons text
     }
   }
   
@@ -129,8 +129,8 @@ void draw(){//Draw the canvas
   
   popMatrix();//go back to normal space?
   
-  fill(0);//red
-  rect(0,0,width,scl * 2);
+  fill(0);//black
+  rect(0,0,width,scl * 2);//ui background
   
   //Update and Draw the UI
   UI.update();//Update the UI position

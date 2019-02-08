@@ -36,11 +36,11 @@ class mTile{//Tile Object
     }
   }
   
-  boolean tileOnScreen(){
-    if(this.x > -scl - SX && this.x  < width - SX && this.y > -scl - SY && this.y < height - SY){
-      return true;
+  boolean tileOnScreen(){//is this tile on screen
+    if(this.x > -scl - SX && this.x  < width - SX && this.y > -scl - SY && this.y < height - SY){//is the tile within the screen bounds
+      return true;//yes
     }
-    return false;
+    return false;//no
   }
   
   void updateLocation(){//Adjust XY location of tile
@@ -51,7 +51,7 @@ class mTile{//Tile Object
   void snapLocation(){//Snap XY location of tile to grid
     this.x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
     this.y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
-    updateLHXY(this.x, this.y);
+    updateLHXY(this.x, this.y);//update the lower/higher xy for background drawing
   }//void snapTileLocation(int tile) END
 }//class mTile() END
 
@@ -76,7 +76,7 @@ void deleteTile(int tile){//Delete a tile and update the array
     mapTiles = (mTile[]) shorten(mapTiles);//Shorten the Map Tiles Array by 1
   }
   //-2,147,483,648 -> 2,147,483,647
-  resetLHXY();
+  resetLHXY();//reset the lower/higher xy for background drawing
 }//void deleteTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -95,30 +95,30 @@ void placeTile(){//Place a tile at the mouses location
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
     }
   }
-  updateLHXY(mapTiles.length - 1);
+  updateLHXY(mapTiles.length - 1);//update the lower/higher xy for background drawing
 }//void placeTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void clearMapTilesArray(){
-  while(mapTiles.length > 0){//Clear the array
-    mapTiles = (mTile[]) shorten(mapTiles);
+void clearMapTilesArray(){//delete all tiles
+  while(mapTiles.length > 0){//if tiles still exist
+    mapTiles = (mTile[]) shorten(mapTiles);//delete them
   }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateLHXY(int x, int y){//update the lower/higher xy for background drawing
-  if(x < lowerx){
+  if(x < lowerx){//make sure we have the lowest x
     lowerx = x;
   }
-  if(y < lowery){
+  if(y < lowery){//make sure we have the lowest y
     lowery = y;
   }
-  if(x > upperx){
+  if(x > upperx){//make sure we have the highest x
     upperx = x;
   }
-  if(y > uppery){
+  if(y > uppery){//make sure we have the highest y
     uppery = y;
   }
 }
@@ -126,32 +126,32 @@ void updateLHXY(int x, int y){//update the lower/higher xy for background drawin
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateLHXY(int tile){//update the lower/higher xy for background drawing
-  if(tile == -1){
-    return;
+  if(tile == -1){//if the tile doesn't exist
+    return;//do nothing
   }
-  if(mapTiles[tile].x < lowerx){
+  if(mapTiles[tile].x < lowerx){//make sure we have the lowest x
     lowerx = mapTiles[tile].x;
   }
-  if(mapTiles[tile].y < lowery){
+  if(mapTiles[tile].y < lowery){//make sure we have the lowest y
     lowery = mapTiles[tile].y;
   }
-  if(mapTiles[tile].x > upperx){
+  if(mapTiles[tile].x > upperx){//make sure we have the highest x
     upperx = mapTiles[tile].x;
   }
-  if(mapTiles[tile].y > uppery){
+  if(mapTiles[tile].y > uppery){//make sure we have the highest y
     uppery = mapTiles[tile].y;
   }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void resetLHXY(){//update the lower/higher xy for background drawing
-  lowerx = 2147483647;
-  lowery = 2147483647;
-  upperx = -2147483648;
-  uppery = -2147483648;
-  for(int i = 0; i < mapTiles.length; i++){
-    updateLHXY(mapTiles[i].x, mapTiles[i].y);
+void resetLHXY(){//reset the lower/higher xy for background drawing
+  lowerx = 2147483647;//tiles will always be less than this
+  lowery = 2147483647;//tiles will always be less than this
+  upperx = -2147483648;//tiles will always be greater than this
+  uppery = -2147483648;//tiles will always be greater than this
+  for(int i = 0; i < mapTiles.length; i++){//go through all tiles
+    updateLHXY(mapTiles[i].x, mapTiles[i].y);//and make sure we're fully up to date
   }
 }
 

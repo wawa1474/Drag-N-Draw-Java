@@ -127,7 +127,7 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
   }
   tileGroupStep = 0;//reset step count
   
-  resetLHXY();
+  resetLHXY();//reset the lower/higher xy for background drawing
 }//void tileGroupCutCopy(char button) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -169,13 +169,13 @@ void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Pl
   //X2 += scl;
   //Y2 += scl;
   
-  strokeWeight(borderThickness); // Thicker
+  strokeWeight(borderThickness);//Thicker
   stroke(255,0,0);//RED
   line(X1, Y1, X1, Y2);//Draw Left
   line(X2, Y1, X2, Y2);//Draw Right
   line(X1, Y1, X2, Y1);//Draw Top
   line(X1, Y2, X2, Y2);//Draw Bottom
-  strokeWeight(1); // Default
+  strokeWeight(1);//Default
   stroke(0);//BLACK
 }//void drawGroupPasteOutline() END
 
@@ -211,12 +211,12 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
   //X2 += scl;
   //Y2 += scl;
     
-  strokeWeight(borderThickness); // Thicker
+  strokeWeight(borderThickness);//Thicker
   stroke(255,0,0);//RED
   line(X1, Y1, X1, Y2);//Draw Left
   line(X2, Y1, X2, Y2);//Draw Right
   line(X1, Y1, X2, Y1);//Draw Top
   line(X1, Y2, X2, Y2);//Draw Bottom
-  strokeWeight(1); // Default
+  strokeWeight(1);//Default
   stroke(0);//BLACK
 }//void drawTileGroupOutline() END

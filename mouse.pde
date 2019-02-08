@@ -14,9 +14,9 @@ void mousePressed(){//We pressed a mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
   
-  for(int i = 0; i < icons.length; i++){
-    if(icons[i].wasClicked()){
-      return;
+  for(int i = 0; i < icons.length; i++){//go through all icons
+    if(icons[i].wasClicked()){//if we clicked on one
+      return;//do nothing
     }
   }
   
@@ -24,8 +24,8 @@ void mousePressed(){//We pressed a mouse button
     return;
   }*/
   
-  if(noTile){
-    return;
+  if(noTile){//if we're not allowed to place tiles
+    return;//do nothing
   }
   
   if(tileGroupStep == 3){//pasteing group of tiles
@@ -116,10 +116,11 @@ void mouseDragged(){//We dragged the mouse while holding a button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
   
-  clickdrag = true;
-  for(int i = 0; i < icons.length; i++){
-    if(icons[i].wasClicked()){
-      return;
+  clickdrag = true;//we're dragging the mouse
+  
+  for(int i = 0; i < icons.length; i++){//go through all icons
+    if(icons[i].wasClicked()){//if we clicked on one
+      return;//return and do nothing
     }
   }
   
@@ -175,7 +176,7 @@ void mouseDragged(){//We dragged the mouse while holding a button
 void mouseReleased(){//We released the mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   
-  clickdrag = false;
+  clickdrag = false;//we're no longer dragging the mouse
   //for(int i = 0; i < icons.length; i++){
   //  if(icons[i].wasClicked()){
   //    return;
@@ -195,8 +196,10 @@ void mouseReleased(){//We released the mouse button
   }
 
   if(mapN != -1 && mapTiles.length > mapN){//If tile exists
-    if(mapTiles[mapN].x >= SX && mapTiles[mapN].x < scl*rowLength + SX && mapTiles[mapN].y == SY){//Is the tile we just dropped on the UI
-      deleteTile(mapN);//Delete a tile and update the array
+    //if(mapTiles[mapN].x >= SX && mapTiles[mapN].x < scl*rowLength + SX && mapTiles[mapN].y == SY){//Is the tile we just dropped on the UI
+    //println(mapTiles[mapN].x + ":" + mapTiles[mapN].y + ":" + SX + ":" + SY);
+    if(mapTiles[mapN].x >= 0 - SX && mapTiles[mapN].x < width - SX && mapTiles[mapN].y < (0 + (scl*2)) - SY){//Did we just drop a tile on the ui
+      deleteTile(mapN);//Delete the tile
       //return false;
     }
   }

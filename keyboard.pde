@@ -21,11 +21,13 @@ void keyTyped(){//We typed a key
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(key == 'f'){//We pressed 'F'
       if(CClear){//Is it currently clear?
-        CClear = false;//Set if not clear
+        CClear = false;//Set it not clear
         //CCheckBox.checked(false);//Uncheck the checkbox
+        clearToggle.setColorLabel(color(0, 0, 0));//make text black
       }else{//Its not clear
         CClear = true;//Set it clear
         //CCheckBox.checked(true);//Check the checkbox
+        clearToggle.setColorLabel(color(255, 255, 255));//make text white
       }
     }else if(key == 'x'){//We pressed 'X'
       if(tileGroupStep == 2){//we're on step two of group selection

@@ -127,7 +127,7 @@ void loadMap(){//called when loadMap is pressed
   if(loadingTileMap == true){//if loading tile map
     noLoop();//don't allow drawing
     loadMapLocaion = true;//make sure to update the map location
-    selectInput("Select a CSV to read from:", "FileLoadMapSelect");//load a map
+    selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
     println("File Selected!");
     while(prepreloading == true){delay(500);}//small delay
     println("File Loaded");
@@ -196,6 +196,7 @@ void fileSaveMapSelect(File selection){//map file save select callback
 void FileLoadMapSelect(File selection){//map file load select callback
   if (selection == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
+    prepreloading = false;///---------------------------------------------------------------do we want this?
   } else {//we selected a file
     println("User selected " + selection.getAbsolutePath() + " for loading");
     fileName = selection.getAbsolutePath();//get the path to the file

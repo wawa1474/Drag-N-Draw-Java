@@ -30,40 +30,40 @@ boolean drawLines = true;
 
 
 class canvasBG{//The background
-  int r = 255;
-  int g = 255;
-  int b = 255;
-  int gUpper = 150;
-  int gLower = 90;
+  int r = 255;//red
+  int g = 255;//green
+  int b = 255;//blue
+  int gUpper = 150;//middle-ish
+  int gLower = 90;//middle-ish
   
   void draw(){//Draw the background
-    strokeWeight(1);
-    background(this.r, this.g, this.b);//Draw the white background
+    strokeWeight(1);//default
+    background(this.r, this.g, this.b);//Draw the background in whatever the color is
     //image(BACKGROUND, 0, 0);//Draw background
     
-    if(this.r > gLower && this.r < gUpper && this.g > gLower && this.g < gUpper && this.b > gLower && this.b < gUpper){
-      stroke(0);//Invert Background
+    if(this.r > gLower && this.r < gUpper && this.g > gLower && this.g < gUpper && this.b > gLower && this.b < gUpper){//if the color is gray-ish
+      stroke(0);//Make it black
     }else{
-      stroke(255-this.r, 255-this.g, 255-this.b);//Invert Background
+      stroke(255-this.r, 255-this.g, 255-this.b);//Invert line color
     }
     
-    if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){
-      for(int i = lowerx - (scl * 20); i < upperx + (scl * 20); i+=scl){
-        line(i,lowery - (scl * 20), i, uppery + (scl * 20));
+    if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){//if the tile xy is not reset and we're should draw lines
+      for(int i = lowerx - (scl * 20); i < upperx + (scl * 20); i+=scl){//for however many horizontal squares there are
+        line(i,lowery - (scl * 20), i, uppery + (scl * 20));//draw lines
       }
-      for(int i = lowery - (scl * 20); i < uppery + (scl * 20); i+=scl){
-        line(lowerx - (scl * 20), i, upperx + (scl * 20), i);
+      for(int i = lowery - (scl * 20); i < uppery + (scl * 20); i+=scl){//for however many vertical squares there are
+        line(lowerx - (scl * 20), i, upperx + (scl * 20), i);//draw lines
       }
     }
   }//void draw() END
   
   void border(){//draw the red border
-    strokeWeight(borderThickness); // Thicker
+    strokeWeight(borderThickness);//Thicker
     stroke(255,0,0);//RED
-    line(1, 0, 1, rows*scl);//Draw Verticle lines
-    line((scl * cols) - 1, 0, (scl * cols) - 1, rows*scl);//Draw Verticle lines
-    line(0, 1, cols*scl, 1);//Draw Horizontal Lines
-    line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Horizontal Lines
+    line(1, 0, 1, rows*scl);//Draw Left line
+    line((scl * cols) - 1, 0, (scl * cols) - 1, rows*scl);//Draw Right line
+    line(0, 1, cols*scl, 1);//Draw Top Line
+    line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Bottom Line
   }//void border() END
 }//class canvasBG END
 
@@ -73,7 +73,7 @@ class tileUI{
   void draw(){
     //fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
     //rect(0, scl, scl, scl);//Display color behind RGB Sliders
-    strokeWeight(1);
+    strokeWeight(1);//default
     fill(255);//Set background color to white
     rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
     for(int i = 0; i < rowLength; i++){//Go through all the tiles
@@ -101,11 +101,17 @@ class tileUI{
   
     text("Drawn: " + drawnTiles, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
     
-    text("X:" + floor(-SX/scl),((scl * 25)),(scl / 1.25));
-    text("Y:" + floor(-(SY-64)/scl),((scl * 25)),(scl * 1.75));
+    text("X:" + floor(-SX/scl),((scl * 25)),(scl / 1.25));//X: (screen x)
+    text("Y:" + floor(-(SY-64)/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)
     
-    text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));
-    text("Y:" + floor((mouseY+(-SY))/scl),((scl * 27) + scl / 2),(scl * 1.75));
+    //display when in ui?
+    //int mouseDisplayX;
+    //int mouseDisplayY;
+    //if(floor((mouseX+(-SX))/scl) < 0){mouseDisplayX = 0;}else{mouseDisplayX = floor((mouseX+(-SX))/scl);}
+    //if(floor((mouseY+(-SY))/scl) < 0){mouseDisplayY = 0;}else{mouseDisplayY = floor((mouseY+(-SY))/scl);}
+    
+    text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
+    text("Y:" + floor((mouseY+(-SY))/scl),((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
     
     textSize(12);//Default text size
   }//void draw() END
