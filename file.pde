@@ -1,4 +1,5 @@
 int _FILEVERSION_ = 4;//what version of file saving and loading
+static final String _magicText = "wawa1474DragDraw";
 
 //File Version Map
   //Version 0:
@@ -389,9 +390,15 @@ void fileSaveMap(){//Save the Map to file
           mapFile[mapFile.length - 1] = (byte)0xA5;
         }
       }
+      
     }
   }else{
     println("File Version Error (Saving).");//throw error
+  }
+  
+  for(int l = 0; l < _magicText.length(); l++){
+    mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+    mapFile[mapFile.length - 1] = (byte)_magicText.charAt(l);
   }
   
   saveBytes(fileName, mapFile);
@@ -424,6 +431,19 @@ void FileLoadMap(){//load map from file
 
   noLoop();//dont allow drawing
   byte[] mapFile = loadBytes(fileName);
+  
+  String magic = "";
+  //println(mapFile.length);
+  for(int l = 0; l < _magicText.length(); l++){
+    magic += (char)mapFile[(mapFile.length - _magicText.length()) + l];
+  }
+  //println(magic);
+  if(!magic.equals(_magicText)){
+    prepreloading = false;///---------------------------------------------------------------do we want this?
+    loop();
+    return;//file was not one of ours
+  }
+  
   int fileVersion;
   int headerLength;
   String headerTileName;

@@ -74,6 +74,7 @@ class tileUI{
     //fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
     //rect(0, scl, scl, scl);//Display color behind RGB Sliders
     strokeWeight(1);//default
+    stroke(0);
     fill(255);//Set background color to white
     rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
     for(int i = 0; i < rowLength; i++){//Go through all the tiles
@@ -252,9 +253,9 @@ void fileSaveLoad(int n){
     }
   }else{
     if(n == 0){//Save
-      selectOutput("Select a CSV to write to:", "fileSaveMapSelect");//map save dialog
+      selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
     }else if(n == 1){//Load
-      selectInput("Select a CSV to read from:", "FileLoadMapSelect");//map load dialog
+      selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
     }else if(n == 2){//Image
       selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
     }else{
