@@ -40,12 +40,12 @@ void setup(){//Setup everything
   //icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
   //icons[icons.length - 1] = new clickableIcon(scl * 19, scl * 15, "maps/map7.ddj", "TEST3");//Place a colored tile with no image
   
-  if(_DEBUG_ == 0){
-    for(int i = 0; i < _DEBUGAMOUNT_; i++){
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
-      mapTiles[mapTiles.length - 1] = new mTile(200*scl,200*scl,1,127,127,127, false);//test tiles
-    }
-  }
+  //if(_DEBUG_ == 0){
+  //  for(int i = 0; i < _DEBUGAMOUNT_; i++){
+  //    mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
+  //    mapTiles[mapTiles.length - 1] = new mTile(200*scl,200*scl,1,127,127,127, false);//test tiles
+  //  }
+  //}
   button.setup();
 }//void setup() END
 
@@ -94,15 +94,21 @@ void draw(){//Draw the canvas
   
   //If dragging a tile: update location
   if (dragging){//Are we dragging a tile
-    if(mapTiles[mapN] != null){//If tile exists
-      mapTiles[mapN].updateLocation();//Adjust XY location of tile
+    //if(mapTiles[mapN] != null){//If tile exists
+      //mapTiles[mapN].updateLocation();//Adjust XY location of tile
+    //}
+    if(mapTiles.get(mapN) != null){//If tile exists
+      mapTiles.get(mapN).updateLocation();//Adjust XY location of tile
     }
   }
   
   //Display Map Tiles
-  for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
-    if(mapTiles[i].tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
-      mapTiles[i].draw();//Draw the tile
+  //for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
+  //  if(mapTiles[i].tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
+  //    mapTiles[i].draw();//Draw the tile
+  for(int i = 0; i < mapTiles.size(); i++){//Go through all the tiles
+    if(mapTiles.get(i).tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
+      mapTiles.get(i).draw();//Draw the tile
       drawnTiles++;//how many tiles are being drawn?
     }
   }
@@ -117,10 +123,15 @@ void draw(){//Draw the canvas
     drawGroupPasteOutline();//draw the red outline
   }
   
-  for(int i = 0; i < icons.length; i++){//Go through all the clickable icons
-    icons[i].draw();//draw the icon
-    if(icons[i].hoveringOver()){//if mouse hovering over icon
-      icons[i].drawText();//draw the icons text
+  //for(int i = 0; i < icons.length; i++){//Go through all the clickable icons
+  for(int i = 0; i < icons.size(); i++){//Go through all the clickable icons
+    //icons[i].draw();//draw the icon
+    //if(icons[i].hoveringOver()){//if mouse hovering over icon
+    //  icons[i].drawText();//draw the icons text
+    //}
+    icons.get(i).draw();//draw the icon
+    if(icons.get(i).hoveringOver()){//if mouse hovering over icon
+      icons.get(i).drawText();//draw the icons text
     }
   }
   

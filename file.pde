@@ -1,6 +1,8 @@
 int _FILEVERSION_ = 4;//what version of file saving and loading
 static final String _magicText = "wawa1474DragDraw";
+
 byte[] mapFile;
+//ArrayList<Byte> mapFile = new ArrayList<Byte>(0);
 
 //File Version Map
   //Version 0:
@@ -209,37 +211,43 @@ void FileLoadMapSelect(File selection){//map file load select callback
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void FileSaveCanvas(){//Save the Canvas to a file
-  int lowX = scl * cols;//make it all the way to the right
-  int highX = 0;//make it all the way to the left
-  int lowY = scl * rows;//make it all the way down
-  int highY = 0;//make it all the way up
+  //int lowX = scl * cols;//make it all the way to the right
+  //int highX = 0;//make it all the way to the left
+  //int lowY = scl * rows;//make it all the way down
+  //int highY = 0;//make it all the way up
   
-  for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
-    if(mapTiles[i].x < lowX){//if theres a tile further left
-      lowX = mapTiles[i].x;//set that as the left
-    }
-    if(mapTiles[i].x > highX){//if theres a tile further right
-      highX = mapTiles[i].x;//set that as the right
-    }
-    if(mapTiles[i].y < lowY){//if theres a tile further up
-      lowY = mapTiles[i].y;//set that as the up
-    }
-    if(mapTiles[i].y > highY){//if theres a tile further down
-      highY = mapTiles[i].y;//set that as the down
-    }
-  }//Went through all the tiles
+  //for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
+  //  if(mapTiles[i].x < lowX){//if theres a tile further left
+  //    lowX = mapTiles[i].x;//set that as the left
+  //  }
+  //  if(mapTiles[i].x > highX){//if theres a tile further right
+  //    highX = mapTiles[i].x;//set that as the right
+  //  }
+  //  if(mapTiles[i].y < lowY){//if theres a tile further up
+  //    lowY = mapTiles[i].y;//set that as the up
+  //  }
+  //  if(mapTiles[i].y > highY){//if theres a tile further down
+  //    highY = mapTiles[i].y;//set that as the down
+  //  }
+  //}//Went through all the tiles
 
-  PGraphics fullCanvas = createGraphics(highX - lowX + scl + 1, highY - lowY + scl + 1);//make the canvas slightly larger than needed
+  //PGraphics fullCanvas = createGraphics(highX - lowX + scl + 1, highY - lowY + scl + 1);//make the canvas slightly larger than needed
+  PGraphics fullCanvas = createGraphics(upperx - lowerx + scl + 1, uppery - lowery + scl + 1);//make the canvas slightly larger than needed
   fullCanvas.beginDraw();//start drawing the canvas
   fullCanvas.background(255);//make the background white
   fullCanvas.image(BACKGROUND, 0, 0);//Draw the background
   //Display Map Tiles
-  for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
-    if(!mapTiles[i].clear){//Is the tile colored
-      fullCanvas.fill(mapTiles[i].r,mapTiles[i].g,mapTiles[i].b);//Set Tile background color
-      fullCanvas.rect(mapTiles[i].x - lowX,mapTiles[i].y - lowY,scl,scl);//Draw colored square behind tile
+  //for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
+  for(int i = 0; i < mapTiles.size(); i++){//Go through all the tiles
+    //if(!mapTiles[i].clear){//Is the tile colored
+    if(!mapTiles.get(i).clear){//Is the tile colored
+      //fullCanvas.fill(mapTiles[i].r,mapTiles[i].g,mapTiles[i].b);//Set Tile background color
+      //fullCanvas.rect(mapTiles[i].x - lowX,mapTiles[i].y - lowY,scl,scl);//Draw colored square behind tile
+      fullCanvas.fill(mapTiles.get(i).r,mapTiles.get(i).g,mapTiles.get(i).b);//Set Tile background color
+      fullCanvas.rect(mapTiles.get(i).x - lowerx,mapTiles.get(i).y - lowery,scl,scl);//Draw colored square behind tile
     }
-    fullCanvas.image(img[mapTiles[i].image], mapTiles[i].x - lowX, mapTiles[i].y - lowY);//Draw tile
+    //fullCanvas.image(img[mapTiles[i].image], mapTiles[i].x - lowX, mapTiles[i].y - lowY);//Draw tile
+    fullCanvas.image(img[mapTiles.get(i).image], mapTiles.get(i).x - lowerx, mapTiles.get(i).y - lowery);//Draw tile
   }//Went through all the tiles
   fullCanvas.endDraw();//stop drawing the canvas
   fullCanvas.save(fileName);// + ".png");//Save the map to a PNG file
@@ -248,10 +256,13 @@ void FileSaveCanvas(){//Save the Canvas to a file
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void padMapFileArray(){
+  //int padding = (16 - floor(mapFile.length % 16)) % 16;
   int padding = (16 - floor(mapFile.length % 16)) % 16;
+  //int padding = (16 - floor(mapFile.size() % 16)) % 16;
   for(int l = 0; l < padding; l++){
     mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
     mapFile[mapFile.length - 1] = (byte)0xA5;
+    //mapFile.add((byte)0xA5);
   }
 }
 
@@ -293,62 +304,102 @@ void fileSaveMap(){//Save the Map to file
   //File Version
   mapFile[0] = (byte)(_FILEVERSION_ >> 8);
   mapFile[1] = (byte)_FILEVERSION_;
+  //mapFile.add((byte)(_FILEVERSION_ >> 8));
+  //mapFile.add((byte)_FILEVERSION_);
   
   //mapFile[2] = 0;//Header Length
   //mapFile[3] = 0;//Header Length
+  //mapFile.add((byte)0x00);
+  //mapFile.add((byte)0x00);
   
   mapFile[4] = (byte)tileMapName.length();
   mapFile[5] = (byte)tileMapLocation.length();
+  //mapFile.add((byte)tileMapName.length());
+  //mapFile.add((byte)tileMapLocation.length());
   
   //Map Tiles Amount
-  mapFile[6] = (byte)(mapTiles.length >> 24);
-  mapFile[7] = (byte)(mapTiles.length >> 16);
-  mapFile[8] = (byte)(mapTiles.length >> 8);
-  mapFile[9] = (byte)mapTiles.length;
+  //mapFile[6] = (byte)(mapTiles.length >> 24);
+  //mapFile[7] = (byte)(mapTiles.length >> 16);
+  //mapFile[8] = (byte)(mapTiles.length >> 8);
+  //mapFile[9] = (byte)mapTiles.length;
+  mapFile[6] = (byte)(mapTiles.size() >> 24);
+  mapFile[7] = (byte)(mapTiles.size() >> 16);
+  mapFile[8] = (byte)(mapTiles.size() >> 8);
+  mapFile[9] = (byte)mapTiles.size();
+  //mapFile.add((byte)(mapTiles.size() >> 24));
+  //mapFile.add((byte)(mapTiles.size() >> 16));
+  //mapFile.add((byte)(mapTiles.size() >> 8));
+  //mapFile.add((byte)mapTiles.size());
   
   //Clickable Icons Amount
-  mapFile[10] = (byte)(icons.length >> 24);
-  mapFile[11] = (byte)(icons.length >> 16);
-  mapFile[12] = (byte)(icons.length >> 8);
-  mapFile[13] = (byte)icons.length;
+  //mapFile[10] = (byte)(icons.length >> 24);
+  //mapFile[11] = (byte)(icons.length >> 16);
+  //mapFile[12] = (byte)(icons.length >> 8);
+  //mapFile[13] = (byte)icons.length;
+  mapFile[10] = (byte)(icons.size() >> 24);
+  mapFile[11] = (byte)(icons.size() >> 16);
+  mapFile[12] = (byte)(icons.size() >> 8);
+  mapFile[13] = (byte)icons.size();
+  //mapFile.add((byte)(icons.size() >> 24));
+  //mapFile.add((byte)(icons.size() >> 16));
+  //mapFile.add((byte)(icons.size() >> 8));
+  //mapFile.add((byte)icons.size());
   
   //Tile Map Name
   for(int i = 0; i < tileMapName.length(); i++){
     mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
     mapFile[mapFile.length - 1] = (byte)tileMapName.charAt(i);
+    //mapFile.add((byte)tileMapName.charAt(i));
   }
   
   //Tile Map Location
   for(int i = 0; i < tileMapLocation.length(); i++){
     mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
     mapFile[mapFile.length - 1] = (byte)tileMapLocation.charAt(i);
+    //mapFile.add((byte)tileMapLocation.charAt(i));
   }
   
   padMapFileArray();
   
   mapFile[2] = (byte)(mapFile.length >> 8);//Header Length
   mapFile[3] = (byte)mapFile.length;//Header Length
+  //byte tmp = mapFile.get(2);
+  //tmp = (byte)(mapFile.size() >> 8);
+  //tmp = mapFile.get(3);
+  //tmp = (byte)mapFile.size();
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
   if(_FILEVERSION_ == 4){// || _FILEVERSION_ == 3){//whats the file version
     //Map Tiles
-    for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
+    //for(int i = 0; i <= mapTiles.length - 1; i++){//loop through all tiles
+    for(int i = 0; i < mapTiles.size(); i++){//loop through all tiles
       mapFile = (byte[]) expand(mapFile, mapFile.length + 8);//make sure we have room
       //XY
-      mapFile[mapFile.length - 8] = (byte)(mapTiles[i].x / scl);
-      mapFile[mapFile.length - 7] = (byte)(mapTiles[i].y / scl);
+      //mapFile[mapFile.length - 8] = (byte)(mapTiles[i].x / scl);
+      //mapFile[mapFile.length - 7] = (byte)(mapTiles[i].y / scl);
+      mapFile[mapFile.length - 8] = (byte)(mapTiles.get(i).x / scl);
+      mapFile[mapFile.length - 7] = (byte)(mapTiles.get(i).y / scl);
+      //mapFile.add((byte)(mapTiles.get(i).x / scl));
+      //mapFile.add((byte)(mapTiles.get(i).y / scl));
       
       //Image Number
-      mapFile[mapFile.length - 6] = (byte)(mapTiles[i].image >> 8);
-      mapFile[mapFile.length - 5] = (byte)mapTiles[i].image;
+      //mapFile[mapFile.length - 6] = (byte)(mapTiles[i].image >> 8);
+      //mapFile[mapFile.length - 5] = (byte)mapTiles[i].image;
+      mapFile[mapFile.length - 6] = (byte)(mapTiles.get(i).image >> 8);
+      mapFile[mapFile.length - 5] = (byte)mapTiles.get(i).image;
       
       //Red/Green
-      mapFile[mapFile.length - 4] = (byte)mapTiles[i].r;
-      mapFile[mapFile.length - 3] = (byte)mapTiles[i].g;
+      //mapFile[mapFile.length - 4] = (byte)mapTiles[i].r;
+      //mapFile[mapFile.length - 3] = (byte)mapTiles[i].g;
+      mapFile[mapFile.length - 4] = (byte)mapTiles.get(i).r;
+      mapFile[mapFile.length - 3] = (byte)mapTiles.get(i).g;
       
       //Blue/Flags
-      mapFile[mapFile.length - 2] = (byte)mapTiles[i].b;
-      if(mapTiles[i].clear){
+      //mapFile[mapFile.length - 2] = (byte)mapTiles[i].b;
+      mapFile[mapFile.length - 2] = (byte)mapTiles.get(i).b;
+      //if(mapTiles[i].clear){
+      if(mapTiles.get(i).clear){
         mapFlags |= 1;
       }
       mapFile[mapFile.length - 1] = (byte)mapFlags;
@@ -357,26 +408,35 @@ void fileSaveMap(){//Save the Map to file
     padMapFileArray();
     
     //Clickable Icons
-    for(int i = 0; i <= icons.length - 1; i++){//loop through all tiles
+    //for(int i = 0; i <= icons.length - 1; i++){//loop through all tiles
+    for(int i = 0; i < icons.size(); i++){//loop through all tiles
       mapFile = (byte[]) expand(mapFile, mapFile.length + 4);//make sure we have room
       //XY
-      mapFile[mapFile.length - 4] = (byte)(icons[i].x / scl);
-      mapFile[mapFile.length - 3] = (byte)(icons[i].y / scl);
+      //mapFile[mapFile.length - 4] = (byte)(icons[i].x / scl);
+      //mapFile[mapFile.length - 3] = (byte)(icons[i].y / scl);
+      mapFile[mapFile.length - 4] = (byte)(icons.get(i).x / scl);
+      mapFile[mapFile.length - 3] = (byte)(icons.get(i).y / scl);
       
       //Image Number
-      mapFile[mapFile.length - 2] = (byte)icons[i].file.length();
-      mapFile[mapFile.length - 1] = (byte)icons[i].hoverText.length();
+      //mapFile[mapFile.length - 2] = (byte)icons[i].file.length();
+      //mapFile[mapFile.length - 1] = (byte)icons[i].hoverText.length();
+      mapFile[mapFile.length - 2] = (byte)icons.get(i).file.length();
+      mapFile[mapFile.length - 1] = (byte)icons.get(i).hoverText.length();
       
       //Tile Map Name
-      for(int j = 0; j < icons[i].file.length(); j++){
+      //for(int j = 0; j < icons[i].file.length(); j++){
+      for(int j = 0; j < icons.get(i).file.length(); j++){
         mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
-        mapFile[mapFile.length - 1] = (byte)icons[i].file.charAt(j);
+        //mapFile[mapFile.length - 1] = (byte)icons[i].file.charAt(j);
+        mapFile[mapFile.length - 1] = (byte)icons.get(i).file.charAt(j);
       }
   
       //Tile Map Location
-      for(int k = 0; k < icons[i].hoverText.length(); k++){
+      //for(int k = 0; k < icons[i].hoverText.length(); k++){
+      for(int k = 0; k < icons.get(i).hoverText.length(); k++){
         mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
-        mapFile[mapFile.length - 1] = (byte)icons[i].hoverText.charAt(k);
+        //mapFile[mapFile.length - 1] = (byte)icons[i].hoverText.charAt(k);
+        mapFile[mapFile.length - 1] = (byte)icons.get(i).hoverText.charAt(k);
       }
       
       padMapFileArray();
@@ -502,14 +562,16 @@ void FileLoadMap(){//load map from file
       imageNumber |= (mapFile[(i * 8) + headerLength + 3]) & 0xFF;
       //println(imageNumber);
       
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
-      mapTiles[mapTiles.length - 1] = new mTile((mapFile[(i * 8) + headerLength] & 0xFF) * scl,//Tile X position
+      //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
+      //mapTiles[mapTiles.length - 1] = new mTile((mapFile[(i * 8) + headerLength] & 0xFF) * scl,//Tile X position
+      mapTiles.add(new mTile((mapFile[(i * 8) + headerLength] & 0xFF) * scl,//Tile X position
                                                 (mapFile[(i * 8) + headerLength + 1] & 0xFF) * scl,//Tile Y position
                                                 imageNumber,//Tile Image
                                                 mapFile[(i * 8) + headerLength + 4],//Tile Red amount
                                                 mapFile[(i * 8) + headerLength + 5],//Tile Green amount
                                                 mapFile[(i * 8) + headerLength + 6],//Tile Blue amount
-                                                CLEAR);//Is Tile Clear
+                                                //CLEAR);//Is Tile Clear
+                                                CLEAR));//Is Tile Clear
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }
     
@@ -537,11 +599,13 @@ void FileLoadMap(){//load map from file
       }
       println("Clickable Tile Text: " + clickableHover);
     
-      icons = (clickableIcon[]) expand(icons, icons.length + 1);//Make sure we have room
-      icons[icons.length - 1] = new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl,//Tile X position
+      //icons = (clickableIcon[]) expand(icons, icons.length + 1);//Make sure we have room
+      //icons[icons.length - 1] = new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl,//Tile X position
+      icons.add(new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl,//Tile X position
                                                 (mapFile[iconsAddress + 1] & 0xFF) * scl,//Tile Y position
                                                 clickableFile,//Tile Image
-                                                clickableHover);//Is Tile Clear
+                                                //clickableHover);//Is Tile Clear
+                                                clickableHover));//Is Tile Clear
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
       
       iconsAddress = clickTextAddress + (16 - (clickTextAddress % 16));

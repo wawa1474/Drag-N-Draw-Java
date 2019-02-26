@@ -14,8 +14,10 @@ void mousePressed(){//We pressed a mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   //updateXY();
   
-  for(int i = 0; i < icons.length; i++){//go through all icons
-    if(icons[i].wasClicked()){//if we clicked on one
+  //for(int i = 0; i < icons.length; i++){//go through all icons
+  for(int i = 0; i < icons.size(); i++){//go through all icons
+    //if(icons[i].wasClicked()){//if we clicked on one
+    if(icons.get(i).wasClicked()){//if we clicked on one
       return;//do nothing
     }
   }
@@ -41,7 +43,8 @@ void mousePressed(){//We pressed a mouse button
       tileGroup("left");//placing image tiles
       return;//Block normal action
     }else if(mouseButton == CENTER){//We clicked with the middle button
-      for(int i = mapTiles.length-1; i >= 0; i--){//Loop through all tiles
+      //for(int i = mapTiles.length-1; i >= 0; i--){//Loop through all tiles
+      for(int i = mapTiles.size(); i >= 0; i--){//Loop through all tiles
         if(isCursorOnTile(i)){//Are we clicking on the tile
           tileGroupDeleting = true;//deleting group of tiles
           //break;
@@ -56,11 +59,15 @@ void mousePressed(){//We pressed a mouse button
     if(tileGroupStep == 2){//placing group of tiles
       tileGroup("right");//coloring group of tiles
     }else{//otherwise
-      for(int i = 0; i <= mapTiles.length-1; i++){//Loop through all tiles
+      //for(int i = 0; i <= mapTiles.length-1; i++){//Loop through all tiles
+      for(int i = 0; i <= mapTiles.size(); i++){//Loop through all tiles
         if(isCursorOnTile(i)){//Are we clicking on the tile
-          mapTiles[i].r = (int)RSlider.getValue();//set tile red value
-          mapTiles[i].g = (int)GSlider.getValue();//set tile green value
-          mapTiles[i].b = (int)BSlider.getValue();//set tile blue value
+          //mapTiles[i].r = (int)RSlider.getValue();//set tile red value
+          //mapTiles[i].g = (int)GSlider.getValue();//set tile green value
+          //mapTiles[i].b = (int)BSlider.getValue();//set tile blue value
+          mapTiles.get(i).r = (int)RSlider.getValue();//set tile red value
+          mapTiles.get(i).g = (int)GSlider.getValue();//set tile green value
+          mapTiles.get(i).b = (int)BSlider.getValue();//set tile blue value
         }
       }//Went through all the tiles
     }
@@ -72,8 +79,9 @@ void mousePressed(){//We pressed a mouse button
       noTile = true;//Dont allow tile placement
       if(img[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
       tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
-      mapTiles[mapTiles.length - 1] = new mTile(scl*i + SX - SX,0 + SY - SY,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Create a tile
+      //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
+      //mapTiles[mapTiles.length - 1] = new mTile(scl*i + SX - SX,0 + SY - SY,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Create a tile
+      mapTiles.add(new mTile(scl*i + SX - SX,0 + SY - SY,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));
     }
   }//Went through all the tiles in the row
   
@@ -83,7 +91,8 @@ void mousePressed(){//We pressed a mouse button
   }
 
   // Did I click on the rectangle?
-  for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
+  //for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
+  for(int i = mapTiles.size() - 1; i >= 0; i--){//Go through all the tiles
     if(isCursorOnTile(i)){//Are we clicking on the tile
       if(mouseButton == CENTER){//We clicked with the middle button
         deleteTile(i);//Delete a tile and update the array
@@ -118,8 +127,10 @@ void mouseDragged(){//We dragged the mouse while holding a button
   
   clickdrag = true;//we're dragging the mouse
   
-  for(int i = 0; i < icons.length; i++){//go through all icons
-    if(icons[i].wasClicked()){//if we clicked on one
+  //for(int i = 0; i < icons.length; i++){//go through all icons
+  for(int i = 0; i < icons.size(); i++){//go through all icons
+    //if(icons[i].wasClicked()){//if we clicked on one
+    if(icons.get(i).wasClicked()){//if we clicked on one
       return;//return and do nothing
     }
   }
@@ -129,17 +140,22 @@ void mouseDragged(){//We dragged the mouse while holding a button
   }*/
   
   if(mouseButton == RIGHT){//We clicked with the right button
-    for(int i = 0; i <= mapTiles.length-1; i++){//loop through all the tiles
+    //for(int i = 0; i <= mapTiles.length-1; i++){//loop through all the tiles
+    for(int i = 0; i <= mapTiles.size() - 1; i++){//loop through all the tiles
       if(isCursorOnTile(i)){//Are we clicking on the tile
-        mapTiles[i].r = (int)RSlider.getValue();//set tile red value
-        mapTiles[i].g = (int)GSlider.getValue();//set tile green value
-        mapTiles[i].b = (int)BSlider.getValue();//set tile blue value
+        //mapTiles[i].r = (int)RSlider.getValue();//set tile red value
+        //mapTiles[i].g = (int)GSlider.getValue();//set tile green value
+        //mapTiles[i].b = (int)BSlider.getValue();//set tile blue value
+        mapTiles.get(i).r = (int)RSlider.getValue();//set tile red value
+        mapTiles.get(i).g = (int)GSlider.getValue();//set tile green value
+        mapTiles.get(i).b = (int)BSlider.getValue();//set tile blue value
       }
     }//Went through all the tiles
   }
   
   if(mouseButton == CENTER && deleting){//We dragging and deleting with the middle button
-    for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
+    //for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
+    for(int i = mapTiles.size() - 1; i >= 0; i--){//Go through all the tiles
       if(isCursorOnTile(i)){//Are we clicking on the tile
         deleteTile(i);//Delete a tile and update the array
         mapN = -1;//We're not holding a tile
@@ -155,7 +171,8 @@ void mouseDragged(){//We dragged the mouse while holding a button
     return;//Block normal action
   }
   
-  for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
+  //for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
+  for(int i = mapTiles.size() - 1; i >= 0; i--){//Go through all the tiles
     /*Pad*/if(isCursorOnTile(i) && !checkImage(tileN)){//Are we clicking on the tile
       return;//Block normal action
     }else if(isCursorOnTile(i) && mouseButton == CENTER){//Are we clicking on the tile with the middle button
@@ -184,8 +201,15 @@ void mouseReleased(){//We released the mouse button
   //}
   
   if(dragging){//Are we dragging a tile
-    if(mapTiles[mapN] != null){//If tile exists
-      mapTiles[mapN].snapLocation();//Snap XY location of tile to grid
+    //if(mapTiles[mapN] != null){//If tile exists
+    //  mapTiles[mapN].snapLocation();//Snap XY location of tile to grid
+    //}
+    if(mapTiles.get(mapN) != null){//If tile exists
+      mapTiles.get(mapN).snapLocation();//Snap XY location of tile to grid
+      //mTile tmp = mapTiles.get(mapN);
+      //tmp.snapLocation();
+      //mapTiles.remove(mapN);
+      //mapTiles.add(tmp);
     }
   }
   
@@ -195,10 +219,13 @@ void mouseReleased(){//We released the mouse button
     noTile = false;//Allow tile placement
   }
 
-  if(mapN != -1 && mapTiles.length > mapN){//If tile exists
+  //if(mapN != -1 && mapTiles.length > mapN){//If tile exists
+  if(mapN != -1 && mapTiles.size() > mapN){//If tile exists
     //if(mapTiles[mapN].x >= SX && mapTiles[mapN].x < scl*rowLength + SX && mapTiles[mapN].y == SY){//Is the tile we just dropped on the UI
     //println(mapTiles[mapN].x + ":" + mapTiles[mapN].y + ":" + SX + ":" + SY);
-    if(mapTiles[mapN].x >= 0 - SX && mapTiles[mapN].x < width - SX && mapTiles[mapN].y < (0 + (scl*2)) - SY){//Did we just drop a tile on the ui
+    //if(mapTiles[mapN].x >= 0 - SX && mapTiles[mapN].x < width - SX && mapTiles[mapN].y < (0 + (scl*2)) - SY){//Did we just drop a tile on the ui
+    mTile tmp = mapTiles.get(mapN);
+    if(tmp.x >= 0 - SX && tmp.x < width - SX && tmp.y < (0 + (scl*2)) - SY){//Did we just drop a tile on the ui
       deleteTile(mapN);//Delete the tile
       //return false;
     }

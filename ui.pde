@@ -98,7 +98,8 @@ class tileUI{
     //String FPS = String.valueOf(frameRate);
     //text("FPS: " + FPS.substring(0, 4), ((scl * 12) + scl / 8), (scl * 1.75));//FPS: (fps.fp)
     
-    text("Tiles: " + mapTiles.length, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
+    //text("Tiles: " + mapTiles.length, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
+    text("Tiles: " + mapTiles.size(), ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
   
     text("Drawn: " + drawnTiles, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
     
@@ -321,9 +322,12 @@ void colorInputB(String value){//called when colorInputB updates
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void loadColors(int tile){//Load RGB Sliders and RGB Inputs with value from tile
-  RSlider.setValue(mapTiles[tile].r);//Set Red Slider value to Red value of the tile
-  GSlider.setValue(mapTiles[tile].g);//Set Green Slider value to Green value of the tile
-  BSlider.setValue(mapTiles[tile].b);//Set Blue Slider value to Blue value of the tile
+  //RSlider.setValue(mapTiles[tile].r);//Set Red Slider value to Red value of the tile
+  //GSlider.setValue(mapTiles[tile].g);//Set Green Slider value to Green value of the tile
+  //BSlider.setValue(mapTiles[tile].b);//Set Blue Slider value to Blue value of the tile
+  RSlider.setValue(mapTiles.get(tile).r);//Set Red Slider value to Red value of the tile
+  GSlider.setValue(mapTiles.get(tile).g);//Set Green Slider value to Green value of the tile
+  BSlider.setValue(mapTiles.get(tile).b);//Set Blue Slider value to Blue value of the tile
 }//void loadColors(int tile) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------

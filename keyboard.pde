@@ -60,9 +60,12 @@ void keyTyped(){//We typed a key
     //    mapTiles[i].x += scl * scrollAmount;//Move tile right 1 space
     //  }
     }else if(key == 'r'){//We pressed 'R'
-      for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
+      //for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
+      for(int i = mapTiles.size() - 1; i >= 0; i--){//Go through all the tiles
         if(isCursorOnTile(i)){//Are we clicking on the tile
-          println("Tile #: " + i + ", X Position: " + mapTiles[i].x + ", Y Position: " + mapTiles[i].y + ", Red Amount: " + mapTiles[i].r + ", Green Amount: " + mapTiles[i].g + ", Blue Amount: " + mapTiles[i].b + ", Tile Image #: " + mapTiles[i].image + ", Is Tile Clear: " + mapTiles[i].clear);// + ", Tile Lore: " + mapTiles[i].lore);
+          //println("Tile #: " + i + ", X Position: " + mapTiles[i].x + ", Y Position: " + mapTiles[i].y + ", Red Amount: " + mapTiles[i].r + ", Green Amount: " + mapTiles[i].g + ", Blue Amount: " + mapTiles[i].b + ", Tile Image #: " + mapTiles[i].image + ", Is Tile Clear: " + mapTiles[i].clear);// + ", Tile Lore: " + mapTiles[i].lore);
+          mTile tmp = mapTiles.get(i);
+          println("Tile #: " + i + ", X Position: " + tmp.x + ", Y Position: " + tmp.y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.clear);// + ", Tile Lore: " + mapTiles[i].lore);
           //console.log('Tile #: ' + i + ', X Position: ' + mapTiles[i].x + ', Y Position: ' + mapTiles[i].y);
           //console.log('Red Amount: ' + mapTiles[i].r + ', Green Amount: ' + mapTiles[i].g + ', Blue Amount: ' + mapTiles[i].b);
           //console.log('Tile Image #: ' + mapTiles[i].image + ', Is Tile Clear: ' + mapTiles[i].clear);
