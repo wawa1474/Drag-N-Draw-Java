@@ -46,6 +46,7 @@ void setup(){//Setup everything
       mapTiles[mapTiles.length - 1] = new mTile(200*scl,200*scl,1,127,127,127, false);//test tiles
     }
   }
+  button.setup();
 }//void setup() END
 
 void draw(){//Draw the canvas
@@ -57,7 +58,7 @@ void draw(){//Draw the canvas
   }else{
     FPS = FPS.substring(0, 2) + ".00";//XX.00
   }
-  surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + FPS + " : " + mapTiles.length);
+  surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + FPS);// + " : " + mapTiles.length);
   
   if(preloading == true){//if preloading
     pushMatrix();//go back to crazy space?
@@ -127,9 +128,12 @@ void draw(){//Draw the canvas
   //line(0,0,width,0);
   //line(0,0,0,height);
   
+  button.draw();
+  
   popMatrix();//go back to normal space?
   
   fill(0);//black
+  noStroke();
   rect(0,0,width,scl * 2);//ui background
   
   //Update and Draw the UI

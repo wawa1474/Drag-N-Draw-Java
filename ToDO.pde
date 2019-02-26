@@ -1,6 +1,15 @@
 /*
 Make custom file format to decrease save file size
 
+use a pallette based color system to compress color data?
+  256 or 65536 color pallette
+
+shave one bit off image number and use it to store clear flag
+  means only 32768 images per map but that should be enough for anyone
+
+for icons have a settable color (16 colors?)
+  and maybe make it so there's no color border?
+
 pack bytes into chars
 xy and image number are seperate
 red and green get packed together

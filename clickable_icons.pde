@@ -5,6 +5,8 @@ class clickableIcon{//clickableIcon Object
   int x, y;//Store XY Position
   String file;//store what file to load
   String hoverText;//text to show when mouse is hovering over
+  color borderColor = color(255,0,0);
+  boolean showBorder = true;
 
   public clickableIcon(int x, int y, String file, String hoverText){//clickableIcon Object
     this.x = x;//Store X Position
@@ -14,15 +16,17 @@ class clickableIcon{//clickableIcon Object
   }//public clickableIcon(int x, int y, String file) END
   
   void draw(){//draw the icon
-    stroke(255,0,0);//set the outline to red
-    //rect(scl * 5, scl * 5, scl, scl);
-    strokeWeight(borderThickness); //Make the outline Thicker
-    line(x, y, x + scl, y);//draw the top line
-    line(x, y, x, y + scl);//draw the left line
-    line(x, y + scl, x + scl, y + scl);//draw the bottom line
-    line(x + scl, y + scl, x + scl, y);//draw the right line
-    strokeWeight(1); //Set the outline back to normal
-    stroke(0);//make the outline to black
+    if(showBorder){
+      stroke(borderColor);//set the outline to red
+      //rect(scl * 5, scl * 5, scl, scl);
+      strokeWeight(borderThickness); //Make the outline Thicker
+      line(x, y, x + scl, y);//draw the top line
+      line(x, y, x, y + scl);//draw the left line
+      line(x, y + scl, x + scl, y + scl);//draw the bottom line
+      line(x + scl, y + scl, x + scl, y);//draw the right line
+      strokeWeight(1); //Set the outline back to normal
+      stroke(0);//make the outline to black
+    }
   }
   
   void drawText(){

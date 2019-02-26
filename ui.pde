@@ -107,12 +107,17 @@ class tileUI{
     
     //display when in ui?
     //int mouseDisplayX;
-    //int mouseDisplayY;
+    int mouseDisplayY = (mouseY+(-SY));
     //if(floor((mouseX+(-SX))/scl) < 0){mouseDisplayX = 0;}else{mouseDisplayX = floor((mouseX+(-SX))/scl);}
-    //if(floor((mouseY+(-SY))/scl) < 0){mouseDisplayY = 0;}else{mouseDisplayY = floor((mouseY+(-SY))/scl);}
+    if(mouseDisplayY < 0 + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
     
     text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
-    text("Y:" + floor((mouseY+(-SY))/scl),((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
+    
+    if(mouseDisplayY == -1){
+      text("Y:" + "UI",((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
+    }else{
+      text("Y:" + mouseDisplayY,((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
+    }
     
     textSize(12);//Default text size
   }//void draw() END
@@ -132,9 +137,9 @@ class tileUI{
   }//void update() END
   
   void setup(){
-    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, scl + 1.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
-    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, scl + 12.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
-    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(scl, scl + 23.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
+    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, (scl + 1.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
+    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, (scl + 12.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
+    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(scl, (scl + 23.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
     RSlider = UIControls.getController("RSlider");//make it easier to use Slider
     GSlider = UIControls.getController("GSlider");//make it easier to use Slider
     BSlider = UIControls.getController("BSlider");//make it easier to use Slider

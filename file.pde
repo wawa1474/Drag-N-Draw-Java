@@ -1,5 +1,6 @@
 int _FILEVERSION_ = 4;//what version of file saving and loading
 static final String _magicText = "wawa1474DragDraw";
+byte[] mapFile;
 
 //File Version Map
   //Version 0:
@@ -246,6 +247,16 @@ void FileSaveCanvas(){//Save the Canvas to a file
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
+void padMapFileArray(){
+  int padding = (16 - floor(mapFile.length % 16)) % 16;
+  for(int l = 0; l < padding; l++){
+    mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
+    mapFile[mapFile.length - 1] = (byte)0xA5;
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
 void fileSaveMap(){//Save the Map to file
   if(loadingTileMap == true){
     tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");//load location
@@ -269,7 +280,7 @@ void fileSaveMap(){//Save the Map to file
     return;
   }
   
-  byte[] mapFile = new byte[14];//Save Meta Data
+  mapFile = new byte[14];//Save Meta Data
   int mapFlags = 0;
   
   //mTile[] clickTiles = new mTile[0];
@@ -313,14 +324,7 @@ void fileSaveMap(){//Save the Map to file
     mapFile[mapFile.length - 1] = (byte)tileMapLocation.charAt(i);
   }
   
-  //int padding = floor(mapFile.length / 16) * 16;
-  int padding = 16 - floor(mapFile.length % 16);
-  if(padding < 16){
-    for(int l = 0; l < padding; l++){
-      mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
-      mapFile[mapFile.length - 1] = (byte)0xA5;
-    }
-  }
+  padMapFileArray();
   
   mapFile[2] = (byte)(mapFile.length >> 8);//Header Length
   mapFile[3] = (byte)mapFile.length;//Header Length
@@ -350,14 +354,7 @@ void fileSaveMap(){//Save the Map to file
       mapFile[mapFile.length - 1] = (byte)mapFlags;
     }
     
-    //int padding = floor(mapFile.length / 16) * 16;
-    padding = 16 - floor(mapFile.length % 16);
-    if(padding < 16){
-      for(int l = 0; l < padding; l++){
-        mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
-        mapFile[mapFile.length - 1] = (byte)0xA5;
-      }
-    }
+    padMapFileArray();
     
     //Clickable Icons
     for(int i = 0; i <= icons.length - 1; i++){//loop through all tiles
@@ -382,14 +379,7 @@ void fileSaveMap(){//Save the Map to file
         mapFile[mapFile.length - 1] = (byte)icons[i].hoverText.charAt(k);
       }
       
-      //int padding = floor(mapFile.length / 16) * 16;
-      padding = 16 - floor(mapFile.length % 16);
-      if(padding < 16){
-        for(int l = 0; l < padding; l++){
-          mapFile = (byte[]) expand(mapFile, mapFile.length + 1);//make sure we have room
-          mapFile[mapFile.length - 1] = (byte)0xA5;
-        }
-      }
+      padMapFileArray();
       
     }
   }else{
