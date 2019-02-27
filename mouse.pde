@@ -89,6 +89,7 @@ void mousePressed(){//We pressed a mouse button
         deleteTile(i);//Delete a tile and update the array
         mapN = -1;//We're not holding a tile
         deleting = true;//We're deleting
+        resetLHXY();//reset the lower/higher xy for background drawing
         return;//Block normal action
       }else if(mouseButton == LEFT && !CClear){//We clicked with the left button
         mapN = i;//Keep track of what tile we clicked on
@@ -105,7 +106,7 @@ void mousePressed(){//We pressed a mouse button
       }*/
     }
   }//Went through all the tiles
-  resetLHXY();//reset the lower/higher xy for background drawing
+  //resetLHXY();//reset the lower/higher xy for background drawing
   
   placeTile();//Place a tile at current mouse position
   }
@@ -188,6 +189,7 @@ void mouseReleased(){//We released the mouse button
   if(dragging){//Are we dragging a tile
     if(mapTiles.get(mapN) != null){//If tile exists
       mapTiles.get(mapN).snapLocation();//Snap XY location of tile to grid
+      resetLHXY();//reset the lower/higher xy for background drawing
     }
   }
   

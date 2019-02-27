@@ -113,8 +113,10 @@ void draw(){//Draw the canvas
       //boolean skip = false;
       for(int z = 15; z >= 0; z--){//loop through all drawn tiles in this xy position
         if(spots[y][x][z] != -1){//if there's a tile to be drawn
-          mapTiles.get(spots[y][x][z]).draw();//draw it
-          drawnTiles++;//how many tiles are being drawn?
+          if(mapTiles.get(spots[y][x][z]).tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
+            mapTiles.get(spots[y][x][z]).draw();//draw it
+            drawnTiles++;//how many tiles are being drawn?
+          }
         }
       }
     }
