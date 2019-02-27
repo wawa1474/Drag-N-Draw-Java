@@ -71,7 +71,7 @@ void deleteTile(int tile){//Delete a tile and update the array
     mapTiles.remove(tile);//delete the specified tile
   }
   //-2,147,483,648 -> 2,147,483,647
-  resetLHXY();//reset the lower/higher xy for background drawing
+  //resetLHXY();//reset the lower/higher xy for background drawing
 }//void deleteTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------

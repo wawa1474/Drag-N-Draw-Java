@@ -6,7 +6,7 @@ import controlP5.*;//import the library
 int cols = 256;//Columns
 int rows = 256;//Rows
 
-int _DEBUG_ = -1;//what are we debugging
+int _DEBUG_ = 0;//what are we debugging
 int _DEBUGAMOUNT_ = 50000;//how many are we debugging
 
 String VERSION = "PRE_ALPHA V0.0.1";
@@ -40,12 +40,13 @@ void setup(){//Setup everything
   //icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
   //icons[icons.length - 1] = new clickableIcon(scl * 19, scl * 15, "maps/map7.ddj", "TEST3");//Place a colored tile with no image
   
-  //if(_DEBUG_ == 0){
-  //  for(int i = 0; i < _DEBUGAMOUNT_; i++){
-  //    mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
-  //    mapTiles[mapTiles.length - 1] = new mTile(200*scl,200*scl,1,127,127,127, false);//test tiles
-  //  }
-  //}
+  if(_DEBUG_ == 0){
+    for(int i = 0; i < _DEBUGAMOUNT_; i++){
+      //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
+      //mapTiles[mapTiles.length - 1] = new mTile(200*scl,200*scl,1,127,127,127, false);//test tiles
+      mapTiles.add(new mTile(200*scl,200*scl,1,127,127,127, false));
+    }
+  }
   button.setup();
 }//void setup() END
 
@@ -100,10 +101,22 @@ void draw(){//Draw the canvas
   }
   
   //Display Map Tiles
-  for(int i = 0; i < mapTiles.size(); i++){//Go through all the tiles
-    if(mapTiles.get(i).tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
-      mapTiles.get(i).draw();//Draw the tile
-      drawnTiles++;//how many tiles are being drawn?
+  //for(int i = 0; i < mapTiles.size(); i++){//Go through all the tiles
+  //  if(mapTiles.get(i).tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
+  //    mapTiles.get(i).draw();//Draw the tile
+  //    drawnTiles++;//how many tiles are being drawn?
+  //  }
+  //}
+  setSpots();//get what tiles we're gonna draw
+  for(int y = 0; y < 256; y++){//loop through all y positions
+    for(int x = 0; x < 256; x++){//loop through all x positions
+      //boolean skip = false;
+      for(int z = 15; z >= 0; z--){//loop through all drawn tiles in this xy position
+        if(spots[y][x][z] != -1){//if there's a tile to be drawn
+          mapTiles.get(spots[y][x][z]).draw();//draw it
+          drawnTiles++;//how many tiles are being drawn?
+        }
+      }
     }
   }
   

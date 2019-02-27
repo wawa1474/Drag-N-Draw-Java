@@ -105,6 +105,7 @@ void mousePressed(){//We pressed a mouse button
       }*/
     }
   }//Went through all the tiles
+  resetLHXY();//reset the lower/higher xy for background drawing
   
   placeTile();//Place a tile at current mouse position
   }
@@ -145,6 +146,7 @@ void mouseDragged(){//We dragged the mouse while holding a button
         mapN = -1;//We're not holding a tile
       }
     }//Went through all the tiles
+    resetLHXY();//reset the lower/higher xy for background drawing
   }
 
   if(noTile){//We're not allowed to place tiles
@@ -199,6 +201,7 @@ void mouseReleased(){//We released the mouse button
     mTile tmp = mapTiles.get(mapN);
     if(tmp.x >= 0 - SX && tmp.x < width - SX && tmp.y < (0 + (scl*2)) - SY){//Did we just drop a tile on the ui
       deleteTile(mapN);//Delete the tile
+      resetLHXY();//reset the lower/higher xy for background drawing
       //return false;
     }
   }
