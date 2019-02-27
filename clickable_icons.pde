@@ -1,6 +1,5 @@
 boolean clickdrag = false;//are we dragging the mouse?
 
-//clickableIcon[] icons = new clickableIcon[0];//clickable icons Array
 ArrayList<clickableIcon> icons = new ArrayList<clickableIcon>(0);
 
 class clickableIcon{//clickableIcon Object
@@ -60,8 +59,5 @@ class clickableIcon{//clickableIcon Object
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void clearClickableTilesArray(){//delete all the icons
-  //while(icons.length > 0){//while icons still exist
-    //icons = (clickableIcon[]) shorten(icons);//delete them
-  //}
-  icons = new ArrayList<clickableIcon>(0);
+  icons.clear();//delete all icons
 }
