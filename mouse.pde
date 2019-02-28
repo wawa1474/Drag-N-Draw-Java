@@ -104,7 +104,7 @@ void mousePressed(){//We pressed a mouse button
           mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);
           dragging = true;//We dragging
           //updateOffset();//Update the mouse offset of the tile
-          loadColors(x, y);//Load the color inputs and sliders with the color from the tile
+          loadColors(tmpTile);//Load the color inputs and sliders with the color from the tile
           loadTile(tmpTile);//load tile image
           return;//Block normal action
         }/*else if(mouseButton == RIGHT){//We clicked with the right button

@@ -35,14 +35,14 @@ class button{
       this.tSize = (this.h - 4) / 2;
     }
     this.tY = this.y + (this.h / 2) + 4;
-    println(textWidth(this.t));
+    //println(textWidth(this.t));
     int tmp = floor((this.w - textWidth(this.t)) / 2);
     if(tmp < 0){
       this.tX = this.x - tmp;
     }else{
       this.tX = this.x + tmp;
     }
-    println(this.tX);
+    //println(this.tX);
   }
   
   boolean wasClicked(){

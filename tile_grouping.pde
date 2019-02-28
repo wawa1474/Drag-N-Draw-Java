@@ -5,7 +5,7 @@ int tileGrouSXLines = 0;//how many X lines of copied tiles
 int tileGrouSYLines = 0;//how many Y lines of copied tiles
 
 
-ArrayList<mTile> mapTilesCopy = new ArrayList<mTile>(0);
+ArrayList<ArrayList<ArrayList<mTile>>> mapTilesCopy = new ArrayList<ArrayList<ArrayList<mTile>>>(0);
 
 
 
@@ -106,28 +106,39 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
   tileGrouSXLines = (X2 - X1) / scl;//how many x lines
   tileGrouSYLines = (Y2 - Y1) / scl;//how many y lines
   
-  mapTilesCopy = new ArrayList<mTile>();//reset the array
+  mapTilesCopy.clear();//delete all tiles
+  for(int x = 0; x < tileGrouSXLines; x++){
+    mapTilesCopy.add(new ArrayList<ArrayList<mTile>>());
+    for(int y = 0; y < tileGrouSYLines; y++){
+      mapTilesCopy.get(x).add(new ArrayList<mTile>());
+    }
+  }
   
-  for(int i = 0; i < tileGrouSYLines; i++){//loop through all y lines
-    for(int j = 0; j < tileGrouSXLines; j++){//loop through all x lines
+  for(int i = 0; i < tileGrouSXLines; i++){//loop through all y lines
+    for(int j = 0; j < tileGrouSYLines; j++){//loop through all x lines
       hadTile = false;//square does not have tile
       if(button == 'x'){//we clicked middle button on a tile
-        for(int k = 0; k < mapTiles.size(); k++){//loop through all tiles
-          //if(isCursorOnTileXY(k, (X1 + (scl * j)) + 4, (Y1 + (scl * i)) + 4)){//Are we clicking on the tile
-          //  mTile tmp = mapTiles.get(k);//copy the tile
-          //  mapTilesCopy.add(new mTile(tmp.x, tmp.y, tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
-          //  tileCount++;//next tile
-          //  deleteTile(k);//delete the tile
-          //  k--;//We need to recheck that tile
-          //  hadTile = true;//square has tile
-          //}
+        for(int x = 0; x < mapTiles.size(); x++){
+          for(int y = 0; y < mapTiles.get(x).size(); y++){
+            for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){
+              if(isCursorOnTileXY((X1 / scl) + i, (Y1 / scl) + j, (X1 + (scl * i)) + 4, (Y1 + (scl * j)) + 4) && mapTiles.get(x).get(y).size() != 0 && z < mapTiles.get(x).get(y).size()){//Are we clicking on the tile
+                mTile tmp = mapTiles.get(x).get(y).get(z);//copy the tile
+                mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
+                tileCount++;//next tile
+                hadTile = true;//square has tile
+              }
+            }
+            if(hadTile == true){
+              mapTiles.get(x).get(y).clear();
+            }
+          }
         }
       }else if(button == 'c'){//we clicked right button
         for(int x = 0; x < mapTiles.size(); x++){
           for(int y = 0; y < mapTiles.get(x).size(); y++){
-            if(isCursorOnTileXY(x, y, (X1 + (scl * j)) + 4, (Y1 + (scl * i)) + 4)){//Are we clicking on the tile
-              mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size());//copy the tile
-              mapTilesCopy.add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
+            if(isCursorOnTileXY(x, y, (X1 + (scl * i)) + 4, (Y1 + (scl * j)) + 4) && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
+              mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
+              mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
               tileCount++;//next tile
               hadTile = true;//square has tile
             }
@@ -153,17 +164,16 @@ void tileGroupPaste(){//Paste The Copied Tiles
   X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
   Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
   
-  for(int i = 0; i < tileGrouSYLines; i++){//loop through all y lines
-    for(int j = 0; j < tileGrouSXLines; j++){//loop through all x lines
-      if(tileCount < mapTilesCopy.size()){//are there more tiles
-        if(mapTilesCopy.get(tileCount) != null){//if tile is not null
-          mTile tmp = mapTilesCopy.get(tileCount);
-          int tmpX = X1 + (scl * j);//Adjust XY To Be On Tile Border
-          int tmpY = Y1 + (scl * i);//Adjust XY To Be On Tile Border
+  for(int i = 0; i < tileGrouSXLines; i++){//loop through all y lines
+    for(int j = 0; j < tileGrouSYLines; j++){//loop through all x lines
+      for(int z = 0; z < mapTilesCopy.get(i).get(j).size(); z++){
+        mTile tmp = mapTilesCopy.get(i).get(j).get(z);
+        int tmpX = (X1 / scl) + i;//Adjust XY To Be On Tile Border
+        int tmpY = (Y1 / scl) + j;//Adjust XY To Be On Tile Border
+        if(tmpX < 0 || tmpY < 0){
+          
+        }else{
           mapTiles.get(tmpX).get(tmpY).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//paste tile
-        }
-        if(tileCount++ == mapTilesCopy.size()){//are we done
-          return;//yes, return
         }
       }
     }

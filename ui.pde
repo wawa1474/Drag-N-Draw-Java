@@ -100,6 +100,7 @@ class tileUI{
     
     //text("Tiles: " + mapTiles.length, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
     int tmp = 0;
+    
     for(int x = 0; x < mapTiles.size(); x++){
       for(int y = 0; y < mapTiles.get(x).size(); y++){
         tmp += mapTiles.get(x).get(y).size();
@@ -338,11 +339,11 @@ void colorInputB(String value){//called when colorInputB updates
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void loadColors(int x, int y){//Load RGB Sliders and RGB Inputs with value from tile
-  if(mapTiles.get(x).get(y).size() != 0){
-    RSlider.setValue(mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1).r);//Set Red Slider value to Red value of the tile
-    GSlider.setValue(mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1).g);//Set Green Slider value to Green value of the tile
-    BSlider.setValue(mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1).b);//Set Blue Slider value to Blue value of the tile
+void loadColors(mTile tmp){//Load RGB Sliders and RGB Inputs with value from tile
+  if(tmp != null){
+    RSlider.setValue(tmp.r);//Set Red Slider value to Red value of the tile
+    GSlider.setValue(tmp.g);//Set Green Slider value to Green value of the tile
+    BSlider.setValue(tmp.b);//Set Blue Slider value to Blue value of the tile
   }
 }//void loadColors(int tile) END
 
