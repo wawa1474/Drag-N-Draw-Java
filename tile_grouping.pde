@@ -38,23 +38,28 @@ void tileGroup(String button){//mess with tiles in square group
   for(int i = 0; i < YLines; i++){//loop through all y lines
     for(int j = 0; j < XLines; j++){//loop through all x lines
       if(button == "left"){//we clicked left button
-        mapTiles.get(X1 + (scl * j)).get(Y1 + (scl * i)).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+        mapTiles.get((X1 + (scl * j)) / scl).get((Y1 + (scl * i)) / scl).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
       }else if(button == "center" && tileGroupDeleting == true){//we clicked middle button on a tile
         //for(int k = 0; k < mapTiles.size(); k++){//loop through all tiles
+        //println("test2");
         for(int x = 0; x < mapTiles.size(); x++){
-          for(int y = 0; x < mapTiles.get(x).size(); y++){
+          for(int y = 0; y < mapTiles.get(x).size(); y++){
             if(isCursorOnTileXY(x, y, (X1 + (scl * j)) + 4, (Y1 + (scl * i)) + 4)){//Are we clicking on the tile
-              deleteTile(x, y);//delete the tile
+              for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){
+                deleteTile(x, y);//delete the tile
+              }
             }
           }
         }
+        //tileGroupDeleting = false;
       }else if(button == "center"){//we clicked middle button
-        mapTiles.get(X1 + (scl * j)).get(Y1 + (scl * i)).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+        //println("test");
+        mapTiles.get((X1/ scl) + j).get((Y1/ scl) + i).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
       }else if(button == "right"){//we clicked right button
         for(int x = 0; x < mapTiles.size(); x++){
-          for(int y = 0; x < mapTiles.get(x).size(); y++){
-            if(isCursorOnTileXY(x, y, (X1 + (scl * j)) + 4, (Y1 + (scl * i)) + 4)){//Are we clicking on the tile
-              mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
+          for(int y = 0; y < mapTiles.get(x).size(); y++){
+            if(isCursorOnTileXY(x, y, (X1 + (scl * j)) + 4, (Y1 + (scl * i)) + 4) && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
+              mTile tmp = mapTiles.get(x).get(y).get(0);//mapTiles.get(x).get(y).size() - 1
               tmp.r = (int)RSlider.getValue();//set tile red value to red slider value
               tmp.g = (int)GSlider.getValue();//set tile green value to green slider value
               tmp.b = (int)BSlider.getValue();//set tile blue value to blue slider value

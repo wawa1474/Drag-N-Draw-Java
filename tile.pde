@@ -4,6 +4,9 @@ int tileBorderNumber = 0;//What number in img[] is the border (its just a null t
 int scl = 32;//Square Scale
 
 ArrayList<ArrayList<ArrayList<mTile>>> mapTiles = new ArrayList<ArrayList<ArrayList<mTile>>>(0);
+mTile tmpTile;
+int tmpTileX = 0;
+int tmpTileY = 0;
 
 
 class mTile{//Tile Object
@@ -40,11 +43,6 @@ class mTile{//Tile Object
     return false;//no
   }
   
-  //void updateLocation(){//Adjust XY location of tile
-  //  this.x = mX + offsetX;//Adjust X location of tile
-  //  this.y = mY + offsetY;//Adjust Y location of tile
-  //}//void updateTileLocation(int tile) END
-  
   //void snapLocation(){//Snap XY location of tile to grid
   //  this.x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
   //  this.y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
@@ -65,7 +63,7 @@ void updateXY(){//Update the XY position of the mouse and the page XY offset
 
 void deleteTile(int x, int y){//Delete a tile and update the array
   if(mapTiles.get(x).get(y).size() > 0){//if there are tiles
-    mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);//delete the specified tile
+    mapTiles.get(x).get(y).remove(0);//mapTiles.get(x).get(y).size());//delete the specified tile
   }
   //-2,147,483,648 -> 2,147,483,647
   //resetLHXY();//reset the lower/higher xy for background drawing
@@ -77,10 +75,12 @@ void placeTile(){//Place a tile at the mouses location
   //print(mouseButton);
   if(mY > scl*UIBottom - SY + fV && mY < (height - (scl*1.5)) - SY + fV && mX < (width - (scl)) - SX + fV){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
-      mapTiles.get(floor(mX/scl)*scl).get(floor(mY/scl)*scl).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
+      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
+      println("test3");
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //print(mouseButton);
-      mapTiles.get(floor(mX/scl)*scl).get(floor(mY/scl)*scl).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+      println("test4");
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
     }
@@ -93,6 +93,12 @@ void placeTile(){//Place a tile at the mouses location
 
 void clearMapTilesArray(){//delete all tiles
   mapTiles.clear();//delete all tiles
+  for(int x = 0; x < 256; x++){
+    mapTiles.add(new ArrayList<ArrayList<mTile>>());
+    for(int y = 0; y < 256; y++){
+      mapTiles.get(x).add(new ArrayList<mTile>());
+    }
+  }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -160,20 +166,22 @@ void loadTile(int x, int y, int z){//Set current image to tile image
   }
 }//void loadTile() END
 
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void updateOffset(int tile){//Update mouse XY offset relative to upper-left corner of tile
-  //mTile tmp = mapTiles.get(tile);
-  //offsetX = tmp.x - mX;//keep track of relative X location of click to corner of rectangle
-  //offsetY = tmp.y - mY;//keep track of relative Y location of click to corner of rectangle
-}//void updateOffset() END
+void loadTile(mTile tmp){//Set current image to tile image
+  if(tmp != null){
+    tileN = tmp.image;//Set current image to tile image
+  }
+}//void loadTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean isCursorOnTile(int x, int y){//Is the mouse cursor on the tile we're checking?
   int tmpX = x * scl;
   int tmpY = y * scl;
-  return(mX > tmpX - fV && mX < tmpX + scl + fV && mY > tmpY - fV && mY < tmpY + scl + fV);//Are we clicking on the tile
+  return(mX > tmpX - fV && mX < tmpX + scl + fV && mY > tmpY - fV && mY < tmpY + scl + fV && mapTiles.get(x).get(y).size() != 0);//Are we clicking on the tile
+  //if(mapTiles.get(x).get(y).size() != 0){
+  //  return true;
+  //}
+  //return false;
 }//boolean isCursorOnTile(int tile) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -204,11 +212,22 @@ boolean isCursorOnTileNoFVXY(int x, int y, int tX, int tY){//Is the mouse cursor
 
 void dragTile(){//If dragging a tile: update location
   if (dragging){//Are we dragging a tile
-    if(mapTiles.get(mapN) != null){//If tile exists
-      //mapTiles.get(mapN).updateLocation();//Adjust XY location of tile
+    if(tmpTile != null){//If tile exists
+      //updateLocation();//Adjust XY location of tile
+      tmpTile.draw(mX - (scl / 2), mY - (scl / 2));// - (scl / 2)
     }
   }
 }
+
+//void updateLocation(){//Adjust XY location of tile
+//  tmpTileX = mX;// + offsetX;//Adjust X location of tile
+//  tmpTileY = mY;// + offsetY;//Adjust Y location of tile
+//}//void updateTileLocation(int tile) END
+
+//void updateOffset(){//Update mouse XY offset relative to upper-left corner of tile
+//  offsetX = tmpTileX - mX;//keep track of relative X location of click to corner of rectangle
+//  offsetY = tmpTileY - mY;//keep track of relative Y location of click to corner of rectangle
+//}//void updateOffset() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 

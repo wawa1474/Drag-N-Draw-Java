@@ -100,15 +100,23 @@ class tileUI{
     
     //text("Tiles: " + mapTiles.length, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
     int tmp = 0;
-      for(int x = 0; x < mapTiles.size(); x++){
-        for(int y = 0; y < mapTiles.get(x).size(); y++){
-          tmp += mapTiles.get(x).get(y).size();
-        }
+    for(int x = 0; x < mapTiles.size(); x++){
+      for(int y = 0; y < mapTiles.get(x).size(); y++){
+        tmp += mapTiles.get(x).get(y).size();
       }
+    }
+    if(tmpTile != null){
+      tmp += 1;
+    }
     
     text("Tiles: " + tmp, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
+    
+    tmp = drawnTiles;
+    if(tmpTile != null){
+      tmp += 1;
+    }
   
-    text("Drawn: " + drawnTiles, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
+    text("Drawn: " + tmp, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
     
     text("X:" + floor(-SX/scl),((scl * 25)),(scl / 1.25));//X: (screen x)
     text("Y:" + floor(-(SY-64)/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)

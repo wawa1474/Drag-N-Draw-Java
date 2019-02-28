@@ -1,4 +1,5 @@
-int[][][] spots;// = new int[256][256];//y, x
+//int[][][] spots;// = new int[256][256];//y, x
+int tileDepth = 16;//how many tiles are drawn per space
 
 //ArrayList<ArrayList<ArrayList<mTile>>> test = new ArrayList<ArrayList<ArrayList<mTile>>>(0);
 //ArrayList<ArrayList<mTile>> test = new ArrayList<ArrayList<mTile>>(256);
@@ -11,12 +12,20 @@ void drawSpots(){
   //    drawnTiles++;//how many tiles are being drawn?
   //  }
   //}
-  for(int y = 0; y < 256; y++){//loop through all y positions
-    for(int x = 0; x < 256; x++){//loop through all x positions
+  for(int x = 0; x < mapTiles.size(); x++){//loop through all y positions
+    for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through all x positions
       //boolean skip = false;
       //mapTiles.get(x).get(y).size() - 1
-      for(int z = 15; z >= 0; z--){//loop through all drawn tiles in this xy position
-        if(mapTiles.get(x).get(y).size() != 0){//if there's a tile to be drawn
+      //for(int z = mapTiles.get(x).get(y).size() - 1; z >= mapTiles.get(x).get(y).size() - tileDepth && mapTiles.get(x).get(y).size() != 0; z--){//loop through all drawn tiles in this xy position
+      int tmp = 0;
+      if(mapTiles.get(x).get(y).size() < tileDepth){
+        tmp = 0;
+      }else{
+        tmp = mapTiles.get(x).get(y).size() - tileDepth;
+      }
+      for(int z = tmp; z < mapTiles.get(x).get(y).size() + tileDepth; z++){//loop through all drawn tiles in this xy position
+        //if(x < mapTiles.size() && y < mapTiles.get(x).size() && z < mapTiles.get(x).get(y).size()){//if there's a tile to be drawn
+        if(z < mapTiles.get(x).get(y).size()){//if there's a tile to be drawn
           if(mapTiles.get(x).get(y).get(z).tileOnScreen(x * scl, y * scl) || drawAll == true){//if tile is within screen bounds or drawAll is set
             mapTiles.get(x).get(y).get(z).draw(x * scl, y * scl);//draw it
             drawnTiles++;//how many tiles are being drawn?

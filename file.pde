@@ -286,11 +286,18 @@ void fileSaveMap(){//Save the Map to file
   mapFile.add((byte)tileMapName.length());
   mapFile.add((byte)tileMapLocation.length());
   
+  int tmp = 0;
+  
   //Map Tiles Amount
-  mapFile.add((byte)(mapTiles.size() >> 24));
-  mapFile.add((byte)(mapTiles.size() >> 16));
-  mapFile.add((byte)(mapTiles.size() >> 8));
-  mapFile.add((byte)mapTiles.size());
+  for(int x = 0; x < mapTiles.size(); x++){
+    for(int y = 0; y < mapTiles.get(x).size(); y++){
+      tmp += mapTiles.get(x).get(y).size();
+    }
+  }
+  mapFile.add((byte)(tmp >> 24));
+  mapFile.add((byte)(tmp >> 16));
+  mapFile.add((byte)(tmp >> 8));
+  mapFile.add((byte)tmp);
   
   //Clickable Icons Amount
   mapFile.add((byte)(icons.size() >> 24));
@@ -377,11 +384,11 @@ void fileSaveMap(){//Save the Map to file
     mapFile.add((byte)_magicText.charAt(l));//add the 'Magic Text'
   }
   
-  byte[] tmp = new byte[mapFile.size()];
+  byte[] tmpFile = new byte[mapFile.size()];
   for(int i = 0; i < mapFile.size(); i++){
-    tmp[i] = mapFile.get(i);
+    tmpFile[i] = mapFile.get(i);
   }
-  saveBytes(fileName, tmp);
+  saveBytes(fileName, tmpFile);
   
   fileName = "Error";
 }//void fileSaveLoad() END
@@ -494,7 +501,7 @@ void FileLoadMap(){//load map from file
       imageNumber |= (mapFile[tmp + 3]) & 0xFF;
       //println(imageNumber);
       
-      println((mapFile[tmp] & 0xFF) + ": " + (mapFile[tmp + 1] & 0xFF));
+      //println((mapFile[tmp] & 0xFF) + ": " + (mapFile[tmp + 1] & 0xFF));
       mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(
                                                 imageNumber,//Tile Image
                                                 mapFile[tmp + 4],//Tile Red amount
@@ -544,9 +551,9 @@ void FileLoadMap(){//load map from file
     println("File Version Error (Loading).");//throw error
   }
   
-  if(mapTiles == null){//Is the array null
-    clearMapTilesArray();
-  }
+  //if(mapTiles == null){//Is the array null
+  //  clearMapTilesArray();
+  //}
   
   if(icons == null){//Is the array null
     clearClickableTilesArray();
