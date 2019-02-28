@@ -18,6 +18,13 @@ void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   
+  for(int x = 0; x < 256; x++){
+    mapTiles.add(new ArrayList<ArrayList<mTile>>());
+    for(int y = 0; y < 256; y++){
+      mapTiles.get(x).add(new ArrayList<mTile>());
+    }
+  }
+  
   //surface.setTitle("Drag 'N' Draw Java: " + VERSION);
   
   FileLoadTileMapInfo();//load tile map info file
@@ -44,7 +51,7 @@ void setup(){//Setup everything
     for(int i = 0; i < _DEBUGAMOUNT_; i++){
       //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
       //mapTiles[mapTiles.length - 1] = new mTile(200*scl,200*scl,1,127,127,127, false);//test tiles
-      mapTiles.add(new mTile(200*scl,200*scl,1,127,127,127, false));
+      mapTiles.get(200).get(200).add(new mTile(1,127,127,127, false));
     }
   }
   button.setup();
@@ -95,8 +102,8 @@ void draw(){//Draw the canvas
   
   dragTile();//drag a grabbed tile
   
-  resetSpots();//reset spots
-  setSpots();//get what tiles we're gonna draw
+  //resetSpots();//reset spots
+  //setSpots();//get what tiles we're gonna draw
   drawSpots();//draw the selected tiles
   
   

@@ -216,13 +216,16 @@ void FileSaveCanvas(){//Save the Canvas to a file
   fullCanvas.background(255);//make the background white
   fullCanvas.image(BACKGROUND, 0, 0);//Draw the background
   //Display Map Tiles
-  for(int i = 0; i < mapTiles.size(); i++){//Go through all the tiles
-    //if(!mapTiles[i].clear){//Is the tile colored
-    if(!mapTiles.get(i).clear){//Is the tile colored
-      fullCanvas.fill(mapTiles.get(i).r,mapTiles.get(i).g,mapTiles.get(i).b);//Set Tile background color
-      fullCanvas.rect(mapTiles.get(i).x - lowerx,mapTiles.get(i).y - lowery,scl,scl);//Draw colored square behind tile
+  for(int x = 0; x < mapTiles.size(); x++){
+    for(int y = 0; y < mapTiles.get(x).size(); y++){
+      for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){
+        if(!mapTiles.get(x).get(y).get(z).clear){//Is the tile colored
+          fullCanvas.fill(mapTiles.get(x).get(y).get(z).r,mapTiles.get(x).get(y).get(z).g,mapTiles.get(x).get(y).get(z).b);//Set Tile background color
+          fullCanvas.rect(x - lowerx,y - lowery,scl,scl);//Draw colored square behind tile
+        }
+        fullCanvas.image(img[mapTiles.get(x).get(y).get(z).image], x - lowerx, y - lowery);//Draw tile
+      }
     }
-    fullCanvas.image(img[mapTiles.get(i).image], mapTiles.get(i).x - lowerx, mapTiles.get(i).y - lowery);//Draw tile
   }//Went through all the tiles
   fullCanvas.endDraw();//stop drawing the canvas
   fullCanvas.save(fileName);// + ".png");//Save the map to a PNG file
@@ -314,26 +317,29 @@ void fileSaveMap(){//Save the Map to file
   
   if(_FILEVERSION_ == 4){// || _FILEVERSION_ == 3){//whats the file version
     //Map Tiles
-    for(int i = 0; i < mapTiles.size(); i++){//loop through all tiles
-
-      //XY
-      mapFile.add((byte)(mapTiles.get(i).x / scl));
-      mapFile.add((byte)(mapTiles.get(i).y / scl));
+    for(int x = 0; x < mapTiles.size(); x++){//loop through all tiles
+      for(int y = 0; y < mapTiles.get(x).size(); y++){
+        for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){
+          //XY
+          mapFile.add((byte)(x));
+          mapFile.add((byte)(y));
       
-      //Image Number
-      mapFile.add((byte)(mapTiles.get(i).image >> 8));
-      mapFile.add((byte)mapTiles.get(i).image);
+          //Image Number
+          mapFile.add((byte)(mapTiles.get(x).get(y).get(z).image >> 8));
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).image);
       
-      //Red/Green
-      mapFile.add((byte)mapTiles.get(i).r);
-      mapFile.add((byte)mapTiles.get(i).g);
+          //Red/Green
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).r);
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).g);
       
-      //Blue/Flags
-      mapFile.add((byte)mapTiles.get(i).b);
-      if(mapTiles.get(i).clear){
-        mapFlags |= 1;
+          //Blue/Flags
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).b);
+          if(mapTiles.get(x).get(y).get(z).clear){
+            mapFlags |= 1;
+          }
+          mapFile.add((byte)mapFlags);
+        }
       }
-      mapFile.add((byte)mapFlags);
     }
     
     padMapFileArray();
@@ -486,15 +492,11 @@ void FileLoadMap(){//load map from file
       imageNumber |= (mapFile[(i * 8) + headerLength + 3]) & 0xFF;
       //println(imageNumber);
       
-      //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//Make sure we have room
-      //mapTiles[mapTiles.length - 1] = new mTile((mapFile[(i * 8) + headerLength] & 0xFF) * scl,//Tile X position
-      mapTiles.add(new mTile((mapFile[(i * 8) + headerLength] & 0xFF) * scl,//Tile X position
-                                                (mapFile[(i * 8) + headerLength + 1] & 0xFF) * scl,//Tile Y position
+      mapTiles.get((mapFile[(i * 8) + headerLength] & 0xFF)).get((mapFile[(i * 8) + headerLength + 1] & 0xFF)).add(new mTile(
                                                 imageNumber,//Tile Image
                                                 mapFile[(i * 8) + headerLength + 4],//Tile Red amount
                                                 mapFile[(i * 8) + headerLength + 5],//Tile Green amount
                                                 mapFile[(i * 8) + headerLength + 6],//Tile Blue amount
-                                                //CLEAR);//Is Tile Clear
                                                 CLEAR));//Is Tile Clear
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }

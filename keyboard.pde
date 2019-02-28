@@ -60,11 +60,12 @@ void keyTyped(){//We typed a key
     //    mapTiles[i].x += scl * scrollAmount;//Move tile right 1 space
     //  }
     }else if(key == 'r'){//We pressed 'R'
-      //for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
-      for(int i = mapTiles.size() - 1; i >= 0; i--){//Go through all the tiles
-        if(isCursorOnTile(i)){//Are we clicking on the tile
-          mTile tmp = mapTiles.get(i);
-          println("Tile #: " + i + ", X Position: " + tmp.x + ", Y Position: " + tmp.y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.clear);// + ", Tile Lore: " + mapTiles[i].lore);
+      for(int x = 0; x < mapTiles.size(); x++){
+        for(int y = 0; y < mapTiles.get(x).size(); y++){
+          if(isCursorOnTile(x, y)){//Are we clicking on the tile
+            mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size());
+            println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.clear);// + ", Tile Lore: " + mapTiles[i].lore);
+          }
         }
       }
     }else if(key == 'q'){//We pressed 'Q'

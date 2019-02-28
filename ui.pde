@@ -323,10 +323,12 @@ void colorInputB(String value){//called when colorInputB updates
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void loadColors(int tile){//Load RGB Sliders and RGB Inputs with value from tile
-  RSlider.setValue(mapTiles.get(tile).r);//Set Red Slider value to Red value of the tile
-  GSlider.setValue(mapTiles.get(tile).g);//Set Green Slider value to Green value of the tile
-  BSlider.setValue(mapTiles.get(tile).b);//Set Blue Slider value to Blue value of the tile
+void loadColors(int x, int y){//Load RGB Sliders and RGB Inputs with value from tile
+  if(mapTiles.get(x).get(y).size() != 0){
+    RSlider.setValue(mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1).r);//Set Red Slider value to Red value of the tile
+    GSlider.setValue(mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1).g);//Set Green Slider value to Green value of the tile
+    BSlider.setValue(mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1).b);//Set Blue Slider value to Blue value of the tile
+  }
 }//void loadColors(int tile) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
