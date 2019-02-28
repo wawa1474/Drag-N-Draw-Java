@@ -14,13 +14,14 @@ void drawSpots(){
   for(int y = 0; y < 256; y++){//loop through all y positions
     for(int x = 0; x < 256; x++){//loop through all x positions
       //boolean skip = false;
-      for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){//loop through all drawn tiles in this xy position
-        //if(spots[y][x][z] != -1){//if there's a tile to be drawn
+      //mapTiles.get(x).get(y).size() - 1
+      for(int z = 15; z >= 0; z--){//loop through all drawn tiles in this xy position
+        if(mapTiles.get(x).get(y).size() != 0){//if there's a tile to be drawn
           if(mapTiles.get(x).get(y).get(z).tileOnScreen(x * scl, y * scl) || drawAll == true){//if tile is within screen bounds or drawAll is set
             mapTiles.get(x).get(y).get(z).draw(x * scl, y * scl);//draw it
             drawnTiles++;//how many tiles are being drawn?
           }
-        //}
+        }
       }
     }
   }

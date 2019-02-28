@@ -154,7 +154,8 @@ void mouseDragged(){//We dragged the mouse while holding a button
     for(int x = 0; x < mapTiles.size(); x++){
       for(int y = 0; y < mapTiles.get(x).size(); y++){
         if(isCursorOnTile(x, y)){//Are we clicking on the tile
-          deleteTile(x, y);//Delete a tile and update the array
+          //deleteTile(x, y);//Delete a tile and update the array
+          mapTiles.get(x).get(y).clear();
           mapN = -1;//We're not holding a tile
         }
       }

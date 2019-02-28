@@ -482,21 +482,24 @@ void FileLoadMap(){//load map from file
     
     //Load Map Tiles
     for(int i = 0; i < mapTilesAmount; i++){//Loop through all the rows
+      int tmp = (i * 8) + headerLength;
+      
       //println(i - 32);
       boolean CLEAR = false;//tile is not clear
-      if((mapFile[(i * 8) + headerLength + 7] & 0x01) == 1){//Is Tile Clear
+      if((mapFile[tmp + 7] & 0x01) == 1){//Is Tile Clear
         CLEAR = true;//tile is clear
       }
       
-      int imageNumber = (mapFile[(i * 8) + headerLength + 2] << 8) & 0xFF;
-      imageNumber |= (mapFile[(i * 8) + headerLength + 3]) & 0xFF;
+      int imageNumber = (mapFile[tmp + 2] << 8) & 0xFF;
+      imageNumber |= (mapFile[tmp + 3]) & 0xFF;
       //println(imageNumber);
       
-      mapTiles.get((mapFile[(i * 8) + headerLength] & 0xFF)).get((mapFile[(i * 8) + headerLength + 1] & 0xFF)).add(new mTile(
+      println((mapFile[tmp] & 0xFF) + ": " + (mapFile[tmp + 1] & 0xFF));
+      mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(
                                                 imageNumber,//Tile Image
-                                                mapFile[(i * 8) + headerLength + 4],//Tile Red amount
-                                                mapFile[(i * 8) + headerLength + 5],//Tile Green amount
-                                                mapFile[(i * 8) + headerLength + 6],//Tile Blue amount
+                                                mapFile[tmp + 4],//Tile Red amount
+                                                mapFile[tmp + 5],//Tile Green amount
+                                                mapFile[tmp + 6],//Tile Blue amount
                                                 CLEAR));//Is Tile Clear
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }

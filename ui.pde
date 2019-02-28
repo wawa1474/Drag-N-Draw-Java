@@ -99,7 +99,14 @@ class tileUI{
     //text("FPS: " + FPS.substring(0, 4), ((scl * 12) + scl / 8), (scl * 1.75));//FPS: (fps.fp)
     
     //text("Tiles: " + mapTiles.length, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
-    text("Tiles: " + mapTiles.size(), ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
+    int tmp = 0;
+      for(int x = 0; x < mapTiles.size(); x++){
+        for(int y = 0; y < mapTiles.get(x).size(); y++){
+          tmp += mapTiles.get(x).get(y).size();
+        }
+      }
+    
+    text("Tiles: " + tmp, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
   
     text("Drawn: " + drawnTiles, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
     
