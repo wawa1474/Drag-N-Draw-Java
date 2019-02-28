@@ -224,3 +224,15 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
   strokeWeight(1);//Default
   stroke(0);//BLACK
 }//void drawTileGroupOutline() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void drawTileGroupOutlines(){
+  if(tileGroupStep > 0 && tileGroupStep != 3){//selecting group and not pasteing
+    drawTileGroupOutline();//draw the red outline
+  }
+  
+  if(tileGroupStep == 3){//pasteing group
+    drawGroupPasteOutline();//draw the red outline
+  }
+}

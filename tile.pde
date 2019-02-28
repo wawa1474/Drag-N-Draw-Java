@@ -191,7 +191,13 @@ boolean isCursorOnTileNoFVXY(int tile, int tX, int tY){//Is the mouse cursor on 
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-
+void dragTile(){//If dragging a tile: update location
+  if (dragging){//Are we dragging a tile
+    if(mapTiles.get(mapN) != null){//If tile exists
+      mapTiles.get(mapN).updateLocation();//Adjust XY location of tile
+    }
+  }
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 

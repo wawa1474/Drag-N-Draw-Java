@@ -61,3 +61,14 @@ class clickableIcon{//clickableIcon Object
 void clearClickableTilesArray(){//delete all the icons
   icons.clear();//delete all icons
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void drawIcons(){
+  for(int i = 0; i < icons.size(); i++){//Go through all the clickable icons
+    icons.get(i).draw();//draw the icon
+    if(icons.get(i).hoveringOver()){//if mouse hovering over icon
+      icons.get(i).drawText();//draw the icons text
+    }
+  }
+}

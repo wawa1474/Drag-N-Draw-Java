@@ -183,6 +183,8 @@ class tileUI{
     loadMap = UIControls.getController("loadMap");//make it easier to use button
     
     changeVisibility(true);//go to tile map selection display
+    
+    //UISetup = true;//ui is setup
   }//void setup() END
 }//class tileUI END
 

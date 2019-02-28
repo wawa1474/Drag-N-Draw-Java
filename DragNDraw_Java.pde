@@ -80,7 +80,7 @@ void draw(){//Draw the canvas
       UISetup = true;//ui is setup
     }
   
-  if(colorWheel.isVisible() || colorInputR.isVisible()){//if not using color wheel or color inputs
+  if(colorWheel.isVisible() || colorInputR.isVisible()){//if using color wheel or color inputs
     noTile = true;//disallow tile placement
   }
   
@@ -93,51 +93,18 @@ void draw(){//Draw the canvas
   
   BG.draw();//Draw the background and grid
   
-  //If dragging a tile: update location
-  if (dragging){//Are we dragging a tile
-    if(mapTiles.get(mapN) != null){//If tile exists
-      mapTiles.get(mapN).updateLocation();//Adjust XY location of tile
-    }
-  }
+  dragTile();//drag a grabbed tile
   
-  //Display Map Tiles
-  //for(int i = 0; i < mapTiles.size(); i++){//Go through all the tiles
-  //  if(mapTiles.get(i).tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
-  //    mapTiles.get(i).draw();//Draw the tile
-  //    drawnTiles++;//how many tiles are being drawn?
-  //  }
-  //}
+  resetSpots();//reset spots
   setSpots();//get what tiles we're gonna draw
-  for(int y = 0; y < 256; y++){//loop through all y positions
-    for(int x = 0; x < 256; x++){//loop through all x positions
-      //boolean skip = false;
-      for(int z = 15; z >= 0; z--){//loop through all drawn tiles in this xy position
-        if(spots[y][x][z] != -1){//if there's a tile to be drawn
-          if(mapTiles.get(spots[y][x][z]).tileOnScreen() || drawAll == true){//if tile is within screen bounds or drawAll is set
-            mapTiles.get(spots[y][x][z]).draw();//draw it
-            drawnTiles++;//how many tiles are being drawn?
-          }
-        }
-      }
-    }
-  }
+  drawSpots();//draw the selected tiles
+  
   
   BG.border();//Draw the RED border
   
-  if(tileGroupStep > 0 && tileGroupStep != 3){//selecting group and not pasteing
-    drawTileGroupOutline();//draw the red outline
-  }
+  drawTileGroupOutlines();//draw the necessary outlines
   
-  if(tileGroupStep == 3){//pasteing group
-    drawGroupPasteOutline();//draw the red outline
-  }
-  
-  for(int i = 0; i < icons.size(); i++){//Go through all the clickable icons
-    icons.get(i).draw();//draw the icon
-    if(icons.get(i).hoveringOver()){//if mouse hovering over icon
-      icons.get(i).drawText();//draw the icons text
-    }
-  }
+  drawIcons();//draw all icons
   
   //strokeWeight(5);
   //line(0,0,width,0);
