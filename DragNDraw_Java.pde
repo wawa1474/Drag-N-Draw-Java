@@ -103,12 +103,11 @@ void draw(){//Draw the canvas
   
   BG.draw();//Draw the background and grid
   
-  dragTile();//drag a grabbed tile
-  
   //resetSpots();//reset spots
   //setSpots();//get what tiles we're gonna draw
   drawSpots();//draw the selected tiles
   
+  dragTile();//drag a grabbed tile
   
   BG.border();//Draw the RED border
   

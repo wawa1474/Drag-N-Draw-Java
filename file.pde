@@ -548,7 +548,7 @@ void FileLoadMap(){//load map from file
                                                 clickableHover));//Is Tile Clear
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
       
-      iconsAddress = clickTextAddress + (16 - (clickTextAddress % 16));
+      iconsAddress = clickTextAddress + (16 - ((clickTextAddress % 16) % 16));
       println("Sequential Icons Address: " + iconsAddress);
     }
   }else{//we don't know that file version

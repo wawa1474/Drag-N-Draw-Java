@@ -140,13 +140,20 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
           mapTiles.get(X1 + i).get(Y1 + j).clear();
         }
       }else if(button == 'c' && !skip){//we clicked right button
-        for(int x = 0; x < mapTiles.size(); x++){
-          for(int y = 0; y < mapTiles.get(x).size(); y++){
-            if(isCursorOnTileXY(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4) && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
-              mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
-              mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
-              hadTile = true;//square has tile
-            }
+        //for(int x = 0; x < mapTiles.size(); x++){
+        //  for(int y = 0; y < mapTiles.get(x).size(); y++){
+        //    if(isCursorOnTileXY(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4) && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
+        //      mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
+        //      mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
+        //      hadTile = true;//square has tile
+        //    }
+        //  }
+        //}
+        for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){
+          if(isCursorOnTileXY(X1 + i, Y1 + j, ((X1 + i) * scl) + 4, ((Y1  + j) * scl) + 4) && mapTiles.get(X1 + i).get(Y1 + j).size() != 0 && z < mapTiles.get(X1 + i).get(Y1 + j).size()){//Are we clicking on the tile
+            mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
+            mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
+            hadTile = true;//square has tile
           }
         }
       }
