@@ -265,6 +265,8 @@ void fileSaveMap(){//Save the Map to file
     return;
   }
   
+  mapFile.clear();
+  
   int mapFlags = 0;
   
   //mTile[] clickTiles = new mTile[0];
@@ -390,6 +392,8 @@ void fileSaveMap(){//Save the Map to file
   }
   saveBytes(fileName, tmpFile);
   
+  mapFile.clear();
+  
   fileName = "Error";
 }//void fileSaveLoad() END
 
@@ -511,7 +515,7 @@ void FileLoadMap(){//load map from file
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }
     
-    int mapTilesLength = (mapTilesAmount * 8) + (16 - floor(mapTilesAmount * 8) % 16) + headerLength;
+    int mapTilesLength = (mapTilesAmount * 8) + ((16 - floor(mapTilesAmount * 8) % 16) % 16) + headerLength;
     
     //Load Clickable Tiles
     

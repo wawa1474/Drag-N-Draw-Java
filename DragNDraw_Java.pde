@@ -6,7 +6,7 @@ import controlP5.*;//import the library
 int cols = 256;//Columns
 int rows = 256;//Rows
 
-int _DEBUG_ = 0;//what are we debugging
+int _DEBUG_ = -1;//what are we debugging
 int _DEBUGAMOUNT_ = 50000;//how many are we debugging
 
 String VERSION = "PRE_ALPHA V0.0.1";
@@ -46,6 +46,9 @@ void setup(){//Setup everything
   
   //icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
   //icons[icons.length - 1] = new clickableIcon(scl * 19, scl * 15, "maps/map7.ddj", "TEST3");//Place a colored tile with no image
+  //icons.add(new clickableIcon(scl * 15, scl * 15, "maps/map9-1.ddj", "TEST"));
+  //icons.add(new clickableIcon(scl * 17, scl * 15, "maps/map9-2.ddj", "TEST2"));
+  //icons.add(new clickableIcon(scl * 19, scl * 15, "maps/map9-3.ddj", "TEST3"));
   
   if(_DEBUG_ == 0){
     for(int i = 0; i < _DEBUGAMOUNT_; i++){
