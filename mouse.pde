@@ -61,7 +61,8 @@ void mousePressed(){//We pressed a mouse button
       for(int x = 0; x < mapTiles.size(); x++){
         for(int y = 0; y < mapTiles.get(x).size(); y++){
           if(isCursorOnTile(x, y) && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
-            mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
+            //mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
+            mTile tmp = mapTiles.get(x).get(y).get(0);
             tmp.r = (int)RSlider.getValue();//set tile red value
             tmp.g = (int)GSlider.getValue();//set tile green value
             tmp.b = (int)BSlider.getValue();//set tile blue value
@@ -144,7 +145,8 @@ void mouseDragged(){//We dragged the mouse while holding a button
     for(int x = 0; x < mapTiles.size(); x++){
       for(int y = 0; y < mapTiles.get(x).size(); y++){
         if(isCursorOnTile(x, y) && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
-          mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
+          //mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
+          mTile tmp = mapTiles.get(x).get(y).get(0);
           tmp.r = (int)RSlider.getValue();//set tile red value
           tmp.g = (int)GSlider.getValue();//set tile green value
           tmp.b = (int)BSlider.getValue();//set tile blue value

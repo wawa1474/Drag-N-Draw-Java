@@ -63,7 +63,8 @@ void updateXY(){//Update the XY position of the mouse and the page XY offset
 
 void deleteTile(int x, int y){//Delete a tile and update the array
   if(mapTiles.get(x).get(y).size() > 0){//if there are tiles
-    mapTiles.get(x).get(y).remove(0);//mapTiles.get(x).get(y).size());//delete the specified tile
+    //mapTiles.get(x).get(y).remove(0);//mapTiles.get(x).get(y).size());//delete the specified tile
+    mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);
   }
   //-2,147,483,648 -> 2,147,483,647
   //resetLHXY();//reset the lower/higher xy for background drawing
