@@ -124,8 +124,8 @@ void keyTyped(){//We typed a key
       //}
       SY -= (scl * scrollAmount);
       
-      if(SY < -((scl * 256) - height)){
-        SY = -((scl * 256) - height);
+      if(SY < -((scl * rows) - height)){
+        SY = -((scl * rows) - height);
       }
       //println(SY);
     }
@@ -138,8 +138,8 @@ void keyTyped(){//We typed a key
       //}
       SX -= (scl * scrollAmount);
       
-      if(SX < -((scl * 256) - width)){
-        SX = -((scl * 256) - width);
+      if(SX < -((scl * cols) - width)){
+        SX = -((scl * cols) - width);
       }
     }
   }

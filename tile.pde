@@ -94,9 +94,9 @@ void placeTile(){//Place a tile at the mouses location
 
 void clearMapTilesArray(){//delete all tiles
   mapTiles.clear();//delete all tiles
-  for(int x = 0; x < 256; x++){
+  for(int x = 0; x < rows; x++){
     mapTiles.add(new ArrayList<ArrayList<mTile>>());
-    for(int y = 0; y < 256; y++){
+    for(int y = 0; y < cols; y++){
       mapTiles.get(x).add(new ArrayList<mTile>());
     }
   }

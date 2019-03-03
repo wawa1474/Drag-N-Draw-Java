@@ -17,15 +17,15 @@ void drawSpots(){
       //boolean skip = false;
       //mapTiles.get(x).get(y).size() - 1
       //for(int z = mapTiles.get(x).get(y).size() - 1; z >= mapTiles.get(x).get(y).size() - tileDepth && mapTiles.get(x).get(y).size() != 0; z--){//loop through all drawn tiles in this xy position
-      int tmp = 0;
-      if(mapTiles.get(x).get(y).size() < tileDepth){
-        tmp = 0;
-      }else{
-        tmp = mapTiles.get(x).get(y).size() - tileDepth;
-      }
-      for(int z = tmp; z < mapTiles.get(x).get(y).size() + tileDepth; z++){//loop through all drawn tiles in this xy position
+      //int tmp = 0;
+      //if(mapTiles.get(x).get(y).size() < tileDepth){
+      //  tmp = 0;
+      //}else{
+      //  tmp = mapTiles.get(x).get(y).size() - tileDepth;
+      //}
+      for(int z = mapTiles.get(x).get(y).size() - tileDepth; z < mapTiles.get(x).get(y).size(); z++){//loop through all drawn tiles in this xy position
         //if(x < mapTiles.size() && y < mapTiles.get(x).size() && z < mapTiles.get(x).get(y).size()){//if there's a tile to be drawn
-        if(z < mapTiles.get(x).get(y).size()){//if there's a tile to be drawn
+        if(z >= 0){//if there's a tile to be drawn
           if(mapTiles.get(x).get(y).get(z).tileOnScreen(x * scl, y * scl) || drawAll == true){//if tile is within screen bounds or drawAll is set
             mapTiles.get(x).get(y).get(z).draw(x * scl, y * scl);//draw it
             drawnTiles++;//how many tiles are being drawn?

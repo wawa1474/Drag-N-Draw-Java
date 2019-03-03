@@ -18,9 +18,9 @@ void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   
-  for(int x = 0; x < 256; x++){
+  for(int x = 0; x < rows; x++){
     mapTiles.add(new ArrayList<ArrayList<mTile>>());
-    for(int y = 0; y < 256; y++){
+    for(int y = 0; y < cols; y++){
       mapTiles.get(x).add(new ArrayList<mTile>());
     }
   }
