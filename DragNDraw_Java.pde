@@ -36,9 +36,10 @@ void setup(){//Setup everything
   
   //changeVisibility(false);
   
-  //icons.add(new clickableIcon(scl * 15, scl * 15, "maps/map9-1.ddj", "TEST"));
-  //icons.add(new clickableIcon(scl * 17, scl * 15, "maps/map9-2.ddj", "TEST2"));
-  //icons.add(new clickableIcon(scl * 19, scl * 15, "maps/map9-3.ddj", "TEST3"));
+  icons.add(new clickableIcon(scl * 13, scl * 13, "maps/map10.ddj", "TEST"));
+  icons.add(new clickableIcon(scl * 15, scl * 13, "maps/map10-1.ddj", "TEST2"));
+  icons.add(new clickableIcon(scl * 17, scl * 13, "maps/map10-2.ddj", "TEST3"));
+  icons.add(new clickableIcon(scl * 19, scl * 13, "maps/map10-3.ddj", "TEST4"));
   
   if(_DEBUG_ == 0){
     for(int i = 0; i < _DEBUGAMOUNT_; i++){

@@ -95,7 +95,6 @@ void mousePressed(){//We pressed a mouse button
         //println("test13 - " + x + ": " + y);
         if(mouseButton == CENTER){//We clicked with the middle button
           deleteTile(x, y);//Delete a tile and update the array
-          mapN = -1;//We're not holding a tile
           deleting = true;//We're deleting
           resetLHXY();//reset the lower/higher xy for background drawing
           return;//Block normal action
@@ -160,7 +159,6 @@ void mouseDragged(){//We dragged the mouse while holding a button
       for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
         if(isCursorOnTile(x, y)){//Are we clicking on the tile
           mapTiles.get(x).get(y).clear();//delete all tiles in this space
-          mapN = -1;//We're not holding a tile
         }
       }
     }//Went through all the tiles

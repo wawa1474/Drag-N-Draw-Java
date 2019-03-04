@@ -278,16 +278,16 @@ void fileSaveMap(){//Save the Map to file
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   //File Version
-  mapFile.add((byte)(_FILEVERSION_ >> 8));//upper byte
-  mapFile.add((byte)_FILEVERSION_);//lower byte
+  mapFile.add((byte)(_FILEVERSION_ >> 8));//upper byte00
+  mapFile.add((byte)_FILEVERSION_);//lower byte01
   
   //dummy header length bytes
-  mapFile.add((byte)0x00);
-  mapFile.add((byte)0x00);
+  mapFile.add((byte)0x00);//02
+  mapFile.add((byte)0x00);//03
   
   //Tile map name and location
-  mapFile.add((byte)tileMapName.length());
-  mapFile.add((byte)tileMapLocation.length());
+  mapFile.add((byte)tileMapName.length());//04
+  mapFile.add((byte)tileMapLocation.length());//05
   
   int tmp = 0;//temporary variable
   
@@ -297,25 +297,30 @@ void fileSaveMap(){//Save the Map to file
       tmp += mapTiles.get(x).get(y).size();//count the number of tiles
     }
   }
-  mapFile.add((byte)(tmp >> 24));
-  mapFile.add((byte)(tmp >> 16));
-  mapFile.add((byte)(tmp >> 8));
-  mapFile.add((byte)tmp);
+  mapFile.add((byte)(tmp >> 24));//06
+  mapFile.add((byte)(tmp >> 16));//07
+  mapFile.add((byte)(tmp >> 8));//08
+  mapFile.add((byte)tmp);//09
   
   //Clickable Icons Amount
-  mapFile.add((byte)(icons.size() >> 24));
-  mapFile.add((byte)(icons.size() >> 16));
-  mapFile.add((byte)(icons.size() >> 8));
-  mapFile.add((byte)icons.size());
+  mapFile.add((byte)(icons.size() >> 24));//10/0A
+  mapFile.add((byte)(icons.size() >> 16));//11/0B
+  mapFile.add((byte)(icons.size() >> 8));//12/0C
+  mapFile.add((byte)icons.size());//13/0D
+  
+  //background color
+  mapFile.add((byte)BG.r);//14/0E
+  mapFile.add((byte)BG.g);//15/0F
+  mapFile.add((byte)BG.b);//16/10
   
   //Tile Map Name
   for(int i = 0; i < tileMapName.length(); i++){
-    mapFile.add((byte)tileMapName.charAt(i));
+    mapFile.add((byte)tileMapName.charAt(i));//??
   }
   
   //Tile Map Location
   for(int i = 0; i < tileMapLocation.length(); i++){
-    mapFile.add((byte)tileMapLocation.charAt(i));
+    mapFile.add((byte)tileMapLocation.charAt(i));//??
   }
   
   padMapFileArray();//pad to a 16 byte boundary
@@ -453,14 +458,14 @@ void FileLoadMap(){//load map from file
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   //File Version
-  fileVersion = (int)(mapFile[0] << 8);//upper byte
-  fileVersion |= (int)mapFile[1];//lower byte
+  fileVersion = int(mapFile[0] << 8);//upper byte
+  fileVersion |= int(mapFile[1]);//lower byte
   
-  headerLength = (int)(mapFile[2] << 8);//Header Length
-  headerLength |= (int)mapFile[3];//Header Length
+  headerLength = int(mapFile[2] << 8);//Header Length
+  headerLength |= int(mapFile[3]);//Header Length
   
-  nameLength = (int)mapFile[4];
-  locationLength = (int)mapFile[5];
+  nameLength = int(mapFile[4]);
+  locationLength = int(mapFile[5]);
   
   //Map Tiles Amount
   mapTilesAmount = convertFourBytesToInt(mapFile[6], mapFile[7], mapFile[8], mapFile[9]);
@@ -469,16 +474,22 @@ void FileLoadMap(){//load map from file
   //Clickable Icons Amount
   iconsAmount = convertFourBytesToInt(mapFile[10], mapFile[11], mapFile[12], mapFile[13]);
   
+  //background color
+  BG.r = int(mapFile[14]);
+  BG.g = int(mapFile[15]);
+  BG.b = int(mapFile[16]);
+  //println("R: " + int(mapFile[14]) + ", G: " + int(mapFile[15]) + ", B: " + int(mapFile[16]));
+  
   //Tile Map Name
   headerTileName = "";
   for(int i = 0; i < nameLength; i++){
-    headerTileName += str((char)mapFile[14 + i]);//get the name
+    headerTileName += str((char)mapFile[17 + i]);//get the name
   }
   println("Tile Map Name: " + headerTileName);
   
   headerTileLocation = "";
   for(int i = 0; i < locationLength; i++){
-    headerTileLocation += str((char)mapFile[14 + nameLength + i]);//get the location
+    headerTileLocation += str((char)mapFile[17 + nameLength + i]);//get the location
   }
   println("Tile Map Location: " + headerTileLocation);
   
@@ -512,9 +523,9 @@ void FileLoadMap(){//load map from file
       //println((mapFile[tmp] & 0xFF) + ": " + (mapFile[tmp + 1] & 0xFF));
       mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(
                                                 imageNumber,//Tile Image
-                                                mapFile[tmp + 4],//Tile Red amount
-                                                mapFile[tmp + 5],//Tile Green amount
-                                                mapFile[tmp + 6],//Tile Blue amount
+                                                int(mapFile[tmp + 4]),//Tile Red amount
+                                                int(mapFile[tmp + 5]),//Tile Green amount
+                                                int(mapFile[tmp + 6]),//Tile Blue amount
                                                 CLEAR));//Is Tile Clear
       //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }
@@ -529,7 +540,7 @@ void FileLoadMap(){//load map from file
     for(int i = 0; i < iconsAmount; i++){//Loop through all the rows
     
       int clickFileAddress = iconsAddress + 4;
-      int clickTextAddress = clickFileAddress + (int)mapFile[iconsAddress + 2];
+      int clickTextAddress = clickFileAddress + int(mapFile[iconsAddress + 2]);
       
       String clickableFile = "";
       for(int j = 0; j < mapFile[iconsAddress + 2]; j++){
