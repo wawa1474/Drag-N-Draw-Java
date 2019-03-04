@@ -1,7 +1,7 @@
 int _FILEVERSION_ = 4;//what version of file saving and loading
-static final String _magicText = "wawa1474DragDraw";
+static final String _magicText = "wawa1474DragDraw";//make sure the file is ours
 
-ArrayList<Byte> mapFile = new ArrayList<Byte>(0);
+ArrayList<Byte> mapFile = new ArrayList<Byte>(0);//temporary byte array
 
 //File Version Map
   //Version 0:
@@ -19,6 +19,7 @@ ArrayList<Byte> mapFile = new ArrayList<Byte>(0);
   //Version 4:
     //0 = File MetaData
     //Compressed Everything
+    //last 16 bytes = _magicText
 
 PImage[] img = new PImage[0];//Tile Images Array
 PImage BACKGROUND;//background image
@@ -216,9 +217,9 @@ void FileSaveCanvas(){//Save the Canvas to a file
   fullCanvas.background(255);//make the background white
   fullCanvas.image(BACKGROUND, 0, 0);//Draw the background
   //Display Map Tiles
-  for(int x = 0; x < mapTiles.size(); x++){
-    for(int y = 0; y < mapTiles.get(x).size(); y++){
-      for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){
+  for(int x = 0; x < mapTiles.size(); x++){//for all the columns
+    for(int y = 0; y < mapTiles.get(x).size(); y++){//for all the rows
+      for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//for all the tiles in that space
         if(!mapTiles.get(x).get(y).get(z).clear){//Is the tile colored
           fullCanvas.fill(mapTiles.get(x).get(y).get(z).r,mapTiles.get(x).get(y).get(z).g,mapTiles.get(x).get(y).get(z).b);//Set Tile background color
           fullCanvas.rect(x - lowerx,y - lowery,scl,scl);//Draw colored square behind tile
@@ -233,10 +234,10 @@ void FileSaveCanvas(){//Save the Canvas to a file
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void padMapFileArray(){
-  int padding = (16 - floor(mapFile.size() % 16)) % 16;
-  for(int l = 0; l < padding; l++){
-    mapFile.add((byte)0xA5);
+void padMapFileArray(){//pad the array to a 16 byte boundary
+  int padding = (16 - floor(mapFile.size() % 16)) % 16;//is the size not on a boundary?
+  for(int l = 0; l < padding; l++){//add the neccessary number of bytes
+    mapFile.add((byte)0xA5);//add a byte
   }
 }
 
@@ -261,13 +262,13 @@ void fileSaveMap(){//Save the Map to file
     return;
   }
   
-  if(fileName.equals("Error")){
-    return;
+  if(fileName.equals("Error")){//if no file was selected
+    return;//don't do anything
   }
   
-  mapFile.clear();
+  mapFile.clear();//clear the temporary array
   
-  int mapFlags = 0;
+  int mapFlags = 0;//temporary variable
   
   //mTile[] clickTiles = new mTile[0];
   
@@ -277,8 +278,8 @@ void fileSaveMap(){//Save the Map to file
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   //File Version
-  mapFile.add((byte)(_FILEVERSION_ >> 8));
-  mapFile.add((byte)_FILEVERSION_);
+  mapFile.add((byte)(_FILEVERSION_ >> 8));//upper byte
+  mapFile.add((byte)_FILEVERSION_);//lower byte
   
   //dummy header length bytes
   mapFile.add((byte)0x00);
@@ -288,12 +289,12 @@ void fileSaveMap(){//Save the Map to file
   mapFile.add((byte)tileMapName.length());
   mapFile.add((byte)tileMapLocation.length());
   
-  int tmp = 0;
+  int tmp = 0;//temporary variable
   
   //Map Tiles Amount
-  for(int x = 0; x < mapTiles.size(); x++){
-    for(int y = 0; y < mapTiles.get(x).size(); y++){
-      tmp += mapTiles.get(x).get(y).size();
+  for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+    for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+      tmp += mapTiles.get(x).get(y).size();//count the number of tiles
     }
   }
   mapFile.add((byte)(tmp >> 24));
@@ -317,7 +318,7 @@ void fileSaveMap(){//Save the Map to file
     mapFile.add((byte)tileMapLocation.charAt(i));
   }
   
-  padMapFileArray();
+  padMapFileArray();//pad to a 16 byte boundary
   
   mapFile.set(2, (byte)(mapFile.size() >> 8));//Header Length
   mapFile.set(3, (byte)mapFile.size());//Header Length
@@ -326,35 +327,35 @@ void fileSaveMap(){//Save the Map to file
   
   if(_FILEVERSION_ == 4){// || _FILEVERSION_ == 3){//whats the file version
     //Map Tiles
-    for(int x = 0; x < mapTiles.size(); x++){//loop through all tiles
-      for(int y = 0; y < mapTiles.get(x).size(); y++){
-        for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){
+    for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+      for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through all rows
+        for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//loop through all tiles in that space
           //XY
           mapFile.add((byte)(x));
           mapFile.add((byte)(y));
       
           //Image Number
-          mapFile.add((byte)(mapTiles.get(x).get(y).get(z).image >> 8));
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).image);
+          mapFile.add((byte)(mapTiles.get(x).get(y).get(z).image >> 8));//upper byte
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).image);//lower byte
       
           //Red/Green
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).r);
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).g);
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).r);//red
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).g);//green
       
           //Blue/Flags
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).b);
-          if(mapTiles.get(x).get(y).get(z).clear){
-            mapFlags |= 1;
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).b);//blue
+          if(mapTiles.get(x).get(y).get(z).clear){//is the tile clear
+            mapFlags |= 1;//yes
           }
-          mapFile.add((byte)mapFlags);
+          mapFile.add((byte)mapFlags);//flags
         }
       }
     }
     
-    padMapFileArray();
+    padMapFileArray();//pad to a 16 byte boundary
     
     //Clickable Icons
-    for(int i = 0; i < icons.size(); i++){//loop through all tiles
+    for(int i = 0; i < icons.size(); i++){//loop through all icons
     
       //XY
       mapFile.add((byte)(icons.get(i).x / scl));
@@ -365,7 +366,6 @@ void fileSaveMap(){//Save the Map to file
       mapFile.add((byte)icons.get(i).hoverText.length());
       
       //Tile Map Name
-      //for(int j = 0; j < icons[i].file.length(); j++){
       for(int j = 0; j < icons.get(i).file.length(); j++){
         mapFile.add((byte)icons.get(i).file.charAt(j));//Add the file name
       }
@@ -375,53 +375,57 @@ void fileSaveMap(){//Save the Map to file
         mapFile.add((byte)icons.get(i).hoverText.charAt(k));//Add the hover text
       }
       
-      padMapFileArray();
+      padMapFileArray();//pad to a 16 byte boundary
       
     }
   }else{
     println("File Version Error (Saving).");//throw error
   }
   
+  for(int l = 0; l < VERSIONB.length; l++){
+    mapFile.add(VERSIONB[l]);//add the program version
+  }
+  
   for(int l = 0; l < _magicText.length(); l++){
     mapFile.add((byte)_magicText.charAt(l));//add the 'Magic Text'
   }
   
-  byte[] tmpFile = new byte[mapFile.size()];
+  byte[] tmpFile = new byte[mapFile.size()];//temporary variable
   for(int i = 0; i < mapFile.size(); i++){
-    tmpFile[i] = mapFile.get(i);
+    tmpFile[i] = mapFile.get(i);//convert from ArrayList to normal Array
   }
-  saveBytes(fileName, tmpFile);
+  saveBytes(fileName, tmpFile);//save the file
   
-  mapFile.clear();
+  mapFile.clear();//clear up memory
   
-  fileName = "Error";
+  fileName = "Error";//reset so we can know if an error occurs
 }//void fileSaveLoad() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-int convertFourBytesToInt(byte a, byte b, byte c, byte d){
-  int returnValue = 0;
+int convertFourBytesToInt(byte a, byte b, byte c, byte d){//convert from four bytes to an integer
+  int returnValue = 0;//start with zero
   
-  returnValue = a & 0xFF;
-  returnValue = returnValue << 8;
-  returnValue |= b & 0xFF;
-  returnValue = returnValue << 8;
-  returnValue |= c & 0xFF;
-  returnValue = returnValue << 8;
-  returnValue |= d & 0xFF;
+  returnValue = a & 0xFF;//set it to the most significant byte
+  returnValue = returnValue << 8;//shift it 8 bits to the left
+  returnValue |= b & 0xFF;//add the upper middle byte
+  returnValue = returnValue << 8;//shift it 8 bits to the left
+  returnValue |= c & 0xFF;//add the lower middle byte
+  returnValue = returnValue << 8;//shift it 8 bits to the left
+  returnValue |= d & 0xFF;//add the least significant byte
   
-  return returnValue;
+  return returnValue;//return the int
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void FileLoadMap(){//load map from file
-  if(fileName.equals("Error")){
-    return;
+  if(fileName.equals("Error")){//if there was an error
+    return;//do nothing
   }
 
   noLoop();//dont allow drawing
-  byte[] mapFile = loadBytes(fileName);
+  byte[] mapFile = loadBytes(fileName);//temporary array
   
   String magic = "";
   //println(mapFile.length);
@@ -429,28 +433,28 @@ void FileLoadMap(){//load map from file
     magic += (char)mapFile[(mapFile.length - _magicText.length()) + l];
   }
   //println(magic);
-  if(!magic.equals(_magicText)){
+  if(!magic.equals(_magicText)){//is the file ours
     prepreloading = false;///---------------------------------------------------------------do we want this?
     loop();
     return;//file was not one of ours
   }
   
-  int fileVersion;
-  int headerLength;
-  String headerTileName;
-  int nameLength;
-  String headerTileLocation;
-  int locationLength;
-  int mapTilesAmount;
-  int iconsAmount;
+  int fileVersion;//what file version is the file
+  int headerLength;//how long is the header
+  String headerTileName;//what is the tile map name
+  int nameLength;//how long is the tile map name
+  String headerTileLocation;//where is the tile map
+  int locationLength;//how long is the tile map location string
+  int mapTilesAmount;//how many tiles are there
+  int iconsAmount;//how many icons are there
   
-  clearMapTilesArray();
-  clearClickableTilesArray();
+  clearMapTilesArray();//get ready to load a new map
+  clearClickableTilesArray();//get ready to load a new map
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   //File Version
-  fileVersion = (int)(mapFile[0] << 8);
-  fileVersion |= (int)mapFile[1];
+  fileVersion = (int)(mapFile[0] << 8);//upper byte
+  fileVersion |= (int)mapFile[1];//lower byte
   
   headerLength = (int)(mapFile[2] << 8);//Header Length
   headerLength |= (int)mapFile[3];//Header Length
@@ -468,13 +472,13 @@ void FileLoadMap(){//load map from file
   //Tile Map Name
   headerTileName = "";
   for(int i = 0; i < nameLength; i++){
-    headerTileName += str((char)mapFile[14 + i]);
+    headerTileName += str((char)mapFile[14 + i]);//get the name
   }
   println("Tile Map Name: " + headerTileName);
   
   headerTileLocation = "";
   for(int i = 0; i < locationLength; i++){
-    headerTileLocation += str((char)mapFile[14 + nameLength + i]);
+    headerTileLocation += str((char)mapFile[14 + nameLength + i]);//get the location
   }
   println("Tile Map Location: " + headerTileLocation);
   

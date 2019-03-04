@@ -7,9 +7,10 @@ int cols = 256;//Columns
 int rows = 256;//Rows
 
 int _DEBUG_ = -1;//what are we debugging
-int _DEBUGAMOUNT_ = 50000;//how many are we debugging
+int _DEBUGAMOUNT_ = 50000;//5000000;//how many are we debugging
 
-String VERSION = "PRE_ALPHA V0.0.1";
+String VERSION = "PRE_ALPHA";//what version do we display
+byte[] VERSIONB = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//<- = pre-alpha
 
 int drawnTiles = 0;//how many tiles are on the screen
 boolean drawAll = false;//draw all tiles even if not on screen?
@@ -18,10 +19,10 @@ void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   
-  for(int x = 0; x < rows; x++){
-    mapTiles.add(new ArrayList<ArrayList<mTile>>());
-    for(int y = 0; y < cols; y++){
-      mapTiles.get(x).add(new ArrayList<mTile>());
+  for(int x = 0; x < cols; x++){//for how many columns there are
+    mapTiles.add(new ArrayList<ArrayList<mTile>>());//create a column
+    for(int y = 0; y < rows; y++){//for how many rows there are
+      mapTiles.get(x).add(new ArrayList<mTile>());//create a row
     }
   }
   
@@ -35,17 +36,6 @@ void setup(){//Setup everything
   
   //changeVisibility(false);
   
-  //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
-  //mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
-  
-  //icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
-  //icons[icons.length - 1] = new clickableIcon(scl * 15, scl * 15, "maps/map5.ddj", "TEST");//Place a colored tile with no image
-  
-  //icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
-  //icons[icons.length - 1] = new clickableIcon(scl * 17, scl * 15, "maps/map6.ddj", "TEST2");//Place a colored tile with no image
-  
-  //icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
-  //icons[icons.length - 1] = new clickableIcon(scl * 19, scl * 15, "maps/map7.ddj", "TEST3");//Place a colored tile with no image
   //icons.add(new clickableIcon(scl * 15, scl * 15, "maps/map9-1.ddj", "TEST"));
   //icons.add(new clickableIcon(scl * 17, scl * 15, "maps/map9-2.ddj", "TEST2"));
   //icons.add(new clickableIcon(scl * 19, scl * 15, "maps/map9-3.ddj", "TEST3"));
@@ -54,20 +44,21 @@ void setup(){//Setup everything
     for(int i = 0; i < _DEBUGAMOUNT_; i++){
       //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
       //mapTiles[mapTiles.length - 1] = new mTile(200*scl,200*scl,1,127,127,127, false);//test tiles
-      mapTiles.get(200).get(200).add(new mTile(1,127,127,127, false));
+      //mapTiles.get(200).get(200).add(new mTile(1,127,127,127, false));//(int)random(256)//40
+      mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(256),(int)random(256),(int)random(256),(int)random(256), (int)random(2)==1));//(int)random(256)
     }
   }
-  button.setup();
+  //button.setup();
 }//void setup() END
 
 void draw(){//Draw the canvas
-  String FPS = String.valueOf(frameRate);
-  if(FPS.length() > 4){
-    FPS = FPS.substring(0, 5);//XX.XX
-  }else if(FPS.length() > 3){
-    FPS = FPS.substring(0, 4) + "0";//XX.X0
-  }else{
-    FPS = FPS.substring(0, 2) + ".00";//XX.00
+  String FPS = String.valueOf(frameRate);//grab the frame rate
+  if(FPS.length() > 4){//if the frame rate has more than 2 decimal places
+    FPS = FPS.substring(0, 5);//XX.XX truncate them
+  }else if(FPS.length() > 3){//if it has 1 decimal place
+    FPS = FPS.substring(0, 4) + "0";//XX.X0 pad it
+  }else{//if it has no decimal places
+    FPS = FPS.substring(0, 2) + ".00";//XX.00 pad it
   }
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + FPS);// + " : " + mapTiles.length);
   
@@ -119,12 +110,12 @@ void draw(){//Draw the canvas
   //line(0,0,width,0);
   //line(0,0,0,height);
   
-  button.draw();
+  //button.draw();
   
   popMatrix();//go back to normal space?
   
   fill(0);//black
-  noStroke();
+  noStroke();//no line around the ui background
   rect(0,0,width,scl * 2);//ui background
   
   //Update and Draw the UI
@@ -133,15 +124,15 @@ void draw(){//Draw the canvas
   }
 }//void draw() END
 
-boolean checkOffset(){//not used
-  //println("X: " + (floor(mouseX / scl) * scl) + ", Y: " + (floor(mouseY / scl) * scl) + ", SX: " + SX + ", SY: " + SY + ", H: " + height + ", W: " + width);
-  if(SX > 0 && (floor(mouseX / scl) * scl) < SX){
-    return true;
-  }else if(SY > 0 && (floor(mouseY / scl) * scl) < SY){
-    return true;
-  }if(SX < 0 && mouseX - width > abs(SX)){
-    return true;
-  }
+//boolean checkOffset(){//not used
+//  //println("X: " + (floor(mouseX / scl) * scl) + ", Y: " + (floor(mouseY / scl) * scl) + ", SX: " + SX + ", SY: " + SY + ", H: " + height + ", W: " + width);
+//  if(SX > 0 && (floor(mouseX / scl) * scl) < SX){
+//    return true;
+//  }else if(SY > 0 && (floor(mouseY / scl) * scl) < SY){
+//    return true;
+//  }if(SX < 0 && mouseX - width > abs(SX)){
+//    return true;
+//  }
   
-  return false;
-}//boolean checkOffset() END
+//  return false;
+//}//boolean checkOffset() END

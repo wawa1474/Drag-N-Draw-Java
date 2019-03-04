@@ -38,10 +38,10 @@ void keyTyped(){//We typed a key
         tileGroupCutCopy('c');//copy group selection
       }
     }else if(key == 'v'){//We pressed 'V'
-      if(tileGroupStep != 3){
+      if(tileGroupStep != 3){//set it up for pasting
         tileGroupStep = 3;//paste step is 3
-      }else if(tileGroupStep == 3){
-        tileGroupStep = 0;//paste step is 3
+      }else if(tileGroupStep == 3){//cancel pasting
+        tileGroupStep = 0;//paste step is 0
       }
     //}else if(key == 'i'){//We pressed 'I'
     //  for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
@@ -60,10 +60,10 @@ void keyTyped(){//We typed a key
     //    mapTiles[i].x += scl * scrollAmount;//Move tile right 1 space
     //  }
     }else if(key == 'r'){//We pressed 'R'
-      for(int x = 0; x < mapTiles.size(); x++){
-        for(int y = 0; y < mapTiles.get(x).size(); y++){
+      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
           if(isCursorOnTile(x, y)){//Are we clicking on the tile
-            mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size());
+            mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size());//grab the tile
             println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.clear);// + ", Tile Lore: " + mapTiles[i].lore);
           }
         }
@@ -82,11 +82,11 @@ void keyTyped(){//We typed a key
         tileGroupStep = 0;//ready to do group tiles stuff
       }
     }else if(key == 'p'){//We pressed 'P'
-      BG.r = (int)RSlider.getValue();
-      BG.g = (int)GSlider.getValue();
-      BG.b = (int)BSlider.getValue();
+      BG.r = (int)RSlider.getValue();//set red
+      BG.g = (int)GSlider.getValue();//set green
+      BG.b = (int)BSlider.getValue();//set blue
     }else if(key == 'o'){//We pressed 'O'
-      drawLines = !drawLines;
+      drawLines = !drawLines;//do we draw the background lines?
     }
     
     if(key == 'w'){//We pressed 'W'
@@ -96,10 +96,10 @@ void keyTyped(){//We typed a key
       //if(SY > scl * 5){//we're outside of the boundaries
       //  SY = scl * 5;//get back inside of the boundaries
       //}
-      SY += (scl * scrollAmount);
+      SY += (scl * scrollAmount);//go up
       
-      if(SY > 64){
-        SY = 64;
+      if(SY > 64){//if we're to far up
+        SY = 64;//make it not so
       }
     }
     if(key == 'a'){//We pressed 'A'
@@ -109,10 +109,10 @@ void keyTyped(){//We typed a key
       //if(SX > scl * 5){//we're outside of the boundaries
       //  SX = scl * 5;//get back inside of the boundaries
       //}
-      SX += (scl * scrollAmount);
+      SX += (scl * scrollAmount);//go left
       
-      if(SX > 0){
-        SX = 0;
+      if(SX > 0){//if we're to far left
+        SX = 0;//make it not so
       }
     }
     if(key == 's'){//We pressed 'S'
@@ -122,10 +122,10 @@ void keyTyped(){//We typed a key
       //if(SY < -((scl * 105) - height)){//we're outside of the boundaries
       //  SY = -((scl * 105) - (floor(height / scl) * scl));//get back inside of the boundaries
       //}
-      SY -= (scl * scrollAmount);
+      SY -= (scl * scrollAmount);//go down
       
-      if(SY < -((scl * rows) - height)){
-        SY = -((scl * rows) - height);
+      if(SY < -((scl * rows) - height)){//if we're to far down
+        SY = -((scl * rows) - height);//make it not so
       }
       //println(SY);
     }
@@ -136,10 +136,10 @@ void keyTyped(){//We typed a key
       //if(SX < -((scl * 105) - width)){//we're outside of the boundaries
       //  SX = -((scl * 105) - (floor(width / scl) * scl));//get back inside of the boundaries
       //}
-      SX -= (scl * scrollAmount);
+      SX -= (scl * scrollAmount);//go right
       
-      if(SX < -((scl * cols) - width)){
-        SX = -((scl * cols) - width);
+      if(SX < -((scl * cols) - width)){//if we're to far right
+        SX = -((scl * cols) - width);//make it not so
       }
     }
   }

@@ -1,13 +1,13 @@
 boolean clickdrag = false;//are we dragging the mouse?
 
-ArrayList<clickableIcon> icons = new ArrayList<clickableIcon>(0);
+ArrayList<clickableIcon> icons = new ArrayList<clickableIcon>(0);//make the array
 
 class clickableIcon{//clickableIcon Object
   int x, y;//Store XY Position
   String file;//store what file to load
   String hoverText;//text to show when mouse is hovering over
-  color borderColor = color(255,0,0);
-  boolean showBorder = true;
+  color borderColor = color(255,0,0);//what color is the border? (red)
+  boolean showBorder = true;//do we show the border
 
   public clickableIcon(int x, int y, String file, String hoverText){//clickableIcon Object
     this.x = x;//Store X Position
@@ -30,7 +30,7 @@ class clickableIcon{//clickableIcon Object
     }
   }
   
-  void drawText(){
+  void drawText(){//draw the hovering text
     fill(0);//black
     textSize(24);//larger
     text(this.hoverText, mouseX - SX, mouseY - SY);//tie the text to the mouse
@@ -64,7 +64,7 @@ void clearClickableTilesArray(){//delete all the icons
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void drawIcons(){
+void drawIcons(){//draw all icons
   for(int i = 0; i < icons.size(); i++){//Go through all the clickable icons
     icons.get(i).draw();//draw the icon
     if(icons.get(i).hoveringOver()){//if mouse hovering over icon

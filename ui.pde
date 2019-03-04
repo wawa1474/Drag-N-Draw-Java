@@ -26,7 +26,7 @@ int borderThickness = 4;//how thick is the canvas border
 
 int lowerx = 2147483647, lowery = 2147483647;//store lowest xy of tiles
 int upperx = -2147483648, uppery = -2147483648;//store highest xy of tiles
-boolean drawLines = true;
+boolean drawLines = true;//do we draw the background lines?
 
 
 class canvasBG{//The background
@@ -71,8 +71,6 @@ class canvasBG{//The background
 
 class tileUI{
   void draw(){
-    //fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
-    //rect(0, scl, scl, scl);//Display color behind RGB Sliders
     strokeWeight(1);//default
     stroke(0);
     fill(255);//Set background color to white
@@ -87,34 +85,26 @@ class tileUI{
       }
     }//Went through all the tiles
     
-    /*if(colorInputR.isVisible()){
-      fill(128);
-      rect(scl / 2, scl * 2, scl * 4, scl);
-    }*/
-    
     fill(255,0,0);//red text
     stroke(0);//no outline
     textSize(24);//larger text size
-    //String FPS = String.valueOf(frameRate);
-    //text("FPS: " + FPS.substring(0, 4), ((scl * 12) + scl / 8), (scl * 1.75));//FPS: (fps.fp)
+
+    int tmp = 0;//how many tiles are there total
     
-    //text("Tiles: " + mapTiles.length, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
-    int tmp = 0;
-    
-    for(int x = 0; x < mapTiles.size(); x++){
-      for(int y = 0; y < mapTiles.get(x).size(); y++){
-        tmp += mapTiles.get(x).get(y).size();
+    for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+      for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+        tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
       }
     }
-    if(tmpTile != null){
-      tmp += 1;
+    if(tmpTile != null){//if we're dragging a tile
+      tmp += 1;//count it to
     }
     
     text("Tiles: " + tmp, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
     
-    tmp = drawnTiles;
-    if(tmpTile != null){
-      tmp += 1;
+    tmp = drawnTiles;//number of tiles that are being drawn
+    if(tmpTile != null){//if we're dragging a tile
+      tmp += 1;//count it to
     }
   
     text("Drawn: " + tmp, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
@@ -125,7 +115,6 @@ class tileUI{
     //display when in ui?
     //int mouseDisplayX;
     int mouseDisplayY = (mouseY+(-SY));
-    //if(floor((mouseX+(-SX))/scl) < 0){mouseDisplayX = 0;}else{mouseDisplayX = floor((mouseX+(-SX))/scl);}
     if(mouseDisplayY < 0 + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
     
     text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
@@ -341,9 +330,11 @@ void colorInputB(String value){//called when colorInputB updates
 
 void loadColors(mTile tmp){//Load RGB Sliders and RGB Inputs with value from tile
   if(tmp != null){
-    RSlider.setValue(tmp.r);//Set Red Slider value to Red value of the tile
-    GSlider.setValue(tmp.g);//Set Green Slider value to Green value of the tile
-    BSlider.setValue(tmp.b);//Set Blue Slider value to Blue value of the tile
+    if(!tmp.clear){//----------------------------------------------------------------------------do we want to check this?
+      RSlider.setValue(tmp.r);//Set Red Slider value to Red value of the tile
+      GSlider.setValue(tmp.g);//Set Green Slider value to Green value of the tile
+      BSlider.setValue(tmp.b);//Set Blue Slider value to Blue value of the tile
+    }
   }
 }//void loadColors(int tile) END
 

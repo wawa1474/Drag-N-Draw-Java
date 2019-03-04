@@ -58,11 +58,11 @@ void mousePressed(){//We pressed a mouse button
     if(tileGroupStep == 2){//placing group of tiles
       tileGroup("right");//coloring group of tiles
     }else{//otherwise
-      for(int x = 0; x < mapTiles.size(); x++){
-        for(int y = 0; y < mapTiles.get(x).size(); y++){
+      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
           if(isCursorOnTile(x, y) && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
             //mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
-            mTile tmp = mapTiles.get(x).get(y).get(0);
+            mTile tmp = mapTiles.get(x).get(y).get(0);//grab the bottom tile
             tmp.r = (int)RSlider.getValue();//set tile red value
             tmp.g = (int)GSlider.getValue();//set tile green value
             tmp.b = (int)BSlider.getValue();//set tile blue value
@@ -89,8 +89,8 @@ void mousePressed(){//We pressed a mouse button
   //println("test6");
   // Did I click on the rectangle?
   //for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
-  for(int x = 0; x < mapTiles.size(); x++){
-    for(int y = 0; y < mapTiles.get(x).size(); y++){
+  for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+    for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
       if(isCursorOnTile(x, y)){//Are we clicking on the tile
         //println("test13 - " + x + ": " + y);
         if(mouseButton == CENTER){//We clicked with the middle button
@@ -101,8 +101,8 @@ void mousePressed(){//We pressed a mouse button
           return;//Block normal action
         }else if(mouseButton == LEFT && !CClear){//We clicked with the left button
           //mapN = x;//Keep track of what tile we clicked on
-          tmpTile = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
-          mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);
+          tmpTile = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
+          mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);//delete the tile
           dragging = true;//We dragging
           //updateOffset();//Update the mouse offset of the tile
           loadColors(tmpTile);//Load the color inputs and sliders with the color from the tile
@@ -142,11 +142,11 @@ void mouseDragged(){//We dragged the mouse while holding a button
   }*/
   
   if(mouseButton == RIGHT){//We clicked with the right button
-    for(int x = 0; x < mapTiles.size(); x++){
-      for(int y = 0; y < mapTiles.get(x).size(); y++){
+    for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+      for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
         if(isCursorOnTile(x, y) && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
           //mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
-          mTile tmp = mapTiles.get(x).get(y).get(0);
+          mTile tmp = mapTiles.get(x).get(y).get(0);//get the tile
           tmp.r = (int)RSlider.getValue();//set tile red value
           tmp.g = (int)GSlider.getValue();//set tile green value
           tmp.b = (int)BSlider.getValue();//set tile blue value
@@ -156,11 +156,10 @@ void mouseDragged(){//We dragged the mouse while holding a button
   }
   
   if(mouseButton == CENTER && deleting){//We dragging and deleting with the middle button
-    for(int x = 0; x < mapTiles.size(); x++){
-      for(int y = 0; y < mapTiles.get(x).size(); y++){
+    for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+      for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
         if(isCursorOnTile(x, y)){//Are we clicking on the tile
-          //deleteTile(x, y);//Delete a tile and update the array
-          mapTiles.get(x).get(y).clear();
+          mapTiles.get(x).get(y).clear();//delete all tiles in this space
           mapN = -1;//We're not holding a tile
         }
       }
@@ -176,8 +175,8 @@ void mouseDragged(){//We dragged the mouse while holding a button
     return;//Block normal action
   }
   
-  for(int x = 0; x < mapTiles.size(); x++){
-    for(int y = 0; y < mapTiles.get(x).size(); y++){
+  for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+    for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
       /*Pad*/if(isCursorOnTile(x, y) && !checkImage(tileN)){//Are we clicking on the tile
         return;//Block normal action
       }else if(isCursorOnTile(x, y) && mouseButton == CENTER){//Are we clicking on the tile with the middle button
@@ -208,10 +207,14 @@ void mouseReleased(){//We released the mouse button
   
   if(dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      //mapTiles.get(mapN).snapLocation();//Snap XY location of tile to grid
-      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(tmpTile);
-      resetLHXY();//reset the lower/higher xy for background drawing
-      tmpTile = null;
+      if(mX >= 0 - SX && mX < width - SX && mY < (0 + (scl*2)) - SY){//Did we just drop a tile on the ui
+        resetLHXY();//reset the lower/higher xy for background drawing
+        tmpTile = null;//we are no longer dragging a tile
+      }else{
+        mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(tmpTile);//place the dragged tile
+        resetLHXY();//reset the lower/higher xy for background drawing
+        tmpTile = null;//we are no longer dragging a tile
+      }
     }
   }
   
@@ -220,15 +223,6 @@ void mouseReleased(){//We released the mouse button
   if(!colorWheel.isVisible() && !colorInputR.isVisible()){//if not using color wheel or color inputs
     noTile = false;//Allow tile placement
   }
-
-  //if(mapN != -1 && mapTiles.size() > mapN){//If tile exists
-  //  mTile tmp = mapTiles.get(mapN);
-  //  if(tmp.x >= 0 - SX && tmp.x < width - SX && tmp.y < (0 + (scl*2)) - SY){//Did we just drop a tile on the ui
-  //    deleteTile(mapN);//Delete the tile
-  //    resetLHXY();//reset the lower/higher xy for background drawing
-  //    //return false;
-  //  }
-  //}
   }
 }//void mouseReleased() END
 
