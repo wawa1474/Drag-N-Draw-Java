@@ -37,22 +37,26 @@ class canvasBG{//The background
   int gLower = 90;//middle-ish
   
   void draw(){//Draw the background
-    strokeWeight(1);//default
-    background(this.r, this.g, this.b);//Draw the background in whatever the color is
-    //image(BACKGROUND, 0, 0);//Draw background
-    
-    if(this.r > gLower && this.r < gUpper && this.g > gLower && this.g < gUpper && this.b > gLower && this.b < gUpper){//if the color is gray-ish
-      stroke(0);//Make it black
+    if(preloading == true){
+      background(255);//white background
+      image(tileMaps[tileMapShow],0,scl);//display tile map
     }else{
-      stroke(255-this.r, 255-this.g, 255-this.b);//Invert line color
-    }
+      strokeWeight(1);//default
+      background(this.r, this.g, this.b);//Draw the background in whatever the color is
     
-    if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){//if the tile xy is not reset and we're should draw lines
-      for(int i = lowerx - (scl * 20); i < upperx + (scl * 20); i+=scl){//for however many horizontal squares there are
-        line(i,lowery - (scl * 20), i, uppery + (scl * 20));//draw lines
+      if(this.r > gLower && this.r < gUpper && this.g > gLower && this.g < gUpper && this.b > gLower && this.b < gUpper){//if the color is gray-ish
+        stroke(0);//Make it black
+      }else{
+        stroke(255-this.r, 255-this.g, 255-this.b);//Invert line color
       }
-      for(int i = lowery - (scl * 20); i < uppery + (scl * 20); i+=scl){//for however many vertical squares there are
-        line(lowerx - (scl * 20), i, upperx + (scl * 20), i);//draw lines
+    
+      if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){//if the tile xy is not reset and we're should draw lines
+        for(int i = lowerx - (scl * 20); i < upperx + (scl * 20); i+=scl){//for however many horizontal squares there are
+          line(i,lowery - (scl * 20), i, uppery + (scl * 20));//draw lines
+        }
+        for(int i = lowery - (scl * 20); i < uppery + (scl * 20); i+=scl){//for however many vertical squares there are
+          line(lowerx - (scl * 20), i, upperx + (scl * 20), i);//draw lines
+        }
       }
     }
   }//void draw() END
@@ -71,64 +75,85 @@ class canvasBG{//The background
 
 class tileUI{
   void draw(){
-    strokeWeight(1);//default
-    stroke(0);
-    fill(255);//Set background color to white
-    rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
-    for(int i = 0; i < rowLength; i++){//Go through all the tiles
-      if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
-        if((rowLength*tileRow)+i == tileN){//If displaying selected tile
-          fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
-          rect(scl*i, 0, scl, scl);//Display color behind the tile
-        }
-        image(img[rowLength*tileRow+i], scl*i, 0);//Draw tile
-      }
-    }//Went through all the tiles
-    
-    fill(255,0,0);//red text
-    stroke(0);//no outline
-    textSize(24);//larger text size
-
-    int tmp = 0;//how many tiles are there total
-    
-    for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-      for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
-        tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
-      }
-    }
-    if(tmpTile != null){//if we're dragging a tile
-      tmp += 1;//count it to
-    }
-    
-    text("Tiles: " + tmp, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
-    
-    tmp = drawnTiles;//number of tiles that are being drawn
-    if(tmpTile != null){//if we're dragging a tile
-      tmp += 1;//count it to
-    }
-  
-    text("Drawn: " + tmp, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
-    
-    text("X:" + floor(-SX/scl),((scl * 25)),(scl / 1.25));//X: (screen x)
-    text("Y:" + floor(-(SY-64)/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)
-    
-    //display when in ui?
-    //int mouseDisplayX;
-    int mouseDisplayY = (mouseY+(-SY));
-    if(mouseDisplayY < 0 + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
-    
-    text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
-    
-    if(mouseDisplayY == -1){
-      text("Y:" + "UI",((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
+    if(preloading == true){
+      fill(0);//black box
+      //rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);//text box background
+      rect(scl * 11.5, 0, scl * 5, scl);//text box background
+      fill(255);//white text
+      //text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
+      text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12, scl / 2);//display tile map name
     }else{
-      text("Y:" + mouseDisplayY,((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
-    }
+      fill(0);//black
+      noStroke();//no line around the ui background
+      rect(0,0,width,scl * 2);//ui background
     
-    textSize(12);//Default text size
+      strokeWeight(1);//default
+      stroke(0);
+      fill(255);//Set background color to white
+      rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
+      for(int i = 0; i < rowLength; i++){//Go through all the tiles
+        if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
+          if((rowLength*tileRow)+i == tileN){//If displaying selected tile
+            fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
+            rect(scl*i, 0, scl, scl);//Display color behind the tile
+          }
+          image(img[rowLength*tileRow+i], scl*i, 0);//Draw tile
+        }
+      }//Went through all the tiles
+    
+      fill(255,0,0);//red text
+      stroke(0);//no outline
+      textSize(24);//larger text size
+
+      int tmp = 0;//how many tiles are there total
+    
+      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+          tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
+        }
+      }
+      if(tmpTile != null){//if we're dragging a tile
+        tmp += 1;//count it to
+      }
+    
+      text("Tiles: " + tmp, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
+    
+      tmp = drawnTiles;//number of tiles that are being drawn
+      if(tmpTile != null){//if we're dragging a tile
+        tmp += 1;//count it to
+      }
+  
+      text("Drawn: " + tmp, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
+    
+      text("X:" + floor(-SX/scl),((scl * 25)),(scl / 1.25));//X: (screen x)
+      text("Y:" + floor(-(SY-64)/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)
+    
+      //display when in ui?
+      //int mouseDisplayX;
+      int mouseDisplayY = (mouseY+(-SY));
+      if(mouseDisplayY < 0 + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
+    
+      text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
+    
+      if(mouseDisplayY == -1){
+        text("Y:" + "UI",((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
+      }else{
+        text("Y:" + mouseDisplayY,((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
+      }
+    
+      textSize(12);//Default text size
+    }
   }//void draw() END
   
   void update(){
+    if(UISetup == false){//is ui not setup
+      UISetup = true;//ui is setup
+    }
+    
+    if(colorWheel.isVisible() || colorInputR.isVisible()){//if using color wheel or color inputs
+      noTile = true;//disallow tile placement
+    }
+    
     scrollAmount = (int)scrollSlider.getValue();//update scroll amount
     
     RSlider.setColorBackground(color(RSlider.getValue(), 0, 0));//update background color (Red)
@@ -422,3 +447,18 @@ void prevRowC(){//Previous Row
     tileRow = floor(fullTotalImages / rowLength);//Loop the row number back to the last
   }
 }//void prevRowC() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+String padFPS(){
+  String FPS = String.valueOf(frameRate);//grab the frame rate
+  if(FPS.length() > 4){//if the frame rate has more than 2 decimal places
+    FPS = FPS.substring(0, 5);//XX.XX truncate them
+  }else if(FPS.length() > 3){//if it has 1 decimal place
+    FPS = FPS.substring(0, 4) + "0";//XX.X0 pad it
+  }else{//if it has no decimal places
+    FPS = FPS.substring(0, 2) + ".00";//XX.00 pad it
+  }
+  
+  return FPS;
+}
