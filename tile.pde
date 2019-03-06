@@ -59,8 +59,6 @@ void deleteTile(int x, int y){//Delete a tile and update the array
   if(mapTiles.get(x).get(y).size() > 0){//if there are tiles
     mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);//delete the top most one
   }
-  //-2,147,483,648 -> 2,147,483,647
-  //resetLHXY();//reset the lower/higher xy for background drawing
 }//void deleteTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -79,7 +77,6 @@ void placeTile(){//Place a tile at the mouses location
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
     }
   }
-  //updateLHXY(mapTiles.size() - 1);//update the lower/higher xy for background drawing
   resetLHXY();//reset the lower/higher xy for background drawing
 }//void placeTile() END
 
@@ -147,35 +144,11 @@ void loadTile(mTile tmp){//Set current image to tile image
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean isCursorOnTile(int x, int y){//Is the mouse cursor on the tile we're checking?
-  int tmpX = x * scl;
+boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we're checking?
+  int tmpX = x * scl;//x,y need to be multiplied for checking
   int tmpY = y * scl;
-  return(mX > tmpX - fV && mX < tmpX + scl + fV && mY > tmpY - fV && mY < tmpY + scl + fV && mapTiles.get(x).get(y).size() != 0);//Are we clicking on the tile
-}//boolean isCursorOnTile(int tile) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-boolean isCursorOnTileXY(int x, int y, int tX, int tY){//Is the mouse cursor on the tile we're checking?
-  int tmpX = x * scl;
-  int tmpY = y * scl;
-  return(tX > tmpX - fV && tX < tmpX + scl + fV && tY > tmpY - fV && tY < tmpY + scl + fV);//Are we clicking on the tile
+  return(tX > tmpX - fV && tX < tmpX + scl + fV && tY > tmpY - fV && tY < tmpY + scl + fV && mapTiles.get(x).get(y).size() != 0);//Are we on the tile
 }//boolean isCursorOnTileXY(int tile, int tX, int tY) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-boolean isCursorOnTileNoFV(int x, int y){//Is the mouse cursor on the tile we're checking?
-  int tmpX = x * scl;
-  int tmpY = y * scl;
-  return(mX > tmpX && mX < tmpX + scl && mY > tmpY && mY < tmpY + scl);//Are we clicking on the tile
-}//boolean isCursorOnTileNoFV(int tile) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-boolean isCursorOnTileNoFVXY(int x, int y, int tX, int tY){//Is the mouse cursor on the tile we're checking?
-  int tmpX = x * scl;
-  int tmpY = y * scl;
-  return(tX > tmpX && tX < tmpX + scl && tY > tmpY && tY < tmpY + scl);//Are we clicking on the tile
-}//boolean isCursorOnTileNoFVXY(int tile, int tX, int tY) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -194,16 +167,13 @@ boolean checkImage(int tile){//check if tile about to place has same image as ti
   for(int x = 0; x < mapTiles.size(); x++){
     for(int y = 0; y < mapTiles.get(x).size(); y++){
       for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){
-        if(isCursorOnTile(x, y)){//Is the mouse cursor on the tile we're checking?
-          if(mapTiles.get(x).get(y).get(z) != null){
-            if(tile == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
-              return false;//Don't place tile
-            }
+        if(isCursorOnTile(x, y, mX, mY)){//Is the mouse cursor on the tile we're checking?
+          if(tile == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
+            return false;//Don't place tile
           }
         }
       }
     }
   }
-  //console.log("True");
   return true;//Place tile
 }//boolean checkImage(int tile) END

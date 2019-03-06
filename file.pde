@@ -17,15 +17,26 @@ ArrayList<Byte> mapFile = new ArrayList<Byte>(0);//temporary byte array
     //Compressed Position
   
   //Version 4:
-    //0 = File MetaData
-    //Compressed Everything
-    //last 16 bytes = _magicText
+    //2 bytes = file format version
+    //2 bytes = header length
+    //tile map name length
+    //tile map location length
+    //4 bytes = number of tiles
+    //4 bytes = number of icons
+    //tile map name (variable length)
+    //tile map location (variable length)
+    //16 byte alignment (variable length 0-15 bytes)
+    //tiles 8 bytes each (x, y, image, red, green, blue, flags) (variable amount)
+    //16 byte alignment (variable length 0-15 bytes)
+    //tiles 4 bytes each (x, y, text length, location length) plus variable length text and map location (variable amount)
+    //16 byte alignment (variable length 0-15 bytes)
+    //16 byte program version
+    //last 16 bytes = _magicText ("wawa1474DragDraw")
 
 PImage[] img = new PImage[0];//Tile Images Array
 PImage BACKGROUND;//background image
 PImage missingTexture;//missingTexture Image
 
-//Table mapTable;//Map Table
 String fileName = "Error";//File Name
 
 Table tileInfoTable;//tile map info table
@@ -122,7 +133,6 @@ void FileLoadTileMapInfo(){//load map from file
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error
   }
-  //image(tileMaps[1],0,0);
 }//FileLoadTileInfo() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -161,13 +171,9 @@ void FileSaveCanvasSelect(File selection){//map canvas save select callback
   } else {//we selected a file
     println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();//get the path to the file
-    //String[] fileNameSplit = split(fileName, '.');//split the filename into parts
-    //String[] fileNamePNG = {fileNameSplit[0], "png"};//array of filename and png
-    //if(fileNameSplit.length > 1){//does the file have an extension
     if(split(fileName, '.').length > 1){//does the file have an extension
       //Already has file type
     }else{
-      //fileName = join(fileNamePNG, '.');//make sure the filename ends with .png
       fileName = join(new String[] {fileName, "png"}, '.');//make sure the filename ends with .png
     }
     FileSaveCanvas();//save the canvas
@@ -182,14 +188,10 @@ void fileSaveMapSelect(File selection){//map file save select callback
   } else {//we selected a file
     println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();//get the path to the file
-    //String[] fileNameSplit = split(fileName, '.');//split the filename into parts
-    //String[] fileNameCSV = {fileNameSplit[0], "csv"};//array of filename and csv
-    //if(fileNameSplit.length > 1){//does the file have an extension
     if(split(fileName, '.').length > 1){//does the file have an extension
       //Already has file type
     }else{
-      //fileName = join(fileNamePNG, '.');//make sure the filename ends with .png
-      fileName = join(new String[] {fileName, "ddj"}, '.');//make sure the filename ends with .png
+      fileName = join(new String[] {fileName, "ddj"}, '.');//make sure the filename ends with .ddj
     }
     fileSaveMap();//save the map
   }
@@ -270,16 +272,14 @@ void fileSaveMap(){//Save the Map to file
   
   int mapFlags = 0;//temporary variable
   
-  //mTile[] clickTiles = new mTile[0];
-  
   //Do we compress clickable icon text?
   String[] clickLoc = new String[0];//Array of clickable icon file locations
   String[] hoveText = new String[0];//Array of clickable icon hover texts
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   //File Version
-  mapFile.add((byte)(_FILEVERSION_ >> 8));//upper byte00
-  mapFile.add((byte)_FILEVERSION_);//lower byte01
+  mapFile.add((byte)(_FILEVERSION_ >> 8));//upper byte
+  mapFile.add((byte)_FILEVERSION_);//lower byte
   
   //dummy header length bytes
   mapFile.add((byte)0x00);//02
@@ -303,15 +303,15 @@ void fileSaveMap(){//Save the Map to file
   mapFile.add((byte)tmp);//09
   
   //Clickable Icons Amount
-  mapFile.add((byte)(icons.size() >> 24));//10/0A
-  mapFile.add((byte)(icons.size() >> 16));//11/0B
-  mapFile.add((byte)(icons.size() >> 8));//12/0C
-  mapFile.add((byte)icons.size());//13/0D
+  mapFile.add((byte)(icons.size() >> 24));//10
+  mapFile.add((byte)(icons.size() >> 16));//11
+  mapFile.add((byte)(icons.size() >> 8));//12
+  mapFile.add((byte)icons.size());//13
   
   //background color
-  mapFile.add((byte)BG.r);//14/0E
-  mapFile.add((byte)BG.g);//15/0F
-  mapFile.add((byte)BG.b);//16/10
+  mapFile.add((byte)BG.r);//14
+  mapFile.add((byte)BG.g);//15
+  mapFile.add((byte)BG.b);//16
   
   //Tile Map Name
   for(int i = 0; i < tileMapName.length(); i++){
@@ -437,7 +437,7 @@ void FileLoadMap(){//load map from file
   for(int l = 0; l < _magicText.length(); l++){
     magic += (char)mapFile[(mapFile.length - _magicText.length()) + l];
   }
-  //println(magic);
+
   if(!magic.equals(_magicText)){//is the file ours
     prepreloading = false;///---------------------------------------------------------------do we want this?
     loop();
@@ -478,7 +478,6 @@ void FileLoadMap(){//load map from file
   BG.r = int(mapFile[14]);
   BG.g = int(mapFile[15]);
   BG.b = int(mapFile[16]);
-  //println("R: " + int(mapFile[14]) + ", G: " + int(mapFile[15]) + ", B: " + int(mapFile[16]));
   
   //Tile Map Name
   headerTileName = "";
@@ -504,13 +503,11 @@ void FileLoadMap(){//load map from file
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
   if(fileVersion == 4){//whats the file version
-    //println(mapTilesAmount);
     
     //Load Map Tiles
     for(int i = 0; i < mapTilesAmount; i++){//Loop through all the rows
       int tmp = (i * 8) + headerLength;
       
-      //println(i - 32);
       boolean CLEAR = false;//tile is not clear
       if((mapFile[tmp + 7] & 0x01) == 1){//Is Tile Clear
         CLEAR = true;//tile is clear
@@ -518,16 +515,13 @@ void FileLoadMap(){//load map from file
       
       int imageNumber = (mapFile[tmp + 2] << 8) & 0xFF;
       imageNumber |= (mapFile[tmp + 3]) & 0xFF;
-      //println(imageNumber);
       
-      //println((mapFile[tmp] & 0xFF) + ": " + (mapFile[tmp + 1] & 0xFF));
       mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(
                                                 imageNumber,//Tile Image
                                                 int(mapFile[tmp + 4]),//Tile Red amount
                                                 int(mapFile[tmp + 5]),//Tile Green amount
                                                 int(mapFile[tmp + 6]),//Tile Blue amount
                                                 CLEAR));//Is Tile Clear
-      //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
     }
     
     int mapTilesLength = (mapTilesAmount * 8) + ((16 - floor(mapTilesAmount * 8) % 16) % 16) + headerLength;
@@ -554,28 +548,16 @@ void FileLoadMap(){//load map from file
       }
       println("Clickable Tile Text: " + clickableHover);
     
-      //icons = (clickableIcon[]) expand(icons, icons.length + 1);//Make sure we have room
-      //icons[icons.length - 1] = new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl,//Tile X position
       icons.add(new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl,//Tile X position
                                                 (mapFile[iconsAddress + 1] & 0xFF) * scl,//Tile Y position
                                                 clickableFile,//Tile Image
-                                                //clickableHover);//Is Tile Clear
                                                 clickableHover));//Is Tile Clear
-      //println(mapTiles[mapTiles.length - 1].x + ", " + mapTiles[mapTiles.length - 1].y);
       
       iconsAddress = clickTextAddress + (16 - ((clickTextAddress % 16) % 16));
       println("Sequential Icons Address: " + iconsAddress);
     }
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error
-  }
-  
-  //if(mapTiles == null){//Is the array null
-  //  clearMapTilesArray();
-  //}
-  
-  if(icons == null){//Is the array null
-    clearClickableTilesArray();
   }
   
   loop();//allow drawing

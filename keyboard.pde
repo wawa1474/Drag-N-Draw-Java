@@ -2,8 +2,8 @@ boolean noKeyboard = false;//Are We Blocking keyTyped() and keyPressed()?
 int scrollAmount = 1;//How many squares to scroll when pressing WASD
 
 void keyPressed(){//We pressed a key
+  //println(keyCode);//What key did we press?
   if(noKeyboard == false){//are we blocking keyboard functions?
-    //println(keyCode);//What key did we press?
     if (keyCode == /*SHIFT*/16){//We pressed shift
       prevRowC();//Previous Tile row
     }else if (keyCode == /*SPACE*/32){//We pressed space
@@ -41,7 +41,7 @@ void keyTyped(){//We typed a key
     }else if(key == 'r'){//We pressed 'R'
       for(int x = 0; x < mapTiles.size(); x++){//go through all columns
         for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
-          if(isCursorOnTile(x, y)){//Are we clicking on the tile
+          if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
             println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.clear);// + ", Tile Lore: " + mapTiles[i].lore);
           }
@@ -50,7 +50,7 @@ void keyTyped(){//We typed a key
     }else if(key == 'e'){//We pressed 'E'
       for(int x = 0; x < mapTiles.size(); x++){//go through all columns
         for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
-          if(isCursorOnTile(x, y)){//Are we clicking on the tile
+          if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
             loadColors(tmp);
           }

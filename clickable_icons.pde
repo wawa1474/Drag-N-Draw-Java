@@ -19,7 +19,6 @@ class clickableIcon{//clickableIcon Object
   void draw(){//draw the icon
     if(showBorder){
       stroke(borderColor);//set the outline to red
-      //rect(scl * 5, scl * 5, scl, scl);
       strokeWeight(borderThickness); //Make the outline Thicker
       line(x, y, x + scl, y);//draw the top line
       line(x, y, x, y + scl);//draw the left line

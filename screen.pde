@@ -10,8 +10,8 @@ void drawSpots(){
           if(z >= 0){//if there's a tile to be drawn
             mapTiles.get(x).get(y).get(z).draw(x * scl, y * scl);//draw it
             drawnTiles++;//how many tiles are being drawn?
-            //if(!mapTiles.get(x).get(y).get(z).clear){
-            //  skip = true;
+            //if(!mapTiles.get(x).get(y).get(z).clear){//if there's a non-clear tile thats not at the bottom
+            //  skip = true;//don't draw anything below it
             //}
           }
         }

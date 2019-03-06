@@ -30,9 +30,6 @@ void tileGroup(String button){//mess with tiles in square group
     Y1 = floor(sy2 / scl);//Adjust XY To Be On Tile Border
   }
   
-  //X2 += scl;
-  //Y2 += scl;
-  
   XLines = (X2 - X1);//how many x lines
   YLines = (Y2 - Y1);//how many y lines
   
@@ -47,7 +44,7 @@ void tileGroup(String button){//mess with tiles in square group
       }else if(button == "center" && tileGroupDeleting == true && !skip){//we clicked middle button on a tile
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
-            if(isCursorOnTileXY(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4)){//Are we clicking on the tile
+            if(isCursorOnTile(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4)){//Are we clicking on the tile
               mapTiles.get(x).get(y).clear();//delete all the tiles in this space
             }
           }
@@ -57,7 +54,7 @@ void tileGroup(String button){//mess with tiles in square group
       }else if(button == "right" && !skip){//we clicked right button
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
-            if(isCursorOnTileXY(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4) && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
+            if(isCursorOnTile(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4)){//Are we clicking on the tile
               for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//go through all the tiles in this space
                 mTile tmp = mapTiles.get(x).get(y).get(0);//grab the tile
                 tmp.r = (int)RSlider.getValue();//set tile red value to red slider value
@@ -102,9 +99,6 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
     Y1 = floor(sy2 / scl);//Adjust XY To Be On Tile Border
   }
   
-  //X2 += scl;
-  //Y2 += scl;
-  
   tileGrouSXLines = (X2 - X1);//how many x lines
   tileGrouSYLines = (Y2 - Y1);//how many y lines
   
@@ -123,7 +117,7 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
         skip = true;//skip this space
       }
       if(button == 'x' && !skip){//we clicked middle button on a tile
-        if(isCursorOnTileXY(X1 + i, Y1 + j, ((X1 + i) * scl) + 4, ((Y1  + j) * scl) + 4) && mapTiles.get(X1 + i).get(Y1 + j).size() != 0){//Are we clicking on the tile
+        if(isCursorOnTile(X1 + i, Y1 + j, ((X1 + i) * scl) + 4, ((Y1  + j) * scl) + 4)){//Are we clicking on the tile
           for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
             mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
             mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
@@ -134,7 +128,7 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
           mapTiles.get(X1 + i).get(Y1 + j).clear();//delete all tiles in the space
         }
       }else if(button == 'c' && !skip){//we clicked right button
-        if(isCursorOnTileXY(X1 + i, Y1 + j, ((X1 + i) * scl) + 4, ((Y1  + j) * scl) + 4) && mapTiles.get(X1 + i).get(Y1 + j).size() != 0){//Are we clicking on the tile
+        if(isCursorOnTile(X1 + i, Y1 + j, ((X1 + i) * scl) + 4, ((Y1  + j) * scl) + 4)){//Are we clicking on the tile
           for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
             mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
             mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
