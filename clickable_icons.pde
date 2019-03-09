@@ -31,7 +31,7 @@ class clickableIcon{//clickableIcon Object
   
   void drawText(){//draw the hovering text
     fill(0);//black
-    textSize(24);//larger
+    textSize(24 / globalScale);//larger
     text(this.hoverText, (mouseX - SX) / globalScale, (mouseY - SY) / globalScale);//tie the text to the mouse
   }
   

@@ -198,15 +198,23 @@ void mouseWheel(MouseEvent event){//We Scrolled The Mouse Wheel
     if(keyCode == /*CTRL*/17){//holding Control
       nextRowC();//Move To Next Row
       keyCode = 0;
+      globalScale += 0.1;
     }else{
       nextTileC();//Move To Next Tile
+      globalScale += 0.01;
     }
   }else{
     if(keyCode == /*CTRL*/17){//holding Control
       prevRowC();//Move To Previous Row
       keyCode = 0;
+      globalScale -= 0.1;
     }else{
       prevTileC();//Move To Previous Tile
+      globalScale -= 0.01;
+    }
+    if(globalScale < 0.01){
+      globalScale = 0.01;
     }
   }
+  redraw = true;
 }//void mouseWheel(event) END

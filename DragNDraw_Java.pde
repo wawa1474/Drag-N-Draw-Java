@@ -7,9 +7,10 @@ int cols = 256;//Columns
 int rows = 256;//Rows
 
 float globalScale = .75;//what is the size of everything
+boolean redraw = true;
 
-int _DEBUG_ = -1;//what are we debugging
-int _DEBUGAMOUNT_ = 50000;//5000000;//how many are we debugging
+int _DEBUG_ = 0;//what are we debugging
+int _DEBUGAMOUNT_ = 5000000;//5000000;//how many are we debugging
 
 int drawnTiles = 0;//how many tiles are on the screen
 boolean drawAll = false;//draw all tiles even if not on screen?
@@ -18,12 +19,7 @@ void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   
-  for(int x = 0; x < cols; x++){//for how many columns there are
-    mapTiles.add(new ArrayList<ArrayList<mTile>>());//create a column
-    for(int y = 0; y < rows; y++){//for how many rows there are
-      mapTiles.get(x).add(new ArrayList<mTile>());//create a row
-    }
-  }
+  clearMapTilesArray();//setup map tiles array
   
   FileLoadTileMapInfo();//load tile map info file
   
@@ -53,9 +49,11 @@ void draw(){//Draw the canvas
   translate(SX, SY);//shift screen around
   scale(1 * globalScale);
   
-  BG.draw();//Draw the background and grid
+  if(redraw){
+    BG.draw();//Draw the background and grid
+  }
   
-  if(preloading != true){//if preloading
+  if(preloading != true && redraw){//if preloading
     drawnTiles = 0;//reset number of drawn tiles
 
     updateXY();//Update the XY position of the mouse and the page XY offset
@@ -69,6 +67,8 @@ void draw(){//Draw the canvas
     drawTileGroupOutlines();//draw the necessary outlines
   
     drawIcons();//draw all icons
+    
+    redraw = false;
   }
   
   popMatrix();//go back to normal space?
