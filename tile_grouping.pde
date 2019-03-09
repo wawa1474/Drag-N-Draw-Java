@@ -153,6 +153,10 @@ void tileGroupPaste(){//Paste The Copied Tiles
   int X1,Y1;//Setup Variables
   int tileCount = 0;//how many tiles are there
   
+  if(noTile == true){//are we not allowed to place tiles
+    return;//do nothing
+  }
+  
   X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
   Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
   

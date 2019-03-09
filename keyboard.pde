@@ -24,6 +24,18 @@ void keyTyped(){//We typed a key
         CClear = true;//Set it clear
         clearToggle.setColorLabel(color(0));//make text white
       }
+    }else if(key == 'q' && noTile == false){//We pressed 'Q'
+      if(tileGroupStep == 0){//set XY1
+        tileGroupStep = 1;//ready for next step
+        sx1 = mouseX - SX;//set x1 to mouse x position
+        sy1 = mouseY - SY;//set y1 to mouse y position
+      }else if (tileGroupStep == 1){//set XY2
+        tileGroupStep = 2;//ready to do group tiles stuff
+        sx2 = mouseX - SX;//set x1 to mouse x position
+        sy2 = mouseY - SY;//set y2 to mouse y position
+      }else if (tileGroupStep == 2){//set XY2
+        tileGroupStep = 0;//ready to do group tiles stuff
+      }
     }else if(key == 'x'){//We pressed 'X'
       if(tileGroupStep == 2){//we're on step two of group selection
         tileGroupCutCopy('x');//cut group selection
@@ -32,7 +44,7 @@ void keyTyped(){//We typed a key
       if(tileGroupStep == 2){//we're on step two of group selection
         tileGroupCutCopy('c');//copy group selection
       }
-    }else if(key == 'v'){//We pressed 'V'
+    }else if(key == 'v' && noTile == false){//We pressed 'V'
       if(tileGroupStep != 3){//set it up for pasting
         tileGroupStep = 3;//paste step is 3
       }else if(tileGroupStep == 3){//cancel pasting
@@ -55,18 +67,6 @@ void keyTyped(){//We typed a key
             loadColors(tmp);
           }
         }
-      }
-    }else if(key == 'q'){//We pressed 'Q'
-      if(tileGroupStep == 0){//set XY1
-        tileGroupStep = 1;//ready for next step
-        sx1 = mouseX - SX;//set x1 to mouse x position
-        sy1 = mouseY - SY;//set y1 to mouse y position
-      }else if (tileGroupStep == 1){//set XY2
-        tileGroupStep = 2;//ready to do group tiles stuff
-        sx2 = mouseX - SX;//set x1 to mouse x position
-        sy2 = mouseY - SY;//set y2 to mouse y position
-      }else if (tileGroupStep == 2){//set XY2
-        tileGroupStep = 0;//ready to do group tiles stuff
       }
     }else if(key == 'p'){//We pressed 'P'
       BG.r = (int)RSlider.getValue();//set red

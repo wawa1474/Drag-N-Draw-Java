@@ -6,6 +6,8 @@ import controlP5.*;//import the library
 int cols = 256;//Columns
 int rows = 256;//Rows
 
+float globalScale = .75;//what is the size of everything
+
 int _DEBUG_ = -1;//what are we debugging
 int _DEBUGAMOUNT_ = 50000;//5000000;//how many are we debugging
 
@@ -43,8 +45,13 @@ void setup(){//Setup everything
 void draw(){//Draw the canvas
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + padFPS());// + " : " + mapTiles.length);
   
+  if(globalScale != 1){
+    noTile = true;
+  }
+  
   pushMatrix();//go back to crazy space?
   translate(SX, SY);//shift screen around
+  scale(1 * globalScale);
   
   BG.draw();//Draw the background and grid
   
