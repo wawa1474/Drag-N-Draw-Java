@@ -1,20 +1,20 @@
-int mapN = 0;//Which map peice are we messing with
 int tileBorderNumber = 0;//What number in img[] is the border (its just a null tile)
 
 int scl = 32;//Square Scale
 
-mTile[] mapTiles = new mTile[0];//Map Tiles Array
+ArrayList<ArrayList<ArrayList<mTile>>> mapTiles = new ArrayList<ArrayList<ArrayList<mTile>>>(0);//the hellish 3 dimensional ArrayList of tiles
+
+mTile tmpTile;//the temporary tile we're dragging
+int tmpTileX = 0;//its x position
+int tmpTileY = 0;//its y position
 
 
 class mTile{//Tile Object
-  int x, y;//Store XY Position
   int image;//Store Image Number
   int r, g, b;//Store RGB Value
   boolean clear;//Is the tile clear
 
-  public mTile(int x, int y, int image, int r, int g, int b, boolean clear){//Tile Object
-    this.x = x;//Store X Position
-    this.y = y;//Store Y Position
+  public mTile(int image, int r, int g, int b, boolean clear){//Tile Object
     this.image = image;//Store Image Number
     this.r = r;//Store Red Value
     this.g = g;//Store Green Value
@@ -22,30 +22,43 @@ class mTile{//Tile Object
     this.clear = clear;//Is the tile clear
     //this.lore = lore || 0;//The LORE? of the tile
   }//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
+  
+  void draw(int x, int y){
+    if(!this.clear || this.image == colorTile){//Is the tile colored
+      fill(this.r,this.g,this.b);//Set Tile background color
+      rect(x,y,scl,scl);//Draw colored square behind tile
+    }
+    
+    if(this.image != colorTile && this.image <= totalImages){//if tile image is not 0 and tile image exists
+      image(img[this.image], x, y);//Draw tile
+    }else if(this.image != 0){//image is not blank
+      image(missingTexture, x, y);//Draw tile
+    }
+  }
 }//class mTile() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+boolean tileOnScreen(int x, int y){//is this tile on screen
+  if(x > -scl - SX && x  < width - SX && y > -scl - SY && y < height - SY){//is the tile within the screen bounds
+    return true;//yes
+  }
+  return false;//no
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateXY(){//Update the XY position of the mouse and the page XY offset
   mX = mouseX - SX;//Update the X position of the mouse
   mY = mouseY - SY;//Update the Y position of the mouse
-  //SX = window.pageXOffset;//Update the page X offset
-  //SY = window.pageYOffset;//Update the page Y offset
 }//void updateXY() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void deleteTile(int tile){//Delete a tile and update the array
-  if(mapTiles.length > 0){//if there are tiles
-    if(mapTiles.length > 1){//If there is more than 1 tile
-      for(int i = tile; i < mapTiles.length - 1; i++){//Go through all tiles after the one we're deleting
-        mapTiles[i] = mapTiles[i + 1];//Shift the tile down 1
-      }
-    }
-    mapTiles = (mTile[]) shorten(mapTiles);//Shorten the Map Tiles Array by 1
+void deleteTile(int x, int y){//Delete a tile and update the array
+  if(mapTiles.get(x).get(y).size() > 0){//if there are tiles
+    mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);//delete the top most one
   }
-  //-2,147,483,648 -> 2,147,483,647
-  resetLHXY();
 }//void deleteTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -54,146 +67,113 @@ void placeTile(){//Place a tile at the mouses location
   //print(mouseButton);
   if(mY > scl*UIBottom - SY + fV && mY < (height - (scl*1.5)) - SY + fV && mX < (width - (scl)) - SX + fV){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
-      mapTiles[mapTiles.length - 1] = new mTile(floor(mX/scl)*scl,floor(mY/scl)*scl,tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false);//Place a colored tile with no image
+      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
+      //println("test3");
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //print(mouseButton);
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
-      mapTiles[mapTiles.length - 1] = new mTile(floor(mX/scl)*scl,floor(mY/scl)*scl,tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear);//Place a tile
+      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+      //println("test4");
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
     }
   }
-  updateLHXY(mapTiles.length - 1);
+  resetLHXY();//reset the lower/higher xy for background drawing
 }//void placeTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void snapTileLocation(int tile){//Snap XY location of tile to grid
-  mapTiles[tile].x = floor(mouseX / scl) * scl - SX;//Adjust X location of tile
-  mapTiles[tile].y = floor(mouseY / scl) * scl - SY;//Adjust Y location of tile
-  updateLHXY(mapTiles[tile].x, mapTiles[tile].y);
-}//void snapTileLocation(int tile) END
+void clearMapTilesArray(){//delete all tiles
+  mapTiles.clear();//delete all tiles
+  for(int x = 0; x < cols; x++){//and make as many columns as needed
+    mapTiles.add(new ArrayList<ArrayList<mTile>>());//add a column
+    for(int y = 0; y < rows; y++){//and make as many rows as needed
+      mapTiles.get(x).add(new ArrayList<mTile>());//add a row
+    }
+  }
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateLHXY(int x, int y){//update the lower/higher xy for background drawing
-  if(x < lowerx){
+  if(x < lowerx){//make sure we have the lowest x
     lowerx = x;
   }
-  if(y < lowery){
+  if(y < lowery){//make sure we have the lowest y
     lowery = y;
   }
-  if(x > upperx){
+  if(x > upperx){//make sure we have the highest x
     upperx = x;
   }
-  if(y > uppery){
+  if(y > uppery){//make sure we have the highest y
     uppery = y;
   }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void updateLHXY(int tile){//update the lower/higher xy for background drawing
-  if(tile == -1){
-    return;
-  }
-  if(mapTiles[tile].x < lowerx){
-    lowerx = mapTiles[tile].x;
-  }
-  if(mapTiles[tile].y < lowery){
-    lowery = mapTiles[tile].y;
-  }
-  if(mapTiles[tile].x > upperx){
-    upperx = mapTiles[tile].x;
-  }
-  if(mapTiles[tile].y > uppery){
-    uppery = mapTiles[tile].y;
+void resetLHXY(){//reset the lower/higher xy for background drawing
+  lowerx = 2147483647;//tiles will always be less than this
+  lowery = 2147483647;//tiles will always be less than this
+  upperx = -2147483648;//tiles will always be greater than this
+  uppery = -2147483648;//tiles will always be greater than this
+  for(int x = 0; x < mapTiles.size(); x++){//got through all columns
+    for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+      if(mapTiles.get(x).get(y).size() != 0){//if there are tiles in this spot
+        if(mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1) != null){//and they're not null
+          updateLHXY(x * scl, y * scl);//make sure we're fully up to date
+        }
+      }
+    }
   }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void resetLHXY(){//update the lower/higher xy for background drawing
-  lowerx = 2147483647;
-  lowery = 2147483647;
-  upperx = -2147483648;
-  uppery = -2147483648;
-  for(int i = 0; i < mapTiles.length; i++){
-    updateLHXY(mapTiles[i].x, mapTiles[i].y);
+void loadTile(int x, int y, int z){//Set current image to tile image
+  if(mapTiles.get(x).get(y).size() != 0){//if there are tiles in this spot
+    tileN = mapTiles.get(x).get(y).get(z).image;//Set current image to tile image
   }
-}
+}//void loadTile() END
 
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void loadTile(int tile){//Set current image to tile image
-  tileN = mapTiles[tile].image;//Set current image to tile image
+void loadTile(mTile tmp){//Set current image to tile image
+  if(tmp != null){
+    tileN = tmp.image;//Set current image to tile image
+    updateTileRow();//make sure we're on the right tile row
+  }
 }//void loadTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void updateOffset(int tile){//Update mouse XY offset relative to upper-left corner of tile
-  offsetX = mapTiles[tile].x-mX;//keep track of relative X location of click to corner of rectangle
-  offsetY = mapTiles[tile].y-mY;//keep track of relative Y location of click to corner of rectangle
-}//void updateOffset() END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-boolean isCursorOnTile(int tile){//Is the mouse cursor on the tile we're checking?
-  return(mX > mapTiles[tile].x - fV && mX < mapTiles[tile].x + scl + fV && mY > mapTiles[tile].y - fV && mY < mapTiles[tile].y + scl + fV);//Are we clicking on the tile
-}//boolean isCursorOnTile(int tile) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-boolean isCursorOnTileXY(int tile, int tX, int tY){//Is the mouse cursor on the tile we're checking?
-  return(tX > mapTiles[tile].x - fV && tX < mapTiles[tile].x + scl + fV && tY > mapTiles[tile].y - fV && tY < mapTiles[tile].y + scl + fV);//Are we clicking on the tile
+boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we're checking?
+  int tmpX = x * scl;//x,y need to be multiplied for checking
+  int tmpY = y * scl;
+  return(tX > tmpX - fV && tX < tmpX + scl + fV && tY > tmpY - fV && tY < tmpY + scl + fV && mapTiles.get(x).get(y).size() != 0);//Are we on the tile
 }//boolean isCursorOnTileXY(int tile, int tX, int tY) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean isCursorOnTileNoFV(int tile){//Is the mouse cursor on the tile we're checking?
-  return(mX > mapTiles[tile].x && mX < mapTiles[tile].x + scl && mY > mapTiles[tile].y && mY < mapTiles[tile].y + scl);//Are we clicking on the tile
-}//boolean isCursorOnTileNoFV(int tile) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-boolean isCursorOnTileNoFVXY(int tile, int tX, int tY){//Is the mouse cursor on the tile we're checking?
-  return(tX > mapTiles[tile].x && tX < mapTiles[tile].x + scl && tY > mapTiles[tile].y && tY < mapTiles[tile].y + scl);//Are we clicking on the tile
-}//boolean isCursorOnTileNoFVXY(int tile, int tX, int tY) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void updateTileLocation(int tile){//Adjust XY location of tile
-  mapTiles[tile].x = mX + offsetX;//Adjust X location of tile
-  mapTiles[tile].y = mY + offsetY;//Adjust Y location of tile
-}//void updateTileLocation(int tile) END
+void dragTile(){//If dragging a tile: update location
+  if (dragging){//Are we dragging a tile
+    if(tmpTile != null){//If tile exists
+      tmpTile.draw(mX - (scl / 2), mY - (scl / 2));//draw the tile on the mouse
+    }
+  }
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean checkImage(int tile){//check if tile about to place has same image as tile mouse is on
-  for(int i = mapTiles.length - 1; i >= 0; i--){//Go through all tiles
-    if(isCursorOnTile(i)){//Is the mouse cursor on the tile we're checking?
-      if(tile == mapTiles[i].image){//Is the tile image we're on the same as the one we're trying to place?
-        //mylog.log("False", "Image", i, ", ", mapTiles[i].image, ", ", tile);
-        return false;//Don't place tile
+  //for(int i = 0; i < mapTiles.size(); i++){//Go through all tiles
+  for(int x = 0; x < mapTiles.size(); x++){
+    for(int y = 0; y < mapTiles.get(x).size(); y++){
+      for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){
+        if(isCursorOnTile(x, y, mX, mY)){//Is the mouse cursor on the tile we're checking?
+          if(tile == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
+            return false;//Don't place tile
+          }
+        }
       }
     }
   }
-  //console.log("True");
   return true;//Place tile
 }//boolean checkImage(int tile) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-boolean checkImageXY(int tile, int x, int y){//check if tile about to place has same image as tile mouse is on
-  for(int i = mapTiles.length - 1; i >= 0; i--){//Go through all tiles
-    if(isCursorOnTileXY(i, x, y)){//Is XY on the tile we're checking?
-      if(tile == mapTiles[i].image){//Is the tile image we're on the same as the one we're trying to place?
-        //mylog.log("False", "Image", i, ", ", mapTiles[i].image, ", ", tile);
-        return false;//Don't place tile
-      }
-    }
-  }
-  //console.log("True");
-  return true;//Place tile
-}//boolean checkImageXY(int tile, int x, int y) END

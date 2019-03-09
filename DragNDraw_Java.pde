@@ -7,9 +7,7 @@ int cols = 256;//Columns
 int rows = 256;//Rows
 
 int _DEBUG_ = -1;//what are we debugging
-int _DEBUGAMOUNT_ = 50000;//how many are we debugging
-
-String VERSION = "PRE_ALPHA V0.0.1";
+int _DEBUGAMOUNT_ = 50000;//5000000;//how many are we debugging
 
 int drawnTiles = 0;//how many tiles are on the screen
 boolean drawAll = false;//draw all tiles even if not on screen?
@@ -18,139 +16,56 @@ void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   
-  //surface.setTitle("Drag 'N' Draw Java: " + VERSION);
+  for(int x = 0; x < cols; x++){//for how many columns there are
+    mapTiles.add(new ArrayList<ArrayList<mTile>>());//create a column
+    for(int y = 0; y < rows; y++){//for how many rows there are
+      mapTiles.get(x).add(new ArrayList<mTile>());//create a row
+    }
+  }
   
   FileLoadTileMapInfo();//load tile map info file
-  //preload();
   
   UIControls = new ControlP5(this);//set up all the control stuff
   UI.setup();//Setup all of the UI stuff
   
-  //changeVisibility(false);
-  
-  //mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);
-  //mapTiles[mapTiles.length - 1] = new mTile(256,256,3,127,127,127,false);
-  
-  icons = (clickableIcon[]) expand(icons, icons.length + 1);//make sure we have room
-  icons[icons.length - 1] = new clickableIcon(scl * 15, scl * 15, "maps/map5.ddj", "TEST");//Place a colored tile with no image
+  //icons.add(new clickableIcon(scl * 13, scl * 13, "maps/map10.ddj", "TEST"));
+  //icons.add(new clickableIcon(scl * 15, scl * 13, "maps/map10-1.ddj", "TEST2"));
+  //icons.add(new clickableIcon(scl * 17, scl * 13, "maps/map10-2.ddj", "TEST3"));
+  //icons.add(new clickableIcon(scl * 19, scl * 13, "maps/map10-3.ddj", "TEST4"));
   
   if(_DEBUG_ == 0){
     for(int i = 0; i < _DEBUGAMOUNT_; i++){
-      mapTiles = (mTile[]) expand(mapTiles, mapTiles.length + 1);//make sure we have room
-      mapTiles[mapTiles.length - 1] = new mTile(200*scl,200*scl,1,127,127,127, false);//test tiles
+      mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(256),(int)random(256),(int)random(256),(int)random(256), (int)random(2)==1));//(int)random(256)
     }
   }
 }//void setup() END
 
 void draw(){//Draw the canvas
-  String FPS = String.valueOf(frameRate);
-  if(FPS.length() > 4){
-    FPS = FPS.substring(0, 5);
-  }else if(FPS.length() > 3){
-    FPS = FPS.substring(0, 4) + "0";
-  }else{
-    FPS = FPS.substring(0, 2) + ".00";
-  }
-  surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + FPS);
-  
-  if(preloading == true){//if preloading
-    pushMatrix();//go back to crazy space?
-    background(255);//white background
-    translate(SX, SY);//shift screen around
-    image(tileMaps[tileMapShow],0,scl);//display tile map
-    //image(tileMaps[0],tileMaps[1].width,scl);
-    fill(0);//black box
-    rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);//text box background
-    fill(255);//white text
-    text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
-    popMatrix();//go back to normal space?
-  }else{
-    if(UISetup == false){//is ui not setup
-      //preload();
-      //changeVisibility(true);
-      //UI.setup();
-      UISetup = true;//ui is setup
-    }
-  
-  if(colorWheel.isVisible() || colorInputR.isVisible()){//if not using color wheel or color inputs
-    noTile = true;//disallow tile placement
-  }
+  surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + padFPS());// + " : " + mapTiles.length);
   
   pushMatrix();//go back to crazy space?
   translate(SX, SY);//shift screen around
   
-  drawnTiles = 0;//reset number of drawn tiles
-
-  updateXY();//Update the XY position of the mouse and the page XY offset
-  
   BG.draw();//Draw the background and grid
   
-  //If dragging a tile: update location
-  if (dragging){//Are we dragging a tile
-    if(mapTiles[mapN] != null){//If tile exists
-      updateTileLocation(mapN);//Adjust XY location of tile
-    }
+  if(preloading != true){//if preloading
+    drawnTiles = 0;//reset number of drawn tiles
+
+    updateXY();//Update the XY position of the mouse and the page XY offset
+  
+    drawSpots();//draw tiles
+  
+    dragTile();//drag a grabbed tile
+  
+    BG.border();//Draw the RED border
+  
+    drawTileGroupOutlines();//draw the necessary outlines
+  
+    drawIcons();//draw all icons
   }
-  
-  //Display Map Tiles
-  for(int i = 0; i < mapTiles.length; i++){//Go through all the tiles
-    if(mapTiles[i].x > -scl - SX && mapTiles[i].x  < width - SX && mapTiles[i].y > -scl - SY && mapTiles[i].y < height - SY || drawAll == true){//if tile is within screen bounds or drawAll is set
-      if(!mapTiles[i].clear || mapTiles[i].image == 0){//Is the tile colored
-        fill(mapTiles[i].r,mapTiles[i].g,mapTiles[i].b);//Set Tile background color
-        rect(mapTiles[i].x,mapTiles[i].y,scl,scl);//Draw colored square behind tile
-      }
-      if(mapTiles[i].image != 0 && mapTiles[i].image <= totalImages){//if tile image is not 0 and tile image exists
-        image(img[mapTiles[i].image], mapTiles[i].x, mapTiles[i].y);//Draw tile
-      }else if(mapTiles[i].image != 0){//image is not blank
-        image(missingTexture, mapTiles[i].x, mapTiles[i].y);//Draw tile
-      }
-      drawnTiles++;//how many tiles are being drawn?
-    }
-  }
-  
-  BG.border();//Draw the RED border
-  
-  if(tileGroupStep > 0 && tileGroupStep != 3){//selecting group and not pasteing
-    drawTileGroupOutline();//draw the red outline
-  }
-  
-  if(tileGroupStep == 3){//pasteing group
-    drawGroupPasteOutline();//draw the red outline
-  }
-  
-  for(int i = 0; i < icons.length; i++){
-    icons[i].draw();
-    if(icons[i].hoveringOver()){
-      fill(0);//black
-      textSize(24);//larger
-      text(icons[i].hoverText, mouseX - SX, mouseY - SY);
-    }
-  }
-  
-  //strokeWeight(5);
-  //line(0,0,width,0);
-  //line(0,0,0,height);
   
   popMatrix();//go back to normal space?
   
-  fill(0);//red
-  rect(0,0,width,scl * 2);
-  
-  //Update and Draw the UI
   UI.update();//Update the UI position
   UI.draw();//Draw the UI
-  }
 }//void draw() END
-
-boolean checkOffset(){//not used
-  //println("X: " + (floor(mouseX / scl) * scl) + ", Y: " + (floor(mouseY / scl) * scl) + ", SX: " + SX + ", SY: " + SY + ", H: " + height + ", W: " + width);
-  if(SX > 0 && (floor(mouseX / scl) * scl) < SX){
-    return true;
-  }else if(SY > 0 && (floor(mouseY / scl) * scl) < SY){
-    return true;
-  }if(SX < 0 && mouseX - width > abs(SX)){
-    return true;
-  }
-  
-  return false;
-}//boolean checkOffset() END

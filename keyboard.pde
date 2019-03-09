@@ -1,12 +1,9 @@
 boolean noKeyboard = false;//Are We Blocking keyTyped() and keyPressed()?
 int scrollAmount = 1;//How many squares to scroll when pressing WASD
 
-
-
-
 void keyPressed(){//We pressed a key
+  //println(keyCode);//What key did we press?
   if(noKeyboard == false){//are we blocking keyboard functions?
-    //println(keyCode);//What key did we press?
     if (keyCode == /*SHIFT*/16){//We pressed shift
       prevRowC();//Previous Tile row
     }else if (keyCode == /*SPACE*/32){//We pressed space
@@ -21,11 +18,11 @@ void keyTyped(){//We typed a key
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(key == 'f'){//We pressed 'F'
       if(CClear){//Is it currently clear?
-        CClear = false;//Set if not clear
-        //CCheckBox.checked(false);//Uncheck the checkbox
+        CClear = false;//Set it not clear
+        clearToggle.setColorLabel(color(255));//make text black
       }else{//Its not clear
         CClear = true;//Set it clear
-        //CCheckBox.checked(true);//Check the checkbox
+        clearToggle.setColorLabel(color(0));//make text white
       }
     }else if(key == 'x'){//We pressed 'X'
       if(tileGroupStep == 2){//we're on step two of group selection
@@ -36,39 +33,30 @@ void keyTyped(){//We typed a key
         tileGroupCutCopy('c');//copy group selection
       }
     }else if(key == 'v'){//We pressed 'V'
-      if(tileGroupStep != 3){
+      if(tileGroupStep != 3){//set it up for pasting
         tileGroupStep = 3;//paste step is 3
-      }else if(tileGroupStep == 3){
-        tileGroupStep = 0;//paste step is 3
+      }else if(tileGroupStep == 3){//cancel pasting
+        tileGroupStep = 0;//paste step is 0
       }
-    //}else if(key == 'i'){//We pressed 'I'
-    //  for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
-    //    mapTiles[i].y -= scl * scrollAmount;//Move tile up 1 space
-    //  }
-    //}else if(key == 'j'){//We pressed 'J'
-    //  for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
-    //    mapTiles[i].x -= scl * scrollAmount;//Move tile left 1 space
-    //  }
-    //}else if(key == 'k'){//We pressed 'K'
-    //  for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
-    //    mapTiles[i].y += scl * scrollAmount;//Move tile down 1 space
-    //  }
-    //}else if(key == 'l'){//We pressed 'L'
-    //  for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
-    //    mapTiles[i].x += scl * scrollAmount;//Move tile right 1 space
-    //  }
     }else if(key == 'r'){//We pressed 'R'
-      for(int i = mapTiles.length-1; i >= 0; i--){//Go through all the tiles
-        if(isCursorOnTile(i)){//Are we clicking on the tile
-          println("Tile #: " + i + ", X Position: " + mapTiles[i].x + ", Y Position: " + mapTiles[i].y + ", Red Amount: " + mapTiles[i].r + ", Green Amount: " + mapTiles[i].g + ", Blue Amount: " + mapTiles[i].b + ", Tile Image #: " + mapTiles[i].image + ", Is Tile Clear: " + mapTiles[i].clear);// + ", Tile Lore: " + mapTiles[i].lore);
-          //console.log('Tile #: ' + i + ', X Position: ' + mapTiles[i].x + ', Y Position: ' + mapTiles[i].y);
-          //console.log('Red Amount: ' + mapTiles[i].r + ', Green Amount: ' + mapTiles[i].g + ', Blue Amount: ' + mapTiles[i].b);
-          //console.log('Tile Image #: ' + mapTiles[i].image + ', Is Tile Clear: ' + mapTiles[i].clear);
-          //console.log('Tile Lore: ' + mapTiles[i].lore);
+      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+          if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
+            mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
+            println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.clear);// + ", Tile Lore: " + mapTiles[i].lore);
+          }
+        }
+      }
+    }else if(key == 'e'){//We pressed 'E'
+      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+          if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
+            mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
+            loadColors(tmp);
+          }
         }
       }
     }else if(key == 'q'){//We pressed 'Q'
-      //tileGroup(scl * 10, scl * 3, scl * 5, scl * 10)
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step
         sx1 = mouseX - SX;//set x1 to mouse x position
@@ -81,64 +69,40 @@ void keyTyped(){//We typed a key
         tileGroupStep = 0;//ready to do group tiles stuff
       }
     }else if(key == 'p'){//We pressed 'P'
-      BG.r = (int)RSlider.getValue();
-      BG.g = (int)GSlider.getValue();
-      BG.b = (int)BSlider.getValue();
+      BG.r = (int)RSlider.getValue();//set red
+      BG.g = (int)GSlider.getValue();//set green
+      BG.b = (int)BSlider.getValue();//set blue
     }else if(key == 'o'){//We pressed 'O'
-      drawLines = !drawLines;
+      drawLines = !drawLines;//do we draw the background lines?
     }
     
     if(key == 'w'){//We pressed 'W'
-      //if(SY < scl * 5){//if we're not outside of the boundaries
-      //  SY += (scl * scrollAmount);//Scroll Screen UP
-      //}
-      //if(SY > scl * 5){//we're outside of the boundaries
-      //  SY = scl * 5;//get back inside of the boundaries
-      //}
-      SY += (scl * scrollAmount);
+      SY += (scl * scrollAmount);//go up
       
-      if(SY > 64){
-        SY = 64;
+      if(SY > 64){//if we're to far up
+        SY = 64;//make it not so
       }
     }
     if(key == 'a'){//We pressed 'A'
-      //if(SX < scl * 5){//if we're not outside of the boundaries
-      //  SX += (scl * scrollAmount);//Scroll Screen LEFT
-      //}
-      //if(SX > scl * 5){//we're outside of the boundaries
-      //  SX = scl * 5;//get back inside of the boundaries
-      //}
-      SX += (scl * scrollAmount);
+      SX += (scl * scrollAmount);//go left
       
-      if(SX > 0){
-        SX = 0;
+      if(SX > 0){//if we're to far left
+        SX = 0;//make it not so
       }
     }
     if(key == 's'){//We pressed 'S'
-      //if(SY > -((scl * 105) - height)){//if we're not outside of the boundaries
-      //  SY -= (scl * scrollAmount);//Scroll Screen RIGHT
-      //}
-      //if(SY < -((scl * 105) - height)){//we're outside of the boundaries
-      //  SY = -((scl * 105) - (floor(height / scl) * scl));//get back inside of the boundaries
-      //}
-      SY -= (scl * scrollAmount);
+      SY -= (scl * scrollAmount);//go down
       
-      if(SY < -((scl * 256) - height)){
-        SY = -((scl * 256) - height);
+      if(SY < -((scl * rows) - height)){//if we're to far down
+        SY = -((scl * rows) - height);//make it not so
       }
       //println(SY);
     }
     if(key == 'd'){//We pressed 'D'
-      //if(SX > -((scl * 105) - width)){//if we're not outside of the boundaries
-      //  SX -= (scl * scrollAmount);//Scroll Screen DOWN
-      //}
-      //if(SX < -((scl * 105) - width)){//we're outside of the boundaries
-      //  SX = -((scl * 105) - (floor(width / scl) * scl));//get back inside of the boundaries
-      //}
-      SX -= (scl * scrollAmount);
+      SX -= (scl * scrollAmount);//go right
       
-      if(SX < -((scl * 256) - width)){
-        SX = -((scl * 256) - width);
+      if(SX < -((scl * cols) - width)){//if we're to far right
+        SX = -((scl * cols) - width);//make it not so
       }
     }
   }
