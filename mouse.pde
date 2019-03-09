@@ -13,16 +13,7 @@ int fV = 1;//Fudge Value to make sure we're really clicking inside something
 void mousePressed(){//We pressed a mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   
-  if(dragging || deleting || clickdrag){//were we dragging or deleting a tile or were we dragging the mouse
-    //do nothing
-  }else{
-    for(int i = 0; i < icons.size(); i++){//go through all icons
-      if(icons.get(i).mouseOver()){//if we clicked on one
-        icons.get(i).loadMap();
-        return;//do nothing
-      }
-    }
-  }
+  checkMouseOverIcon(true);
 
   if(noTile){//if we're not allowed to place tiles
     return;//do nothing
@@ -117,15 +108,7 @@ void mouseDragged(){//We dragged the mouse while holding a button
   
   clickdrag = true;//we're dragging the mouse
   
-  if(dragging || deleting || clickdrag){//were we dragging or deleting a tile or were we dragging the mouse
-    //do nothing
-  }else{
-    for(int i = 0; i < icons.size(); i++){//go through all icons
-      if(icons.get(i).mouseOver()){//if we clicked on one
-        return;//do nothing
-      }
-    }
-  }
+  checkMouseOverIcon(false);
   
   if(mouseButton == RIGHT){//We clicked with the right button
     for(int x = 0; x < mapTiles.size(); x++){//go through all columns

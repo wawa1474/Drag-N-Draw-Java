@@ -64,3 +64,17 @@ void drawIcons(){//draw all icons
     }
   }
 }
+
+boolean checkMouseOverIcon(boolean loadMap){
+  if(dragging || deleting || clickdrag){//were we dragging or deleting a tile or were we dragging the mouse
+    //do nothing
+  }else{
+    for(int i = 0; i < icons.size(); i++){//go through all icons
+      if(icons.get(i).mouseOver()){//if we clicked on one
+        if(loadMap == true){ icons.get(i).loadMap(); }
+        return true;//do nothing
+      }
+    }
+  }
+  return false;
+}

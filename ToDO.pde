@@ -1,10 +1,14 @@
 /*
+variable size scaling
+  maybe use mouse wheel to change size
+
 redo how context switching is done
   make a menu system
 
 redo tile map system
   allow multiple tile maps at once
   redo how they are shown and used by user
+  change tile image changing to somehow free up mouse wheel
 
 make "tool" system
   recolor tool (currently right-click) would be a selectable tool
