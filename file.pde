@@ -3,36 +3,6 @@ static final String _magicText = "wawa1474DragDraw";//make sure the file is ours
 
 ArrayList<Byte> mapFile = new ArrayList<Byte>(0);//temporary byte array
 
-//File Version Map
-  //Version 0:
-    //0 = File MetaData
-    //Compressed Color/Position Tile Data
-  
-  //Version 1:
-    //0 = File MetaData
-    //No Compression
-  
-  //Version 2:
-    //0 = File MetaData
-    //Compressed Position
-  
-  //Version 4:
-    //2 bytes = file format version
-    //2 bytes = header length
-    //tile map name length
-    //tile map location length
-    //4 bytes = number of tiles
-    //4 bytes = number of icons
-    //tile map name (variable length)
-    //tile map location (variable length)
-    //16 byte alignment (variable length 0-15 bytes)
-    //tiles 8 bytes each (x, y, image, red, green, blue, flags) (variable amount)
-    //16 byte alignment (variable length 0-15 bytes)
-    //tiles 4 bytes each (x, y, text length, location length) plus variable length text and map location (variable amount)
-    //16 byte alignment (variable length 0-15 bytes)
-    //16 byte program version
-    //last 16 bytes = _magicText ("wawa1474DragDraw")
-
 PImage[] img = new PImage[0];//Tile Images Array
 PImage BACKGROUND;//background image
 PImage missingTexture;//missingTexture Image
@@ -388,7 +358,7 @@ void fileSaveMap(){//Save the Map to file
   }
   
   for(int l = 0; l < VERSIONB.length; l++){
-    mapFile.add(VERSIONB[l]);//add the program version
+    mapFile.add((byte)VERSIONB[l]);//add the program version
   }
   
   for(int l = 0; l < _magicText.length(); l++){

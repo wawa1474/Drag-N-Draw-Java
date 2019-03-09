@@ -9,9 +9,6 @@ int rows = 256;//Rows
 int _DEBUG_ = -1;//what are we debugging
 int _DEBUGAMOUNT_ = 50000;//5000000;//how many are we debugging
 
-String VERSION = "PRE_ALPHA";//what version do we display
-byte[] VERSIONB = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//<- = pre-alpha
-
 int drawnTiles = 0;//how many tiles are on the screen
 boolean drawAll = false;//draw all tiles even if not on screen?
 
