@@ -39,7 +39,7 @@ class mTile{//Tile Object
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean tileOnScreen(int x, int y){//is this tile on screen
+boolean tileOnScreen(float x, float y){//is this tile on screen
   if(x > -scl - SX && x  < width - SX && y > -scl - SY && y < height - SY){//is the tile within the screen bounds
     return true;//yes
   }

@@ -35,19 +35,12 @@ class clickableIcon{//clickableIcon Object
     text(this.hoverText, mouseX - SX, mouseY - SY);//tie the text to the mouse
   }
   
-  boolean wasClicked(){//did we click this icon?
-    if(dragging || deleting || clickdrag){//were we dragging or deleting a tile or were we dragging the mouse
-      return false;//then no we weren't clicking this icon
-    }
-    if(mouseX - SX > this.x - 5 && mouseY - SY > this.y - 5 && mouseX - SX < this.x + scl + 5 && mouseY - SY < this.y + scl + 5){//are we within the bounds of this icon?
-      fileName = file;//setup the file we want to load
-      FileLoadMap();//and load it
-      return true;//we did click the icon
-    }
-    return false;//no we weren't clicking this icon
+  void loadMap(){
+    fileName = this.file;//setup the file we want to load
+    FileLoadMap();//and load it
   }
   
-  boolean hoveringOver(){//are we hovering over the icon
+  boolean mouseOver(){//are we hovering over the icon
     if(mouseX - SX > this.x - 5 && mouseY - SY > this.y - 5 && mouseX - SX < this.x + scl + 5 && mouseY - SY < this.y + scl + 5){//are we within the bounds of this icon?
       return true;//yes we're hovering over the icon
     }
@@ -66,8 +59,22 @@ void clearClickableTilesArray(){//delete all the icons
 void drawIcons(){//draw all icons
   for(int i = 0; i < icons.size(); i++){//Go through all the clickable icons
     icons.get(i).draw();//draw the icon
-    if(icons.get(i).hoveringOver()){//if mouse hovering over icon
+    if(icons.get(i).mouseOver()){//if mouse hovering over icon
       icons.get(i).drawText();//draw the icons text
     }
   }
+}
+
+boolean checkMouseOverIcon(boolean loadMap){
+  if(dragging || deleting || clickdrag){//were we dragging or deleting a tile or were we dragging the mouse
+    //do nothing
+  }else{
+    for(int i = 0; i < icons.size(); i++){//go through all icons
+      if(icons.get(i).mouseOver()){//if we clicked on one
+        if(loadMap == true){ icons.get(i).loadMap(); }
+        return true;//do nothing
+      }
+    }
+  }
+  return false;
 }

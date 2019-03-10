@@ -16,12 +16,7 @@ void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   
-  for(int x = 0; x < cols; x++){//for how many columns there are
-    mapTiles.add(new ArrayList<ArrayList<mTile>>());//create a column
-    for(int y = 0; y < rows; y++){//for how many rows there are
-      mapTiles.get(x).add(new ArrayList<mTile>());//create a row
-    }
-  }
+  clearMapTilesArray();//setup map tiles array
   
   FileLoadTileMapInfo();//load tile map info file
   
@@ -42,6 +37,8 @@ void setup(){//Setup everything
 
 void draw(){//Draw the canvas
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + padFPS());// + " : " + mapTiles.length);
+  
+  updateScreenBounds();
   
   pushMatrix();//go back to crazy space?
   translate(SX, SY);//shift screen around
