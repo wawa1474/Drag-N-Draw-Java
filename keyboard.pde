@@ -27,12 +27,12 @@ void keyTyped(){//We typed a key
     }else if(key == 'q' && noTile == false){//We pressed 'Q'
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step
-        sx1 = mouseX - SX;//set x1 to mouse x position
-        sy1 = mouseY - SY;//set y1 to mouse y position
+        sx1 = mouseX + (screenX * scl);//set x1 to mouse x position
+        sy1 = mouseY + (screenY * scl);//set y1 to mouse y position
       }else if (tileGroupStep == 1){//set XY2
         tileGroupStep = 2;//ready to do group tiles stuff
-        sx2 = mouseX - SX;//set x1 to mouse x position
-        sy2 = mouseY - SY;//set y2 to mouse y position
+        sx2 = mouseX + (screenX * scl);//set x1 to mouse x position
+        sy2 = mouseY + (screenY * scl);//set y2 to mouse y position
       }else if (tileGroupStep == 2){//set XY2
         tileGroupStep = 0;//ready to do group tiles stuff
       }
@@ -77,32 +77,32 @@ void keyTyped(){//We typed a key
     }
     
     if(key == 'w'){//We pressed 'W'
-      SY += (scl * scrollAmount);//go up
+      screenY -= scrollAmount;//go up
       
-      if(SY > 64){//if we're to far up
-        SY = 64;//make it not so
+      if(screenY < 0){//if we're to far up
+        screenY = 0;//make it not so
       }
     }
     if(key == 'a'){//We pressed 'A'
-      SX += (scl * scrollAmount);//go left
+      screenX -= scrollAmount;//go left
       
-      if(SX > 0){//if we're to far left
-        SX = 0;//make it not so
+      if(screenX < 0){//if we're to far left
+        screenX = 0;//make it not so
       }
     }
     if(key == 's'){//We pressed 'S'
-      SY -= (scl * scrollAmount);//go down
+      screenY += scrollAmount;//go down
       
-      if(SY < -((scl * rows) - height)){//if we're to far down
-        SY = -((scl * rows) - height) + 1;//make it not so
+      if(screenY > rows - 1){//if we're to far down
+        screenY = rows - 1;//make it not so
       }
       //println(SY);
     }
     if(key == 'd'){//We pressed 'D'
-      SX -= (scl * scrollAmount);//go right
+      screenX += scrollAmount;//go right
       
-      if(SX < -((scl * cols) - width)){//if we're to far right
-        SX = -((scl * cols) - width) + 1;//make it not so
+      if(screenX > cols - 1){//if we're to far right
+        screenX = cols - 1;//make it not so
       }
     }
   }

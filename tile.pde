@@ -40,7 +40,7 @@ class mTile{//Tile Object
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean tileOnScreen(float x, float y){//is this tile on screen
-  if(x > -scl - SX && x  < width - SX && y > -scl - SY && y < height - SY){//is the tile within the screen bounds
+  if(x > 0 + (screenX * scl) && x < width + (screenX * scl) && y > 0 + (screenY * scl) && y < height - (screenY * scl)){//is the tile within the screen bounds
     return true;//yes
   }
   return false;//no
@@ -49,8 +49,8 @@ boolean tileOnScreen(float x, float y){//is this tile on screen
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateXY(){//Update the XY position of the mouse and the page XY offset
-  mX = mouseX - SX;//Update the X position of the mouse
-  mY = mouseY - SY;//Update the Y position of the mouse
+  mX = mouseX - (screenX * scl);//Update the X position of the mouse
+  mY = mouseY - (screenY * scl);//Update the Y position of the mouse
 }//void updateXY() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ void deleteTile(int x, int y){//Delete a tile and update the array
 
 void placeTile(){//Place a tile at the mouses location
   //print(mouseButton);
-  if(mY > scl*UIBottom - SY + fV && mY < (height - (scl*1.5)) - SY + fV && mX < (width - (scl)) - SX + fV){//We're not on the UI and we're within the screen bounds
+  if(mY > scl*UIBottom + (screenX * scl) + fV && mY < (height - (scl*1.5)) + (screenY * scl) + fV && mX < (width - (scl)) + (screenX * scl) + fV){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
       mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
       //println("test3");

@@ -157,8 +157,8 @@ void tileGroupPaste(){//Paste The Copied Tiles
     return;//do nothing
   }
   
-  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl + (screenX * scl);//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl + (screenY * scl);//Adjust XY To Be On Tile Border
   
   for(int i = 0; i < tileGrouSXLines; i++){//loop through all columns
     for(int j = 0; j < tileGrouSYLines; j++){//loop through all rows
@@ -182,10 +182,10 @@ void tileGroupPaste(){//Paste The Copied Tiles
 void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Placed
   int X1,X2,Y1,Y2;//Setup Variables
   
-  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
-  X2 = (floor((mouseX + (ceil((float)tileGrouSXLines / 2) * scl)) / scl) * scl) - SX;//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
-  Y2 = (floor((mouseY + (ceil((float)tileGrouSYLines / 2) * scl)) / scl) * scl) - SY;//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl + (screenX * scl);//Adjust XY To Be On Tile Border
+  X2 = (floor((mouseX + (ceil((float)tileGrouSXLines / 2) * scl)) / scl) * scl) + (screenX * scl);//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl + (screenY * scl);//Adjust XY To Be On Tile Border
+  Y2 = (floor((mouseY + (ceil((float)tileGrouSYLines / 2) * scl)) / scl) * scl) + (screenY * scl);//Adjust XY To Be On Tile Border
   
   //X2 += scl;
   //Y2 += scl;
@@ -206,8 +206,8 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
   int X1,X2,Y1,Y2,asx2 = 0,asy2 = 0;//Setup Variables
     
   if(tileGroupStep == 1){//Are We On Step One
-    asx2 = mouseX - SX;//Corner is tied to mouse
-    asy2 = mouseY - SY;//Corner is tied to mouse
+    asx2 = mouseX + (screenX * scl);//Corner is tied to mouse
+    asy2 = mouseY + (screenY * scl);//Corner is tied to mouse
   }else if(tileGroupStep == 2){//Are We On Step Two
     asx2 = sx2;//Corner is tied to set XY
     asy2 = sy2;//Corner is tied to set XY

@@ -125,15 +125,15 @@ class tileUI{
   
       text("Drawn: " + tmp, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
     
-      text("X:" + floor(-SX/scl),((scl * 25)),(scl / 1.25));//X: (screen x)
-      text("Y:" + floor(-(SY-64)/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)
+      text("X:" + screenX,((scl * 25)),(scl / 1.25));//X: (screen x)
+      text("Y:" + screenY,((scl * 25)),(scl * 1.75));//Y: (screen y)
     
       //display when in ui?
       //int mouseDisplayX;
-      int mouseDisplayY = (mouseY+(-SY));
+      int mouseDisplayY = (mouseY + (screenY * scl));
       if(mouseDisplayY < 0 + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
     
-      text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
+      text("X:" + floor((mouseX + (screenX * scl))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
     
       if(mouseDisplayY == -1){
         text("Y:" + "UI",((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
