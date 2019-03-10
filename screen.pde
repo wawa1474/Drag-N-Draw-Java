@@ -1,11 +1,15 @@
 int tileDepth = 4;//16;//how many tiles are drawn per space
 
+int screenX1, screenX2, screenY1, screenY2;//0 -> cols/rows
+
 void drawSpots(){
   //Display Map Tiles
-  for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
-    for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+  //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+    //for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+  for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+    for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       //if(tileOnScreen(x * scl, y * scl) || drawAll == true){//if tile is within screen bounds or drawAll is set
-      if(tileOnScreen((x * scl) * globalScale, (y * scl) * globalScale) || drawAll == true){//if tile is within screen bounds or drawAll is set
+      //if(tileOnScreen((x * scl) * globalScale, (y * scl) * globalScale) || drawAll == true){//if tile is within screen bounds or drawAll is set
         boolean skip = false;//do we skip drawing the rest of the tiles in this spot?
         for(int z = mapTiles.get(x).get(y).size() - tileDepth; z < mapTiles.get(x).get(y).size() && !skip; z++){//loop through all drawn tiles in this xy position
           if(z >= 0){//if there's a tile to be drawn
@@ -16,7 +20,29 @@ void drawSpots(){
             //}
           }
         }
-      }
+      //}
     }
   }
+}
+
+void updateScreenBounds(){
+  screenX2 = floor(width - SX)/scl;
+  screenY2 = floor(height - SY)/scl;
+  
+  screenX1 = screenX2 - floor(width / scl);
+  screenY1 = (screenY2 - floor(height / scl)) + 2;
+  
+  screenX1 = floor(screenX1  / globalScale);
+  screenY1 = floor(screenY1  / globalScale);
+  
+  if(screenX1 < 0){screenX1 = 0;}
+  if(screenY1 < 0){screenY1 = 0;}
+  
+  screenX2 = floor(screenX2  / globalScale);
+  screenY2 = floor(screenY2  / globalScale) + 1;
+  
+  if(screenX2 > 255){screenX2 = 255;}
+  if(screenY2 > 255){screenY2 = 255;}
+  
+  //println(screenX1 + ", " + screenY1 + ", " + screenX2 + ", " + screenY2);
 }

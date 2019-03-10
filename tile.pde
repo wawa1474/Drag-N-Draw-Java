@@ -153,7 +153,7 @@ boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we'r
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void dragTile(){//If dragging a tile: update location
-  if (dragging){//Are we dragging a tile
+  if(dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
       tmpTile.draw(mX - (scl / 2), mY - (scl / 2));//draw the tile on the mouse
     }

@@ -74,6 +74,18 @@ void keyTyped(){//We typed a key
       BG.b = (int)BSlider.getValue();//set blue
     }else if(key == 'o'){//We pressed 'O'
       drawLines = !drawLines;//do we draw the background lines?
+    }else if(key == '='){//We pressed '='
+      globalScale += 0.01;
+      redraw = true;
+    }else if(key == '-'){//We pressed '-'
+      globalScale -= 0.01;
+      if(globalScale < 0.01){
+        globalScale = 0.01;
+      }
+      redraw = true;
+    }else if(key == '0'){//We pressed '0'
+      globalScale = 1;
+      redraw = true;
     }
     
     if(key == 'w'){//We pressed 'W'
@@ -94,7 +106,7 @@ void keyTyped(){//We typed a key
       SY -= (scl * scrollAmount);//go down
       
       if(SY < -((scl * rows) - height)){//if we're to far down
-        SY = -((scl * rows) - height);//make it not so
+        SY = -((scl * rows) - height) + 1;//make it not so
       }
       //println(SY);
     }
@@ -102,7 +114,7 @@ void keyTyped(){//We typed a key
       SX -= (scl * scrollAmount);//go right
       
       if(SX < -((scl * cols) - width)){//if we're to far right
-        SX = -((scl * cols) - width);//make it not so
+        SX = -((scl * cols) - width) + 1;//make it not so
       }
     }
   }

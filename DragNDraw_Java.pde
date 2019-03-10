@@ -41,25 +41,33 @@ void setup(){//Setup everything
 void draw(){//Draw the canvas
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + padFPS());// + " : " + mapTiles.length);
   
+  updateScreenBounds();
+  
   if(globalScale != 1){
     noTile = true;
+  }else{
+    noTile = false;
+  }
+  
+  if(dragging){
+    redraw = true;
   }
   
   pushMatrix();//go back to crazy space?
   translate(SX, SY);//shift screen around
   scale(1 * globalScale);
   
-  if(redraw){
+  //if(redraw){
     BG.draw();//Draw the background and grid
-  }
+  //}
   
-  if(preloading != true && redraw){//if preloading
+  if(preloading != true){// && redraw){//if preloading
     drawnTiles = 0;//reset number of drawn tiles
 
     updateXY();//Update the XY position of the mouse and the page XY offset
   
     drawSpots();//draw tiles
-  
+    
     dragTile();//drag a grabbed tile
   
     BG.border();//Draw the RED border
@@ -70,7 +78,7 @@ void draw(){//Draw the canvas
     
     redraw = false;
   }
-  
+
   popMatrix();//go back to normal space?
   
   UI.update();//Update the UI position
