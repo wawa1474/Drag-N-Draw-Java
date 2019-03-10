@@ -52,10 +52,10 @@ class canvasBG{//The background
     
       if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){//if the tile xy is not reset and we're should draw lines
         for(int i = lowerx - (scl * 20); i < upperx + (scl * 21); i+=scl){//for however many horizontal squares there are
-          line(i,lowery - (scl * 20), i, uppery + (scl * 20));//draw lines
+          line(i - (screenX * scl),lowery - (scl * 20) - (screenY * scl), i - (screenX * scl), uppery + (scl * 20) - (screenY * scl));//draw lines
         }
         for(int i = lowery - (scl * 20); i < uppery + (scl * 21); i+=scl){//for however many vertical squares there are
-          line(lowerx - (scl * 20), i, upperx + (scl * 20), i);//draw lines
+          line(lowerx - (scl * 20) - (screenX * scl), i - (screenY * scl), upperx + (scl * 20) - (screenX * scl), i - (screenY * scl));//draw lines
         }
       }
     }
@@ -66,7 +66,7 @@ class canvasBG{//The background
     stroke(255,0,0);//RED
     line(1, 0, 1, rows*scl);//Draw Left line
     line((scl * cols) - 1, 0, (scl * cols) - 1, rows*scl);//Draw Right line
-    line(0, 1, cols*scl, 1);//Draw Top Line
+    line(0, 1 + (2 * scl), cols*scl, 1 + (2 * scl));//Draw Top Line
     line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Bottom Line
   }//void border() END
 }//class canvasBG END

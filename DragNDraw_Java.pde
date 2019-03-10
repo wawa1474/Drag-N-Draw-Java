@@ -41,7 +41,7 @@ void draw(){//Draw the canvas
   updateScreenBounds();
   
   pushMatrix();//go back to crazy space?
-  translate((screenX * scl), (screenY * scl));//shift screen around
+  translate(-(screenX * scl), -(screenY * scl));//shift screen around
   
   BG.draw();//Draw the background and grid
   

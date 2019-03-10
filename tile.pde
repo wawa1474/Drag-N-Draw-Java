@@ -67,11 +67,11 @@ void placeTile(){//Place a tile at the mouses location
   //print(mouseButton);
   if(mY > scl*UIBottom + (screenX * scl) + fV && mY < (height - (scl*1.5)) + (screenY * scl) + fV && mX < (width - (scl)) + (screenX * scl) + fV){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
-      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
+      mapTiles.get(floor(mX/scl) + screenX).get(floor(mY/scl) + screenY).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
       //println("test3");
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //print(mouseButton);
-      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+      mapTiles.get(floor(mX/scl) + screenX).get(floor(mY/scl) + screenY).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
       //println("test4");
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
