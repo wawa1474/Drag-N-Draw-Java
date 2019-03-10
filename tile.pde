@@ -49,8 +49,8 @@ boolean tileOnScreen(float x, float y){//is this tile on screen
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateXY(){//Update the XY position of the mouse and the page XY offset
-  mX = mouseX - (screenX * scl);//Update the X position of the mouse
-  mY = mouseY - (screenY * scl);//Update the Y position of the mouse
+  mouseTileX = (mouseX / scl) - screenX;//Update the X position of the mouse
+  mouseTileY = (mouseY / scl) - screenY;//Update the Y position of the mouse
 }//void updateXY() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -65,13 +65,13 @@ void deleteTile(int x, int y){//Delete a tile and update the array
 
 void placeTile(){//Place a tile at the mouses location
   //print(mouseButton);
-  if(mY > scl*UIBottom + (screenX * scl) + fV && mY < (height - (scl*1.5)) + (screenY * scl) + fV && mX < (width - (scl)) + (screenX * scl) + fV){//We're not on the UI and we're within the screen bounds
+  if(mouseTileY > UIBottom + screenX){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
-      mapTiles.get(floor(mX/scl) + screenX).get(floor(mY/scl) + screenY).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
+      mapTiles.get(mouseTileX + screenX).get(mouseTileY + screenY).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
       //println("test3");
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //print(mouseButton);
-      mapTiles.get(floor(mX/scl) + screenX).get(floor(mY/scl) + screenY).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+      mapTiles.get(mouseTileX + screenX).get(mouseTileY + screenY).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
       //println("test4");
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
@@ -145,9 +145,7 @@ void loadTile(mTile tmp){//Set current image to tile image
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we're checking?
-  int tmpX = x * scl;//x,y need to be multiplied for checking
-  int tmpY = y * scl;
-  return(tX > tmpX - fV && tX < tmpX + scl + fV && tY > tmpY - fV && tY < tmpY + scl + fV && mapTiles.get(x).get(y).size() != 0);//Are we on the tile
+  return(tX == x && tY == y && mapTiles.get(x).get(y).size() != 0);//Are we on the tile
 }//boolean isCursorOnTileXY(int tile, int tX, int tY) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -155,7 +153,7 @@ boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we'r
 void dragTile(){//If dragging a tile: update location
   if (dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      tmpTile.draw(mX - (scl / 2), mY - (scl / 2));//draw the tile on the mouse
+      tmpTile.draw((mouseTileX + screenX) * scl, (mouseTileY + screenY) * scl);//draw the tile on the mouse
     }
   }
 }
@@ -167,7 +165,7 @@ boolean checkImage(int tile){//check if tile about to place has same image as ti
   for(int x = 0; x < mapTiles.size(); x++){
     for(int y = 0; y < mapTiles.get(x).size(); y++){
       for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){
-        if(isCursorOnTile(x, y, mX, mY)){//Is the mouse cursor on the tile we're checking?
+        if(isCursorOnTile(x, y, mouseTileX, mouseTileY)){//Is the mouse cursor on the tile we're checking?
           if(tile == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
             return false;//Don't place tile
           }

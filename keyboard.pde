@@ -27,12 +27,12 @@ void keyTyped(){//We typed a key
     }else if(key == 'q' && noTile == false){//We pressed 'Q'
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step
-        sx1 = mouseX + (screenX * scl);//set x1 to mouse x position
-        sy1 = mouseY + (screenY * scl);//set y1 to mouse y position
+        tileGroupX1 = mouseTileX + screenX;//set x1 to mouse x position
+        tileGroupY1 = mouseTileY + screenY;//set y1 to mouse y position
       }else if (tileGroupStep == 1){//set XY2
         tileGroupStep = 2;//ready to do group tiles stuff
-        sx2 = mouseX + (screenX * scl);//set x1 to mouse x position
-        sy2 = mouseY + (screenY * scl);//set y2 to mouse y position
+        tileGroupX2 = mouseTileX + screenX + 1;//set x1 to mouse x position
+        tileGroupY2 = mouseTileY + screenY + 1;//set y2 to mouse y position
       }else if (tileGroupStep == 2){//set XY2
         tileGroupStep = 0;//ready to do group tiles stuff
       }
@@ -53,7 +53,7 @@ void keyTyped(){//We typed a key
     }else if(key == 'r'){//We pressed 'R'
       for(int x = 0; x < mapTiles.size(); x++){//go through all columns
         for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
-          if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
+          if(isCursorOnTile(x, y, mouseTileX, mouseTileY)){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
             println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.clear);// + ", Tile Lore: " + mapTiles[i].lore);
           }
@@ -62,7 +62,7 @@ void keyTyped(){//We typed a key
     }else if(key == 'e'){//We pressed 'E'
       for(int x = 0; x < mapTiles.size(); x++){//go through all columns
         for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
-          if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
+          if(isCursorOnTile(x, y, mouseTileX, mouseTileY)){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
             loadColors(tmp);
           }

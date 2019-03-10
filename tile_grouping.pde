@@ -1,8 +1,9 @@
 int tileGroupStep = 0;//what step are we in setting tile group
 boolean tileGroupDeleting = false;//are we deleting the tile group
-int sx1, sy1, sx2, sy2;//tileGroup XY corners
+int tileGroupX1, tileGroupX2, tileGroupY1, tileGroupY2;//tileGroup XY corners 0 -> rows/cols
 int tileGrouSXLines = 0;//how many X lines of copied tiles
 int tileGrouSYLines = 0;//how many Y lines of copied tiles
+int X1, X2, Y1, Y2;//define XY positions
 
 
 ArrayList<ArrayList<ArrayList<mTile>>> mapTilesCopy = new ArrayList<ArrayList<ArrayList<mTile>>>(0);//the hellish 3 dimensional ArrayList of tiles to copy, paste, or cut
@@ -10,25 +11,10 @@ ArrayList<ArrayList<ArrayList<mTile>>> mapTilesCopy = new ArrayList<ArrayList<Ar
 
 
 void tileGroup(String button){//mess with tiles in square group
-  int X1, X2, Y1, Y2;//define XY positions
   int XLines, YLines;//define number of XY lines
   boolean skip = false;
   
-  if(sx1 < sx2){//if x1 is less than x2
-    X1 = floor(sx1 / scl);//Adjust XY To Be On Tile Border
-    X2 = (ceil((float)sx2 / scl));//Adjust XY To Be On Tile Border
-  }else{//otherwise
-    X2 = (ceil((float)sx1 / scl));//Adjust XY To Be On Tile Border
-    X1 = floor(sx2 / scl);//Adjust XY To Be On Tile Border
-  }
-  
-  if(sy1 < sy2){//if y1 is less than y2
-    Y1 = floor(sy1 / scl);//Adjust XY To Be On Tile Border
-    Y2 = (ceil((float)sy2 / scl));//Adjust XY To Be On Tile Border
-  }else{//otherwise
-    Y2 = (ceil((float)sy1 / scl));//Adjust XY To Be On Tile Border
-    Y1 = floor(sy2 / scl);//Adjust XY To Be On Tile Border
-  }
+  setupOutlineXY(tileGroupX1, tileGroupX2, tileGroupY1, tileGroupY2);
   
   XLines = (X2 - X1);//how many x lines
   YLines = (Y2 - Y1);//how many y lines
@@ -44,7 +30,7 @@ void tileGroup(String button){//mess with tiles in square group
       }else if(button == "center" && tileGroupDeleting == true && !skip){//we clicked middle button on a tile
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
-            if(isCursorOnTile(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4)){//Are we clicking on the tile
+            if(isCursorOnTile(x, y, X1 + i, Y1 + j)){//Are we clicking on the tile
               mapTiles.get(x).get(y).clear();//delete all the tiles in this space
             }
           }
@@ -54,7 +40,7 @@ void tileGroup(String button){//mess with tiles in square group
       }else if(button == "right" && !skip){//we clicked right button
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
-            if(isCursorOnTile(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4)){//Are we clicking on the tile
+            if(isCursorOnTile(x, y, X1 + i, Y1 + j)){//Are we clicking on the tile
               for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//go through all the tiles in this space
                 mTile tmp = mapTiles.get(x).get(y).get(0);//grab the tile
                 tmp.r = (int)RSlider.getValue();//set tile red value to red slider value
@@ -79,25 +65,10 @@ void tileGroup(String button){//mess with tiles in square group
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void tileGroupCutCopy(char button){//mess with tiles in square group
-  int X1, X2, Y1, Y2;//define XY positions
   boolean skip = false;//how many tiles are selected
   boolean hadTile = false;//did that square have a tile?
   
-  if(sx1 < sx2){//if x1 is less than x2
-    X1 = floor(sx1 / scl);//Adjust XY To Be On Tile Border
-    X2 = (ceil((float)sx2 / scl));//Adjust XY To Be On Tile Border
-  }else{//otherwise
-    X2 = (ceil((float)sx1 / scl));//Adjust XY To Be On Tile Border
-    X1 = floor(sx2 / scl);//Adjust XY To Be On Tile Border
-  }
-  
-  if(sy1 < sy2){//if y1 is less than y2
-    Y1 = floor(sy1 / scl);//Adjust XY To Be On Tile Border
-    Y2 = (ceil((float)sy2 / scl));//Adjust XY To Be On Tile Border
-  }else{//otherwise
-    Y2 = (ceil((float)sy1 / scl));//Adjust XY To Be On Tile Border
-    Y1 = floor(sy2 / scl);//Adjust XY To Be On Tile Border
-  }
+  setupOutlineXY(tileGroupX1, tileGroupX2, tileGroupY1, tileGroupY2);
   
   tileGrouSXLines = (X2 - X1);//how many x lines
   tileGrouSYLines = (Y2 - Y1);//how many y lines
@@ -117,7 +88,7 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
         skip = true;//skip this space
       }
       if(button == 'x' && !skip){//we clicked middle button on a tile
-        if(isCursorOnTile(X1 + i, Y1 + j, ((X1 + i) * scl) + 4, ((Y1  + j) * scl) + 4)){//Are we clicking on the tile
+        if(isCursorOnTile(X1 + i, Y1 + j, X1 + i, Y1  + j)){//Are we clicking on the tile
           for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
             mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
             mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
@@ -128,7 +99,7 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
           mapTiles.get(X1 + i).get(Y1 + j).clear();//delete all tiles in the space
         }
       }else if(button == 'c' && !skip){//we clicked right button
-        if(isCursorOnTile(X1 + i, Y1 + j, ((X1 + i) * scl) + 4, ((Y1  + j) * scl) + 4)){//Are we clicking on the tile
+        if(isCursorOnTile(X1 + i, Y1 + j, X1 + i, Y1  + j)){//Are we clicking on the tile
           for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
             mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
             mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
@@ -150,7 +121,6 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void tileGroupPaste(){//Paste The Copied Tiles
-  int X1,Y1;//Setup Variables
   int tileCount = 0;//how many tiles are there
   
   if(noTile == true){//are we not allowed to place tiles
@@ -186,9 +156,16 @@ void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Pl
   X2 = (floor((mouseX + (ceil((float)tileGrouSXLines / 2) * scl)) / scl) * scl) + (screenX * scl);//Adjust XY To Be On Tile Border
   Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl + (screenY * scl);//Adjust XY To Be On Tile Border
   Y2 = (floor((mouseY + (ceil((float)tileGrouSYLines / 2) * scl)) / scl) * scl) + (screenY * scl);//Adjust XY To Be On Tile Border
+
+  //X1 = (mouseTileX - (tileGrouSXLines / 2)) + screenX;//Adjust XY To Be On Tile Border
+  //X2 = (mouseTileX + (tileGrouSXLines / 2)) + screenX;//Adjust XY To Be On Tile Border
+  //Y1 = (mouseTileY - (tileGrouSYLines / 2)) + screenY;//Adjust XY To Be On Tile Border
+  //Y2 = (mouseTileY + (tileGrouSYLines / 2)) + screenY;//Adjust XY To Be On Tile Border
   
-  //X2 += scl;
-  //Y2 += scl;
+  //int tmpX = 0, tmpY = 0;
+  
+  //if(X2 - X1 % 2 != 0){tmpX = 1;}
+  //if(Y2 - Y1 % 2 != 0){tmpY = 1;}
   
   strokeWeight(borderThickness);//Thicker
   stroke(255,0,0);//RED
@@ -196,6 +173,10 @@ void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Pl
   line(X2, Y1, X2, Y2);//Draw Right
   line(X1, Y1, X2, Y1);//Draw Top
   line(X1, Y2, X2, Y2);//Draw Bottom
+  //line(X1 * scl, Y1 * scl, X1 * scl, (Y2 + tmpY) * scl);//Draw Left
+  //line((X2 + tmpX) * scl, Y1 * scl, (X2 + tmpX) * scl, (Y2 + tmpY) * scl);//Draw Right
+  //line(X1 * scl, Y1 * scl, (X2 + tmpX) * scl, Y1 * scl);//Draw Top
+  //line(X1 * scl, (Y2 + tmpY) * scl, (X2 + tmpX) * scl, (Y2 + tmpY) * scl);//Draw Bottom
   strokeWeight(1);//Default
   stroke(0);//BLACK
 }//void drawGroupPasteOutline() END
@@ -203,41 +184,27 @@ void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Pl
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
-  int X1,X2,Y1,Y2,asx2 = 0,asy2 = 0;//Setup Variables
+  int asx2 = 0,asy2 = 0;//Setup Variables
     
   if(tileGroupStep == 1){//Are We On Step One
-    asx2 = mouseX + (screenX * scl);//Corner is tied to mouse
-    asy2 = mouseY + (screenY * scl);//Corner is tied to mouse
+    asx2 = mouseTileX + screenX + 1;//Corner is tied to mouse
+    asy2 = mouseTileY + screenY + 1;//Corner is tied to mouse
   }else if(tileGroupStep == 2){//Are We On Step Two
-    asx2 = sx2;//Corner is tied to set XY
-    asy2 = sy2;//Corner is tied to set XY
-  }
-    
-  if(sx1 < asx2){//if x1 is less than x2
-    X1 = floor(sx1 / scl) * scl;//Adjust XY To Be On Tile Border
-    X2 = ceil((float)asx2 / scl) * scl;//Adjust XY To Be On Tile Border
-  }else{//otherwise
-    X2 = ceil((float)sx1 / scl) * scl;//Adjust XY To Be On Tile Border
-    X1 = floor(asx2 / scl) * scl;//Adjust XY To Be On Tile Border
+    asx2 = tileGroupX2;//Corner is tied to set XY
+    asy2 = tileGroupY2;//Corner is tied to set XY
   }
   
-  if(sy1 < asy2){//if y1 is less than y2
-    Y1 = floor(sy1 / scl) * scl;//Adjust XY To Be On Tile Border
-    Y2 = ceil((float)asy2 / scl) * scl;//Adjust XY To Be On Tile Border
-  }else{//otherwise
-    Y2 = ceil((float)sy1 / scl) * scl;//Adjust XY To Be On Tile Border
-    Y1 = floor(asy2 / scl) * scl;//Adjust XY To Be On Tile Border
-  }
+  setupOutlineXY(tileGroupX1, asx2, tileGroupY1, asy2);
   
   //X2 += scl;
   //Y2 += scl;
     
   strokeWeight(borderThickness);//Thicker
   stroke(255,0,0);//RED
-  line(X1, Y1, X1, Y2);//Draw Left
-  line(X2, Y1, X2, Y2);//Draw Right
-  line(X1, Y1, X2, Y1);//Draw Top
-  line(X1, Y2, X2, Y2);//Draw Bottom
+  line(X1 * scl, Y1 * scl, X1 * scl, Y2 * scl);//Draw Left
+  line(X2 * scl, Y1 * scl, X2 * scl, Y2 * scl);//Draw Right
+  line(X1 * scl, Y1 * scl, X2 * scl, Y1 * scl);//Draw Top
+  line(X1 * scl, Y2 * scl, X2 * scl, Y2 * scl);//Draw Bottom
   strokeWeight(1);//Default
   stroke(0);//BLACK
 }//void drawTileGroupOutline() END
@@ -251,5 +218,23 @@ void drawTileGroupOutlines(){
   
   if(tileGroupStep == 3){//pasteing group
     drawGroupPasteOutline();//draw the red outline
+  }
+}
+
+void setupOutlineXY(int tmpX1, int tmpX2, int tmpY1, int tmpY2){
+  if(tmpX1 < tmpX2){//if x1 is less than x2
+    X1 = tmpX1;//Adjust XY To Be On Tile Border
+    X2 = tmpX2;//Adjust XY To Be On Tile Border
+  }else{//otherwise
+    X2 = tmpX1 + 1;//Adjust XY To Be On Tile Border
+    X1 = tmpX2 - 1;//Adjust XY To Be On Tile Border
+  }
+  
+  if(tmpY1 < tmpY2){//if y1 is less than y2
+    Y1 = tmpY1;//Adjust XY To Be On Tile Border
+    Y2 = tmpY2;//Adjust XY To Be On Tile Border
+  }else{//otherwise
+    Y2 = tmpY1 + 1;//Adjust XY To Be On Tile Border
+    Y1 = tmpY2 - 1;//Adjust XY To Be On Tile Border
   }
 }
