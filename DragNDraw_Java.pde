@@ -48,7 +48,7 @@ void draw(){//Draw the canvas
   if(preloading != true){//if preloading
     drawnTiles = 0;//reset number of drawn tiles
 
-    updateXY();//Update the XY position of the mouse and the page XY offset
+    updateMouseXY();//Update the XY position of the mouse and the page XY offset
   
     drawSpots();//draw tiles
   

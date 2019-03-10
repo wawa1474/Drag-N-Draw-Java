@@ -27,12 +27,12 @@ void keyTyped(){//We typed a key
     }else if(key == 'q' && noTile == false){//We pressed 'Q'
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step
-        tileGroupX1 = mouseTileX + screenX;//set x1 to mouse x position
-        tileGroupY1 = mouseTileY + screenY;//set y1 to mouse y position
+        tileGroupX1 = mouseTileX;//set x1 to mouse x position
+        tileGroupY1 = mouseTileY;//set y1 to mouse y position
       }else if (tileGroupStep == 1){//set XY2
         tileGroupStep = 2;//ready to do group tiles stuff
-        tileGroupX2 = mouseTileX + screenX + 1;//set x1 to mouse x position
-        tileGroupY2 = mouseTileY + screenY + 1;//set y2 to mouse y position
+        tileGroupX2 = mouseTileX + 1;//set x1 to mouse x position
+        tileGroupY2 = mouseTileY + 1;//set y2 to mouse y position
       }else if (tileGroupStep == 2){//set XY2
         tileGroupStep = 0;//ready to do group tiles stuff
       }

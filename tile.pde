@@ -48,13 +48,6 @@ boolean tileOnScreen(float x, float y){//is this tile on screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void updateXY(){//Update the XY position of the mouse and the page XY offset
-  mouseTileX = (mouseX / scl) - screenX;//Update the X position of the mouse
-  mouseTileY = (mouseY / scl) - screenY;//Update the Y position of the mouse
-}//void updateXY() END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
 void deleteTile(int x, int y){//Delete a tile and update the array
   if(mapTiles.get(x).get(y).size() > 0){//if there are tiles
     mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);//delete the top most one
@@ -67,11 +60,11 @@ void placeTile(){//Place a tile at the mouses location
   //print(mouseButton);
   if(mouseTileY > UIBottom + screenX){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
-      mapTiles.get(mouseTileX + screenX).get(mouseTileY + screenY).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
+      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
       //println("test3");
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //print(mouseButton);
-      mapTiles.get(mouseTileX + screenX).get(mouseTileY + screenY).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
       //println("test4");
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
@@ -153,7 +146,7 @@ boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we'r
 void dragTile(){//If dragging a tile: update location
   if (dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      tmpTile.draw((mouseTileX + screenX) * scl, (mouseTileY + screenY) * scl);//draw the tile on the mouse
+      tmpTile.draw((mouseTileX) * scl, (mouseTileY) * scl);//draw the tile on the mouse
     }
   }
 }

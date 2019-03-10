@@ -1,8 +1,8 @@
 int tileGroupStep = 0;//what step are we in setting tile group
 boolean tileGroupDeleting = false;//are we deleting the tile group
 int tileGroupX1, tileGroupX2, tileGroupY1, tileGroupY2;//tileGroup XY corners 0 -> rows/cols
-int tileGrouSXLines = 0;//how many X lines of copied tiles
-int tileGrouSYLines = 0;//how many Y lines of copied tiles
+int tileGroupCols = 0;//how many X lines of copied tiles
+int tileGroupRows = 0;//how many Y lines of copied tiles
 int X1, X2, Y1, Y2;//define XY positions
 
 
@@ -70,19 +70,19 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
   
   setupOutlineXY(tileGroupX1, tileGroupX2, tileGroupY1, tileGroupY2);
   
-  tileGrouSXLines = (X2 - X1);//how many x lines
-  tileGrouSYLines = (Y2 - Y1);//how many y lines
+  tileGroupCols = (X2 - X1);//how many x lines
+  tileGroupRows = (Y2 - Y1);//how many y lines
   
   mapTilesCopy.clear();//delete all tiles
-  for(int x = 0; x < tileGrouSXLines; x++){//and make as many columns as needed
+  for(int x = 0; x < tileGroupCols; x++){//and make as many columns as needed
     mapTilesCopy.add(new ArrayList<ArrayList<mTile>>());//add a column
-    for(int y = 0; y < tileGrouSYLines; y++){//and make as many rows as needed
+    for(int y = 0; y < tileGroupRows; y++){//and make as many rows as needed
       mapTilesCopy.get(x).add(new ArrayList<mTile>());//add a row
     }
   }
   
-  for(int i = 0; i < tileGrouSXLines; i++){//loop through all columns
-    for(int j = 0; j < tileGrouSYLines; j++){//loop through all rows
+  for(int i = 0; i < tileGroupCols; i++){//loop through all columns
+    for(int j = 0; j < tileGroupRows; j++){//loop through all rows
       hadTile = false;//square does not have tile
       if(X1 + i < 0 || Y1 + j < 0){//if its a negetive number
         skip = true;//skip this space
@@ -127,11 +127,11 @@ void tileGroupPaste(){//Paste The Copied Tiles
     return;//do nothing
   }
   
-  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl + (screenX * scl);//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl + (screenY * scl);//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGroupCols / 2) * scl)) / scl) * scl + (screenX * scl);//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGroupRows / 2) * scl)) / scl) * scl + (screenY * scl);//Adjust XY To Be On Tile Border
   
-  for(int i = 0; i < tileGrouSXLines; i++){//loop through all columns
-    for(int j = 0; j < tileGrouSYLines; j++){//loop through all rows
+  for(int i = 0; i < tileGroupCols; i++){//loop through all columns
+    for(int j = 0; j < tileGroupRows; j++){//loop through all rows
       for(int z = 0; z < mapTilesCopy.get(i).get(j).size(); z++){//go through all tiles in this space
         mTile tmp = mapTilesCopy.get(i).get(j).get(z);//get the copy
         int tmpX = (X1 / scl) + i;//Adjust XY To Be On Tile Border
@@ -152,10 +152,10 @@ void tileGroupPaste(){//Paste The Copied Tiles
 void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Placed
   int X1,X2,Y1,Y2;//Setup Variables
   
-  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl + (screenX * scl);//Adjust XY To Be On Tile Border
-  X2 = (floor((mouseX + (ceil((float)tileGrouSXLines / 2) * scl)) / scl) * scl) + (screenX * scl);//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl + (screenY * scl);//Adjust XY To Be On Tile Border
-  Y2 = (floor((mouseY + (ceil((float)tileGrouSYLines / 2) * scl)) / scl) * scl) + (screenY * scl);//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGroupCols / 2) * scl)) / scl) * scl + (screenX * scl);//Adjust XY To Be On Tile Border
+  X2 = (floor((mouseX + (ceil((float)tileGroupCols / 2) * scl)) / scl) * scl) + (screenX * scl);//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGroupRows / 2) * scl)) / scl) * scl + (screenY * scl);//Adjust XY To Be On Tile Border
+  Y2 = (floor((mouseY + (ceil((float)tileGroupRows / 2) * scl)) / scl) * scl) + (screenY * scl);//Adjust XY To Be On Tile Border
 
   //X1 = (mouseTileX - (tileGrouSXLines / 2)) + screenX;//Adjust XY To Be On Tile Border
   //X2 = (mouseTileX + (tileGrouSXLines / 2)) + screenX;//Adjust XY To Be On Tile Border
@@ -187,8 +187,8 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
   int asx2 = 0,asy2 = 0;//Setup Variables
     
   if(tileGroupStep == 1){//Are We On Step One
-    asx2 = mouseTileX + screenX + 1;//Corner is tied to mouse
-    asy2 = mouseTileY + screenY + 1;//Corner is tied to mouse
+    asx2 = mouseTileX + 1;//Corner is tied to mouse
+    asy2 = mouseTileY + 1;//Corner is tied to mouse
   }else if(tileGroupStep == 2){//Are We On Step Two
     asx2 = tileGroupX2;//Corner is tied to set XY
     asy2 = tileGroupY2;//Corner is tied to set XY

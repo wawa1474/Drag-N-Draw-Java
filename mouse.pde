@@ -8,7 +8,10 @@ int screenX = 0, screenY = 0;//Screen XY
 int mouseTileX = 0, mouseTileY = 0;//Mouse XY
 int fV = 1;//Fudge Value to make sure we're really clicking inside something
 
-
+void updateMouseXY(){//Update the XY position of the mouse and the page XY offset
+  mouseTileX = (mouseX / scl) + screenX;//Update the X position of the mouse
+  mouseTileY = (mouseY / scl) + screenY;//Update the Y position of the mouse
+}//void updateXY() END
 
 void mousePressed(){//We pressed a mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
@@ -64,14 +67,14 @@ void mousePressed(){//We pressed a mouse button
   }
 
   for(int i = 0; i < rowLength; i++){//Go through all the tiles in the row
-    if(mouseTileX > i + screenX && mouseTileX < (i+1) + screenX && mouseTileY > 0 + screenY && mouseTileY < 1 + screenX){//Are we clicking on the tile UI
+    if(mouseTileX > i + screenX && mouseTileX < (i+1) + screenX && mouseTileY > 0 + screenY && mouseTileY < 1 + screenY){//Are we clicking on the tile UI
       noTile = true;//Dont allow tile placement
       if(img[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
       tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on
     }
   }//Went through all the tiles in the row
 
-  if(mouseTileX > 0 + screenX && mouseTileX < UIRight + screenX && mouseTileY > 0 + screenY && mouseTileY < UIBottom + screenY){//Did we click on the UI
+  if(mouseTileY < UIBottom + screenY){//Did we click on the UI
     noTile = true;//Dont allow tile placement
     return;//Don't do anything else
   }
@@ -172,7 +175,7 @@ void mouseReleased(){//We released the mouse button
   
   if(dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      if(mouseTileY < 0 + 2 + screenY){//Did we just drop a tile on the ui
+      if(mouseTileY < UIBottom + screenY){//Did we just drop a tile on the ui
         resetLHXY();//reset the lower/higher xy for background drawing
         tmpTile = null;//we are no longer dragging a tile
       }else{
