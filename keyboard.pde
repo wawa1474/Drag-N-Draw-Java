@@ -51,8 +51,10 @@ void keyTyped(){//We typed a key
         tileGroupStep = 0;//paste step is 0
       }
     }else if(key == 'r'){//We pressed 'R'
-      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+      //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+      //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+      for(int x = screenBoundsX1; x < screenBoundsX2 + 1; x++){//loop through all columns
+        for(int y = screenBoundsY1; y < screenBoundsY2 + 1; y++){//loop through rows
           if(isCursorOnTile(x, y, mouseTileX, mouseTileY)){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
             println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.clear);// + ", Tile Lore: " + mapTiles[i].lore);
@@ -60,9 +62,11 @@ void keyTyped(){//We typed a key
         }
       }
     }else if(key == 'e'){//We pressed 'E'
-      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
-          if(isCursorOnTile(x, y, mouseTileX, mouseTileY)){//Are we clicking on the tile
+      //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+      //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+      for(int x = screenBoundsX1; x < screenBoundsX2 + 1; x++){//loop through all columns
+        for(int y = screenBoundsY1; y < screenBoundsY2 + 1; y++){//loop through rows
+          if(isCursorOnTile(x, y, mouseTileX + screenX, mouseTileY + screenY)){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
             loadColors(tmp);
           }

@@ -131,9 +131,9 @@ class tileUI{
       //display when in ui?
       //int mouseDisplayX;
       int mouseDisplayY = (mouseY + (screenY * scl));
-      if(mouseDisplayY < 0 + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
+      if(mouseDisplayY < 0 + (UIBottom * scl) + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
     
-      text("X:" + floor((mouseX + (screenX * scl))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
+      text("X:" + mouseTileX,((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
     
       if(mouseDisplayY == -1){
         text("Y:" + "UI",((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
