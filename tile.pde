@@ -26,13 +26,13 @@ class mTile{//Tile Object
   void draw(int x, int y){
     if(!this.clear || this.image == colorTile){//Is the tile colored
       fill(this.r,this.g,this.b);//Set Tile background color
-      rect(x,y,scl,scl);//Draw colored square behind tile
+      rect(x,y + (-2 * scl),scl,scl);//Draw colored square behind tile
     }
     
     if(this.image != colorTile && this.image <= totalImages){//if tile image is not 0 and tile image exists
-      image(img[this.image], x, y);//Draw tile
+      image(img[this.image], x, y + (-2 * scl));//Draw tile
     }else if(this.image != 0){//image is not blank
-      image(missingTexture, x, y);//Draw tile
+      image(missingTexture, x, y + (-2 * scl));//Draw tile
     }
   }
 }//class mTile() END
@@ -146,7 +146,7 @@ boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we'r
 void dragTile(){//If dragging a tile: update location
   if (dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      tmpTile.draw((mouseTileX) * scl, (mouseTileY) * scl);//draw the tile on the mouse
+      tmpTile.draw((mouseTileX) * scl, (mouseTileY * scl) - (-2 * scl));//draw the tile on the mouse
     }
   }
 }

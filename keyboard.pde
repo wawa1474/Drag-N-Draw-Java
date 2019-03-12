@@ -66,7 +66,7 @@ void keyTyped(){//We typed a key
       //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
       for(int x = screenBoundsX1; x < screenBoundsX2 + 1; x++){//loop through all columns
         for(int y = screenBoundsY1; y < screenBoundsY2 + 1; y++){//loop through rows
-          if(isCursorOnTile(x, y, mouseTileX + screenX, mouseTileY + screenY)){//Are we clicking on the tile
+          if(isCursorOnTile(x, y, mouseTileX, mouseTileY)){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
             loadColors(tmp);
           }
@@ -83,8 +83,8 @@ void keyTyped(){//We typed a key
     if(key == 'w'){//We pressed 'W'
       screenY -= scrollAmount;//go up
       
-      if(screenY < 0){//if we're to far up
-        screenY = 0;//make it not so
+      if(screenY < -2){//if we're to far up
+        screenY = -2;//make it not so
       }
     }
     if(key == 'a'){//We pressed 'A'

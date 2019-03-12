@@ -66,7 +66,7 @@ class canvasBG{//The background
     stroke(255,0,0);//RED
     line(1, 0, 1, rows*scl);//Draw Left line
     line((scl * cols) - 1, 0, (scl * cols) - 1, rows*scl);//Draw Right line
-    line(0, 1 + (2 * scl), cols*scl, 1 + (2 * scl));//Draw Top Line
+    line(0, 1, cols*scl, 1);//Draw Top Line
     line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Bottom Line
   }//void border() END
 }//class canvasBG END
@@ -126,12 +126,12 @@ class tileUI{
       text("Drawn: " + tmp, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
     
       text("X:" + screenX,((scl * 25)),(scl / 1.25));//X: (screen x)
-      text("Y:" + screenY,((scl * 25)),(scl * 1.75));//Y: (screen y)
+      text("Y:" + (screenY + 2),((scl * 25)),(scl * 1.75));//Y: (screen y)
     
       //display when in ui?
       //int mouseDisplayX;
       int mouseDisplayY = (mouseY + (screenY * scl));
-      if(mouseDisplayY < 0 + (UIBottom * scl) + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
+      if(mouseDisplayY < (-2 * scl) + (UIBottom * scl) + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
     
       text("X:" + mouseTileX,((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
     

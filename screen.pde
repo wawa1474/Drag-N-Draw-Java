@@ -25,7 +25,7 @@ void drawSpots(){
 
 void updateScreenBounds(){
   screenBoundsX1 = screenX;
-  screenBoundsY1 = screenY;
+  screenBoundsY1 = screenY + 2;
   
   screenBoundsX2 = screenBoundsX1 + floor(width / scl);
   screenBoundsY2 = screenBoundsY1 + floor(height / scl);

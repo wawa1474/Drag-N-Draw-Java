@@ -4,7 +4,7 @@ boolean noTile = false;//Are we blocking placement of tiles?
 
 //int offsetX = 0, offsetY = 0;//Mouseclick offset
 
-int screenX = 0, screenY = 0;//Screen XY
+int screenX = 0, screenY = -2;//Screen XY
 int mouseTileX = 0, mouseTileY = 0;//Mouse XY
 int fV = 1;//Fudge Value to make sure we're really clicking inside something
 
