@@ -48,7 +48,7 @@ boolean tileOnScreen(float x, float y){//is this tile on screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void updateXY(){//Update the XY position of the mouse and the page XY offset
+void updateMouseXY(){//Update the XY position of the mouse and the page XY offset
   mX = mouseX - SX;//Update the X position of the mouse
   mY = mouseY - SY;//Update the Y position of the mouse
 }//void updateXY() END
@@ -155,7 +155,12 @@ boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we'r
 void dragTile(){//If dragging a tile: update location
   if (dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      tmpTile.draw(mX - (scl / 2), mY - (scl / 2));//draw the tile on the mouse
+      //tmpTile.draw(mX - (scl / 2), mY - (scl / 2));//draw the tile on the mouse
+      if(mY < (UIBottom * scl) - SY){
+        
+      }else{
+        tmpTile.draw(floor(mX / scl) * scl, floor(mY / scl) * scl);//draw the tile on the mouse snapped to the grid
+      }
     }
   }
 }
@@ -163,9 +168,10 @@ void dragTile(){//If dragging a tile: update location
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean checkImage(int tile){//check if tile about to place has same image as tile mouse is on
-  //for(int i = 0; i < mapTiles.size(); i++){//Go through all tiles
-  for(int x = 0; x < mapTiles.size(); x++){
-    for(int y = 0; y < mapTiles.get(x).size(); y++){
+  //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+  //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+  for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+    for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){
         if(isCursorOnTile(x, y, mX, mY)){//Is the mouse cursor on the tile we're checking?
           if(tile == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?

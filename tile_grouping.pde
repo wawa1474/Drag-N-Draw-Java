@@ -1,8 +1,8 @@
 int tileGroupStep = 0;//what step are we in setting tile group
 boolean tileGroupDeleting = false;//are we deleting the tile group
 int sx1, sy1, sx2, sy2;//tileGroup XY corners
-int tileGrouSXLines = 0;//how many X lines of copied tiles
-int tileGrouSYLines = 0;//how many Y lines of copied tiles
+int tileGroupCols = 0;//how many columns of copied tiles
+int tileGroupRows = 0;//how many rows of copied tiles
 
 
 ArrayList<ArrayList<ArrayList<mTile>>> mapTilesCopy = new ArrayList<ArrayList<ArrayList<mTile>>>(0);//the hellish 3 dimensional ArrayList of tiles to copy, paste, or cut
@@ -99,19 +99,19 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
     Y1 = floor(sy2 / scl);//Adjust XY To Be On Tile Border
   }
   
-  tileGrouSXLines = (X2 - X1);//how many x lines
-  tileGrouSYLines = (Y2 - Y1);//how many y lines
+  tileGroupCols = (X2 - X1);//how many x lines
+  tileGroupRows = (Y2 - Y1);//how many y lines
   
   mapTilesCopy.clear();//delete all tiles
-  for(int x = 0; x < tileGrouSXLines; x++){//and make as many columns as needed
+  for(int x = 0; x < tileGroupCols; x++){//and make as many columns as needed
     mapTilesCopy.add(new ArrayList<ArrayList<mTile>>());//add a column
-    for(int y = 0; y < tileGrouSYLines; y++){//and make as many rows as needed
+    for(int y = 0; y < tileGroupRows; y++){//and make as many rows as needed
       mapTilesCopy.get(x).add(new ArrayList<mTile>());//add a row
     }
   }
   
-  for(int i = 0; i < tileGrouSXLines; i++){//loop through all columns
-    for(int j = 0; j < tileGrouSYLines; j++){//loop through all rows
+  for(int i = 0; i < tileGroupCols; i++){//loop through all columns
+    for(int j = 0; j < tileGroupRows; j++){//loop through all rows
       hadTile = false;//square does not have tile
       if(X1 + i < 0 || Y1 + j < 0){//if its a negetive number
         skip = true;//skip this space
@@ -157,11 +157,11 @@ void tileGroupPaste(){//Paste The Copied Tiles
     return;//do nothing
   }
   
-  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGroupCols / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGroupRows / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
   
-  for(int i = 0; i < tileGrouSXLines; i++){//loop through all columns
-    for(int j = 0; j < tileGrouSYLines; j++){//loop through all rows
+  for(int i = 0; i < tileGroupCols; i++){//loop through all columns
+    for(int j = 0; j < tileGroupRows; j++){//loop through all rows
       for(int z = 0; z < mapTilesCopy.get(i).get(j).size(); z++){//go through all tiles in this space
         mTile tmp = mapTilesCopy.get(i).get(j).get(z);//get the copy
         int tmpX = (X1 / scl) + i;//Adjust XY To Be On Tile Border
@@ -182,10 +182,10 @@ void tileGroupPaste(){//Paste The Copied Tiles
 void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Placed
   int X1,X2,Y1,Y2;//Setup Variables
   
-  X1 = floor((mouseX - (floor(tileGrouSXLines / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
-  X2 = (floor((mouseX + (ceil((float)tileGrouSXLines / 2) * scl)) / scl) * scl) - SX;//Adjust XY To Be On Tile Border
-  Y1 = floor((mouseY - (floor(tileGrouSYLines / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
-  Y2 = (floor((mouseY + (ceil((float)tileGrouSYLines / 2) * scl)) / scl) * scl) - SY;//Adjust XY To Be On Tile Border
+  X1 = floor((mouseX - (floor(tileGroupCols / 2) * scl)) / scl) * scl - SX;//Adjust XY To Be On Tile Border
+  X2 = (floor((mouseX + (ceil((float)tileGroupCols / 2) * scl)) / scl) * scl) - SX;//Adjust XY To Be On Tile Border
+  Y1 = floor((mouseY - (floor(tileGroupRows / 2) * scl)) / scl) * scl - SY;//Adjust XY To Be On Tile Border
+  Y2 = (floor((mouseY + (ceil((float)tileGroupRows / 2) * scl)) / scl) * scl) - SY;//Adjust XY To Be On Tile Border
   
   //X2 += scl;
   //Y2 += scl;

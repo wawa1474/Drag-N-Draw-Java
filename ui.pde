@@ -50,12 +50,21 @@ class canvasBG{//The background
         stroke(255-this.r, 255-this.g, 255-this.b);//Invert line color
       }
     
-      if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){//if the tile xy is not reset and we're should draw lines
-        for(int i = lowerx - (scl * 20); i < upperx + (scl * 21); i+=scl){//for however many horizontal squares there are
-          line(i,lowery - (scl * 20), i, uppery + (scl * 20));//draw lines
+      //if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){//if the tile xy is not reset and we're should draw lines
+      //  for(int i = lowerx - (scl * 20); i < upperx + (scl * 21); i+=scl){//for however many horizontal squares there are
+      //    line(i,lowery - (scl * 20), i, uppery + (scl * 20));//draw lines
+      //  }
+      //  for(int i = lowery - (scl * 20); i < uppery + (scl * 21); i+=scl){//for however many vertical squares there are
+      //    line(lowerx - (scl * 20), i, upperx + (scl * 20), i);//draw lines
+      //  }
+      //}
+      
+      if(drawLines){//if the tile xy is not reset and we're should draw lines
+        for(int i = screenX1; i < screenX2 + 2; i++){//for however many horizontal squares there are
+          line(i * scl,screenY1 * scl, i * scl, (screenY2 + 2) * scl);//draw lines
         }
-        for(int i = lowery - (scl * 20); i < uppery + (scl * 21); i+=scl){//for however many vertical squares there are
-          line(lowerx - (scl * 20), i, upperx + (scl * 20), i);//draw lines
+        for(int i = screenY1; i < screenY2 + 2; i++){//for however many vertical squares there are
+          line(screenX1 * scl, i * scl, (screenX2 + 2) * scl, i * scl);//draw lines
         }
       }
     }
@@ -128,17 +137,12 @@ class tileUI{
       text("X:" + floor(-SX/scl),((scl * 25)),(scl / 1.25));//X: (screen x)
       text("Y:" + floor(-(SY-64)/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)
     
-      //display when in ui?
-      //int mouseDisplayX;
-      int mouseDisplayY = (mouseY+(-SY));
-      if(mouseDisplayY < 0 + borderThickness){mouseDisplayY = -1;}else{mouseDisplayY = floor(mouseDisplayY / scl);}
-    
       text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
     
-      if(mouseDisplayY == -1){
+      if(mY < (UIBottom * scl) - SY){
         text("Y:" + "UI",((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
       }else{
-        text("Y:" + mouseDisplayY,((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
+        text("Y:" + floor(mY / scl),((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
       }
     
       textSize(12);//Default text size

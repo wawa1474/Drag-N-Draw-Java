@@ -32,8 +32,10 @@ void mousePressed(){//We pressed a mouse button
       tileGroup("left");//placing image tiles
       return;//Block normal action
     }else if(mouseButton == CENTER){//We clicked with the middle button
-      for(int x = 0; x < mapTiles.size(); x++){
-        for(int y = 0; y < mapTiles.get(x).size(); y++){
+      //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+      //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+      for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+        for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
           if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
             tileGroupDeleting = true;//deleting group of tiles
           }
@@ -48,8 +50,10 @@ void mousePressed(){//We pressed a mouse button
     if(tileGroupStep == 2){//placing group of tiles
       tileGroup("right");//coloring group of tiles
     }else{//otherwise
-      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+      //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+      //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+      for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+        for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
           if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
             //mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
             mTile tmp = mapTiles.get(x).get(y).get(0);//grab the bottom tile
@@ -71,14 +75,16 @@ void mousePressed(){//We pressed a mouse button
     }
   }//Went through all the tiles in the row
 
-  if(mX > 0 - SX && mX < scl*UIRight - SX && mY > 0 /* scl */ - SY && mY < scl*UIBottom - SY){//Did we click on the UI
+  if(mY < (UIBottom * scl) - SY){//Did we click on the UI
     noTile = true;//Dont allow tile placement
     return;//Don't do anything else
   }
 
   // Did I click on the rectangle?
-  for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-    for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+  //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+  //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+  for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+    for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
         if(mouseButton == CENTER){//We clicked with the middle button
           deleteTile(x, y);//Delete a tile and update the array
@@ -111,8 +117,10 @@ void mouseDragged(){//We dragged the mouse while holding a button
   checkMouseOverIcon(false);
   
   if(mouseButton == RIGHT){//We clicked with the right button
-    for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-      for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+    //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+    //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+    for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+      for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
         if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
           mTile tmp = mapTiles.get(x).get(y).get(0);//get the tile
           tmp.r = (int)RSlider.getValue();//set tile red value
@@ -124,8 +132,10 @@ void mouseDragged(){//We dragged the mouse while holding a button
   }
   
   if(mouseButton == CENTER && deleting){//We dragging and deleting with the middle button
-    for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-      for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+    //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+    //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+    for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+      for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
         if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
           mapTiles.get(x).get(y).clear();//delete all tiles in this space
         }
@@ -142,8 +152,10 @@ void mouseDragged(){//We dragged the mouse while holding a button
     return;//Block normal action
   }
   
-  for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-    for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+  //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
+  //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
+  for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+    for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       /*Pad*/if(isCursorOnTile(x, y, mX, mY) && !checkImage(tileN)){//Are we clicking on the tile
         return;//Block normal action
       }else if(isCursorOnTile(x, y, mX, mY) && mouseButton == CENTER){//Are we clicking on the tile with the middle button
@@ -172,7 +184,7 @@ void mouseReleased(){//We released the mouse button
   
   if(dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      if(mX >= 0 - SX && mX < width - SX && mY < (0 + (scl*2)) - SY){//Did we just drop a tile on the ui
+      if(mY < (UIBottom * scl) - SY){//Did we just drop a tile on the ui
         resetLHXY();//reset the lower/higher xy for background drawing
         tmpTile = null;//we are no longer dragging a tile
       }else{
