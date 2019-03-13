@@ -15,10 +15,13 @@ boolean drawAll = false;//draw all tiles even if not on screen?
 void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
+  noSmooth();
   
   clearMapTilesArray();//setup map tiles array
   
-  FileLoadTileMapInfo();//load tile map info file
+  fileHandlingTest();
+  
+  dummyFileLoadTileMapInfo();//load tile map info file
   
   UIControls = new ControlP5(this);//set up all the control stuff
   UI.setup();//Setup all of the UI stuff
