@@ -9,8 +9,8 @@ PImage missingTexture;//missingTexture Image
 
 String fileName = "Error";//File Name
 
-Table tileInfoTable;//tile map info table
-PImage[] tileMaps = new PImage[0];//tile maps images
+Table tileInfoTable = new Table();//tile map info table
+PImage[] tileMapImages = new PImage[0];//tile maps images
 boolean preloading = true;//are we preloading
 boolean prepreloading = true;//are we prepreloading
 int tileMapShow = 0;//display which tile map
@@ -24,89 +24,6 @@ int colorTile = 0;//Which tile is the clear colored tile
 String tileMapName = "Classic";//tile map name
 boolean loadingTileMap = true;//are we loading the tile map
 
-
-
-void preload(){//Preload all of the images
-  //FileLoadTileInfo();
-  PImage tileMap = loadImage(tileMapLocation);//load the tile map image
-  tileMap.loadPixels();//load the images pixels
-  
-  for(int i = 0; i < img.length; i++){//delete all the images
-    img = (PImage[]) shorten(img);//Shorten the Tile Images Array by 1
-  }
-  
-  for(int i = 0; i <= totalImages; i++){//Go through all the images
-    img = (PImage[]) expand(img, img.length + 1);//make sure we have room
-    img[i] = createImage(32, 32, ARGB);//create a new image
-    img[i].loadPixels();//load the images pixels
-    for(int y = 0; y < 32; y++){//for tile height
-      for(int x = 0; x < 32; x++){//for tile width
-        img[i].set(x, y, tileMap.get(x + (scl * floor(i % tileMapWidth)), y + (scl * floor(i / tileMapHeight))));//set pixel
-      }
-    }
-    img[i].updatePixels();//update the image pixels
-  }
-  
-  missingTexture = loadImage("assets/missingTexture.png");//load missing texture image
-  
-  println(totalImages + ": " + fullTotalImages);
-  if(totalImages != fullTotalImages){//is there empty sapce
-    for(int i = totalImages + 1; i <= fullTotalImages; i++){//fill the empty space
-      img = (PImage[]) expand(img, img.length + 1);//make sure we have room
-      img[i] = missingTexture;//make the empty spaces be missing textures
-    }
-  }
-  
-  BACKGROUND = loadImage("assets/background.png");//load background image
-}//void preload() END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void FileLoadTileMapInfo(){//load map from file
-  tileInfoTable = loadTable("assets/tileMapInfo.csv", "header, csv");// + ".csv", "header");//Load the csv
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
-  int fileVersion = int(tileInfoTable.getInt(0,"location"));//File Version
-  //int(mapTable.get(0,'y'));//blank
-  //int(mapTable.get(0,'image'));//blank
-  //int(mapTable.get(0,'r'));//blank
-  //int(mapTable.get(0,'g'));//blank
-  //int(mapTable.get(0,'b'));//blank
-  //int(mapTable.get(0,'clear'));//blank
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
-  
-  if(fileVersion == 0){//whats the file version
-    for(int i = 1; i < tileInfoTable.getRowCount(); i++){//Loop through all the rows
-      tileMaps = (PImage[]) expand(tileMaps, tileMaps.length + 1);//make sure we have room
-      tileMaps[tileMaps.length - 1] = loadImage(tileInfoTable.getString(i,"location"));//load tile map image
-      println(tileInfoTable.getString(i,"location") + ", " +//Tile X position
-                              tileInfoTable.getInt(i,"tileMapHeight") + ", " +//Tile Y position
-                              tileInfoTable.getInt(i,"tileMapWidth") + ", " +//Tile Image
-                              tileInfoTable.getInt(i,"tileMapTileX") + ", " +//Tile Red amount
-                              tileInfoTable.getInt(i,"tileMapTileY") + ", " +//Tile Red amount
-                              tileInfoTable.getInt(i,"images") + ", " +//Tile Red amount
-                              tileInfoTable.getInt(i,"colortile"),//Is Tile Clear
-                              tileInfoTable.getString(i,"name"));//,//Is Tile Clear
-      if(tileMapName.equals(tileInfoTable.getString(i,"name"))){//does the map name and tile map name match
-        tileMapLocation = tileInfoTable.getString(i,"location");//update tile map location
-        tileMapHeight = tileInfoTable.getInt(i,"tileMapHeight");//how tiles high
-        tileMapWidth = tileInfoTable.getInt(i,"tileMapWidth");//how many tile wide
-        //tileMapTileX = 32;//tile width
-        //tileMapTileY = 32;//tile height
-        colorTile = tileInfoTable.getInt(i,"colortile");//Is Tile Clear
-        totalImages = tileInfoTable.getInt(i,"images") - 1;//Total Images
-        fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
-        tileN = 1;//make sure were on tile 1
-        updateTileRow();//make sure we're on the correct row
-      }
-    }
-  }else{//we don't know that file version
-    println("File Version Error (Loading).");//throw error
-  }
-}//FileLoadTileInfo() END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
 void loadMap(){//called when loadMap is pressed
   if(loadingTileMap == true){//if loading tile map
     noLoop();//don't allow drawing
@@ -115,8 +32,8 @@ void loadMap(){//called when loadMap is pressed
     println("File Selected!");
     while(prepreloading == true){delay(500);}//small delay
     println("File Loaded");
-    FileLoadTileMapInfo();//load tile map info file
-    preload();//preload stuff
+    dummyFileLoadTileMapInfo();//load tile map info file
+    dummyPreload();//preload stuff
     tileN = 1;//make sure we're on the first tile
     updateTileRow();//make sure we're on the correct row
     noTile = false;//allowed to place tiles
@@ -224,7 +141,7 @@ void fileSaveMap(){//Save the Map to file
     colorTile = tileInfoTable.getInt(tileMapShow + 1,"colortile");//load number of tiles tall
     tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
     fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
-    preload();//preload stuff
+    dummyPreload();//preload stuff
     tileN = 1;//make sure were on tile 1
     updateTileRow();//make sure we're on the correct row
     noTile = false;//allowed to place tiles
@@ -465,8 +382,8 @@ void FileLoadMap(){//load map from file
   if(!tileMapName.equals(headerTileName)){//if map names aren't equal
     println("Changing Tile Map");
     tileMapName = headerTileName;//Tile Map Name
-    FileLoadTileMapInfo();
-    preload();
+    dummyFileLoadTileMapInfo();
+    dummyPreload();
   }else{
     
   }

@@ -39,7 +39,9 @@ class canvasBG{//The background
   void draw(){//Draw the background
     if(preloading == true){
       background(255);//white background
-      image(tileMaps[tileMapShow],0,scl);//display tile map
+      if(tileMapImages.length != 0){
+        image(tileMapImages[tileMapShow],0,scl);//display tile map
+      }
     }else{
       strokeWeight(1);//default
       background(this.r, this.g, this.b);//Draw the background in whatever the color is
@@ -90,7 +92,11 @@ class tileUI{
       rect(scl * 11.5, 0, scl * 5, scl);//text box background
       fill(255);//white text
       //text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
-      text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12, scl / 2);//display tile map name
+      if(tileInfoTable.getRowCount() != 0){
+        text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12, scl / 2);//display tile map name
+      }else{
+        text("No Tile Maps Exist!", scl * 12, scl / 2);//display tile map name
+      }
     }else{
       fill(0);//black
       noStroke();//no line around the ui background
@@ -100,7 +106,7 @@ class tileUI{
       stroke(0);
       fill(255);//Set background color to white
       rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
-      for(int i = 0; i < rowLength; i++){//Go through all the tiles
+      for(int i = 0; i < rowLength && img.length != 0; i++){//Go through all the tiles
         if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
           if((rowLength*tileRow)+i == tileN){//If displaying selected tile
             fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
@@ -283,7 +289,7 @@ void fileSaveLoad(int n){
       colorTile = tileInfoTable.getInt(tileMapShow + 1,"colortile");//load number of tiles tall
       tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
       fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
-      preload();//preload stuff
+      dummyPreload();//preload stuff
       tileN = 1;//make sure were on tile 1
       updateTileRow();//make sure we're on the correct row
       noTile = false;//allowed to place tiles

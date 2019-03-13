@@ -29,9 +29,10 @@ class mTile{//Tile Object
       rect(x,y,scl,scl);//Draw colored square behind tile
     }
     
-    if(this.image != colorTile && this.image <= totalImages){//if tile image is not 0 and tile image exists
+    if(this.image != colorTile && this.image <= totalImages && img.length != 0){//if tile image is not 0 and tile image exists
       image(img[this.image], x, y);//Draw tile
-    }else if(this.image != 0){//image is not blank
+      //image(img, x, y, scl, scl)
+    }else if(this.image != 0 && missingTexture != null){//image is not blank
       image(missingTexture, x, y);//Draw tile
     }
   }
