@@ -1,5 +1,3 @@
-int tileBorderNumber = 0;//What number in img[] is the border (its just a null tile)
-
 int scl = 32;//Square Scale
 
 ArrayList<ArrayList<ArrayList<mTile>>> mapTiles = new ArrayList<ArrayList<ArrayList<mTile>>>(0);//the hellish 3 dimensional ArrayList of tiles
@@ -24,12 +22,12 @@ class mTile{//Tile Object
   }//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
   
   void draw(int x, int y){
-    if(!this.clear || this.image == colorTile){//Is the tile colored
+    if(!this.clear || this.image == colorTileNumber){//Is the tile colored
       fill(this.r,this.g,this.b);//Set Tile background color
       rect(x,y,scl,scl);//Draw colored square behind tile
     }
     
-    if(this.image != colorTile && this.image <= totalImages && img.length != 0){//if tile image is not 0 and tile image exists
+    if(this.image != colorTileNumber && this.image <= totalImages && img.length != 0){//if tile image is not 0 and tile image exists
       image(img[this.image], x, y);//Draw tile
       //image(img, x, y, scl, scl)
     }else if(this.image != 0 && missingTexture != null){//image is not blank
@@ -68,7 +66,7 @@ void placeTile(){//Place a tile at the mouses location
   //print(mouseButton);
   if(mY > scl*UIBottom - SY + fV && mY < (height - (scl*1.5)) - SY + fV && mX < (width - (scl)) - SX + fV){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
-      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
+      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(colorTileNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
       //println("test3");
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //print(mouseButton);

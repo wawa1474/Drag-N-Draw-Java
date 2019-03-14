@@ -20,8 +20,8 @@ int tileMapHeight = 32;//how tiles high
 int tileMapWidth = 32;//how many tile wide
 int tileMapTileX = 32;//tile width
 int tileMapTileY = 32;//tile height
-int colorTile = 0;//Which tile is the clear colored tile
-String tileMapName = "Classic";//tile map name
+int colorTileNumber = 0;//Which tile is the clear colored tile
+String loadedTileMapName = "Classic";//tile map name
 boolean loadingTileMap = true;//are we loading the tile map
 
 void loadMap(){//called when loadMap is pressed
@@ -32,14 +32,16 @@ void loadMap(){//called when loadMap is pressed
     println("File Selected!");
     while(prepreloading == true){delay(500);}//small delay
     println("File Loaded");
-    dummyFileLoadTileMapInfo();//load tile map info file
-    dummyPreload();//preload stuff
+    loadTileMapInfo();//load tile map info file
+    loadTileMap();//preload stuff
     tileN = 1;//make sure we're on the first tile
     updateTileRow();//make sure we're on the correct row
     noTile = false;//allowed to place tiles
     changeVisibility(false);//normal screen
     loadingTileMap = false;//not loading tile map
     preloading = false;//no longer preloading
+    SX = tmpSX;
+    SY = tmpSY;
     loop();//allow drawing
   }else{
     preloading = true;//now preloading
@@ -47,6 +49,10 @@ void loadMap(){//called when loadMap is pressed
     UISetup = false;//ui is setup
     loadingTileMap = true;//loading tile map
     changeVisibility(true);//tile map loading screen
+    tmpSX = SX;
+    tmpSY = SY;
+    SX = 0;
+    SY = 64;
   }
 }//void loadMap() END
 
@@ -134,14 +140,7 @@ void padMapFileArray(){//pad the array to a 16 byte boundary
 
 void fileSaveMap(){//Save the Map to file
   if(loadingTileMap == true){
-    tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");//load location
-    totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
-    tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");//load number of tiles wide
-    tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
-    colorTile = tileInfoTable.getInt(tileMapShow + 1,"colortile");//load number of tiles tall
-    tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
-    fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
-    dummyPreload();//preload stuff
+    loadTileMap();//preload stuff
     tileN = 1;//make sure were on tile 1
     updateTileRow();//make sure we're on the correct row
     noTile = false;//allowed to place tiles
@@ -173,7 +172,7 @@ void fileSaveMap(){//Save the Map to file
   mapFile.add((byte)0x00);//03
   
   //Tile map name and location
-  mapFile.add((byte)tileMapName.length());//04
+  mapFile.add((byte)loadedTileMapName.length());//04
   mapFile.add((byte)tileMapLocation.length());//05
   
   int tmp = 0;//temporary variable
@@ -201,8 +200,8 @@ void fileSaveMap(){//Save the Map to file
   mapFile.add((byte)BG.b);//16
   
   //Tile Map Name
-  for(int i = 0; i < tileMapName.length(); i++){
-    mapFile.add((byte)tileMapName.charAt(i));//??
+  for(int i = 0; i < loadedTileMapName.length(); i++){
+    mapFile.add((byte)loadedTileMapName.charAt(i));//??
   }
   
   //Tile Map Location
@@ -379,11 +378,16 @@ void FileLoadMap(){//load map from file
   }
   println("Tile Map Location: " + headerTileLocation);
   
-  if(!tileMapName.equals(headerTileName)){//if map names aren't equal
+  if(!loadedTileMapName.equals(headerTileName)){//if map names aren't equal
     println("Changing Tile Map");
-    tileMapName = headerTileName;//Tile Map Name
-    dummyFileLoadTileMapInfo();
-    dummyPreload();
+    boolean skip = false;
+    for(int i = 0; i < tileMaps.size() && !skip; i++){
+      if(tileMaps.get(i).tileMapName.equals(headerTileName)){
+        tileMapShow = i;
+        skip = true;
+      }
+    }
+    loadTileMap();
   }else{
     
   }

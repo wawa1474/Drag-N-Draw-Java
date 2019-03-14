@@ -1,3 +1,3 @@
 location,tileMapHeight,tileMapWidth,tileMapTileX,tileMapTileY,images,colortile,name
 0,0,0,0,0,0,0,Info
-assets/tileMap3.png,16,16,32,32,16,16,Hexadecimal
+tileMap3.png,1,16,32,32,16,17,Hexadecimal

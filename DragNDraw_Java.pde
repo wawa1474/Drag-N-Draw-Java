@@ -19,9 +19,9 @@ void setup(){//Setup everything
   
   clearMapTilesArray();//setup map tiles array
   
-  fileHandlingTest();
+  //fileHandlingTest();
   
-  dummyFileLoadTileMapInfo();//load tile map info file
+  loadTileMapInfo();//load tile map info file
   
   UIControls = new ControlP5(this);//set up all the control stuff
   UI.setup();//Setup all of the UI stuff

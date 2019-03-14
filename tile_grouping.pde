@@ -50,7 +50,7 @@ void tileGroup(String button){//mess with tiles in square group
           }
         }
       }else if(button == "center" && !skip){//we clicked middle button
-        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(colorTileNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
       }else if(button == "right" && !skip){//we clicked right button
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows

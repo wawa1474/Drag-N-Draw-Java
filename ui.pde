@@ -39,8 +39,8 @@ class canvasBG{//The background
   void draw(){//Draw the background
     if(preloading == true){
       background(255);//white background
-      if(tileMapImages.length != 0){
-        image(tileMapImages[tileMapShow],0,scl);//display tile map
+      if(tileMaps.size() != 0){
+        image(tileMaps.get(tileMapShow).tileMapImage,0,scl);//display tile map
       }
     }else{
       strokeWeight(1);//default
@@ -92,8 +92,8 @@ class tileUI{
       rect(scl * 11.5, 0, scl * 5, scl);//text box background
       fill(255);//white text
       //text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
-      if(tileInfoTable.getRowCount() != 0){
-        text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12, scl / 2);//display tile map name
+      if(tileMaps.size() != 0){
+        text(tileMaps.get(tileMapShow).tileMapName, scl * 12, scl / 2);//display tile map name
       }else{
         text("No Tile Maps Exist!", scl * 12, scl / 2);//display tile map name
       }
@@ -112,7 +112,9 @@ class tileUI{
             fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
             rect(scl*i, 0, scl, scl);//Display color behind the tile
           }
-          image(img[rowLength*tileRow+i], scl*i, 0);//Draw tile
+          if(img[(rowLength*tileRow)+i] != null){
+            image(img[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
+          }
         }
       }//Went through all the tiles
     
@@ -273,29 +275,24 @@ void fileSaveLoad(int n){
   if(loadingTileMap == true){
     if(n == 0){//Prev
       tileMapShow--;//go to previous tile map
-      if(tileMapShow <= 0){//make sure we don't go below zero
-        tileMapShow = 0;//set to 0
+      if(tileMapShow < 0){//make sure we don't go below zero
+        tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
       }
     }else if(n == 1){//Next
       tileMapShow++;//go to next tile map
-      if(tileMapShow >= tileInfoTable.getRowCount() - 2){//make sure we dont go above maximum tile map
-        tileMapShow = tileInfoTable.getRowCount() - 2;//set to maxixmum tile map
+      if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
+        tileMapShow = 0;//set to 0
       }
     }else if(n == 2){//Load
-      tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");//load location
-      totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
-      tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");//load number of tiles wide
-      tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
-      colorTile = tileInfoTable.getInt(tileMapShow + 1,"colortile");//load number of tiles tall
-      tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
-      fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
-      dummyPreload();//preload stuff
+      loadTileMap();//preload stuff
       tileN = 1;//make sure were on tile 1
       updateTileRow();//make sure we're on the correct row
       noTile = false;//allowed to place tiles
       loadingTileMap = false;//no longer loading map
       preloading = false;//no longer preloading
       changeVisibility(false);//go to normal display
+      SX = tmpSX;
+      SY = tmpSY;
     }else{
       println("Button Does Not Exist");//Tell me your secrets
     }
