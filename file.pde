@@ -7,12 +7,12 @@ PImage BACKGROUND;//background image
 PImage missingTexture;//missingTexture Image
 
 String fileName = "Error";//File Name
-
-boolean preloading = true;//are we preloading
-boolean prepreloading = true;//are we prepreloading
 int tileMapShow = 0;//display which tile map
 String loadedTileMapName = "Classic";//tile map name
 boolean loadingTileMap = true;//are we loading the tile map
+
+boolean preloading = true;//are we preloading
+boolean prepreloading = true;//are we prepreloading
 
 void loadMap(){//called when loadMap is pressed
   if(loadingTileMap == true){//if loading tile map
@@ -21,8 +21,7 @@ void loadMap(){//called when loadMap is pressed
     println("File Selected!");
     while(prepreloading == true){delay(500);}//small delay
     println("File Loaded");
-    loadTileMapInfo();//load tile map info file
-    loadTileMap();//preload stuff
+    loadTileMap();//load selected tile map
     tileN = 1;//make sure we're on the first tile
     updateTileRow();//make sure we're on the correct row
     noTile = false;//allowed to place tiles
@@ -129,7 +128,7 @@ void padMapFileArray(){//pad the array to a 16 byte boundary
 
 void fileSaveMap(){//Save the Map to file
   if(loadingTileMap == true){
-    loadTileMap();//preload stuff
+    loadTileMap();//load selected tile map
     tileN = 1;//make sure were on tile 1
     updateTileRow();//make sure we're on the correct row
     noTile = false;//allowed to place tiles
@@ -376,7 +375,7 @@ void FileLoadMap(){//load map from file
         skip = true;
       }
     }
-    loadTileMap();
+    loadTileMap();//load selected tile map
   }else{
     
   }

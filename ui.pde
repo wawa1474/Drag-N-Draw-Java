@@ -284,7 +284,7 @@ void fileSaveLoad(int n){
         tileMapShow = 0;//set to 0
       }
     }else if(n == 2){//Load
-      loadTileMap();//preload stuff
+      loadTileMap();//load selected tile map
       tileN = 1;//make sure were on tile 1
       updateTileRow();//make sure we're on the correct row
       noTile = false;//allowed to place tiles
