@@ -27,6 +27,8 @@ void loadTileMapInfo(){
       loadTileMapInfo(directory, f.getAbsolutePath());
     }
   }
+  
+  missingTexture = loadImage("assets/missingTexture.png");
 }
 
 class tileMap{
