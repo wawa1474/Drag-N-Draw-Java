@@ -2,11 +2,12 @@ import java.util.Date;
 
 ArrayList<tileMap> tileMaps = new ArrayList<tileMap>(0);//arraylist of tile maps
 //ArrayList<PImage> tiles = new ArrayList<PImage>(0);//arraylist of tile images
+PImage[] tileImages = new PImage[0];//Tile Images Array
 int loadedTileMap = -1;
 
 void loadTileMap(){
   //i only exist so they know where the new code needs to be placed
-  img = tileMaps.get(tileMapShow).splitTiles();
+  tileImages = tileMaps.get(tileMapShow).splitTiles();
 }
 
 void loadTileMapInfo(){
@@ -28,7 +29,7 @@ void loadTileMapInfo(){
 
 class tileMap{
   PImage tileMapImage;//tile map image
-  String tileMaplocation;//location
+  String tileMapLocation;//location
   int tileMapcols;//tileMapWidth
   int tileMaprows;//tileMapHeight
   int tileWidth;//tileMapTileX
@@ -38,7 +39,7 @@ class tileMap{
   String tileMapName;//name
   
   public tileMap(String loc, int rows, int cols, int tileWidth, int tileHeight, int num, int colorTile, String name){
-    this.tileMaplocation = loc;
+    this.tileMapLocation = loc;
     this.tileMapcols = cols;
     this.tileMaprows = rows;
     this.tileWidth = tileWidth;
@@ -47,7 +48,7 @@ class tileMap{
     this.colorTile = colorTile;
     this.tileMapName = name;
     
-    this.tileMapImage = loadImage(this.tileMaplocation);
+    this.tileMapImage = loadImage(this.tileMapLocation);
   }
   
   //ArrayList<PImage> splitTiles(){
@@ -55,16 +56,16 @@ class tileMap{
     //ArrayList<PImage> tmpTiles = new ArrayList<PImage>();
     PImage[] tmpTiles = new PImage[this.numImages];
     int total = 0;
-    for(int x = 0; x < this.tileMapcols; x++){
-      for(int y = 0; y < this.tileMaprows; y++){
+    for(int y = 0; y < this.tileMaprows; y++){
+      for(int x = 0; x < this.tileMapcols; x++){
         PImage tmp = createImage(this.tileWidth, this.tileHeight, ARGB);
         tmp.copy(this.tileMapImage, x * scl, y * scl, this.tileWidth, this.tileHeight, 0, 0, this.tileWidth, this.tileHeight);
         //tmpTiles.add(tmp);
-        tmpTiles[((x + 1) * (y + 1)) - 1] = tmp;
+        tmpTiles[total] = tmp;
         total++;
         if(total == this.numImages){
+          //println(((x + 1) * (y + 1)) - 1);
           fullTotalImages = (ceil((float)(numImages) / rowLength) * rowLength) - 1;//make sure all tile rows are full
-          colorTileNumber = this.colorTile;
           loadedTileMapName = this.tileMapName;
           return tmpTiles;
         }
@@ -75,6 +76,7 @@ class tileMap{
 }
 
 void loadTileMapInfo(String directory, String fileLocation){
+  Table tileInfoTable = new Table();//tile map info table
   tileInfoTable = loadTable(fileLocation, "header, csv");// + ".csv", "header");//Load the csv
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA

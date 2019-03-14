@@ -106,14 +106,14 @@ class tileUI{
       stroke(0);
       fill(255);//Set background color to white
       rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
-      for(int i = 0; i < rowLength && img.length != 0; i++){//Go through all the tiles
+      for(int i = 0; i < rowLength && tileImages.length != 0; i++){//Go through all the tiles
         if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
           if((rowLength*tileRow)+i == tileN){//If displaying selected tile
             fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
             rect(scl*i, 0, scl, scl);//Display color behind the tile
           }
-          if(img[(rowLength*tileRow)+i] != null){
-            image(img[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
+          if(tileImages[(rowLength*tileRow)+i] != null){
+            image(tileImages[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
           }
         }
       }//Went through all the tiles

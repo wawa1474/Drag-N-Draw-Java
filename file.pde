@@ -3,31 +3,20 @@ static final String _magicText = "wawa1474DragDraw";//make sure the file is ours
 
 ArrayList<Byte> mapFile = new ArrayList<Byte>(0);//temporary byte array
 
-PImage[] img = new PImage[0];//Tile Images Array
 PImage BACKGROUND;//background image
 PImage missingTexture;//missingTexture Image
 
 String fileName = "Error";//File Name
 
-Table tileInfoTable = new Table();//tile map info table
-PImage[] tileMapImages = new PImage[0];//tile maps images
 boolean preloading = true;//are we preloading
 boolean prepreloading = true;//are we prepreloading
 int tileMapShow = 0;//display which tile map
-String tileMapLocation = "assets/tileMap.png";//wheres the tilemap located
-boolean loadMapLocaion = false;//load tile map location
-int tileMapHeight = 32;//how tiles high
-int tileMapWidth = 32;//how many tile wide
-int tileMapTileX = 32;//tile width
-int tileMapTileY = 32;//tile height
-int colorTileNumber = 0;//Which tile is the clear colored tile
 String loadedTileMapName = "Classic";//tile map name
 boolean loadingTileMap = true;//are we loading the tile map
 
 void loadMap(){//called when loadMap is pressed
   if(loadingTileMap == true){//if loading tile map
     noLoop();//don't allow drawing
-    loadMapLocaion = true;//make sure to update the map location
     selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
     println("File Selected!");
     while(prepreloading == true){delay(500);}//small delay
@@ -119,7 +108,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
           fullCanvas.fill(mapTiles.get(x).get(y).get(z).r,mapTiles.get(x).get(y).get(z).g,mapTiles.get(x).get(y).get(z).b);//Set Tile background color
           fullCanvas.rect(x - lowerx,y - lowery,scl,scl);//Draw colored square behind tile
         }
-        fullCanvas.image(img[mapTiles.get(x).get(y).get(z).image], x - lowerx, y - lowery);//Draw tile
+        fullCanvas.image(tileImages[mapTiles.get(x).get(y).get(z).image], x - lowerx, y - lowery);//Draw tile
       }
     }
   }//Went through all the tiles
@@ -173,7 +162,7 @@ void fileSaveMap(){//Save the Map to file
   
   //Tile map name and location
   mapFile.add((byte)loadedTileMapName.length());//04
-  mapFile.add((byte)tileMapLocation.length());//05
+  mapFile.add((byte)tileMaps.get(tileMapShow).tileMapLocation.length());//05
   
   int tmp = 0;//temporary variable
   
@@ -205,8 +194,8 @@ void fileSaveMap(){//Save the Map to file
   }
   
   //Tile Map Location
-  for(int i = 0; i < tileMapLocation.length(); i++){
-    mapFile.add((byte)tileMapLocation.charAt(i));//??
+  for(int i = 0; i < tileMaps.get(tileMapShow).tileMapLocation.length(); i++){
+    mapFile.add((byte)tileMaps.get(tileMapShow).tileMapLocation.charAt(i));//??
   }
   
   padMapFileArray();//pad to a 16 byte boundary

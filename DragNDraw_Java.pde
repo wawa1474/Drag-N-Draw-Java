@@ -7,7 +7,7 @@ int cols = 256;//Columns
 int rows = 256;//Rows
 
 int _DEBUG_ = -1;//what are we debugging
-int _DEBUGAMOUNT_ = 50000;//5000000;//how many are we debugging
+int _DEBUGAMOUNT_ = 5000000;//5000000;//how many are we debugging
 
 int drawnTiles = 0;//how many tiles are on the screen
 boolean drawAll = false;//draw all tiles even if not on screen?
@@ -33,7 +33,8 @@ void setup(){//Setup everything
   
   if(_DEBUG_ == 0){
     for(int i = 0; i < _DEBUGAMOUNT_; i++){
-      mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(256),(int)random(256),(int)random(256),(int)random(256), (int)random(2)==1));//(int)random(256)
+      //mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(tileMaps.get(tileMapShow).numImages),(int)random(256),(int)random(256),(int)random(256), (int)random(2)==1));//(int)random(256)
+      mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(256),(int)random(256),(int)random(256),(int)random(256), false));//(int)random(256)
     }
   }
 }//void setup() END
