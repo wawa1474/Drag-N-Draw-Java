@@ -81,29 +81,30 @@ void loadTileMapInfo(String directory, String fileLocation){
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   int fileVersion = int(tileInfoTable.getInt(0,"location"));//File Version
-  //int(mapTable.get(0,'y'));//blank
-  //int(mapTable.get(0,'image'));//blank
-  //int(mapTable.get(0,'r'));//blank
-  //int(mapTable.get(0,'g'));//blank
-  //int(mapTable.get(0,'b'));//blank
-  //int(mapTable.get(0,'clear'));//blank
+  //int(mapTable.get(0,"tileMapColumns"));//blank
+  //int(mapTable.get(0,"tileMapRows"));//blank
+  //int(mapTable.get(0,"tileWidth"));//blank
+  //int(mapTable.get(0,"tileHeight"));//blank
+  //int(mapTable.get(0,"images"));//blank
+  //int(mapTable.get(0,"colortile"));//blank
+  //mapTable.get(0,"name");//should be "Info"
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
   if(fileVersion == 0){//whats the file version
     for(int i = 1; i < tileInfoTable.getRowCount(); i++){//Loop through all the tile maps
       println(tileInfoTable.getString(i,"location") + ", " +//tile map image location
-              tileInfoTable.getInt(i,"tileMapHeight") + ", " +//tile map rows
-              tileInfoTable.getInt(i,"tileMapWidth") + ", " +//tile map columns
-              tileInfoTable.getInt(i,"tileMapTileX") + ", " +//tile width
-              tileInfoTable.getInt(i,"tileMapTileY") + ", " +//tile height
+              tileInfoTable.getInt(i,"tileMapColumns") + ", " +//tile map columns
+              tileInfoTable.getInt(i,"tileMapRows") + ", " +//tile map rows
+              tileInfoTable.getInt(i,"tileWidth") + ", " +//tile width
+              tileInfoTable.getInt(i,"tileHeight") + ", " +//tile height
               tileInfoTable.getInt(i,"images") + ", " +//number of images
               tileInfoTable.getInt(i,"colortile") + ", " +//clear color tile number
               tileInfoTable.getString(i,"name"));//tile map name
 
       //String loc, int rows, int cols, int tileWidth, int tileHeight, int num, int colorTile, String name
       tileMaps.add(new tileMap(directory + "\\" + tileInfoTable.getString(i,"location"),
-                               tileInfoTable.getInt(i,"tileMapHeight"), tileInfoTable.getInt(i,"tileMapWidth"),
-                               tileInfoTable.getInt(i,"tileMapTileX"), tileInfoTable.getInt(i,"tileMapTileY"),
+                               tileInfoTable.getInt(i,"tileMapColumns"), tileInfoTable.getInt(i,"tileMapRows"),
+                               tileInfoTable.getInt(i,"tileWidth"), tileInfoTable.getInt(i,"tileHeight"),
                                tileInfoTable.getInt(i,"images"), tileInfoTable.getInt(i,"colortile"),
                                tileInfoTable.getString(i,"name")));
     }
