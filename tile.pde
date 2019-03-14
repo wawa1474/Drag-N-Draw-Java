@@ -27,7 +27,7 @@ class mTile{//Tile Object
       rect(x,y,scl,scl);//Draw colored square behind tile
     }
     
-    if(this.image != tileMaps.get(tileMapShow).colorTile && this.image <= totalImages && tileImages.length != 0 && tileImages[this.image] != null){//if tile image is not 0 and tile image exists
+    if(tileMaps.size() != 0 && this.image != tileMaps.get(tileMapShow).colorTile && this.image <= totalImages && tileImages.length != 0 && tileImages[this.image] != null){//if tile image is not 0 and tile image exists
       //println(this.image);
       image(tileImages[this.image], x, y);//Draw tile
       //image(img, x, y, scl, scl)

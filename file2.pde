@@ -7,7 +7,9 @@ int loadedTileMap = -1;
 
 void loadTileMap(){
   //i only exist so they know where the new code needs to be placed
-  tileImages = tileMaps.get(tileMapShow).splitTiles();
+  if(tileMaps.size() != 0){
+    tileImages = tileMaps.get(tileMapShow).splitTiles();
+  }
 }
 
 void loadTileMapInfo(){
