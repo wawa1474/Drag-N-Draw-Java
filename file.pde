@@ -18,9 +18,9 @@ void loadMap(){//called when loadMap is pressed
   if(loadingTileMap == true){//if loading tile map
     noLoop();//don't allow drawing
     selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
-    println("File Selected!");
+    //println("File Selected!");
     while(prepreloading == true){delay(500);}//small delay
-    println("File Loaded");
+    //println("File Loaded");
     loadTileMap();//load selected tile map
     tileN = 1;//make sure we're on the first tile
     updateTileRow();//make sure we're on the correct row
@@ -50,7 +50,7 @@ void FileSaveCanvasSelect(File selection){//map canvas save select callback
   if (selection == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
   } else {//we selected a file
-    println("User selected " + selection.getAbsolutePath() + " for saving");
+    //println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();//get the path to the file
     if(split(fileName, '.').length > 1){//does the file have an extension
       //Already has file type
@@ -67,7 +67,7 @@ void fileSaveMapSelect(File selection){//map file save select callback
   if (selection == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
   } else {//we selected a file
-    println("User selected " + selection.getAbsolutePath() + " for saving");
+    //println("User selected " + selection.getAbsolutePath() + " for saving");
     fileName = selection.getAbsolutePath();//get the path to the file
     if(split(fileName, '.').length > 1){//does the file have an extension
       //Already has file type
@@ -85,7 +85,7 @@ void FileLoadMapSelect(File selection){//map file load select callback
     println("Window was closed or the user hit cancel.");
     prepreloading = false;///---------------------------------------------------------------do we want this?
   } else {//we selected a file
-    println("User selected " + selection.getAbsolutePath() + " for loading");
+    //println("User selected " + selection.getAbsolutePath() + " for loading");
     fileName = selection.getAbsolutePath();//get the path to the file
     FileLoadMap();//load the map
   }
@@ -343,7 +343,7 @@ void FileLoadMap(){//load map from file
   
   //Map Tiles Amount
   mapTilesAmount = convertFourBytesToInt(mapFile[6], mapFile[7], mapFile[8], mapFile[9]);
-  println(mapTilesAmount + " Tiles Loaded");
+  //println(mapTilesAmount + " Tiles Loaded");
   
   //Clickable Icons Amount
   iconsAmount = convertFourBytesToInt(mapFile[10], mapFile[11], mapFile[12], mapFile[13]);
@@ -358,16 +358,16 @@ void FileLoadMap(){//load map from file
   for(int i = 0; i < nameLength; i++){
     headerTileName += str((char)mapFile[17 + i]);//get the name
   }
-  println("Tile Map Name: " + headerTileName);
+  //println("Tile Map Name: " + headerTileName);
   
   headerTileLocation = "";
   for(int i = 0; i < locationLength; i++){
     headerTileLocation += str((char)mapFile[17 + nameLength + i]);//get the location
   }
-  println("Tile Map Location: " + headerTileLocation);
+  //println("Tile Map Location: " + headerTileLocation);
   
   if(!loadedTileMapName.equals(headerTileName)){//if map names aren't equal
-    println("Changing Tile Map");
+    //println("Changing Tile Map");
     boolean skip = false;
     for(int i = 0; i < tileMaps.size() && !skip; i++){
       if(tileMaps.get(i).tileMapName.equals(headerTileName)){
@@ -408,7 +408,7 @@ void FileLoadMap(){//load map from file
     //Load Clickable Tiles
     
     int iconsAddress = mapTilesLength;
-    println("Starting Icons Address: " + iconsAddress);
+    //println("Starting Icons Address: " + iconsAddress);
     
     for(int i = 0; i < iconsAmount; i++){//Loop through all the rows
     
@@ -419,13 +419,13 @@ void FileLoadMap(){//load map from file
       for(int j = 0; j < mapFile[iconsAddress + 2]; j++){
         clickableFile += str((char)mapFile[clickFileAddress + j]);
       }
-      println("Clickable Tile File: " + clickableFile);
+      //println("Clickable Tile File: " + clickableFile);
       
       String clickableHover = "";
       for(int j = 0; j < mapFile[iconsAddress + 3]; j++){
         clickableHover += str((char)mapFile[clickTextAddress + j]);
       }
-      println("Clickable Tile Text: " + clickableHover);
+      //println("Clickable Tile Text: " + clickableHover);
     
       icons.add(new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl,//Tile X position
                                                 (mapFile[iconsAddress + 1] & 0xFF) * scl,//Tile Y position
@@ -433,7 +433,7 @@ void FileLoadMap(){//load map from file
                                                 clickableHover));//Is Tile Clear
       
       iconsAddress = clickTextAddress + (16 - ((clickTextAddress % 16) % 16));
-      println("Sequential Icons Address: " + iconsAddress);
+      //println("Sequential Icons Address: " + iconsAddress);
     }
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error

@@ -92,14 +92,14 @@ void loadTileMapInfo(String directory, String fileLocation){
   
   if(fileVersion == 0){//whats the file version
     for(int i = 1; i < tileInfoTable.getRowCount(); i++){//Loop through all the tile maps
-      println(tileInfoTable.getString(i,"location") + ", " +//tile map image location
-              tileInfoTable.getInt(i,"tileMapColumns") + ", " +//tile map columns
-              tileInfoTable.getInt(i,"tileMapRows") + ", " +//tile map rows
-              tileInfoTable.getInt(i,"tileWidth") + ", " +//tile width
-              tileInfoTable.getInt(i,"tileHeight") + ", " +//tile height
-              tileInfoTable.getInt(i,"images") + ", " +//number of images
-              tileInfoTable.getInt(i,"colortile") + ", " +//clear color tile number
-              tileInfoTable.getString(i,"name"));//tile map name
+      //println(tileInfoTable.getString(i,"location") + ", " +//tile map image location
+      //        tileInfoTable.getInt(i,"tileMapColumns") + ", " +//tile map columns
+      //        tileInfoTable.getInt(i,"tileMapRows") + ", " +//tile map rows
+      //        tileInfoTable.getInt(i,"tileWidth") + ", " +//tile width
+      //        tileInfoTable.getInt(i,"tileHeight") + ", " +//tile height
+      //        tileInfoTable.getInt(i,"images") + ", " +//number of images
+      //        tileInfoTable.getInt(i,"colortile") + ", " +//clear color tile number
+      //        tileInfoTable.getString(i,"name"));//tile map name
 
       //String loc, int rows, int cols, int tileWidth, int tileHeight, int num, int colorTile, String name
       tileMaps.add(new tileMap(directory + "\\" + tileInfoTable.getString(i,"location"),
