@@ -39,7 +39,9 @@ class canvasBG{//The background
   void draw(){//Draw the background
     if(preloading == true){
       background(255);//white background
-      image(tileMaps[tileMapShow],0,scl);//display tile map
+      if(tileMaps.size() != 0){
+        image(tileMaps.get(tileMapShow).tileMapImage,0,scl);//display tile map
+      }
     }else{
       strokeWeight(1);//default
       background(this.r, this.g, this.b);//Draw the background in whatever the color is
@@ -49,15 +51,6 @@ class canvasBG{//The background
       }else{
         stroke(255-this.r, 255-this.g, 255-this.b);//Invert line color
       }
-    
-      //if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){//if the tile xy is not reset and we're should draw lines
-      //  for(int i = lowerx - (scl * 20); i < upperx + (scl * 21); i+=scl){//for however many horizontal squares there are
-      //    line(i,lowery - (scl * 20), i, uppery + (scl * 20));//draw lines
-      //  }
-      //  for(int i = lowery - (scl * 20); i < uppery + (scl * 21); i+=scl){//for however many vertical squares there are
-      //    line(lowerx - (scl * 20), i, upperx + (scl * 20), i);//draw lines
-      //  }
-      //}
       
       if(drawLines){//if the tile xy is not reset and we're should draw lines
         for(int i = screenX1; i < screenX2 + 2; i++){//for however many horizontal squares there are
@@ -90,7 +83,11 @@ class tileUI{
       rect(scl * 11.5, 0, scl * 5, scl);//text box background
       fill(255);//white text
       //text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
-      text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12, scl / 2);//display tile map name
+      if(tileMaps.size() != 0){
+        text(tileMaps.get(tileMapShow).tileMapName, scl * 12, scl / 2);//display tile map name
+      }else{
+        text("No Tile Maps Exist!", scl * 12, scl / 2);//display tile map name
+      }
     }else{
       fill(0);//black
       noStroke();//no line around the ui background
@@ -100,13 +97,15 @@ class tileUI{
       stroke(0);
       fill(255);//Set background color to white
       rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
-      for(int i = 0; i < rowLength; i++){//Go through all the tiles
+      for(int i = 0; i < rowLength && tileImages.length != 0; i++){//Go through all the tiles
         if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
           if((rowLength*tileRow)+i == tileN){//If displaying selected tile
             fill(RSlider.getValue(),GSlider.getValue(),BSlider.getValue());//Set background color to the RGB value set by user
             rect(scl*i, 0, scl, scl);//Display color behind the tile
           }
-          image(img[rowLength*tileRow+i], scl*i, 0);//Draw tile
+          if(tileImages[(rowLength*tileRow)+i] != null){
+            image(tileImages[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
+          }
         }
       }//Went through all the tiles
     
@@ -267,29 +266,24 @@ void fileSaveLoad(int n){
   if(loadingTileMap == true){
     if(n == 0){//Prev
       tileMapShow--;//go to previous tile map
-      if(tileMapShow <= 0){//make sure we don't go below zero
-        tileMapShow = 0;//set to 0
+      if(tileMapShow < 0){//make sure we don't go below zero
+        tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
       }
     }else if(n == 1){//Next
       tileMapShow++;//go to next tile map
-      if(tileMapShow >= tileInfoTable.getRowCount() - 2){//make sure we dont go above maximum tile map
-        tileMapShow = tileInfoTable.getRowCount() - 2;//set to maxixmum tile map
+      if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
+        tileMapShow = 0;//set to 0
       }
     }else if(n == 2){//Load
-      tileMapLocation = tileInfoTable.getString(tileMapShow + 1,"location");//load location
-      totalImages = tileInfoTable.getInt(tileMapShow + 1,"images") - 1;//load number of images
-      tileMapWidth = tileInfoTable.getInt(tileMapShow + 1,"tileMapWidth");//load number of tiles wide
-      tileMapHeight = tileInfoTable.getInt(tileMapShow + 1,"tileMapHeight");//load number of tiles tall
-      colorTile = tileInfoTable.getInt(tileMapShow + 1,"colortile");//load number of tiles tall
-      tileMapName = tileInfoTable.getString(tileMapShow + 1,"name");//load name
-      fullTotalImages = ceil((float)totalImages / rowLength) * rowLength - 1;//adjust total images
-      preload();//preload stuff
+      loadTileMap();//load selected tile map
       tileN = 1;//make sure were on tile 1
       updateTileRow();//make sure we're on the correct row
       noTile = false;//allowed to place tiles
       loadingTileMap = false;//no longer loading map
       preloading = false;//no longer preloading
       changeVisibility(false);//go to normal display
+      SX = tmpSX;//reload our position
+      SY = tmpSY;//reload our position
     }else{
       println("Button Does Not Exist");//Tell me your secrets
     }

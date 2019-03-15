@@ -7,7 +7,7 @@ int cols = 256;//Columns
 int rows = 256;//Rows
 
 int _DEBUG_ = -1;//what are we debugging
-int _DEBUGAMOUNT_ = 50000;//5000000;//how many are we debugging
+int _DEBUGAMOUNT_ = 5000000;//5000000;//how many are we debugging
 
 int drawnTiles = 0;//how many tiles are on the screen
 boolean drawAll = false;//draw all tiles even if not on screen?
@@ -15,10 +15,11 @@ boolean drawAll = false;//draw all tiles even if not on screen?
 void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
+  noSmooth();
   
   clearMapTilesArray();//setup map tiles array
   
-  FileLoadTileMapInfo();//load tile map info file
+  loadTileMapInfo();//load tile map info files
   
   UIControls = new ControlP5(this);//set up all the control stuff
   UI.setup();//Setup all of the UI stuff
@@ -30,7 +31,8 @@ void setup(){//Setup everything
   
   if(_DEBUG_ == 0){
     for(int i = 0; i < _DEBUGAMOUNT_; i++){
-      mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(256),(int)random(256),(int)random(256),(int)random(256), (int)random(2)==1));//(int)random(256)
+      //mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(tileMaps.get(tileMapShow).numImages),(int)random(256),(int)random(256),(int)random(256), (int)random(2)==1));//(int)random(256)
+      mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(256),(int)random(256),(int)random(256),(int)random(256), false));//(int)random(256)
     }
   }
 }//void setup() END
@@ -38,7 +40,7 @@ void setup(){//Setup everything
 void draw(){//Draw the canvas
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + padFPS());// + " : " + mapTiles.length);
   
-  updateScreenBounds();
+  updateScreenBounds();//where on the map is the screen
   
   pushMatrix();//go back to crazy space?
   translate(SX, SY);//shift screen around

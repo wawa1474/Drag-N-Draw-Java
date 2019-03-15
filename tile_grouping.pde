@@ -50,7 +50,7 @@ void tileGroup(String button){//mess with tiles in square group
           }
         }
       }else if(button == "center" && !skip){//we clicked middle button
-        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileBorderNumber,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
       }else if(button == "right" && !skip){//we clicked right button
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
@@ -72,8 +72,6 @@ void tileGroup(String button){//mess with tiles in square group
   }
   tileGroupStep = 0;//reset step count
   tileGroupDeleting = false;//no longer deleting
-  
-  resetLHXY();//reset the lower/higher xy for background drawing
 }//void tileGroup(String button) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -144,7 +142,6 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
     }
   }
   tileGroupStep = 0;//reset step count
-  resetLHXY();//reset the lower/higher xy for background drawing
 }//void tileGroupCutCopy(char button) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -174,7 +171,6 @@ void tileGroupPaste(){//Paste The Copied Tiles
       }
     }
   }
-  resetLHXY();//reset the lower/higher xy for background drawing
 }//void tileGroupPaste() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
