@@ -28,10 +28,8 @@ class mTile{//Tile Object
     }
     
     if(tileMaps.size() != 0 && this.image != tileMaps.get(tileMapShow).colorTile && this.image <= totalImages && tileImages.length != 0 && tileImages[this.image] != null){//if tile image is not 0 and tile image exists
-      //println(this.image);
       image(tileImages[this.image], x, y);//Draw tile
-      //image(img, x, y, scl, scl)
-    }else if(this.image != 0 && missingTexture != null){//image is not blank
+    }else if(this.image != 0 && missingTexture != null && !this.clear){//image is not blank
       image(missingTexture, x, y);//Draw tile
     }
   }
@@ -64,17 +62,15 @@ void deleteTile(int x, int y){//Delete a tile and update the array
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void placeTile(){//Place a tile at the mouses location
-  //print(mouseButton);
   if(mY > scl*UIBottom - SY + fV && mY < (height - (scl*1.5)) - SY + fV && mX < (width - (scl)) - SX + fV){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
-      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
-      //println("test3");
+      //.get(x).get(y).add(new mTile(color tile, red, green, blue, tile is clear));
+      mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), true));//Place a colored tile with no image
     }else if(mouseButton == LEFT){//We're dragging with the left button
-      //print(mouseButton);
+      //.get(x).get(y).add(new mTile(selected tile image number, red, green, blue, is tile clear?));
       mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
-      //println("test4");
     }else if(mouseButton == RIGHT){//We clicked with the right button
-      //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
+      //do nothing
     }
   }
 }//void placeTile() END
@@ -93,23 +89,6 @@ void clearMapTilesArray(){//delete all tiles
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void updateLHXY(int x, int y){//update the lower/higher xy for background drawing
-  if(x < lowerx){//make sure we have the lowest x
-    lowerx = x;
-  }
-  if(y < lowery){//make sure we have the lowest y
-    lowery = y;
-  }
-  if(x > upperx){//make sure we have the highest x
-    upperx = x;
-  }
-  if(y > uppery){//make sure we have the highest y
-    uppery = y;
-  }
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
 void resetLHXY(){//reset the lower/higher xy for background drawing
   lowerx = 2147483647;//tiles will always be less than this
   lowery = 2147483647;//tiles will always be less than this
@@ -119,7 +98,13 @@ void resetLHXY(){//reset the lower/higher xy for background drawing
     for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
       if(mapTiles.get(x).get(y).size() != 0){//if there are tiles in this spot
         if(mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1) != null){//and they're not null
-          updateLHXY(x * scl, y * scl);//make sure we're fully up to date
+          int tmpX = x * scl;
+          int tmpY = y * scl;
+          
+          if(tmpX < lowerx){lowerx = tmpX;}//make sure we have the lowest x
+          if(tmpY < lowery){lowery = tmpY;}//make sure we have the lowest y
+          if(tmpX > upperx){upperx = tmpX;}//make sure we have the highest x
+          if(tmpY > uppery){uppery = tmpY;}//make sure we have the highest y
         }
       }
     }
@@ -154,9 +139,8 @@ boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we'r
 void dragTile(){//If dragging a tile: update location
   if (dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      //tmpTile.draw(mX - (scl / 2), mY - (scl / 2));//draw the tile on the mouse
       if(mY < (UIBottom * scl) - SY){
-        
+        //do nothing
       }else{
         tmpTile.draw(floor(mX / scl) * scl, floor(mY / scl) * scl);//draw the tile on the mouse snapped to the grid
       }
@@ -167,8 +151,6 @@ void dragTile(){//If dragging a tile: update location
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean checkImage(int tile){//check if tile about to place has same image as tile mouse is on
-  //for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
-  //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
   for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){

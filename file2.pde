@@ -11,6 +11,8 @@ void loadTileMap(){
   }
 }
 
+//---------------------------------------------------------------------------------------------------------------------------------------
+
 void loadTileMapInfo(){
   String path = sketchPath() + "/assets/";//base directory
   ArrayList<File> allFiles = listFilesRecursive(path);//get all the files
@@ -28,6 +30,8 @@ void loadTileMapInfo(){
   
   missingTexture = loadImage("assets/missingTexture.png");//load the missing texture file
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------------
 
 class tileMap{
   PImage tileMapImage;//tile map image
@@ -115,6 +119,8 @@ void loadTileMapInfo(String directory, String fileLocation){
   }
 }
 
+//---------------------------------------------------------------------------------------------------------------------------------------
+
 //void fileHandlingTest(){
 //  // Using just the path of this sketch to demonstrate,
 //  // but you can list any directory you like.
@@ -152,6 +158,8 @@ void loadTileMapInfo(String directory, String fileLocation){
 //  }
 //}
 
+//---------------------------------------------------------------------------------------------------------------------------------------
+
 //// This function returns all the files in a directory as an array of Strings  
 //String[] listFileNames(String dir) {
 //  File file = new File(dir);
@@ -163,6 +171,8 @@ void loadTileMapInfo(String directory, String fileLocation){
 //    return null;
 //  }
 //}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
 
 //// This function returns all the files in a directory as an array of File objects
 //// This is useful if you want more info about the file
@@ -177,12 +187,16 @@ void loadTileMapInfo(String directory, String fileLocation){
 //  }
 //}
 
+//---------------------------------------------------------------------------------------------------------------------------------------
+
 // Function to get a list of all files in a directory and all subdirectories
 ArrayList<File> listFilesRecursive(String dir) {
   ArrayList<File> fileList = new ArrayList<File>(); 
   recurseDir(fileList, dir);
   return fileList;
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------------
 
 // Recursive function to traverse subdirectories
 void recurseDir(ArrayList<File> a, String dir) {

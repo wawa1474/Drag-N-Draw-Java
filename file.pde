@@ -404,12 +404,8 @@ void FileLoadMap(){//load map from file
       int imageNumber = (mapFile[tmp + 2] << 8) & 0xFF;
       imageNumber |= (mapFile[tmp + 3]) & 0xFF;
       
-      mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(
-                                                imageNumber,//Tile Image
-                                                int(mapFile[tmp + 4]),//Tile Red amount
-                                                int(mapFile[tmp + 5]),//Tile Green amount
-                                                int(mapFile[tmp + 6]),//Tile Blue amount
-                                                CLEAR));//Is Tile Clear
+      //.get(x).get(y).add(new mTile(tile number, red, green, blue, is tile clear?));
+      mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(imageNumber, int(mapFile[tmp + 4]), int(mapFile[tmp + 5]), int(mapFile[tmp + 6]), CLEAR));
     }
     
     int mapTilesLength = (mapTilesAmount * 8) + ((16 - floor(mapTilesAmount * 8) % 16) % 16) + headerLength;
@@ -436,10 +432,8 @@ void FileLoadMap(){//load map from file
       }
       //println("Clickable Tile Text: " + clickableHover);
     
-      icons.add(new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl,//Tile X position
-                                                (mapFile[iconsAddress + 1] & 0xFF) * scl,//Tile Y position
-                                                clickableFile,//Tile Image
-                                                clickableHover));//Is Tile Clear
+      //.add(new clickableIcon(x, y, tile image number, is tile clear?));
+      icons.add(new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl, (mapFile[iconsAddress + 1] & 0xFF) * scl, clickableFile, clickableHover));
       
       iconsAddress = clickTextAddress + (16 - ((clickTextAddress % 16) % 16));
       //println("Sequential Icons Address: " + iconsAddress);

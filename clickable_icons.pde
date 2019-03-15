@@ -65,6 +65,8 @@ void drawIcons(){//draw all icons
   }
 }
 
+//---------------------------------------------------------------------------------------------------------------------------------------
+
 boolean checkMouseOverIcon(boolean loadMap){
   if(dragging || deleting || clickdrag){//were we dragging or deleting a tile or were we dragging the mouse
     //do nothing

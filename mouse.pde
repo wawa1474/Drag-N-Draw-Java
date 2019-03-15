@@ -2,8 +2,6 @@ boolean dragging = false;// Is a tile being dragged?
 boolean deleting = false;//Are we deleting tiles?
 boolean noTile = false;//Are we blocking placement of tiles?
 
-//int offsetX = 0, offsetY = 0;//Mouseclick offset
-
 int SX = 0, SY = 64;//Screen XY
 int tmpSX = 0, tmpSY = 64;//saved Screen XY
 int mX = 0, mY = 0;//Mouse XY
@@ -14,7 +12,7 @@ int fV = 1;//Fudge Value to make sure we're really clicking inside something
 void mousePressed(){//We pressed a mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   
-  checkMouseOverIcon(true);
+  checkMouseOverIcon(true);//is the mouse over an icon? if so load the file
 
   if(noTile){//if we're not allowed to place tiles
     return;//do nothing
@@ -52,7 +50,6 @@ void mousePressed(){//We pressed a mouse button
       for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
           if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
-            //mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);
             mTile tmp = mapTiles.get(x).get(y).get(0);//grab the bottom tile
             tmp.r = (int)RSlider.getValue();//set tile red value
             tmp.g = (int)GSlider.getValue();//set tile green value
@@ -108,7 +105,9 @@ void mouseDragged(){//We dragged the mouse while holding a button
   
   clickdrag = true;//we're dragging the mouse
   
-  checkMouseOverIcon(false);
+  if(checkMouseOverIcon(false)){//if the mouse over an icon?
+    return;
+  }
   
   if(mouseButton == RIGHT){//We clicked with the right button
     for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
