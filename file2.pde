@@ -1,41 +1,39 @@
-import java.util.Date;
+//import java.util.Date;
 
 ArrayList<tileMap> tileMaps = new ArrayList<tileMap>(0);//arraylist of tile maps
 //ArrayList<PImage> tiles = new ArrayList<PImage>(0);//arraylist of tile images
 PImage[] tileImages = new PImage[0];//Tile Images Array
-int loadedTileMap = -1;
+int loadedTileMap = -1;//what tile map is loaded
 
 void loadTileMap(){
-  //i only exist so they know where the new code needs to be placed
-  if(tileMaps.size() != 0){
-    tileImages = tileMaps.get(tileMapShow).splitTiles();
+  if(tileMaps.size() != 0){//if a tile map exists
+    tileImages = tileMaps.get(tileMapShow).splitTiles();//split the tile map into individual tiles
   }
 }
 
 void loadTileMapInfo(){
-  //i only exist so they know where the new code needs to be placed
-  String path = sketchPath() + "/assets/";
-  ArrayList<File> allFiles = listFilesRecursive(path);
-  String directory = "";
+  String path = sketchPath() + "/assets/";//base directory
+  ArrayList<File> allFiles = listFilesRecursive(path);//get all the files
+  String directory = "";//what is the tile maps directory
 
-  for(File f : allFiles) {
-    if(f.isDirectory()){
-      directory = f.getAbsolutePath();
+  for(File f : allFiles) {//go through all files
+    if(f.isDirectory()){//if its a directory
+      directory = f.getAbsolutePath();//remember it
     }
     
-    if(f.getName().endsWith(".csv")){
-      loadTileMapInfo(directory, f.getAbsolutePath());
+    if(f.getName().endsWith(".csv")){//if its a .csv file
+      loadTileMapInfo(directory, f.getAbsolutePath());//load the tile maps
     }
   }
   
-  missingTexture = loadImage("assets/missingTexture.png");
+  missingTexture = loadImage("assets/missingTexture.png");//load the missing texture file
 }
 
 class tileMap{
   PImage tileMapImage;//tile map image
   String tileMapLocation;//location
-  int tileMapcols;//tileMapWidth
-  int tileMaprows;//tileMapHeight
+  int tileMapCols;//tileMapWidth
+  int tileMapRows;//tileMapHeight
   int tileWidth;//tileMapTileX
   int tileHeight;//tileMapTileY
   int numImages;//images
@@ -44,8 +42,8 @@ class tileMap{
   
   public tileMap(String loc, int rows, int cols, int tileWidth, int tileHeight, int num, int colorTile, String name){
     this.tileMapLocation = loc;
-    this.tileMapcols = cols;
-    this.tileMaprows = rows;
+    this.tileMapCols = cols;
+    this.tileMapRows = rows;
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
     this.numImages = num;
@@ -60,22 +58,22 @@ class tileMap{
     //ArrayList<PImage> tmpTiles = new ArrayList<PImage>();
     PImage[] tmpTiles = new PImage[this.numImages];
     int total = 0;
-    for(int y = 0; y < this.tileMaprows; y++){
-      for(int x = 0; x < this.tileMapcols; x++){
-        PImage tmp = createImage(this.tileWidth, this.tileHeight, ARGB);
-        tmp.copy(this.tileMapImage, x * scl, y * scl, this.tileWidth, this.tileHeight, 0, 0, this.tileWidth, this.tileHeight);
+    for(int y = 0; y < this.tileMapRows; y++){//go through all tile map rows
+      for(int x = 0; x < this.tileMapCols; x++){//go through all tile map columns
+        PImage tmp = createImage(this.tileWidth, this.tileHeight, ARGB);//create a temporary image
+        tmp.copy(this.tileMapImage, x * scl, y * scl, this.tileWidth, this.tileHeight, 0, 0, this.tileWidth, this.tileHeight);//copy the tile at this xy position
         //tmpTiles.add(tmp);
-        tmpTiles[total] = tmp;
-        total++;
-        if(total == this.numImages){
+        tmpTiles[total] = tmp;//copy the tile to the temporary array of tiles
+        total++;//next tile
+        if(total == this.numImages){//if we've gone through all the tiles
           //println(((x + 1) * (y + 1)) - 1);
           fullTotalImages = (ceil((float)(numImages) / rowLength) * rowLength) - 1;//make sure all tile rows are full
-          loadedTileMapName = this.tileMapName;
-          return tmpTiles;
+          loadedTileMapName = this.tileMapName;//let's remember what tile map we loaded
+          return tmpTiles;//return the temporary tiles array
         }
       }
     }
-    return tmpTiles;
+    return tmpTiles;//gotta do this other wise processing isn't happy
   }
 }
 
@@ -106,11 +104,11 @@ void loadTileMapInfo(String directory, String fileLocation){
       //        tileInfoTable.getString(i,"name"));//tile map name
 
       //String loc, int rows, int cols, int tileWidth, int tileHeight, int num, int colorTile, String name
-      tileMaps.add(new tileMap(directory + "\\" + tileInfoTable.getString(i,"location"),
-                               tileInfoTable.getInt(i,"tileMapColumns"), tileInfoTable.getInt(i,"tileMapRows"),
-                               tileInfoTable.getInt(i,"tileWidth"), tileInfoTable.getInt(i,"tileHeight"),
-                               tileInfoTable.getInt(i,"images"), tileInfoTable.getInt(i,"colortile"),
-                               tileInfoTable.getString(i,"name")));
+      tileMaps.add(new tileMap(directory + "\\" + tileInfoTable.getString(i,"location"),//what is the images name
+                               tileInfoTable.getInt(i,"tileMapColumns"), tileInfoTable.getInt(i,"tileMapRows"),//how many columns and rows are in the tile map
+                               tileInfoTable.getInt(i,"tileWidth"), tileInfoTable.getInt(i,"tileHeight"),//how many pixels wide and tall are the tiles
+                               tileInfoTable.getInt(i,"images"), tileInfoTable.getInt(i,"colortile"),//how many images are there and what is the 'clear' tile
+                               tileInfoTable.getString(i,"name")));//what is the tile maps name
     }
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error

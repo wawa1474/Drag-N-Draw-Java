@@ -19,9 +19,7 @@ void setup(){//Setup everything
   
   clearMapTilesArray();//setup map tiles array
   
-  //fileHandlingTest();
-  
-  loadTileMapInfo();//load tile map info file
+  loadTileMapInfo();//load tile map info files
   
   UIControls = new ControlP5(this);//set up all the control stuff
   UI.setup();//Setup all of the UI stuff
@@ -42,7 +40,7 @@ void setup(){//Setup everything
 void draw(){//Draw the canvas
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + padFPS());// + " : " + mapTiles.length);
   
-  updateScreenBounds();
+  updateScreenBounds();//where on the map is the screen
   
   pushMatrix();//go back to crazy space?
   translate(SX, SY);//shift screen around

@@ -72,8 +72,6 @@ void tileGroup(String button){//mess with tiles in square group
   }
   tileGroupStep = 0;//reset step count
   tileGroupDeleting = false;//no longer deleting
-  
-  resetLHXY();//reset the lower/higher xy for background drawing
 }//void tileGroup(String button) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -144,7 +142,6 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
     }
   }
   tileGroupStep = 0;//reset step count
-  resetLHXY();//reset the lower/higher xy for background drawing
 }//void tileGroupCutCopy(char button) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -174,7 +171,6 @@ void tileGroupPaste(){//Paste The Copied Tiles
       }
     }
   }
-  resetLHXY();//reset the lower/higher xy for background drawing
 }//void tileGroupPaste() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------

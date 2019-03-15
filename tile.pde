@@ -77,7 +77,6 @@ void placeTile(){//Place a tile at the mouses location
       //mapTiles[mapTiles.length] = new mTile(Math.floor(mX/scl)*scl,Math.floor(mY/scl)*scl,tileN,RSlider.value(),GSlider.value(),BSlider.value(), CClear);//Place a tile
     }
   }
-  resetLHXY();//reset the lower/higher xy for background drawing
 }//void placeTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------

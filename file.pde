@@ -3,7 +3,6 @@ static final String _magicText = "wawa1474DragDraw";//make sure the file is ours
 
 ArrayList<Byte> mapFile = new ArrayList<Byte>(0);//temporary byte array
 
-PImage BACKGROUND;//background image
 PImage missingTexture;//missingTexture Image
 
 String fileName = "Error";//File Name
@@ -28,8 +27,8 @@ void loadMap(){//called when loadMap is pressed
     changeVisibility(false);//normal screen
     loadingTileMap = false;//not loading tile map
     preloading = false;//no longer preloading
-    SX = tmpSX;
-    SY = tmpSY;
+    SX = tmpSX;//reload our position
+    SY = tmpSY;//reload our position
     loop();//allow drawing
   }else{
     preloading = true;//now preloading
@@ -37,10 +36,10 @@ void loadMap(){//called when loadMap is pressed
     UISetup = false;//ui is setup
     loadingTileMap = true;//loading tile map
     changeVisibility(true);//tile map loading screen
-    tmpSX = SX;
-    tmpSY = SY;
-    SX = 0;
-    SY = 64;
+    tmpSX = SX;//save our position
+    tmpSY = SY;//save our position
+    SX = 0;//go back to the top left for looking at tile maps
+    SY = 64;//go back to the top left for looking at tile maps
   }
 }//void loadMap() END
 
@@ -94,20 +93,30 @@ void FileLoadMapSelect(File selection){//map file load select callback
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void FileSaveCanvas(){//Save the Canvas to a file
-
+  resetLHXY();//reset the lower/higher xy for background drawing
+  
   PGraphics fullCanvas = createGraphics(upperx - lowerx + scl + 1, uppery - lowery + scl + 1);//make the canvas slightly larger than needed
   fullCanvas.beginDraw();//start drawing the canvas
   fullCanvas.background(255);//make the background white
-  fullCanvas.image(BACKGROUND, 0, 0);//Draw the background
+  
+  if(drawLines){//if the tile xy is not reset and we're should draw lines
+    for(int x = 0; x < cols; x++){//for however many horizontal squares there are
+      fullCanvas.line(x * scl,0, x * scl, (rows + 1) * scl);//draw lines
+    }
+    for(int y = 0; y < rows; y++){//for however many vertical squares there are
+      fullCanvas.line(0, y * scl, (cols + 1) * scl, y * scl);//draw lines
+    }
+  }
+  
   //Display Map Tiles
-  for(int x = 0; x < mapTiles.size(); x++){//for all the columns
-    for(int y = 0; y < mapTiles.get(x).size(); y++){//for all the rows
+  for(int x = 0; x < cols; x++){//for all the columns
+    for(int y = 0; y < rows; y++){//for all the rows
       for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//for all the tiles in that space
         if(!mapTiles.get(x).get(y).get(z).clear){//Is the tile colored
           fullCanvas.fill(mapTiles.get(x).get(y).get(z).r,mapTiles.get(x).get(y).get(z).g,mapTiles.get(x).get(y).get(z).b);//Set Tile background color
-          fullCanvas.rect(x - lowerx,y - lowery,scl,scl);//Draw colored square behind tile
+          fullCanvas.rect((x * scl) - lowerx,(y * scl) - lowery,scl,scl);//Draw colored square behind tile
         }
-        fullCanvas.image(tileImages[mapTiles.get(x).get(y).get(z).image], x - lowerx, y - lowery);//Draw tile
+        fullCanvas.image(tileImages[mapTiles.get(x).get(y).get(z).image], (x * scl) - lowerx, (y * scl) - lowery);//Draw tile
       }
     }
   }//Went through all the tiles
@@ -441,7 +450,6 @@ void FileLoadMap(){//load map from file
   
   loop();//allow drawing
   prepreloading = false;//no longer prepreloading
-  resetLHXY();
   
   fileName = "Error";
 }//void FileLoadMap() END

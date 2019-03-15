@@ -51,15 +51,6 @@ class canvasBG{//The background
       }else{
         stroke(255-this.r, 255-this.g, 255-this.b);//Invert line color
       }
-    
-      //if(upperx != -2147483648 && lowerx != 2147483647 && drawLines){//if the tile xy is not reset and we're should draw lines
-      //  for(int i = lowerx - (scl * 20); i < upperx + (scl * 21); i+=scl){//for however many horizontal squares there are
-      //    line(i,lowery - (scl * 20), i, uppery + (scl * 20));//draw lines
-      //  }
-      //  for(int i = lowery - (scl * 20); i < uppery + (scl * 21); i+=scl){//for however many vertical squares there are
-      //    line(lowerx - (scl * 20), i, upperx + (scl * 20), i);//draw lines
-      //  }
-      //}
       
       if(drawLines){//if the tile xy is not reset and we're should draw lines
         for(int i = screenX1; i < screenX2 + 2; i++){//for however many horizontal squares there are
@@ -291,8 +282,8 @@ void fileSaveLoad(int n){
       loadingTileMap = false;//no longer loading map
       preloading = false;//no longer preloading
       changeVisibility(false);//go to normal display
-      SX = tmpSX;
-      SY = tmpSY;
+      SX = tmpSX;//reload our position
+      SY = tmpSY;//reload our position
     }else{
       println("Button Does Not Exist");//Tell me your secrets
     }
