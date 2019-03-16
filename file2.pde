@@ -71,7 +71,8 @@ class tileMap{
         total++;//next tile
         if(total == this.numImages){//if we've gone through all the tiles
           //println(((x + 1) * (y + 1)) - 1);
-          fullTotalImages = (ceil((float)(numImages) / rowLength) * rowLength) - 1;//make sure all tile rows are full
+          totalImages = this.numImages;
+          fullTotalImages = (ceil((float)(this.numImages) / rowLength) * rowLength) - 1;//make sure all tile rows are full
           loadedTileMapName = this.tileMapName;//let's remember what tile map we loaded
           return tmpTiles;//return the temporary tiles array
         }

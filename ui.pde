@@ -106,6 +106,10 @@ class tileUI{
           if(tileImages[(rowLength*tileRow)+i] != null){
             image(tileImages[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
           }
+          if((rowLength*tileRow)+i == tileN){
+            noFill();
+            rect(scl*i, 0, scl - 1, scl - 1);//Display color behind the tile
+          }
         }
       }//Went through all the tiles
     
