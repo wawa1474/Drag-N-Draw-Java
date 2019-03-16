@@ -41,6 +41,7 @@ void draw(){//Draw the canvas
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + padFPS());// + " : " + mapTiles.length);
   
   updateScreenBounds();//where on the map is the screen
+  updateMouseXY();//Update the XY position of the mouse and the page XY offset
   
   pushMatrix();//go back to crazy space?
   translate(SX, SY);//shift screen around
@@ -50,8 +51,6 @@ void draw(){//Draw the canvas
   if(preloading != true){//if preloading
     drawnTiles = 0;//reset number of drawn tiles
 
-    updateMouseXY();//Update the XY position of the mouse and the page XY offset
-  
     drawSpots();//draw tiles
   
     dragTile();//drag a grabbed tile

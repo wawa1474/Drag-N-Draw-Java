@@ -17,13 +17,7 @@ void keyPressed(){//We pressed a key
 void keyTyped(){//We typed a key
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(key == 'f'){//We pressed 'F'
-      if(CClear){//Is it currently clear?
-        CClear = false;//Set it not clear
-        clearToggle.setColorLabel(color(255));//make text black
-      }else{//Its not clear
-        CClear = true;//Set it clear
-        clearToggle.setColorLabel(color(0));//make text white
-      }
+      clearToggle();
     }else if(key == 'q' && noTile == false){//We pressed 'Q'
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step

@@ -9,15 +9,14 @@ int fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1
 int UIRight = 22;//How many tiles long is the UI?
 int UIBottom = 2;//How many tiles tall is the UI?
 
+color BLACK = color(0);
+color WHITE = color(255);
+
 ControlP5 UIControls;//ui controls
 Controller RSlider, GSlider, BSlider;//sliders
 Controller scrollSlider;//slider
-ButtonBar fileSaveLoad;//button bar
-Controller colorSelect, colorInput;//buttons
 Controller colorInputR, colorInputG, colorInputB;//number input
-Controller colorWheel;//color whee;
-Controller clearToggle;//button
-Controller loadMap;//button
+Controller colorWheel;//color wheel
 
 tileUI UI = new tileUI();//Create a UI
 boolean UISetup = false;//Are we setting up the ui?
@@ -88,6 +87,10 @@ class tileUI{
       }else{
         text("No Tile Maps Exist!", scl * 12, scl / 2);//display tile map name
       }
+      
+      for(button b : buttons){
+        b.draw();
+      }
     }else{
       fill(0);//black
       noStroke();//no line around the ui background
@@ -149,6 +152,10 @@ class tileUI{
       }
     
       textSize(12);//Default text size
+      
+      for(button b : buttons){
+        b.draw();
+      }
     }
   }//void draw() END
   
@@ -167,11 +174,11 @@ class tileUI{
     GSlider.setColorBackground(color(0, GSlider.getValue(), 0));//update background color (Green)
     BSlider.setColorBackground(color(0, 0, BSlider.getValue()));//update background color (Blue)
     
-    colorSelect.setColorBackground(color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));//update background color
-    colorInput.setColorBackground(color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));//update background color
+    setButtonColorBack("hue", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+    setButtonColorBack("rgb", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
     
-    colorSelect.setColorLabel(color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));//update inverted label color
-    colorInput.setColorLabel(color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));//update inverted label color
+    setButtonColorText("hue", color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));
+    setButtonColorText("rgb", color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));
   }//void update() END
   
   void setup(){
@@ -185,9 +192,6 @@ class tileUI{
     UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 5,scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2,scl).setRange(1,10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
     scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
     
-    fileSaveLoad = UIControls.addButtonBar("fileSaveLoad").addItems(split("Save Load Image", " ")).setSize(scl * 4, scl).setPosition(scl * 7,scl).setColorBackground(color(0, 127, 127));//create ButtonBar
-    //fileSaveLoad = UIControls.getController("fileSaveLoad");
-    
     UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
       .onChange(new CallbackListener(){//when changed
         public void controlEvent(CallbackEvent theEvent){
@@ -199,10 +203,6 @@ class tileUI{
       });
     colorWheel = UIControls.getController("colorWheel");//make it easier to use ColorWheel
     
-    
-    UIControls.addButton("colorSelect").setSize(scl, scl).setPosition(0, scl).setCaptionLabel("Wheel");//create button
-    colorSelect = UIControls.getController("colorSelect");//make it easier to use button
-    
     UIControls.addTextfield("colorInputR").setPosition(scl * 4, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
     UIControls.addTextfield("colorInputG").setPosition(scl * 4, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
     UIControls.addTextfield("colorInputB").setPosition(scl * 4, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
@@ -210,14 +210,24 @@ class tileUI{
     colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
     colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
     
-    UIControls.addButton("colorInput").setSize(scl, scl).setPosition(scl * 4, scl).setCaptionLabel("RGB");//create button
-    colorInput = UIControls.getController("colorInput");//make it easier to use button
+    buttons.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, false, "hue"));
     
-    UIControls.addButton("clearToggle").setSize(scl, scl).setPosition(scl * 11, scl).setCaptionLabel("Clear").setColorLabel(color(0, 0, 0)).setColorBackground(color(127));//create button
-    clearToggle = UIControls.getController("clearToggle");//make it easier to use button
+    buttons.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, false, "rgb"));
+
+    buttons.add(new button(scl * 11, scl, scl, scl, BLACK, "Clear", WHITE, 12, false, "clear"));
+
+    buttons.add(new button(scl * 5, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, "load map"));
     
-    UIControls.addButton("loadMap").setSize(scl * 2, scl).setPosition(scl * 6, 0).setCaptionLabel("Load Map");//create button
-    loadMap = UIControls.getController("loadMap");//make it easier to use button
+    buttons.add(new button(scl * 7, scl, scl, scl, BLACK, "Save", WHITE, 12, false, "save"));
+    buttons.add(new button(scl * 8, scl, scl, scl, BLACK, "Load", WHITE, 12, false, "load"));
+    buttons.add(new button(scl * 9, scl, scl * 2, scl, BLACK, "Image", WHITE, 12, false, "image"));
+    buttons.add(new button(0, 0, scl, scl, BLACK, "Prev", WHITE, 12, true, "prev"));
+    buttons.add(new button(scl, 0, scl, scl, BLACK, "Next", WHITE, 12, true, "next"));
+    buttons.add(new button(scl * 2, 0, scl, scl, BLACK, "Load", WHITE, 12, true, "load tile"));
+    
+    for(button b : buttons){
+      b.setup();
+    }
     
     changeVisibility(true);//go to tile map selection display
     
@@ -229,33 +239,37 @@ class tileUI{
 
 void changeVisibility(boolean visibility){//change screen
   if(visibility){//are we going to the tile map loading screen
-    loadMap.setPosition(scl * 5, 0);//change position
-    loadMap.setLabel("Load Map");//change label
+    setButtonVis("hue", false);
+    setButtonVis("rgb", false);
+    setButtonVis("clear", false);
     
-    fileSaveLoad.setPosition(0,0);//change position
-    fileSaveLoad.changeItem("Save","text","Prev");//"Prev Next Load"
-    fileSaveLoad.changeItem("Load","text","Next");//"Prev Next Load"
-    fileSaveLoad.changeItem("Image","text","Load");//"Prev Next Load"
+    setButtonVis("prev", true);
+    setButtonVis("next", true);
+    setButtonVis("load tile", true);
+    setButtonVis("save", false);
+    setButtonVis("load", false);
+    setButtonVis("image", false);
     
-    clearToggle.setVisible(false);//clearToggle is not visible
-    colorInput.setVisible(false);//colorInput is not visible
-    colorSelect.setVisible(false);//colorSelect is not visible
+    setButtonPos("load map", scl * 5, 0);
+    
     scrollSlider.setVisible(false);//scrollSlider is not visible
     RSlider.setVisible(false);//RSlider is not visible
     GSlider.setVisible(false);//GSlider is not visible
     BSlider.setVisible(false);//BSlider is not visible
   }else{
-    loadMap.setPosition(scl * 14, scl);//change position
-    loadMap.setLabel("Change Tileset");//change label
+    setButtonVis("hue", true);
+    setButtonVis("rgb", true);
+    setButtonVis("clear", true);
     
-    fileSaveLoad.setPosition(scl * 7,scl);//change position
-    fileSaveLoad.changeItem("Save","text","Save");//"Save Load Image"
-    fileSaveLoad.changeItem("Load","text","Load");//"Save Load Image"
-    fileSaveLoad.changeItem("Image","text","Image");//"Save Load Image"
+    setButtonVis("prev", false);
+    setButtonVis("next", false);
+    setButtonVis("load tile", false);
+    setButtonVis("save", true);
+    setButtonVis("load", true);
+    setButtonVis("image", true);
     
-    clearToggle.setVisible(true);//clearToggle is visible
-    colorInput.setVisible(true);//colorInput is visible
-    colorSelect.setVisible(true);//colorSelect is visible
+    setButtonPos("load map", scl * 14, scl);
+    
     scrollSlider.setVisible(true);//scrollSlider is visible
     RSlider.setVisible(true);//RSlider is visible
     GSlider.setVisible(true);//GSlider is visible
@@ -265,54 +279,47 @@ void changeVisibility(boolean visibility){//change screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void fileSaveLoad(int n){
-  //println(n);
-  if(loadingTileMap == true){
-    if(n == 0){//Prev
-      tileMapShow--;//go to previous tile map
-      if(tileMapShow < 0){//make sure we don't go below zero
-        tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
-      }
-    }else if(n == 1){//Next
-      tileMapShow++;//go to next tile map
-      if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
-        tileMapShow = 0;//set to 0
-      }
-    }else if(n == 2){//Load
-      loadTileMap();//load selected tile map
-      tileN = 1;//make sure were on tile 1
-      updateTileRow();//make sure we're on the correct row
-      noTile = false;//allowed to place tiles
-      loadingTileMap = false;//no longer loading map
-      preloading = false;//no longer preloading
-      changeVisibility(false);//go to normal display
-      SX = tmpSX;//reload our position
-      SY = tmpSY;//reload our position
-    }else{
-      println("Button Does Not Exist");//Tell me your secrets
-    }
-  }else{
-    if(n == 0){//Save
-      selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
-    }else if(n == 1){//Load
-      selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
-    }else if(n == 2){//Image
-      selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
-    }else{
-      println("Button Does Not Exist");//Tell me your secrets
-    }
+void buttonPrevTileMap(){
+  tileMapShow--;//go to previous tile map
+  if(tileMapShow < 0){//make sure we don't go below zero
+    tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
   }
-}//void fileSaveLoad(int n) END
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void buttonNextTileMap(){
+  tileMapShow++;//go to next tile map
+  if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
+    tileMapShow = 0;//set to 0
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void buttonLoadTileMap(){
+  loadTileMap();//load selected tile map
+  tileN = 1;//make sure were on tile 1
+  updateTileRow();//make sure we're on the correct row
+  noTile = false;//allowed to place tiles
+  loadingTileMap = false;//no longer loading map
+  preloading = false;//no longer preloading
+  changeVisibility(false);//go to normal display
+  SX = tmpSX;//reload our position
+  SY = tmpSY;//reload our position
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void clearToggle(){//called when clearToggle is clicked
   if(CClear){//is variable set
     CClear = false;//don't place clear tiles
-    clearToggle.setColorLabel(color(0, 0, 0));//make text black
+    setButtonColorText("clear", WHITE);
+    setButtonColorBack("clear", BLACK);
   }else{
     CClear = true;//place clear tiles
-    clearToggle.setColorLabel(color(255, 255, 255));//make text white
+    setButtonColorText("clear", BLACK);
+    setButtonColorBack("clear", WHITE);
   }
   
 }//void clearToggle() END

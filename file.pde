@@ -136,16 +136,16 @@ void padMapFileArray(){//pad the array to a 16 byte boundary
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void fileSaveMap(){//Save the Map to file
-  if(loadingTileMap == true){
-    loadTileMap();//load selected tile map
-    tileN = 1;//make sure were on tile 1
-    updateTileRow();//make sure we're on the correct row
-    noTile = false;//allowed to place tiles
-    loadingTileMap = false;//no longer loading map
-    preloading = false;//no longer preloading
-    changeVisibility(false);//go to normal display
-    return;
-  }
+  //if(loadingTileMap == true){
+  //  loadTileMap();//load selected tile map
+  //  tileN = 1;//make sure were on tile 1
+  //  updateTileRow();//make sure we're on the correct row
+  //  noTile = false;//allowed to place tiles
+  //  loadingTileMap = false;//no longer loading map
+  //  preloading = false;//no longer preloading
+  //  changeVisibility(false);//go to normal display
+  //  return;
+  //}
   
   if(fileName.equals("Error")){//if no file was selected
     return;//don't do anything
