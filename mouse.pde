@@ -10,7 +10,9 @@ int fV = 1;//Fudge Value to make sure we're really clicking inside something
 
 
 void mousePressed(){//We pressed a mouse button
-  checkButtons();
+  if(checkButtons()){
+    return;
+  }
 
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   

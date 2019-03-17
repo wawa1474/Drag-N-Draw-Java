@@ -1,5 +1,20 @@
 //button button = new button(32,32,32,32,color(0,127,127),"LOAD",color(255), 8);
 ArrayList<button> buttons = new ArrayList<button>(0);
+PImage[] gui;
+
+void loadButtonImages(){
+  PImage ui = loadImage("/assets/UI/Icons_byVellidragon.png");
+  gui = new PImage[30];
+  int pos = 0;
+  for(int y = 0; y < 6; y++){
+    for(int x = 0; x < 5; x++){
+      PImage tmp = createImage(32, 32, ARGB);//create a temporary image
+      tmp.copy(ui, x * 16, y * 16, 16, 16, 0, 0, 32, 32);
+      gui[pos] = tmp;
+      pos++;
+    }
+  }
+}
 
 class button{
   float x;
@@ -14,8 +29,9 @@ class button{
   color tColor;
   boolean visible;
   String name;
+  int image;
   
-  public button(float x, float y, float w, float h, color bC, String t, color tC, float tS, boolean vis, String name){
+  public button(float x, float y, float w, float h, color bC, String t, color tC, float tS, boolean vis, String name, int image){
     this.x = x;
     this.y = y;
     this.h = h;
@@ -34,6 +50,7 @@ class button{
     //println(textWidth(t));
     //this.tX = floor(this.w - textWidth(t)) / 2;
     this.name = name;
+    this.image = image;
   }
   
   void setup(){
@@ -69,6 +86,10 @@ class button{
       textSize(this.tSize);
       fill(this.tColor);//Set button text color
       text(this.t, this.tX, this.tY);
+      
+      if(this.image != -1){
+        image(gui[this.image], this.x, this.y);
+      }
     }
   }
 }
@@ -117,54 +138,55 @@ void setButtonPos(String button, int x, int y){
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void checkButtons(){
+boolean checkButtons(){
   for(button b : buttons){
     if(b.wasClicked()){
       switch(b.name){
         case "hue":
           colorSelect();
-          break;
+          return true;
         
         case "rgb":
           colorInput();
-          break;
+          return true;
         
         case "clear":
           clearToggle();
-          break;
+          return true;
         
         case "load map":
           buttonLoadMap();
-          break;
+          return true;
         
         case "change map":
           buttonChangeTileMap();
-          break;
+          return true;
         
         case "save":
           selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
-          break;
+          return true;
         
         case "load":
           selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
-          break;
+          return true;
         
         case "image":
           selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
-          break;
+          return true;
         
         case "prev":
           buttonPrevTileMap();
-          break;
+          return true;
         
         case "next":
           buttonNextTileMap();
-          break;
+          return true;
         
         case "load tile":
           buttonLoadTileMap();
-          break;
+          return true;
       }
     }
   }
+  return false;
 }
