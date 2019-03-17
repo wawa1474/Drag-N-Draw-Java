@@ -2,20 +2,20 @@
 ArrayList<button> buttons = new ArrayList<button>(0);
 
 class button{
-  int x;
-  int y;
-  int h;
-  int w;
+  float x;
+  float y;
+  float h;
+  float w;
   String t;
-  int tSize = 0;
-  int tX;
-  int tY;
+  float tSize = 0;
+  float tX;
+  float tY;
   color bColor;
   color tColor;
   boolean visible;
   String name;
   
-  public button(int x, int y, int w, int h, color bC, String t, color tC, int tS, boolean vis, String name){
+  public button(float x, float y, float w, float h, color bC, String t, color tC, float tS, boolean vis, String name){
     this.x = x;
     this.y = y;
     this.h = h;
@@ -134,7 +134,11 @@ void checkButtons(){
           break;
         
         case "load map":
-          loadMap();
+          buttonLoadMap();
+          break;
+        
+        case "change map":
+          buttonChangeTileMap();
           break;
         
         case "save":

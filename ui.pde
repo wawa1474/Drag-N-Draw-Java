@@ -177,8 +177,9 @@ class tileUI{
     setButtonColorBack("hue", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
     setButtonColorBack("rgb", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
     
-    setButtonColorText("hue", color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));
-    setButtonColorText("rgb", color(200 - RSlider.getValue(), 200 - GSlider.getValue(), 200 - BSlider.getValue()));
+    int tmpVal = 150;
+    setButtonColorText("hue", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+    setButtonColorText("rgb", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
   }//void update() END
   
   void setup(){
@@ -216,14 +217,16 @@ class tileUI{
 
     buttons.add(new button(scl * 11, scl, scl, scl, BLACK, "Clear", WHITE, 12, false, "clear"));
 
-    buttons.add(new button(scl * 5, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, "load map"));
+    buttons.add(new button(scl * 6, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, "load map"));
+    buttons.add(new button(scl * 12, scl, scl * 4, scl, BLACK, "Change Tile Map", WHITE, 12, true, "change map"));
     
     buttons.add(new button(scl * 7, scl, scl, scl, BLACK, "Save", WHITE, 12, false, "save"));
     buttons.add(new button(scl * 8, scl, scl, scl, BLACK, "Load", WHITE, 12, false, "load"));
     buttons.add(new button(scl * 9, scl, scl * 2, scl, BLACK, "Image", WHITE, 12, false, "image"));
-    buttons.add(new button(0, 0, scl, scl, BLACK, "Prev", WHITE, 12, true, "prev"));
-    buttons.add(new button(scl, 0, scl, scl, BLACK, "Next", WHITE, 12, true, "next"));
-    buttons.add(new button(scl * 2, 0, scl, scl, BLACK, "Load", WHITE, 12, true, "load tile"));
+    
+    buttons.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, true, "prev"));
+    buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, "next"));
+    buttons.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, true, "load tile"));
     
     for(button b : buttons){
       b.setup();
@@ -250,7 +253,8 @@ void changeVisibility(boolean visibility){//change screen
     setButtonVis("load", false);
     setButtonVis("image", false);
     
-    setButtonPos("load map", scl * 5, 0);
+    setButtonVis("load map", true);
+    setButtonVis("change map", false);
     
     scrollSlider.setVisible(false);//scrollSlider is not visible
     RSlider.setVisible(false);//RSlider is not visible
@@ -268,7 +272,8 @@ void changeVisibility(boolean visibility){//change screen
     setButtonVis("load", true);
     setButtonVis("image", true);
     
-    setButtonPos("load map", scl * 14, scl);
+    setButtonVis("load map", false);
+    setButtonVis("change map", true);
     
     scrollSlider.setVisible(true);//scrollSlider is visible
     RSlider.setVisible(true);//RSlider is visible
