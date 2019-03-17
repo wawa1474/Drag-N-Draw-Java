@@ -87,9 +87,9 @@ class button{
       fill(this.tColor);//Set button text color
       text(this.t, this.tX, this.tY);
       
-      if(this.image != -1){
-        image(gui[this.image], this.x, this.y);
-      }
+      //if(this.image != -1){
+      //  image(gui[this.image], this.x, this.y);
+      //}
     }
   }
 }

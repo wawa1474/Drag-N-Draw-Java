@@ -183,7 +183,7 @@ class tileUI{
   }//void update() END
   
   void setup(){
-    loadButtonImages();
+    //loadButtonImages();
     
     UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, (scl + 1.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider
     UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, (scl + 12.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3,10).setRange(0,255).setValue(127).setCaptionLabel("");//create Slider

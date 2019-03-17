@@ -23,6 +23,7 @@ class mTile{//Tile Object
   
   void draw(int x, int y){
     if(!this.clear || this.image == tileMaps.get(tileMapShow).colorTile){//Is the tile colored
+      if(!drawLines){noStroke();}
       fill(this.r,this.g,this.b);//Set Tile background color
       rect(x,y,scl,scl);//Draw colored square behind tile
     }
