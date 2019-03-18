@@ -88,7 +88,7 @@ class button{
       text(this.t, this.tX, this.tY);
       
       //if(this.image != -1){
-      //  image(gui[this.image], this.x, this.y);
+        //image(gui[this.image], this.x, this.y);
       //}
     }
   }
@@ -160,6 +160,10 @@ boolean checkButtons(){
         
         case "change map":
           buttonChangeTileMap();
+          return true;
+        
+        case "new":
+          clearMapTilesArray();
           return true;
         
         case "save":

@@ -217,14 +217,15 @@ class tileUI{
     
     buttons.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, false, "rgb", -1));
 
-    buttons.add(new button(scl * 10.9, scl, scl * 1.2, scl, BLACK, "Clear", WHITE, 12, false, "clear", -1));
+    buttons.add(new button(scl * 11.5, scl, scl * 1.2, scl, BLACK, "Clear", WHITE, 12, false, "clear", -1));
 
     buttons.add(new button(scl * 6, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, "load map", 2));
-    buttons.add(new button(scl * 12.1, scl, scl * 3.5, scl, BLACK, "Change Tile Map", WHITE, 12, true, "change map", -1));
+    buttons.add(new button(scl * 12.7, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, true, "change map", -1));
     
-    buttons.add(new button(scl * 7, scl, scl * 1.2, scl, BLACK, "Save", WHITE, 12, false, "save", 4));
-    buttons.add(new button(scl * 8.2, scl, scl * 1.2, scl, BLACK, "Load", WHITE, 12, false, "load", 2));
-    buttons.add(new button(scl * 9.4, scl, scl * 1.5, scl, BLACK, "Image", WHITE, 12, false, "image", -1));
+    buttons.add(new button(scl * 7, scl, scl, scl, BLACK, "New", WHITE, 12, false, "new", 0));//5
+    buttons.add(new button(scl * 8, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, false, "save", 4));
+    buttons.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, false, "load", 2));
+    buttons.add(new button(scl * 10.2, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, false, "image", -1));
     
     buttons.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, true, "prev", 10));
     buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, "next", 11));
@@ -251,6 +252,7 @@ void changeVisibility(boolean visibility){//change screen
     setButtonVis("prev", true);
     setButtonVis("next", true);
     setButtonVis("load tile", true);
+    setButtonVis("new", false);
     setButtonVis("save", false);
     setButtonVis("load", false);
     setButtonVis("image", false);
@@ -270,6 +272,7 @@ void changeVisibility(boolean visibility){//change screen
     setButtonVis("prev", false);
     setButtonVis("next", false);
     setButtonVis("load tile", false);
+    setButtonVis("new", true);
     setButtonVis("save", true);
     setButtonVis("load", true);
     setButtonVis("image", true);
