@@ -122,12 +122,6 @@ void loadTile(mTile tmp){//Set current image to tile image
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean isCursorOnTile(int x, int y, int tX, int tY){//Is tX,tY on the tile we're checking?
-  return(tX == x && tY == y && mapTiles.get(x).get(y).size() != 0);//Are we on the tile
-}//boolean isCursorOnTileXY(int tile, int tX, int tY) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
 void dragTile(){//If dragging a tile: update location
   if (dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
@@ -146,7 +140,7 @@ boolean checkImage(int tile){//check if tile about to place has same image as ti
   for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){
-        if(isCursorOnTile(x, y, mouseTileX, mouseTileY)){//Is the mouse cursor on the tile we're checking?
+        if(x == mouseTileX && y == mouseTileY){//Is the mouse cursor on the tile we're checking?
           if(tile == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
             return false;//Don't place tile
           }

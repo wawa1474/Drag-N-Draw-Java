@@ -44,7 +44,7 @@ void tileGroup(String button){//mess with tiles in square group
       }else if(button == "center" && tileGroupDeleting == true && !skip){//we clicked middle button on a tile
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
-            if(isCursorOnTile(x, y, X1 + i, Y1 + j)){//Are we clicking on the tile
+            if(x == X1 + i && y == Y1 + j){//Are we clicking on the tile
               mapTiles.get(x).get(y).clear();//delete all the tiles in this space
             }
           }
@@ -54,7 +54,7 @@ void tileGroup(String button){//mess with tiles in square group
       }else if(button == "right" && !skip){//we clicked right button
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
-            if(isCursorOnTile(x, y, X1 + i, Y1 + j)){//Are we clicking on the tile
+            if(x == X1 + i && y == Y1 + j){//Are we clicking on the tile
               for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//go through all the tiles in this space
                 mTile tmp = mapTiles.get(x).get(y).get(0);//grab the tile
                 tmp.r = (int)RSlider.getValue();//set tile red value to red slider value
