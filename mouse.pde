@@ -2,18 +2,15 @@ boolean dragging = false;// Is a tile being dragged?
 boolean deleting = false;//Are we deleting tiles?
 boolean noTile = false;//Are we blocking placement of tiles?
 
-int SX = 0, SY = 0;//Screen XY
-int tmpSX = 0, tmpSY = 0;//saved Screen XY
-int mX = 0, mY = 0;//Mouse XY
-int mouseTileX = 0, mouseTileY = 0;
-int fV = 1;//Fudge Value to make sure we're really clicking inside something
+int screenX = 0, screenY = 0;//Screen XY
+int tmpScreenX = 0, tmpScreenY = 0;//saved Screen XY
+int mouseTileX = 0, mouseTileY = 0;//what tile is the mouse on
+int fudgeValue = 1;//Fudge Value to make sure we're really clicking inside something
 
 
-void updateMouseXY(){//Update the XY position of the mouse and the page XY offset
-  mX = mouseX - SX;//Update the X position of the mouse
-  mY = mouseY - SY - 64;//Update the Y position of the mouse
-  mouseTileX = floor(mX / scl);
-  mouseTileY = floor(mY / scl);
+void updateMouseXY(){//Update the XY position of the mouse
+  mouseTileX = floor((mouseX - screenX) / scl);
+  mouseTileY = floor(((mouseY - screenY) - 64) / scl);
 }//void updateXY() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -75,7 +72,7 @@ void mousePressed(){//We pressed a mouse button
   }
 
   for(int i = 0; i < rowLength; i++){//Go through all the tiles in the row
-    if(mouseX > (scl * i) + fV && mouseX < (scl * (i + 1)) - fV && mouseY > 0 + fV && mouseY < scl - fV){//Are we clicking on the tile UI
+    if(mouseX > (scl * i) + fudgeValue && mouseX < (scl * (i + 1)) - fudgeValue && mouseY > 0 + fudgeValue && mouseY < scl - fudgeValue){//Are we clicking on the tile UI
       noTile = true;//Dont allow tile placement
       if(tileImages[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
       tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on

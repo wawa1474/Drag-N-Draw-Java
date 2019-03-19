@@ -131,24 +131,24 @@ class tileUI{
         tmp += 1;//count it to
       }
     
-      text("Tiles: " + tmp, ((scl * 16) + scl / 8), (scl / 1.25));//Tiles: (tiles)
+      text("Tiles: " + tmp, (scl * 16) + (scl / 8), (scl / 1.25));//Tiles: (tiles)
     
       tmp = drawnTiles;//number of tiles that are being drawn
       if(tmpTile != null){//if we're dragging a tile
         tmp += 1;//count it to
       }
   
-      text("Drawn: " + tmp, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
+      text("Drawn: " + tmp, (scl * 16) + (scl / 8), (scl * 1.75));//Drawn: (drawn)
     
-      text("X:" + floor(-SX/scl),((scl * 25)),(scl / 1.25));//X: (screen x)
-      text("Y:" + floor(-(SY)/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)
+      text("X:" + floor(-screenX/scl),((scl * 25)),(scl / 1.25));//X: (screen x)
+      text("Y:" + floor(-screenY/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)
     
-      text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
+      text("X:" + floor((mouseX - screenX)/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
     
       if(mouseY < UIBottom * scl){
-        text("Y:" + "UI",((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
+        text("Y:" + "UI",(scl * 27) + (scl / 2),(scl * 1.75));//Y: (mouse Y)
       }else{
-        text("Y:" + floor(mY / scl),((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
+        text("Y:" + floor(((mouseY - screenY) - 64) / scl),(scl * 27) + (scl / 2),(scl * 1.75));//Y: (mouse Y)
       }
     
       textSize(12);//Default text size
@@ -315,8 +315,8 @@ void buttonLoadTileMap(){
   loadingTileMap = false;//no longer loading map
   preloading = false;//no longer preloading
   changeVisibility(false);//go to normal display
-  SX = tmpSX;//reload our position
-  SY = tmpSY;//reload our position
+  screenX = tmpScreenX;//reload our position
+  screenY = tmpScreenY;//reload our position
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------

@@ -26,8 +26,8 @@ void buttonLoadMap(){
   changeVisibility(false);//normal screen
   loadingTileMap = false;//not loading tile map
   preloading = false;//no longer preloading
-  SX = tmpSX;//reload our position
-  SY = tmpSY;//reload our position
+  screenX = tmpScreenX;//reload our position
+  screenY = tmpScreenY;//reload our position
   loop();//allow drawing
 }
 
@@ -37,10 +37,10 @@ void buttonChangeTileMap(){
   UISetup = false;//ui is setup
   loadingTileMap = true;//loading tile map
   changeVisibility(true);//tile map loading screen
-  tmpSX = SX;//save our position
-  tmpSY = SY;//save our position
-  SX = 0;//go back to the top left for looking at tile maps
-  SY = 64;//go back to the top left for looking at tile maps
+  tmpScreenX = screenX;//save our position
+  tmpScreenY = screenY;//save our position
+  screenX = 0;//go back to the top left for looking at tile maps
+  screenY = 64;//go back to the top left for looking at tile maps
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------

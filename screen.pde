@@ -22,8 +22,8 @@ void drawSpots(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateScreenBounds(){
-  screenX2 = floor(width - SX)/scl;
-  screenY2 = floor(height - SY)/scl;
+  screenX2 = floor(width - screenX)/scl;
+  screenY2 = floor(height - screenY)/scl;
 
   screenX1 = screenX2 - floor(width / scl);
   screenY1 = (screenY2 - floor(height / scl));

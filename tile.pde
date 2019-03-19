@@ -39,7 +39,7 @@ class mTile{//Tile Object
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean tileOnScreen(float x, float y){//is this tile on screen
-  if(x > -scl - SX && x  < width - SX && y > -scl - SY && y < height - SY){//is the tile within the screen bounds
+  if(x > -scl - screenX && x  < width - screenX && y > -scl - screenY && y < height - screenY){//is the tile within the screen bounds
     return true;//yes
   }
   return false;//no
@@ -56,7 +56,7 @@ void deleteTile(int x, int y){//Delete a tile and update the array
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void placeTile(){//Place a tile at the mouses location
-  if(mouseY > (UIBottom * scl) + fV && mY < (height - (scl*2)) - SY + fV && mX < (width - (scl*0.1)) - SX + fV && mouseX > 0){//We're not on the UI and we're within the screen bounds
+  if(mouseY > (UIBottom * scl) + fudgeValue && mouseY < height - fudgeValue && mouseX < width - fudgeValue && mouseX > 0 + fudgeValue){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
       //.get(x).get(y).add(new mTile(color tile, red, green, blue, tile is clear));
       mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), true));//Place a colored tile with no image
