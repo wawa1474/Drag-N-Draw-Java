@@ -203,7 +203,7 @@ void drawTileGroupOutline(){//Draw Red Outline Showing Selected Area
     
   if(tileGroupStep == 1){//Are We On Step One
     asx2 = mouseX - SX;//Corner is tied to mouse
-    asy2 = mouseY - SY;//Corner is tied to mouse
+    asy2 = mouseY - SY - 64;//Corner is tied to mouse
   }else if(tileGroupStep == 2){//Are We On Step Two
     asx2 = sx2;//Corner is tied to set XY
     asy2 = sy2;//Corner is tied to set XY

@@ -141,11 +141,11 @@ class tileUI{
       text("Drawn: " + tmp, ((scl * 16) + scl / 8), (scl * 1.75));//Drawn: (drawn)
     
       text("X:" + floor(-SX/scl),((scl * 25)),(scl / 1.25));//X: (screen x)
-      text("Y:" + floor(-(SY-64)/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)
+      text("Y:" + floor(-(SY)/scl),((scl * 25)),(scl * 1.75));//Y: (screen y)
     
       text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
     
-      if(mY < (UIBottom * scl) - SY){
+      if(mouseY < (UIBottom * scl)){
         text("Y:" + "UI",((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
       }else{
         text("Y:" + floor(mY / scl),((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)

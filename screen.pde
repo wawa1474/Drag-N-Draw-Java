@@ -26,7 +26,7 @@ void updateScreenBounds(){
   screenY2 = floor(height - SY)/scl;
 
   screenX1 = screenX2 - floor(width / scl);
-  screenY1 = (screenY2 - floor(height / scl)) + 2;
+  screenY1 = (screenY2 - floor(height / scl));
 
   //println(screenX1 + ", " + screenY1 + ", " + screenX2 + ", " + screenY2);
 }

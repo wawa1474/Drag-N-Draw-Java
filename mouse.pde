@@ -5,9 +5,18 @@ boolean noTile = false;//Are we blocking placement of tiles?
 int SX = 0, SY = 0;//Screen XY
 int tmpSX = 0, tmpSY = 0;//saved Screen XY
 int mX = 0, mY = 0;//Mouse XY
+//int mouseTileX = 0, mouseTileY = 0;
 int fV = 1;//Fudge Value to make sure we're really clicking inside something
 
 
+void updateMouseXY(){//Update the XY position of the mouse and the page XY offset
+  mX = mouseX - SX;//Update the X position of the mouse
+  mY = mouseY - SY - 64;//Update the Y position of the mouse
+  //mouseTileX = mX;
+  //mouseTileY = mY - 64;
+}//void updateXY() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
 
 void mousePressed(){//We pressed a mouse button
   if(checkButtons()){
@@ -66,14 +75,14 @@ void mousePressed(){//We pressed a mouse button
   }
 
   for(int i = 0; i < rowLength; i++){//Go through all the tiles in the row
-    if(mX > scl*i - SX + fV && mX < scl*(i+1) - SX - fV && mY > 0 - SY + fV && mY < scl - SY - fV){//Are we clicking on the tile UI
+    if(mouseX > (scl * i) + fV && mouseX < (scl * (i + 1)) - fV && mouseY > 0 + fV && mouseY < scl - fV){//Are we clicking on the tile UI
       noTile = true;//Dont allow tile placement
       if(tileImages[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
       tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on
     }
   }//Went through all the tiles in the row
 
-  if(mY < (UIBottom * scl) - SY){//Did we click on the UI
+  if(mouseY < (UIBottom * scl)){//Did we click on the UI
     noTile = true;//Dont allow tile placement
     return;//Don't do anything else
   }
@@ -169,7 +178,7 @@ void mouseReleased(){//We released the mouse button
   
     if(dragging){//Are we dragging a tile
       if(tmpTile != null){//If tile exists
-        if(mY < (UIBottom * scl) - SY){//Did we just drop a tile on the ui
+        if(mY < (UIBottom * scl) - 64 - SY){//Did we just drop a tile on the ui
           tmpTile = null;//we are no longer dragging a tile
         }else{
           mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(tmpTile);//place the dragged tile
