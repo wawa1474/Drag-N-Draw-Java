@@ -10,6 +10,10 @@ int fV = 1;//Fudge Value to make sure we're really clicking inside something
 
 
 void mousePressed(){//We pressed a mouse button
+  if(checkButtons()){
+    return;
+  }
+
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   
   checkMouseOverIcon(true);//is the mouse over an icon? if so load the file
@@ -161,24 +165,24 @@ void mouseDragged(){//We dragged the mouse while holding a button
 void mouseReleased(){//We released the mouse button
   if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
   
-  clickdrag = false;//we're no longer dragging the mouse
+    clickdrag = false;//we're no longer dragging the mouse
   
-  if(dragging){//Are we dragging a tile
-    if(tmpTile != null){//If tile exists
-      if(mY < (UIBottom * scl) - SY){//Did we just drop a tile on the ui
-        tmpTile = null;//we are no longer dragging a tile
-      }else{
-        mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(tmpTile);//place the dragged tile
-        tmpTile = null;//we are no longer dragging a tile
+    if(dragging){//Are we dragging a tile
+      if(tmpTile != null){//If tile exists
+        if(mY < (UIBottom * scl) - SY){//Did we just drop a tile on the ui
+          tmpTile = null;//we are no longer dragging a tile
+        }else{
+          mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(tmpTile);//place the dragged tile
+          tmpTile = null;//we are no longer dragging a tile
+        }
       }
     }
-  }
   
-  deleting = false;//Quit deleting
-  dragging = false;//Quit dragging
-  if(!colorWheel.isVisible() && !colorInputR.isVisible()){//if not using color wheel or color inputs
-    noTile = false;//Allow tile placement
-  }
+    deleting = false;//Quit deleting
+    dragging = false;//Quit dragging
+    if(!colorWheel.isVisible() && !colorInputR.isVisible()){//if not using color wheel or color inputs
+      noTile = false;//Allow tile placement
+    }
   }
 }//void mouseReleased() END
 

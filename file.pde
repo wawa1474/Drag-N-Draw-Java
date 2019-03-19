@@ -13,35 +13,35 @@ boolean loadingTileMap = true;//are we loading the tile map
 boolean preloading = true;//are we preloading
 boolean prepreloading = true;//are we prepreloading
 
-void loadMap(){//called when loadMap is pressed
-  if(loadingTileMap == true){//if loading tile map
-    noLoop();//don't allow drawing
-    selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
-    //println("File Selected!");
-    while(prepreloading == true){delay(500);}//small delay
-    //println("File Loaded");
-    loadTileMap();//load selected tile map
-    tileN = 1;//make sure we're on the first tile
-    updateTileRow();//make sure we're on the correct row
-    noTile = false;//allowed to place tiles
-    changeVisibility(false);//normal screen
-    loadingTileMap = false;//not loading tile map
-    preloading = false;//no longer preloading
-    SX = tmpSX;//reload our position
-    SY = tmpSY;//reload our position
-    loop();//allow drawing
-  }else{
-    preloading = true;//now preloading
-    prepreloading = true;//now prepreloading
-    UISetup = false;//ui is setup
-    loadingTileMap = true;//loading tile map
-    changeVisibility(true);//tile map loading screen
-    tmpSX = SX;//save our position
-    tmpSY = SY;//save our position
-    SX = 0;//go back to the top left for looking at tile maps
-    SY = 64;//go back to the top left for looking at tile maps
-  }
-}//void loadMap() END
+void buttonLoadMap(){
+  noLoop();//don't allow drawing
+  selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
+  //println("File Selected!");
+  while(prepreloading == true){delay(500);}//small delay
+  //println("File Loaded");
+  loadTileMap();//load selected tile map
+  tileN = 1;//make sure we're on the first tile
+  updateTileRow();//make sure we're on the correct row
+  noTile = false;//allowed to place tiles
+  changeVisibility(false);//normal screen
+  loadingTileMap = false;//not loading tile map
+  preloading = false;//no longer preloading
+  SX = tmpSX;//reload our position
+  SY = tmpSY;//reload our position
+  loop();//allow drawing
+}
+
+void buttonChangeTileMap(){
+  preloading = true;//now preloading
+  prepreloading = true;//now prepreloading
+  UISetup = false;//ui is setup
+  loadingTileMap = true;//loading tile map
+  changeVisibility(true);//tile map loading screen
+  tmpSX = SX;//save our position
+  tmpSY = SY;//save our position
+  SX = 0;//go back to the top left for looking at tile maps
+  SY = 64;//go back to the top left for looking at tile maps
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -136,16 +136,16 @@ void padMapFileArray(){//pad the array to a 16 byte boundary
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void fileSaveMap(){//Save the Map to file
-  if(loadingTileMap == true){
-    loadTileMap();//load selected tile map
-    tileN = 1;//make sure were on tile 1
-    updateTileRow();//make sure we're on the correct row
-    noTile = false;//allowed to place tiles
-    loadingTileMap = false;//no longer loading map
-    preloading = false;//no longer preloading
-    changeVisibility(false);//go to normal display
-    return;
-  }
+  //if(loadingTileMap == true){
+  //  loadTileMap();//load selected tile map
+  //  tileN = 1;//make sure were on tile 1
+  //  updateTileRow();//make sure we're on the correct row
+  //  noTile = false;//allowed to place tiles
+  //  loadingTileMap = false;//no longer loading map
+  //  preloading = false;//no longer preloading
+  //  changeVisibility(false);//go to normal display
+  //  return;
+  //}
   
   if(fileName.equals("Error")){//if no file was selected
     return;//don't do anything
