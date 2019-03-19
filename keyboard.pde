@@ -49,7 +49,7 @@ void keyTyped(){//We typed a key
       //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
       for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-          if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
+          if(isCursorOnTile(x, y, mouseTileX, mouseTileY)){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
             println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.clear);// + ", Tile Lore: " + mapTiles[i].lore);
           }
@@ -60,7 +60,7 @@ void keyTyped(){//We typed a key
       //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
       for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-          if(isCursorOnTile(x, y, mX, mY)){//Are we clicking on the tile
+          if(isCursorOnTile(x, y, mouseTileX, mouseTileY)){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
             loadColors(tmp);
           }

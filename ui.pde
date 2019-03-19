@@ -145,7 +145,7 @@ class tileUI{
     
       text("X:" + floor((mouseX+(-SX))/scl),((scl * 27) + scl / 2),(scl / 1.25));//X: (mouse x)
     
-      if(mouseY < (UIBottom * scl)){
+      if(mouseY < UIBottom * scl){
         text("Y:" + "UI",((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)
       }else{
         text("Y:" + floor(mY / scl),((scl * 27) + scl / 2),(scl * 1.75));//Y: (mouse Y)

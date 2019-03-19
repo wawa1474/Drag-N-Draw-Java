@@ -44,7 +44,7 @@ void tileGroup(String button){//mess with tiles in square group
       }else if(button == "center" && tileGroupDeleting == true && !skip){//we clicked middle button on a tile
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
-            if(isCursorOnTile(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4)){//Are we clicking on the tile
+            if(isCursorOnTile(x, y, X1 + i, Y1 + j)){//Are we clicking on the tile
               mapTiles.get(x).get(y).clear();//delete all the tiles in this space
             }
           }
@@ -54,7 +54,7 @@ void tileGroup(String button){//mess with tiles in square group
       }else if(button == "right" && !skip){//we clicked right button
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
-            if(isCursorOnTile(x, y, ((X1 + i) * scl) + 4, ((Y1 + j) * scl) + 4)){//Are we clicking on the tile
+            if(isCursorOnTile(x, y, X1 + i, Y1 + j)){//Are we clicking on the tile
               for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//go through all the tiles in this space
                 mTile tmp = mapTiles.get(x).get(y).get(0);//grab the tile
                 tmp.r = (int)RSlider.getValue();//set tile red value to red slider value
@@ -115,23 +115,19 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
         skip = true;//skip this space
       }
       if(button == 'x' && !skip){//we clicked middle button on a tile
-        if(isCursorOnTile(X1 + i, Y1 + j, ((X1 + i) * scl) + 4, ((Y1  + j) * scl) + 4)){//Are we clicking on the tile
-          for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
-            mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
-            mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
-            hadTile = true;//square has tile
-          }
+        for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
+          mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
+          mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
+          hadTile = true;//square has tile
         }
         if(hadTile == true){//if there was a tile in the space
           mapTiles.get(X1 + i).get(Y1 + j).clear();//delete all tiles in the space
         }
       }else if(button == 'c' && !skip){//we clicked right button
-        if(isCursorOnTile(X1 + i, Y1 + j, ((X1 + i) * scl) + 4, ((Y1  + j) * scl) + 4)){//Are we clicking on the tile
-          for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
-            mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
-            mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
-            hadTile = true;//square has tile
-          }
+        for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
+          mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
+          mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.clear));//copy the tile
+          hadTile = true;//square has tile
         }
       }
       if(hadTile == false){//if square did not have tile
