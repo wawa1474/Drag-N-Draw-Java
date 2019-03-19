@@ -178,7 +178,7 @@ void mouseReleased(){//We released the mouse button
   
     if(dragging){//Are we dragging a tile
       if(tmpTile != null){//If tile exists
-        if(mY < (UIBottom * scl) - 64 - SY){//Did we just drop a tile on the ui
+        if(mouseY < UIBottom * scl){//Did we just drop a tile on the ui
           tmpTile = null;//we are no longer dragging a tile
         }else{
           mapTiles.get(floor(mX/scl)).get(floor(mY/scl)).add(tmpTile);//place the dragged tile
