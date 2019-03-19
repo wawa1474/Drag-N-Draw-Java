@@ -2,8 +2,8 @@ boolean dragging = false;// Is a tile being dragged?
 boolean deleting = false;//Are we deleting tiles?
 boolean noTile = false;//Are we blocking placement of tiles?
 
-int SX = 0, SY = 64;//Screen XY
-int tmpSX = 0, tmpSY = 64;//saved Screen XY
+int SX = 0, SY = 0;//Screen XY
+int tmpSX = 0, tmpSY = 0;//saved Screen XY
 int mX = 0, mY = 0;//Mouse XY
 int fV = 1;//Fudge Value to make sure we're really clicking inside something
 

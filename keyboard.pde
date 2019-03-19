@@ -77,8 +77,8 @@ void keyTyped(){//We typed a key
     if(key == 'w'){//We pressed 'W'
       SY += (scl * scrollAmount);//go up
       
-      if(SY > 64){//if we're to far up
-        SY = 64;//make it not so
+      if(SY > 0){//if we're to far up
+        SY = 0;//make it not so
       }
     }
     if(key == 'a'){//We pressed 'A'
