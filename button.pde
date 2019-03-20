@@ -69,11 +69,11 @@ class button{
   }
   
   boolean wasClicked(){
-    int tmpX = mX + SX;
-    int tmpY = mY + SY;
+    int tmpX = mouseX;
+    int tmpY = mouseY;
     //print(this.name + ": ");
     //println(tmpX > this.x + fV && tmpX < this.x + this.w - fV && tmpY > this.y + fV && tmpY < this.y + this.h - fV && this.visible);// && mX < this.x + this.w - fV && mY > this.y + fV && mY < this.y + this.h - fV);
-    return(tmpX > this.x + fV && tmpX < this.x + this.w - fV && tmpY > this.y + fV && tmpY < this.y + this.h - fV && this.visible);//Are we clicking on the button
+    return(tmpX > this.x + fudgeValue && tmpX < this.x + this.w - fudgeValue && tmpY > this.y + fudgeValue && tmpY < this.y + this.h - fudgeValue && this.visible);//Are we clicking on the button
   }
   
   void draw(){

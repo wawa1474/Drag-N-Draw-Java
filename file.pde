@@ -26,8 +26,8 @@ void buttonLoadMap(){
   changeVisibility(false);//normal screen
   loadingTileMap = false;//not loading tile map
   preloading = false;//no longer preloading
-  SX = tmpSX;//reload our position
-  SY = tmpSY;//reload our position
+  screenX = tmpScreenX;//reload our position
+  screenY = tmpScreenY;//reload our position
   loop();//allow drawing
 }
 
@@ -37,10 +37,10 @@ void buttonChangeTileMap(){
   UISetup = false;//ui is setup
   loadingTileMap = true;//loading tile map
   changeVisibility(true);//tile map loading screen
-  tmpSX = SX;//save our position
-  tmpSY = SY;//save our position
-  SX = 0;//go back to the top left for looking at tile maps
-  SY = 64;//go back to the top left for looking at tile maps
+  tmpScreenX = screenX;//save our position
+  tmpScreenY = screenY;//save our position
+  screenX = 0;//go back to the top left for looking at tile maps
+  screenY = 64;//go back to the top left for looking at tile maps
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
   for(int x = 0; x < cols; x++){//for all the columns
     for(int y = 0; y < rows; y++){//for all the rows
       for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//for all the tiles in that space
-        if(!mapTiles.get(x).get(y).get(z).clear){//Is the tile colored
+        if(mapTiles.get(x).get(y).get(z).colored){//Is the tile colored
           fullCanvas.fill(mapTiles.get(x).get(y).get(z).r,mapTiles.get(x).get(y).get(z).g,mapTiles.get(x).get(y).get(z).b);//Set Tile background color
           fullCanvas.rect((x * scl) - lowerx,(y * scl) - lowery,scl,scl);//Draw colored square behind tile
         }
@@ -232,7 +232,7 @@ void fileSaveMap(){//Save the Map to file
       
           //Blue/Flags
           mapFile.add((byte)mapTiles.get(x).get(y).get(z).b);//blue
-          if(mapTiles.get(x).get(y).get(z).clear){//is the tile clear
+          if(mapTiles.get(x).get(y).get(z).colored){//is the tile clear
             mapFlags |= 1;//yes
           }
           mapFile.add((byte)mapFlags);//flags
