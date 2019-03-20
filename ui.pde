@@ -28,41 +28,41 @@ int upperx = -2147483648, uppery = -2147483648;//store highest xy of tiles
 boolean drawLines = true;//do we draw the background lines?
 
 
-class canvasBG {//The background
+class canvasBG{//The background
   int r = 255;//red
   int g = 255;//green
   int b = 255;//blue
   int gUpper = 150;//middle-ish
   int gLower = 90;//middle-ish
 
-  void draw() {//Draw the background
-    if (preloading == true) {
+  void draw(){//Draw the background
+    if(preloading == true){
       background(255);//white background
-      if (tileMaps.size() != 0) {
+      if(tileMaps.size() != 0){
         image(tileMaps.get(tileMapShow).tileMapImage, 0, scl);//display tile map
       }
-    } else {
+    }else{
       strokeWeight(1);//default
       background(this.r, this.g, this.b);//Draw the background in whatever the color is
 
-      if (this.r > gLower && this.r < gUpper && this.g > gLower && this.g < gUpper && this.b > gLower && this.b < gUpper) {//if the color is gray-ish
+      if(this.r > gLower && this.r < gUpper && this.g > gLower && this.g < gUpper && this.b > gLower && this.b < gUpper){//if the color is gray-ish
         stroke(0);//Make it black
-      } else {
+      }else{
         stroke(255-this.r, 255-this.g, 255-this.b);//Invert line color
       }
 
-      if (drawLines) {//if the tile xy is not reset and we're should draw lines
-        for (int i = screenX1; i < screenX2 + 2; i++) {//for however many horizontal squares there are
+      if(drawLines){//if the tile xy is not reset and we're should draw lines
+        for(int i = screenX1; i < screenX2 + 2; i++){//for however many horizontal squares there are
           line(i * scl, screenY1 * scl, i * scl, (screenY2 + 2) * scl);//draw lines
         }
-        for (int i = screenY1; i < screenY2 + 2; i++) {//for however many vertical squares there are
+        for(int i = screenY1; i < screenY2 + 2; i++){//for however many vertical squares there are
           line(screenX1 * scl, i * scl, (screenX2 + 2) * scl, i * scl);//draw lines
         }
       }
     }
   }//void draw() END
 
-  void border() {//draw the red border
+  void border(){//draw the red border
     strokeWeight(borderThickness);//Thicker
     stroke(255, 0, 0);//RED
     line(1, 0, 1, rows*scl);//Draw Left line
@@ -74,24 +74,24 @@ class canvasBG {//The background
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-class tileUI {
-  void draw() {
-    if (preloading == true) {
+class tileUI{
+  void draw(){
+    if(preloading == true){
       fill(0);//black box
       //rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);//text box background
       rect(scl * 11.5, 0, scl * 5, scl);//text box background
       fill(255);//white text
       //text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
-      if (tileMaps.size() != 0) {
+      if(tileMaps.size() != 0){
         text(tileMaps.get(tileMapShow).tileMapName, scl * 12, scl / 2);//display tile map name
-      } else {
+      }else{
         text("No Tile Maps Exist!", scl * 12, scl / 2);//display tile map name
       }
 
-      for (button b : buttons) {
+      for(button b : buttons){
         b.draw();
       }
-    } else {
+    }else{
       fill(0);//black
       noStroke();//no line around the ui background
       rect(0, 0, width, scl * 2);//ui background
@@ -100,16 +100,16 @@ class tileUI {
       stroke(0);
       fill(255);//Set background color to white
       rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
-      for (int i = 0; i < rowLength && tileImages.length != 0; i++) {//Go through all the tiles
-        if ((rowLength*tileRow)+i <= fullTotalImages) {//If tile exists
-          if ((rowLength*tileRow)+i == tileN) {//If displaying selected tile
+      for(int i = 0; i < rowLength && tileImages.length != 0; i++){//Go through all the tiles
+        if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
+          if((rowLength*tileRow)+i == tileN){//If displaying selected tile
             fill(RSlider.getValue(), GSlider.getValue(), BSlider.getValue());//Set background color to the RGB value set by user
             rect(scl*i, 0, scl, scl);//Display color behind the tile
           }
-          if (tileImages[(rowLength*tileRow)+i] != null) {
+          if(tileImages[(rowLength*tileRow)+i] != null){
             image(tileImages[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
           }
-          if ((rowLength*tileRow)+i == tileN) {
+          if((rowLength*tileRow)+i == tileN){
             noFill();
             rect(scl*i, 0, scl - 1, scl - 1);//Display color behind the tile
           }
@@ -122,19 +122,19 @@ class tileUI {
 
       int tmp = 0;//how many tiles are there total
 
-      for (int x = 0; x < mapTiles.size(); x++) {//go through all columns
-        for (int y = 0; y < mapTiles.get(x).size(); y++) {//go through all rows
+      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
           tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
         }
       }
-      if (tmpTile != null) {//if we're dragging a tile
+      if(tmpTile != null){//if we're dragging a tile
         tmp += 1;//count it to
       }
 
       text("Tiles: " + tmp, (scl * 16) + (scl / 8), (scl / 1.25));//Tiles: (tiles)
 
       tmp = drawnTiles;//number of tiles that are being drawn
-      if (tmpTile != null) {//if we're dragging a tile
+      if(tmpTile != null){//if we're dragging a tile
         tmp += 1;//count it to
       }
 
@@ -145,26 +145,26 @@ class tileUI {
 
       text("X:" + floor((mouseX - screenX)/scl), ((scl * 27) + scl / 2), (scl / 1.25));//X: (mouse x)
 
-      if (mouseY < UIBottom * scl) {
+      if(mouseY < UIBottom * scl){
         text("Y:" + "UI", (scl * 27) + (scl / 2), (scl * 1.75));//Y: (mouse Y)
-      } else {
+      }else{
         text("Y:" + floor(((mouseY - screenY) - 64) / scl), (scl * 27) + (scl / 2), (scl * 1.75));//Y: (mouse Y)
       }
 
       textSize(12);//Default text size
 
-      for (button b : buttons) {
+      for(button b : buttons){
         b.draw();
       }
     }
   }//void draw() END
 
-  void update() {
-    if (UISetup == false) {//is ui not setup
+  void update(){
+    if(UISetup == false){//is ui not setup
       UISetup = true;//ui is setup
     }
 
-    if (colorWheel.isVisible() || colorInputR.isVisible()) {//if using color wheel or color inputs
+    if(colorWheel.isVisible() || colorInputR.isVisible()){//if using color wheel or color inputs
       noTile = true;//disallow tile placement
     }
 
@@ -180,7 +180,7 @@ class tileUI {
     int tmpVal = 150;
     setButtonColorText("hue", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
     setButtonColorText("rgb", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
-    
+
     if(colorTiles){
       setButtonColorBack("clear", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
       setButtonColorText("clear", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
@@ -188,10 +188,9 @@ class tileUI {
       setButtonColorBack("clear", BLACK);
       setButtonColorText("clear", WHITE);
     }
-    
   }//void update() END
 
-  void setup() {
+  void setup(){
     //loadButtonImages();
 
     UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, (scl + 1.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
@@ -205,8 +204,8 @@ class tileUI {
     scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
     UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
-      .onChange(new CallbackListener() {//when changed
-      public void controlEvent(CallbackEvent theEvent) {
+      .onChange(new CallbackListener(){//when changed
+      public void controlEvent(CallbackEvent theEvent){
         //println(theEvent);
         RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());//make sure all values are the same
         GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());//make sure all values are the same
@@ -241,7 +240,7 @@ class tileUI {
     buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, "next", 11));
     buttons.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, true, "load tile", -1));
 
-    for (button b : buttons) {
+    for(button b : buttons){
       b.setup();
     }
 
@@ -253,8 +252,8 @@ class tileUI {
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void changeVisibility(boolean visibility) {//change screen
-  if (visibility) {//are we going to the tile map loading screen
+void changeVisibility(boolean visibility){//change screen
+  if(visibility){//are we going to the tile map loading screen
     setButtonVis("hue", false);
     setButtonVis("rgb", false);
     setButtonVis("clear", false);
@@ -274,7 +273,7 @@ void changeVisibility(boolean visibility) {//change screen
     RSlider.setVisible(false);//RSlider is not visible
     GSlider.setVisible(false);//GSlider is not visible
     BSlider.setVisible(false);//BSlider is not visible
-  } else {
+  }else{
     setButtonVis("hue", true);
     setButtonVis("rgb", true);
     setButtonVis("clear", true);
@@ -299,25 +298,25 @@ void changeVisibility(boolean visibility) {//change screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void buttonPrevTileMap() {
+void buttonPrevTileMap(){
   tileMapShow--;//go to previous tile map
-  if (tileMapShow < 0) {//make sure we don't go below zero
+  if(tileMapShow < 0){//make sure we don't go below zero
     tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
   }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void buttonNextTileMap() {
+void buttonNextTileMap(){
   tileMapShow++;//go to next tile map
-  if (tileMapShow >= tileMaps.size()) {//make sure we dont go above maximum tile map
+  if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
     tileMapShow = 0;//set to 0
   }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void buttonLoadTileMap() {
+void buttonLoadTileMap(){
   loadTileMap();//load selected tile map
   tileN = 1;//make sure were on tile 1
   updateTileRow();//make sure we're on the correct row
@@ -331,24 +330,24 @@ void buttonLoadTileMap() {
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void clearToggle() {//called when clearToggle is clicked
-  if (colorTiles) {//is variable set
+void clearToggle(){//called when clearToggle is clicked
+  if(colorTiles){//is variable set
     colorTiles = false;//don't place clear tiles
-  } else {
+  }else{
     colorTiles = true;//place clear tiles
   }
 }//void clearToggle() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void colorSelect() {//called when colorSelect is clicked
+void colorSelect(){//called when colorSelect is clicked
   colorWheel.setVisible(!colorWheel.isVisible());//invert visibility
   noTile = !noTile;//ivert whether tiles can be placed
 }//void colorSelect() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void colorInput() {//called when colorInput is clicked
+void colorInput(){//called when colorInput is clicked
   //UIControls.get(Textfield.class, "colorInputR").setVisible(!UIControls.get(Textfield.class, "colorInputR").isVisible());
   colorInputR.setVisible(!colorInputR.isVisible());//invert visibility
   colorInputG.setVisible(!colorInputG.isVisible());//invert visibility
@@ -359,27 +358,27 @@ void colorInput() {//called when colorInput is clicked
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void colorInputR(String value) {//called when colorInputR updates
+void colorInputR(String value){//called when colorInputR updates
   RSlider.setValue(int(value));//make sure all values are the same
 }//void colorInputR(String value) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void colorInputG(String value) {//called when colorInputG updates
+void colorInputG(String value){//called when colorInputG updates
   GSlider.setValue(int(value));//make sure all values are the same
 }//void colorInputG(String value) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void colorInputB(String value) {//called when colorInputB updates
+void colorInputB(String value){//called when colorInputB updates
   BSlider.setValue(int(value));//make sure all values are the same
 }//void colorInputB(String value) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void loadColors(mTile tmp) {//Load RGB Sliders and RGB Inputs with value from tile
-  if (tmp != null) {
-    if (tmp.colored) {//----------------------------------------------------------------------------do we want to check this?
+void loadColors(mTile tmp){//Load RGB Sliders and RGB Inputs with value from tile
+  if(tmp != null){
+    if(tmp.colored){//----------------------------------------------------------------------------do we want to check this?
       RSlider.setValue(tmp.r);//Set Red Slider value to Red value of the tile
       GSlider.setValue(tmp.g);//Set Green Slider value to Green value of the tile
       BSlider.setValue(tmp.b);//Set Blue Slider value to Blue value of the tile
@@ -389,16 +388,16 @@ void loadColors(mTile tmp) {//Load RGB Sliders and RGB Inputs with value from ti
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void nextTileC() {//Move To Next Tile
+void nextTileC(){//Move To Next Tile
   updateTileRow();//Get the row to whatever tile were on
   tileN++;//Increment the tile number
-  if (tileN > fullTotalImages) {//Is the tile number greater than our total number of images?
+  if(tileN > fullTotalImages){//Is the tile number greater than our total number of images?
     tileN = 0;//Loop the tile number back to the first tile
     tileRow = 0;//Loop the tile row back to the first row
   }
-  if (tileN == rowLength*(tileRow+1)) {//If the tile number is the last tile
+  if(tileN == rowLength*(tileRow+1)){//If the tile number is the last tile
     tileRow++;//Increment the tile row
-    if (tileRow > fullTotalImages/rowLength) {//Is the tile row greater than our total number of rows?
+    if (tileRow > fullTotalImages/rowLength){//Is the tile row greater than our total number of rows?
       tileRow = 0;//Loop the tile row back to the first row
     }
   }
@@ -406,16 +405,16 @@ void nextTileC() {//Move To Next Tile
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void prevTileC() {//Move To Previous Tile
+void prevTileC(){//Move To Previous Tile
   updateTileRow();//Get the row to whatever tile were on
   tileN--;//Decrement the tile number
-  if (tileN < 0) {//Is the tile number less than zero?
+  if(tileN < 0){//Is the tile number less than zero?
     tileN = fullTotalImages;//Loop the tile number back to the last tile
     tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
   }
-  if (tileN < rowLength*tileRow) {//Is the tile number less than the lower end of the current row?
+  if(tileN < rowLength*tileRow){//Is the tile number less than the lower end of the current row?
     tileRow--;//Decrement the tile row
-    if (tileRow < 0) {//Is the tile number less than zero?
+    if(tileRow < 0){//Is the tile number less than zero?
       tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
     }
   }
@@ -423,16 +422,16 @@ void prevTileC() {//Move To Previous Tile
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void updateTileRow() {//Get the row to whatever tile were on
-  while (floor(tileN/rowLength)*rowLength < rowLength*tileRow) {//Is tileN lower than the row were on?
+void updateTileRow(){//Get the row to whatever tile were on
+  while(floor(tileN/rowLength)*rowLength < rowLength*tileRow){//Is tileN lower than the row were on?
     tileRow--;//Decrement tileRow
-    if (tileRow < 0) {//Is the tile number less than zero?
+    if(tileRow < 0){//Is the tile number less than zero?
       tileRow = floor(fullTotalImages/rowLength);//Loop the tile row back to the last row
     }
   }
-  while (floor(tileN/rowLength)*rowLength > rowLength*tileRow) {//Is tileN higher than the row were on?
+  while(floor(tileN/rowLength)*rowLength > rowLength*tileRow){//Is tileN higher than the row were on?
     tileRow++;//Increment tileRow
-    if (tileRow > fullTotalImages/rowLength) {//Is the tile row greater than our total number of rows?
+    if(tileRow > fullTotalImages/rowLength){//Is the tile row greater than our total number of rows?
       tileRow = 0;//Loop the tile row back to the first row
     }
   }
@@ -440,47 +439,47 @@ void updateTileRow() {//Get the row to whatever tile were on
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void nextRowC() {//Next Row
-  if (tileN < rowLength * tileRow || tileN > rowLength * tileRow + rowLength) {//Is tileN outside of our current row
+void nextRowC(){//Next Row
+  if(tileN < rowLength * tileRow || tileN > rowLength * tileRow + rowLength){//Is tileN outside of our current row
     //Do Nothing
-  } else {
+  }else{
     tileN += rowLength;//Keep the selected tile number in the same relative position
-    if (tileN > fullTotalImages) {//If the tile number is greater than our total number of tiles
+    if(tileN > fullTotalImages){//If the tile number is greater than our total number of tiles
       tileN = tileN - (fullTotalImages + 1);//Loop the tile number back to first row in the same relative position
     }
   }
   tileRow++;//Increment the row number
-  if (tileRow > fullTotalImages / rowLength) {//If the row number is greater than our total number of rows
+  if(tileRow > fullTotalImages / rowLength){//If the row number is greater than our total number of rows
     tileRow = 0;//Loop the row number back to the first
   }
 }//void nextRowC() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void prevRowC() {//Previous Row
-  if (tileN < rowLength * tileRow || tileN > rowLength * tileRow + rowLength) {//Is tileN outside of our current row
+void prevRowC(){//Previous Row
+  if(tileN < rowLength * tileRow || tileN > rowLength * tileRow + rowLength){//Is tileN outside of our current row
     //Do Nothing
-  } else {
+  }else{
     tileN -= rowLength;//Keep the selected tile number in the same relative position
-    if (tileN < 0) {//If the tile number is less than zero
+    if(tileN < 0){//If the tile number is less than zero
       tileN = (fullTotalImages + 1) - (0 - tileN);//Loop the tile number back to last row in the same relative position
     }
   }
   tileRow--;//Decrement the row number
-  if (tileRow < 0) {//If the row number is less than our zero
+  if(tileRow < 0){//If the row number is less than our zero
     tileRow = floor(fullTotalImages / rowLength);//Loop the row number back to the last
   }
 }//void prevRowC() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-String padFPS() {
+String padFPS(){
   String FPS = String.valueOf(frameRate);//grab the frame rate
-  if (FPS.length() > 4) {//if the frame rate has more than 2 decimal places
+  if(FPS.length() > 4){//if the frame rate has more than 2 decimal places
     FPS = FPS.substring(0, 5);//XX.XX truncate them
-  } else if (FPS.length() > 3) {//if it has 1 decimal place
+  }else if(FPS.length() > 3){//if it has 1 decimal place
     FPS = FPS.substring(0, 4) + "0";//XX.X0 pad it
-  } else {//if it has no decimal places
+  }else{//if it has no decimal places
     FPS = FPS.substring(0, 2) + ".00";//XX.00 pad it
   }
 
