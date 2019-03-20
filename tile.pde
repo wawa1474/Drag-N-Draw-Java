@@ -10,19 +10,19 @@ int tmpTileY = 0;//its y position
 class mTile{//Tile Object
   int image;//Store Image Number
   int r, g, b;//Store RGB Value
-  boolean clear;//Is the tile clear
+  boolean colored;//does the tile have a background color
 
-  public mTile(int image, int r, int g, int b, boolean clear){//Tile Object
+  public mTile(int image, int r, int g, int b, boolean colored){//Tile Object
     this.image = image;//Store Image Number
     this.r = r;//Store Red Value
     this.g = g;//Store Green Value
     this.b = b;//Store Blue Value
-    this.clear = clear;//Is the tile clear
+    this.colored = colored;//Is the tile clear
     //this.lore = lore || 0;//The LORE? of the tile
   }//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
   
   void draw(int x, int y){
-    if(!this.clear || this.image == tileMaps.get(tileMapShow).colorTile){//Is the tile colored
+    if(this.colored || this.image == tileMaps.get(tileMapShow).colorTile){//Is the tile colored
       if(!drawLines){noStroke();}
       fill(this.r,this.g,this.b);//Set Tile background color
       rect(x,y,scl,scl);//Draw colored square behind tile
@@ -30,7 +30,7 @@ class mTile{//Tile Object
     
     if(tileMaps.size() != 0 && this.image != tileMaps.get(tileMapShow).colorTile && this.image <= totalImages && tileImages.length != 0 && tileImages[this.image] != null){//if tile image is not 0 and tile image exists
       image(tileImages[this.image], x, y);//Draw tile
-    }else if(this.image != 0 && missingTexture != null && !this.clear){//image is not blank
+    }else if(this.image != 0 && missingTexture != null && this.colored){//image is not blank
       image(missingTexture, x, y);//Draw tile
     }
   }
@@ -47,9 +47,9 @@ boolean tileOnScreen(float x, float y){//is this tile on screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void deleteTile(int x, int y){//Delete a tile and update the array
+void deleteTile(int x, int y, int z){//Delete a tile and update the array
   if(mapTiles.get(x).get(y).size() > 0){//if there are tiles
-    mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);//delete the top most one
+    mapTiles.get(x).get(y).remove(z);//delete the top most one
   }
 }//void deleteTile() END
 
@@ -59,10 +59,10 @@ void placeTile(){//Place a tile at the mouses location
   if(mouseY > (UIBottom * scl) + fudgeValue && mouseY < height - fudgeValue && mouseX < width - fudgeValue && mouseX > 0 + fudgeValue){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
       //.get(x).get(y).add(new mTile(color tile, red, green, blue, tile is clear));
-      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), true));//Place a colored tile with no image
+      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //.get(x).get(y).add(new mTile(selected tile image number, red, green, blue, is tile clear?));
-      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), CClear));//Place a tile
+      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), colorTiles));//Place a tile
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //do nothing
     }

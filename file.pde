@@ -112,7 +112,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
   for(int x = 0; x < cols; x++){//for all the columns
     for(int y = 0; y < rows; y++){//for all the rows
       for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//for all the tiles in that space
-        if(!mapTiles.get(x).get(y).get(z).clear){//Is the tile colored
+        if(mapTiles.get(x).get(y).get(z).colored){//Is the tile colored
           fullCanvas.fill(mapTiles.get(x).get(y).get(z).r,mapTiles.get(x).get(y).get(z).g,mapTiles.get(x).get(y).get(z).b);//Set Tile background color
           fullCanvas.rect((x * scl) - lowerx,(y * scl) - lowery,scl,scl);//Draw colored square behind tile
         }
@@ -232,7 +232,7 @@ void fileSaveMap(){//Save the Map to file
       
           //Blue/Flags
           mapFile.add((byte)mapTiles.get(x).get(y).get(z).b);//blue
-          if(mapTiles.get(x).get(y).get(z).clear){//is the tile clear
+          if(mapTiles.get(x).get(y).get(z).colored){//is the tile clear
             mapFlags |= 1;//yes
           }
           mapFile.add((byte)mapFlags);//flags

@@ -89,12 +89,12 @@ void mousePressed(){//We pressed a mouse button
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
         if(mouseButton == CENTER){//We clicked with the middle button
-          deleteTile(x, y);//Delete a tile and update the array
+          deleteTile(x, y, mapTiles.get(x).get(y).size() - 1);//Delete a tile
           deleting = true;//We're deleting
           return;//Block normal action
-        }else if(mouseButton == LEFT && !CClear){//We clicked with the left button
+        }else if(mouseButton == LEFT && colorTiles){//We clicked with the left button
           tmpTile = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
-          mapTiles.get(x).get(y).remove(mapTiles.get(x).get(y).size() - 1);//delete the tile
+          deleteTile(x, y, mapTiles.get(x).get(y).size() - 1);//Delete a tile
           dragging = true;//We dragging
           loadColors(tmpTile);//Load the color inputs and sliders with the color from the tile
           loadTile(tmpTile);//load tile image
@@ -154,7 +154,7 @@ void mouseDragged(){//We dragged the mouse while holding a button
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       if(mapTiles.get(x).get(y).size() != 0){
         if(x == mouseTileX && y == mouseTileY){//Are we clicking on the tile
-          if(!checkImage(tileN) || mouseButton == CENTER || !CClear){
+          if(!checkImage(tileN) || mouseButton == CENTER || colorTiles){
             return;//Block normal action
           }
         }
