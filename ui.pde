@@ -200,7 +200,7 @@ class tileUI{
     GSlider = UIControls.getController("GSlider");//make it easier to use Slider
     BSlider = UIControls.getController("BSlider");//make it easier to use Slider
 
-    UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 5, scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+    UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 6.05, scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
     scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
     UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
@@ -223,22 +223,19 @@ class tileUI{
     colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
 
     buttons.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, false, "hue", -1));
-
     buttons.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, false, "rgb", -1));
+    buttons.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, false, "clear", -1));
 
-    buttons.add(new button(scl * 11.5, scl, scl * 1.2, scl, BLACK, "Color", WHITE, 12, false, "clear", -1));
-
-    buttons.add(new button(scl * 6, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, "load map", 2));
-    buttons.add(new button(scl * 12.7, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, true, "change map", -1));
-
-    buttons.add(new button(scl * 7, scl, scl, scl, BLACK, "New", WHITE, 12, false, "new", 0));//5
-    buttons.add(new button(scl * 8, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, false, "save", 4));
-    buttons.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, false, "load", 2));
-    buttons.add(new button(scl * 10.2, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, false, "image", -1));
+    buttons.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, false, "new", 0));//5
+    buttons.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, false, "save", 4));
+    buttons.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, false, "load", 2));
+    buttons.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, false, "image", -1));
+    buttons.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, true, "change map", -1));
 
     buttons.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, true, "prev", 10));
     buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, "next", 11));
     buttons.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, true, "load tile", -1));
+    buttons.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, "load map", 2));
 
     for(button b : buttons){
       b.setup();
