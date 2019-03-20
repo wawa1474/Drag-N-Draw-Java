@@ -11,6 +11,7 @@ int UIBottom = 2;//How many tiles tall is the UI?
 
 color BLACK = color(0);
 color WHITE = color(255);
+color GREY = color(127);
 
 ControlP5 UIControls;//ui controls
 Controller RSlider, GSlider, BSlider;//sliders
@@ -128,27 +129,30 @@ class tileUI{
         }
       }
       if(tmpTile != null){//if we're dragging a tile
-        tmp += 1;//count it to
+        tmp += 1;//count it too
       }
+      
+      float tmpX1 = (scl * 16) + (scl / 8);
+      float tmpX2 = scl * 25;
+      float tmpX3 = (scl * 27) + (scl / 2);
+      
+      float tmpY1 = (scl / 1.25);
+      float tmpY2 = (scl * 1.75);
 
-      text("Tiles: " + tmp, (scl * 16) + (scl / 8), (scl / 1.25));//Tiles: (tiles)
+      text("Tiles: " + tmp, tmpX1, tmpY1);//Tiles:(tmp)
+      text("Drawn: " + drawnTiles, tmpX1, tmpY2);//Drawn:(drawnTiles)
 
-      tmp = drawnTiles;//number of tiles that are being drawn
-      if(tmpTile != null){//if we're dragging a tile
-        tmp += 1;//count it to
-      }
+      text("X:" + floor(-screenX/scl), tmpX2, tmpY1);//X:(screenX)
+      text("Y:" + floor(-screenY/scl), tmpX2, tmpY2);//Y:(screenY)
 
-      text("Drawn: " + tmp, (scl * 16) + (scl / 8), (scl * 1.75));//Drawn: (drawn)
-
-      text("X:" + floor(-screenX/scl), ((scl * 25)), (scl / 1.25));//X: (screen x)
-      text("Y:" + floor(-screenY/scl), ((scl * 25)), (scl * 1.75));//Y: (screen y)
-
-      text("X:" + floor((mouseX - screenX)/scl), ((scl * 27) + scl / 2), (scl / 1.25));//X: (mouse x)
+      
 
       if(mouseY < UIBottom * scl){
-        text("Y:" + "UI", (scl * 27) + (scl / 2), (scl * 1.75));//Y: (mouse Y)
+        text("X:UI", tmpX3, tmpY1);//X:UI
+        text("Y:UI", tmpX3, tmpY2);//Y:UI
       }else{
-        text("Y:" + floor(((mouseY - screenY) - 64) / scl), (scl * 27) + (scl / 2), (scl * 1.75));//Y: (mouse Y)
+        text("X:" + mouseTileX, tmpX3, tmpY1);//X:(mouseTileX)
+        text("Y:" + mouseTileY, tmpX3, tmpY2);//Y:(mouseTileY)
       }
 
       textSize(12);//Default text size

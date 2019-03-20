@@ -2,6 +2,7 @@ int tileDepth = 4;//16;//how many tiles are drawn per space
 int screenX1, screenX2, screenY1, screenY2;//0 -> cols/rows
 
 void drawSpots(){
+  drawnTiles = 0;//reset number of drawn tiles
   //Display Map Tiles
   for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
@@ -15,6 +16,17 @@ void drawSpots(){
             //}
           }
         }
+    }
+  }
+  
+  if (dragging){//Are we dragging a tile
+    if(tmpTile != null){//If tile exists
+      if(mouseY < UIBottom * scl){
+        //do nothing
+      }else{
+        tmpTile.draw(mouseTileX * scl, mouseTileY * scl);//draw the tile on the mouse snapped to the grid
+        drawnTiles++;//dragged tile on screen, count it
+      }
     }
   }
 }

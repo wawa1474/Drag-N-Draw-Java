@@ -23,7 +23,7 @@ class mTile{//Tile Object
   
   void draw(int x, int y){
     if(this.colored || this.image == tileMaps.get(tileMapShow).colorTile){//Is the tile colored
-      if(!drawLines){noStroke();}
+      if(!drawLines){noStroke();}else{strokeWeight(1); stroke(BLACK);}
       fill(this.r,this.g,this.b);//Set Tile background color
       rect(x,y,scl,scl);//Draw colored square behind tile
     }
@@ -119,20 +119,6 @@ void loadTile(mTile tmp){//Set current image to tile image
     updateTileRow();//make sure we're on the right tile row
   }
 }//void loadTile() END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void dragTile(){//If dragging a tile: update location
-  if (dragging){//Are we dragging a tile
-    if(tmpTile != null){//If tile exists
-      if(mouseY < UIBottom * scl){
-        //do nothing
-      }else{
-        tmpTile.draw(mouseTileX * scl, mouseTileY * scl);//draw the tile on the mouse snapped to the grid
-      }
-    }
-  }
-}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 

@@ -49,11 +49,7 @@ void draw(){//Draw the canvas
   BG.draw();//Draw the background and grid
   
   if(preloading != true){//if preloading
-    drawnTiles = 0;//reset number of drawn tiles
-
     drawSpots();//draw tiles
-  
-    dragTile();//drag a grabbed tile
   
     BG.border();//Draw the RED border
   
@@ -66,4 +62,61 @@ void draw(){//Draw the canvas
   
   UI.update();//Update the UI position
   UI.draw();//Draw the UI
+  
+  //pushMatrix();
+  //translate(scl * 4.5, scl * 4.5);
+  ////rotate(frameCount / -100.0);
+  //polygon(-(scl), -(scl/2), scl/2, 6);  // Hexagon
+  //polygon(0, 0, scl/2, 6);  // Hexagon
+  //polygon(scl, scl/2, scl/2, 6);  // Hexagon
+  //popMatrix();
+  //fill(0);
+  //if (mousePressed) {
+  //  drawHexagon2(scl * 4.5, scl * 4.5, scl/2);
+  //}
+  //else {
+  //  drawHexagon(scl * 4.5, scl * 4.5, scl/2);
+  //}
 }//void draw() END
+
+//void polygon(float x, float y, float radius, int npoints) {
+//  float angle = TWO_PI / npoints;
+//  fill(BLACK);
+//  beginShape();
+//  for (float a = 0; a < TWO_PI; a += angle) {
+//    float sx = x + cos(a) * radius;
+//    float sy = y + sin(a) * radius;
+//    vertex(sx, sy);
+//  }
+//  endShape(CLOSE);
+//}
+
+
+//void drawHexagon(float x, float y, float radius) {
+//  pushMatrix();
+//  translate(x, y);
+//  beginShape();
+//  for (int i = 0; i < 6; i++) {
+//    pushMatrix();
+//    float angle = PI*i/3;
+//    vertex(cos(angle) * radius, sin(angle) * radius);
+//    popMatrix();
+//  }
+//  endShape(CLOSE);
+//  popMatrix();
+//}
+
+//void drawHexagon2(float x, float y, float radius) {
+//  pushMatrix();
+//  translate(x, y);
+//  rotate(PI/6.0);
+//  beginShape();
+//  for (int i = 0; i < 6; i++) {
+//    pushMatrix();
+//    float angle = PI*i/3;
+//    vertex(cos(angle) * radius, sin(angle) * radius);
+//    popMatrix();
+//  }
+//  endShape(CLOSE);
+//  popMatrix();
+//}
