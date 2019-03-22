@@ -88,10 +88,6 @@ class tileUI{
       }else{
         text("No Tile Maps Exist!", scl * 12, scl / 2);//display tile map name
       }
-
-      for(button b : buttons){
-        b.draw();
-      }
     }else{
       fill(0);//black
       noStroke();//no line around the ui background
@@ -156,10 +152,10 @@ class tileUI{
       }
 
       textSize(12);//Default text size
-
-      for(button b : buttons){
-        b.draw();
-      }
+    }
+    
+    for(button b : buttons){
+      b.draw();
     }
   }//void draw() END
 

@@ -22,11 +22,11 @@ void keyTyped(){//We typed a key
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step
         sx1 = mouseX - screenX;//set x1 to mouse x position
-        sy1 = mouseY - screenY - 64;//set y1 to mouse y position
+        sy1 = mouseY - screenY - (scl * 2);//set y1 to mouse y position
       }else if (tileGroupStep == 1){//set XY2
         tileGroupStep = 2;//ready to do group tiles stuff
         sx2 = mouseX - screenX;//set x1 to mouse x position
-        sy2 = mouseY - screenY - 64;//set y2 to mouse y position
+        sy2 = mouseY - screenY - (scl * 2);//set y2 to mouse y position
       }else if (tileGroupStep == 2){//set XY2
         tileGroupStep = 0;//ready to do group tiles stuff
       }

@@ -28,10 +28,12 @@ class mTile{//Tile Object
       rect(x,y,scl,scl);//Draw colored square behind tile
     }
     
-    if(tileMaps.size() != 0 && this.image != tileMaps.get(tileMapShow).colorTile && this.image <= totalImages && tileImages.length != 0 && tileImages[this.image] != null){//if tile image is not 0 and tile image exists
-      image(tileImages[this.image], x, y);//Draw tile
-    }else if(this.image != 0 && missingTexture != null && this.colored){//image is not blank
-      image(missingTexture, x, y);//Draw tile
+    if(tileMaps.size() != 0 && this.image != tileMaps.get(tileMapShow).colorTile){
+      if(this.image <= totalImages && tileImages.length != 0 && tileImages[this.image] != null){//if tile image is not 0 and tile image exists
+        image(tileImages[this.image], x, y);//Draw tile
+      }else if(missingTexture != null && !this.colored){//image is not blank
+        image(missingTexture, x, y);//Draw tile
+      }
     }
   }
 }//class mTile() END
@@ -136,3 +138,33 @@ boolean checkImage(int tile){//check if tile about to place has same image as ti
   }
   return true;//Place tile
 }//boolean checkImage(int tile) END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+int sclAlignDown(int a){
+  return floor(a / scl) * scl;
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+int sclAlignUp(int a){
+  return ceil((float)a / scl) * scl;
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+int sclDivideDown(int a){
+  return floor(a / scl);
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+int sclDivideUp(int a){
+  return ceil((float)a / scl);
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+int sclMultiply(int a){
+  return floor(a * scl);
+}

@@ -44,7 +44,7 @@ void draw(){//Draw the canvas
   updateMouseXY();//Update the XY position of the mouse and the page XY offset
   
   pushMatrix();//go back to crazy space?
-  translate(screenX, screenY + 64);//shift screen around
+  translate(screenX, screenY + (scl * 2));//shift screen around
   
   BG.draw();//Draw the background and grid
   

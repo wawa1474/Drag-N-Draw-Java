@@ -40,7 +40,7 @@ void buttonChangeTileMap(){
   tmpScreenX = screenX;//save our position
   tmpScreenY = screenY;//save our position
   screenX = 0;//go back to the top left for looking at tile maps
-  screenY = 64;//go back to the top left for looking at tile maps
+  screenY = (scl * 2);//go back to the top left for looking at tile maps
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------

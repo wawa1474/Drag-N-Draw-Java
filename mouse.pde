@@ -10,7 +10,7 @@ int fudgeValue = 1;//Fudge Value to make sure we're really clicking inside somet
 
 void updateMouseXY(){//Update the XY position of the mouse
   mouseTileX = floor((mouseX - screenX) / scl);
-  mouseTileY = floor(((mouseY - screenY) - 64) / scl);
+  mouseTileY = floor(((mouseY - screenY) - (scl * 2)) / scl);
 }//void updateXY() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ void mousePressed(){//We pressed a mouse button
     }else if(mouseButton == CENTER){//We clicked with the middle button
       for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-          if(x == mouseTileX && y == mouseTileY){//Are we clicking on the tile
+          if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
             tileGroupDeleting = true;//deleting group of tiles
           }
         }
