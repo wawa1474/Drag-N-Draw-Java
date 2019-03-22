@@ -89,18 +89,21 @@ void keyTyped(){//We typed a key
       }
     }
     if(key == 's'){//We pressed 'S'
-      screenY -= (scl * scrollAmount);//go down
-      
-      if(screenY < -((scl * rows) - height)){//if we're to far down
-        screenY = -((scl * rows) - height) + 1;//make it not so
+      if(rows > height / scl){
+        screenY -= (scl * scrollAmount);//go down
+        
+        if(screenY < -((scl * (rows + 2)) - height)){//if we're to far down
+          screenY = -((scl * (rows + 2)) - height) + 1;//make it not so
+        }
       }
-      //println(SY);
     }
     if(key == 'd'){//We pressed 'D'
-      screenX -= (scl * scrollAmount);//go right
-      
-      if(screenX < -((scl * cols) - width)){//if we're to far right
-        screenX = -((scl * cols) - width) + 1;//make it not so
+      if(cols > width / scl){
+        screenX -= (scl * scrollAmount);//go right
+        
+        if(screenX < -((scl * cols) - width)){//if we're to far right
+          screenX = -((scl * cols) - width) + 1;//make it not so
+        }
       }
     }
   }

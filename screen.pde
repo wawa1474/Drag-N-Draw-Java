@@ -1,4 +1,4 @@
-int tileDepth = 4;//16;//how many tiles are drawn per space
+int tileDepth = 16;//16;//how many tiles are drawn per space
 int screenX1, screenX2, screenY1, screenY2;//0 -> cols/rows
 
 void drawSpots(){
@@ -6,7 +6,8 @@ void drawSpots(){
   //Display Map Tiles
   for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-        boolean skip = false;//do we skip drawing the rest of the tiles in this spot?
+      boolean skip = false;//do we skip drawing the rest of the tiles in this spot?
+      if(checkBounds(x, y)){
         for(int z = mapTiles.get(x).get(y).size() - tileDepth; z < mapTiles.get(x).get(y).size() && !skip; z++){//loop through all drawn tiles in this xy position
           if(z >= 0){//if there's a tile to be drawn
             mapTiles.get(x).get(y).get(z).draw(x * scl, y * scl);//draw it
@@ -16,6 +17,7 @@ void drawSpots(){
             //}
           }
         }
+      }
     }
   }
   
@@ -39,6 +41,14 @@ void updateScreenBounds(){
 
   screenX1 = screenX2 - floor(width / scl);
   screenY1 = (screenY2 - floor(height / scl));
+  
+  if(screenX2 > rows){
+    screenX2 = rows;
+  }
+  
+  if(screenY2 > cols){
+    screenY2 = cols;
+  }
 
   //println(screenX1 + ", " + screenY1 + ", " + screenX2 + ", " + screenY2);
 }

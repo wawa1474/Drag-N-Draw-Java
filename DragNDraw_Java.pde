@@ -3,8 +3,8 @@ import controlP5.*;//import the library
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
 
-int cols = 256;//Columns
-int rows = 256;//Rows
+int cols = 8;//Columns
+int rows = 8;//Rows
 
 int _DEBUG_ = -1;//what are we debugging
 int _DEBUGAMOUNT_ = 5000000;//5000000;//how many are we debugging
@@ -16,6 +16,7 @@ void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   noSmooth();
+  //frameRate(120);
   
   clearMapTilesArray();//setup map tiles array
   
@@ -32,7 +33,7 @@ void setup(){//Setup everything
   if(_DEBUG_ == 0){
     for(int i = 0; i < _DEBUGAMOUNT_; i++){
       //mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(tileMaps.get(tileMapShow).numImages),(int)random(256),(int)random(256),(int)random(256), (int)random(2)==1));//(int)random(256)
-      mapTiles.get((int)random(256)).get((int)random(256)).add(new mTile((int)random(256),(int)random(256),(int)random(256),(int)random(256), false));//(int)random(256)
+      mapTiles.get((int)random(cols)).get((int)random(rows)).add(new mTile((int)random(tileMaps.get(tileMapShow).numImages),(int)random(256),(int)random(256),(int)random(256), (int)random(2)==1));//(int)random(256)
     }
   }
 }//void setup() END

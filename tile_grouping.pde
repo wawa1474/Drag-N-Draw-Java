@@ -63,7 +63,6 @@ void tileGroup(String button){//mess with tiles in square group
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void tileGroupCutCopy(char button){//mess with tiles in square group
-  boolean negative = false;//are we in a negative area?
   boolean hadTile = false;//did that square have a tile?
   
   setupXXYY(sx1, sx2, sy1, sy2);
@@ -82,30 +81,27 @@ void tileGroupCutCopy(char button){//mess with tiles in square group
   for(int i = 0; i < tileGroupCols; i++){//loop through all columns
     for(int j = 0; j < tileGroupRows; j++){//loop through all rows
       hadTile = false;//square does not have tile
-      if(X1 + i < 0 || Y1 + j < 0){//if its a negetive number
-        negative = true;//skip this space
-      }
-      if(button == 'x' && !negative){//we clicked middle button on a tile
-        for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
-          mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
-          mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.colored));//copy the tile
-          hadTile = true;//square has tile
+      if(checkBounds(X1 + i, Y1 + j)){//if its a negetive number
+        if(button == 'x'){//we clicked middle button on a tile
+          for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
+            mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
+            mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.colored));//copy the tile
+            hadTile = true;//square has tile
+          }
+          if(hadTile == true){//if there was a tile in the space
+            mapTiles.get(X1 + i).get(Y1 + j).clear();//delete all tiles in the space
+          }
+        }else if(button == 'c'){//we clicked right button
+          for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
+            mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
+            mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.colored));//copy the tile
+            hadTile = true;//square has tile
+          }
         }
-        if(hadTile == true){//if there was a tile in the space
-          mapTiles.get(X1 + i).get(Y1 + j).clear();//delete all tiles in the space
-        }
-      }else if(button == 'c' && !negative){//we clicked right button
-        for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
-          mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
-          mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.colored));//copy the tile
-          hadTile = true;//square has tile
-        }
       }
-      if(hadTile == false){//if square did not have tile
-        mapTilesCopy.add(null);//insert null tile
-      }
-      
-      negative = false;//only skip if we need to
+      //if(hadTile == false){//if square did not have tile
+      //  mapTilesCopy.add(null);//insert null tile
+      //}
     }
   }
   tileGroupStep = 0;//reset step count
@@ -126,9 +122,7 @@ void tileGroupPaste(){//Paste The Copied Tiles
         mTile tmp = mapTilesCopy.get(i).get(j).get(z);//get the copy
         int tmpX = (X1 / scl) + i;//Adjust XY To Be On Tile Border
         int tmpY = (Y1 / scl) + j;//Adjust XY To Be On Tile Border
-        if(tmpX < 0 || tmpY < 0){//if we're in a negative area
-          //do nothing
-        }else{
+        if(checkBounds(tmpX, tmpY)){//if we're in a negative area
           mapTiles.get(tmpX).get(tmpY).add(new mTile(tmp.image, tmp.r, tmp.g, tmp.b, tmp.colored));//paste tile
         }
       }

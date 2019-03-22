@@ -122,7 +122,7 @@ void mouseDragged(){//We dragged the mouse while holding a button
   if(mouseButton == RIGHT){//We clicked with the right button
     for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
       for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-        if(x == mouseTileX && y == mouseTileY){//Are we clicking on the tile
+        if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
           mTile tmp = mapTiles.get(x).get(y).get(0);//get the tile
           tmp.r = (int)RSlider.getValue();//set tile red value
           tmp.g = (int)GSlider.getValue();//set tile green value
@@ -130,6 +130,7 @@ void mouseDragged(){//We dragged the mouse while holding a button
         }
       }
     }//Went through all the tiles
+    return;
   }
   
   if(mouseButton == CENTER && deleting){//We dragging and deleting with the middle button
@@ -140,20 +141,17 @@ void mouseDragged(){//We dragged the mouse while holding a button
         }
       }
     }//Went through all the tiles
+    return;
   }
 
-  if(noTile){//We're not allowed to place tiles
-    return;//Don't do anything else
-  }
-
-  if(dragging){//We're dragging
+  if(dragging || noTile){//We're dragging or are not allowed to place tiles
     return;//Block normal action
   }
   
   for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-      if(mapTiles.get(x).get(y).size() != 0){
-        if(x == mouseTileX && y == mouseTileY){//Are we clicking on the tile
+      if(checkBounds(x, y)){
+        if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
           if(!checkImage(tileN) || mouseButton == CENTER || colorTiles){
             return;//Block normal action
           }

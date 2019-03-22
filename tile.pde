@@ -58,7 +58,7 @@ void deleteTile(int x, int y, int z){//Delete a tile and update the array
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void placeTile(){//Place a tile at the mouses location
-  if(mouseY > (UIBottom * scl) + fudgeValue && mouseY < height - fudgeValue && mouseX < width - fudgeValue && mouseX > 0 + fudgeValue){//We're not on the UI and we're within the screen bounds
+  if(mouseY > (UIBottom * scl) + fudgeValue && mouseY < height - fudgeValue && mouseX < width - fudgeValue && mouseX > 0 + fudgeValue && checkBounds(mouseTileX, mouseTileY)){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
       //.get(x).get(y).add(new mTile(color tile, red, green, blue, tile is clear));
       mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
@@ -127,14 +127,27 @@ void loadTile(mTile tmp){//Set current image to tile image
 boolean checkImage(int tile){//check if tile about to place has same image as tile mouse is on
   for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-      for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){
-        if(x == mouseTileX && y == mouseTileY){//Is the mouse cursor on the tile we're checking?
-          if(tile == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
-            return false;//Don't place tile
+      if(checkBounds(x, y)){
+        for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){
+          if(x == mouseTileX && y == mouseTileY){//Is the mouse cursor on the tile we're checking?
+            if(tile == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
+              return false;//Don't place tile
+            }
           }
         }
       }
     }
   }
+  //for(int z = mapTiles.get(mouseTileY).get(mouseTileY).size() - 1; z >= 0; z--){
+  //  if(tile == mapTiles.get(mouseTileY).get(mouseTileY).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
+  //    return false;//Don't place tile
+  //  }
+  //}
   return true;//Place tile
 }//boolean checkImage(int tile) END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+boolean checkBounds(int x, int y){
+  return !(x >= cols || y >= rows || x < 0 || y < 0);//true if within bounds
+}
