@@ -145,9 +145,3 @@ boolean checkImage(int tile){//check if tile about to place has same image as ti
   //}
   return true;//Place tile
 }//boolean checkImage(int tile) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-boolean checkBounds(int x, int y){
-  return !(x >= cols || y >= rows || x < 0 || y < 0);//true if within bounds
-}

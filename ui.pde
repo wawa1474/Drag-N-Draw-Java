@@ -13,6 +13,7 @@ color BLACK = color(0);
 color WHITE = color(255);
 color GREY = color(127);
 
+import controlP5.*;//import the library
 ControlP5 UIControls;//ui controls
 Controller RSlider, GSlider, BSlider;//sliders
 Controller scrollSlider;//slider

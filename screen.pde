@@ -1,5 +1,9 @@
+int cols = 8;//Columns
+int rows = 8;//Rows
+
 int tileDepth = 16;//16;//how many tiles are drawn per space
 int screenX1, screenX2, screenY1, screenY2;//0 -> cols/rows
+int drawnTiles = 0;//how many tiles are on the screen
 
 void drawSpots(){
   drawnTiles = 0;//reset number of drawn tiles
@@ -51,4 +55,10 @@ void updateScreenBounds(){
   }
 
   //println(screenX1 + ", " + screenY1 + ", " + screenX2 + ", " + screenY2);
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+boolean checkBounds(int x, int y){
+  return !(x >= cols || y >= rows || x < 0 || y < 0);//true if within bounds
 }

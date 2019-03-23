@@ -51,7 +51,7 @@ void keyTyped(){//We typed a key
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
           if(x == mouseTileX && y == mouseTileY){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
-            println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Clear: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
+            println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Colored: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
           }
         }
       }
