@@ -80,6 +80,7 @@ variable length - four (4) bytes per icon
 
 variable length - sixteen (16) byte alignment (0 - 15)
 
+sixteen (16) bytes - application version
 sixteen (16) bytes - magic text ("wawa1474DragDraw")
 
 */

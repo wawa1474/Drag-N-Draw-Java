@@ -67,9 +67,9 @@ void keyTyped(){//We typed a key
         }
       }
     }else if(key == 'p'){//We pressed 'P'
-      BG.r = (int)RSlider.getValue();//set red
-      BG.g = (int)GSlider.getValue();//set green
-      BG.b = (int)BSlider.getValue();//set blue
+      backgroundRed = (int)RSlider.getValue();//set red
+      backgroundGreen = (int)GSlider.getValue();//set green
+      backgroundBlue = (int)BSlider.getValue();//set blue
     }else if(key == 'o'){//We pressed 'O'
       drawLines = !drawLines;//do we draw the background lines?
     }
@@ -89,19 +89,19 @@ void keyTyped(){//We typed a key
       }
     }
     if(key == 's'){//We pressed 'S'
-      if(rows > height / scl){
+      if(rows > height / scl || selectingTileMap == true){
         screenY -= (scl * scrollAmount);//go down
         
-        if(screenY < -((scl * (rows + 2)) - height)){//if we're to far down
+        if(screenY < -((scl * (rows + 2)) - height) && selectingTileMap == false){//if we're to far down
           screenY = -((scl * (rows + 2)) - height) + 1;//make it not so
         }
       }
     }
     if(key == 'd'){//We pressed 'D'
-      if(cols > width / scl){
+      if(cols > width / scl || selectingTileMap == true){
         screenX -= (scl * scrollAmount);//go right
         
-        if(screenX < -((scl * cols) - width)){//if we're to far right
+        if(screenX < -((scl * cols) - width) && selectingTileMap == false){//if we're to far right
           screenX = -((scl * cols) - width) + 1;//make it not so
         }
       }

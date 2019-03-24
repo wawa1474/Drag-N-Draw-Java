@@ -1,11 +1,11 @@
-int cols = 256;//Columns
-int rows = 256;//Rows
+int cols = 8;//Columns
+int rows = 8;//Rows
 
 int tileDepth = 16;//16;//how many tiles are drawn per space
 int screenX1, screenX2, screenY1, screenY2;//0 -> cols/rows
 int drawnTiles = 0;//how many tiles are on the screen
 
-void drawSpots(){
+void drawTilesAndIcons(){
   drawnTiles = 0;//reset number of drawn tiles
   //Display Map Tiles
   for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
@@ -21,6 +21,20 @@ void drawSpots(){
             //}
           }
         }
+      }
+    }
+  }
+
+  //draw any icons on the screen
+  for(int i = 0; i < icons.size(); i++){//Go through all the clickable icons
+    clickableIcon tmp = icons.get(i);
+    int tmpX = tmp.x / scl;
+    int tmpY = tmp.y / scl;
+    
+    if(tmpX >= screenX1 && tmpX <= screenX2 && tmpY >= screenY1 && tmpY <= screenY2){
+      tmp.draw();//draw the icon
+      if(tmp.mouseOver()){//if mouse hovering over icon
+        tmp.drawText();//draw the icons text
       }
     }
   }

@@ -10,7 +10,7 @@ void setup(){//Setup everything
   loadTileMapInfo();//load tile map info files
   
   UIControls = new ControlP5(this);//set up all the control stuff
-  UI.setup();//Setup all of the UI stuff
+  setupUI();//Setup all of the UI stuff
   
   debug();//run whatever debug option is set
 }//void setup() END
@@ -24,20 +24,31 @@ void draw(){//Draw the canvas
   pushMatrix();//go back to crazy space?
   translate(screenX, screenY + (scl * 2));//shift screen around
   
-  BG.draw();//Draw the background and grid
   
-  if(selectingTileMap != true){//are we selecting a tile map
-    drawSpots();//draw tiles
   
-    BG.border();//Draw the RED border
+  if(selectingTileMap == true){//are we selecting a tile map
+    drawTileBackground();
+  }else{
+    drawBackground();//Draw the background and grid
+    
+    drawTilesAndIcons();//draw tiles
+  
+    drawBorder();//Draw the RED border
   
     drawTileGroupOutlines();//draw the necessary outlines
-  
-    drawIcons();//draw all icons
   }
   
   popMatrix();//go back to normal space?
   
-  UI.update();//Update the UI position
-  UI.draw();//Draw the UI
+  updateUI();//Update the UI position
+  
+  if(selectingTileMap == true){
+    drawTileUI();
+  }else{
+    drawUI();//Draw the UI
+  }
+  
+  for(button b : buttons){
+    b.draw();
+  }
 }//void draw() END

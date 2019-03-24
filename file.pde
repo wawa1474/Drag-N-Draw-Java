@@ -22,7 +22,7 @@ void buttonLoadMap(){
   tileN = 1;//make sure we're on the first tile
   updateTileRow();//make sure we're on the correct row
   noTile = false;//allowed to place tiles
-  changeVisibility(false);//normal screen
+  changeVisibility(_MAPUI_);//normal screen
   selectingTileMap = false;//no longer selecting a tile map
   screenX = tmpScreenX;//reload our position
   screenY = tmpScreenY;//reload our position
@@ -32,7 +32,7 @@ void buttonLoadMap(){
 void buttonChangeTileMap(){
   selectingTileMap = true;//selecting a tile map
   //loadingMap = true;//now prepreloading
-  changeVisibility(true);//tile map loading screen
+  changeVisibility(_TILEMAPUI_);//tile map loading screen
   tmpScreenX = screenX;//save our position
   tmpScreenY = screenY;//save our position
   screenX = 0;//go back to the top left for looking at tile maps
@@ -171,9 +171,9 @@ void fileSaveMap(){//Save the Map to file
   mapFile.add((byte)(rows));
   
   //background color
-  mapFile.add((byte)BG.r);//14
-  mapFile.add((byte)BG.g);//15
-  mapFile.add((byte)BG.b);//16
+  mapFile.add((byte)backgroundRed);//14
+  mapFile.add((byte)backgroundGreen);//15
+  mapFile.add((byte)backgroundBlue);//16
   
   //Map Tiles Amount
   int tmp = 0;//temporary variable
@@ -358,9 +358,9 @@ void FileLoadMap(){//load map from file
     }
     
     //background color
-    BG.r = int(mapFile[8]);
-    BG.g = int(mapFile[9]);
-    BG.b = int(mapFile[10]);
+    backgroundRed = int(mapFile[8]);
+    backgroundGreen = int(mapFile[9]);
+    backgroundBlue = int(mapFile[10]);
     
     //Map Tiles Amount
     mapTilesAmount = convertFourBytesToInt(mapFile[11], mapFile[12], mapFile[13], mapFile[14]);

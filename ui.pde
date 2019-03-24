@@ -13,6 +13,10 @@ color BLACK = color(0);
 color WHITE = color(255);
 color GREY = color(127);
 
+int backgroundRed = 255;//red
+int backgroundGreen = 255;//green
+int backgroundBlue = 255;//blue
+
 import controlP5.*;//import the library
 ControlP5 UIControls;//ui controls
 Controller RSlider, GSlider, BSlider;//sliders
@@ -20,274 +24,238 @@ Controller scrollSlider;//slider
 Controller colorInputR, colorInputG, colorInputB;//number input
 Controller colorWheel;//color wheel
 
-tileUI UI = new tileUI();//Create a UI
-canvasBG BG = new canvasBG();//Create a background
+int _TILEMAPUI_ = 0;
+int _MAPUI_ = 1;
+
 int borderThickness = 4;//how thick is the canvas border
 
 int lowerx = 2147483647, lowery = 2147483647;//store lowest xy of tiles
 int upperx = -2147483648, uppery = -2147483648;//store highest xy of tiles
 boolean drawLines = true;//do we draw the background lines?
 
-
-class canvasBG{//The background
-  int r = 255;//red
-  int g = 255;//green
-  int b = 255;//blue
+void drawBackground(){//Draw the background
   int gUpper = 150;//middle-ish
   int gLower = 90;//middle-ish
 
-  void draw(){//Draw the background
-    if(selectingTileMap == true){//if selecting a Tile Map
-      background(255);//white background
-      if(tileMaps.size() != 0){
-        image(tileMaps.get(tileMapShow).tileMapImage, 0, scl);//display tile map
-      }
-    }else{
-      strokeWeight(1);//default
-      background(this.r, this.g, this.b);//Draw the background in whatever the color is
+  strokeWeight(1);//default
+  background(backgroundRed, backgroundGreen, backgroundBlue);//Draw the background in whatever the color is
 
-      if(this.r > gLower && this.r < gUpper && this.g > gLower && this.g < gUpper && this.b > gLower && this.b < gUpper){//if the color is gray-ish
-        stroke(0);//Make it black
-      }else{
-        stroke(255-this.r, 255-this.g, 255-this.b);//Invert line color
-      }
-
-      if(drawLines){//if the tile xy is not reset and we're should draw lines
-        for(int i = screenX1; i < screenX2 + 2; i++){//for however many horizontal squares there are
-          line(i * scl, screenY1 * scl, i * scl, (screenY2 + 2) * scl);//draw lines
-        }
-        for(int i = screenY1; i < screenY2 + 2; i++){//for however many vertical squares there are
-          line(screenX1 * scl, i * scl, (screenX2 + 2) * scl, i * scl);//draw lines
-        }
-      }
-    }
-  }//void draw() END
-
-  void border(){//draw the red border
-    strokeWeight(borderThickness);//Thicker
-    stroke(255, 0, 0);//RED
-    line(1, 0, 1, rows*scl);//Draw Left line
-    line((scl * cols) - 1, 0, (scl * cols) - 1, rows*scl);//Draw Right line
-    line(0, 1, cols*scl, 1);//Draw Top Line
-    line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Bottom Line
-  }//void border() END
-}//class canvasBG END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-class tileUI{
-  void draw(){
-    if(selectingTileMap == true){//if selecting a Tile Map
-      fill(0);//black box
-      //rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);//text box background
-      rect(scl * 11.5, 0, scl * 5, scl);//text box background
-      fill(255);//white text
-      //text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
-      if(tileMaps.size() != 0){
-        text(tileMaps.get(tileMapShow).tileMapName, scl * 12, scl / 2);//display tile map name
-      }else{
-        text("No Tile Maps Exist!", scl * 12, scl / 2);//display tile map name
-      }
-    }else{
-      fill(0);//black
-      noStroke();//no line around the ui background
-      rect(0, 0, width, scl * 2);//ui background
-
-      strokeWeight(1);//default
-      stroke(0);
-      fill(255);//Set background color to white
-      rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
-      for(int i = 0; i < rowLength && tileImages.length != 0; i++){//Go through all the tiles
-        if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
-          if((rowLength*tileRow)+i == tileN){//If displaying selected tile
-            fill(RSlider.getValue(), GSlider.getValue(), BSlider.getValue());//Set background color to the RGB value set by user
-            rect(scl*i, 0, scl, scl);//Display color behind the tile
-          }
-          if(tileImages[(rowLength*tileRow)+i] != null){
-            image(tileImages[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
-          }
-          if((rowLength*tileRow)+i == tileN){
-            noFill();
-            rect(scl*i, 0, scl - 1, scl - 1);//Display color behind the tile
-          }
-        }
-      }//Went through all the tiles
-
-      fill(255, 0, 0);//red text
-      stroke(0);//no outline
-      textSize(24);//larger text size
-
-      int tmp = 0;//how many tiles are there total
-
-      for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-        for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
-          tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
-        }
-      }
-      if(tmpTile != null){//if we're dragging a tile
-        tmp += 1;//count it too
-      }
-      
-      float tmpX1 = (scl * 16) + (scl / 8);
-      float tmpX2 = scl * 25;
-      float tmpX3 = (scl * 27) + (scl / 2);
-      
-      float tmpY1 = (scl / 1.25);
-      float tmpY2 = (scl * 1.75);
-
-      text("Tiles: " + tmp, tmpX1, tmpY1);//Tiles:(tmp)
-      text("Drawn: " + drawnTiles, tmpX1, tmpY2);//Drawn:(drawnTiles)
-
-      text("X:" + floor(-screenX/scl), tmpX2, tmpY1);//X:(screenX)
-      text("Y:" + floor(-screenY/scl), tmpX2, tmpY2);//Y:(screenY)
-
-      
-
-      if(mouseY < UIBottom * scl){
-        text("X:UI", tmpX3, tmpY1);//X:UI
-        text("Y:UI", tmpX3, tmpY2);//Y:UI
-      }else{
-        text("X:" + mouseTileX, tmpX3, tmpY1);//X:(mouseTileX)
-        text("Y:" + mouseTileY, tmpX3, tmpY2);//Y:(mouseTileY)
-      }
-
-      textSize(12);//Default text size
-    }
-    
-    for(button b : buttons){
-      b.draw();
-    }
-  }//void draw() END
-
-  void update(){
-    if(colorWheel.isVisible() || colorInputR.isVisible()){//if using color wheel or color inputs
-      noTile = true;//disallow tile placement
-    }
-
-    scrollAmount = (int)scrollSlider.getValue();//update scroll amount
-
-    RSlider.setColorBackground(color(RSlider.getValue(), 0, 0));//update background color (Red)
-    GSlider.setColorBackground(color(0, GSlider.getValue(), 0));//update background color (Green)
-    BSlider.setColorBackground(color(0, 0, BSlider.getValue()));//update background color (Blue)
-
-    setButtonColorBack("hue", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-    setButtonColorBack("rgb", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-
-    int tmpVal = 150;
-    setButtonColorText("hue", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
-    setButtonColorText("rgb", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
-
-    if(colorTiles){
-      setButtonColorBack("clear", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-      setButtonColorText("clear", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
-    }else{
-      setButtonColorBack("clear", BLACK);
-      setButtonColorText("clear", WHITE);
-    }
-  }//void update() END
-
-  void setup(){
-    //loadButtonImages();
-
-    UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, (scl + 1.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-    UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, (scl + 12.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-    UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(scl, (scl + 23.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-    RSlider = UIControls.getController("RSlider");//make it easier to use Slider
-    GSlider = UIControls.getController("GSlider");//make it easier to use Slider
-    BSlider = UIControls.getController("BSlider");//make it easier to use Slider
-
-    UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 6.05, scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
-    scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
-
-    UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
-      .onChange(new CallbackListener(){//when changed
-      public void controlEvent(CallbackEvent theEvent){
-        //println(theEvent);
-        RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());//make sure all values are the same
-        GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());//make sure all values are the same
-        BSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").b());//make sure all values are the same
-      }
-    }
-    );
-    colorWheel = UIControls.getController("colorWheel");//make it easier to use ColorWheel
-
-    UIControls.addTextfield("colorInputR").setPosition(scl * 4, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
-    UIControls.addTextfield("colorInputG").setPosition(scl * 4, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
-    UIControls.addTextfield("colorInputB").setPosition(scl * 4, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
-    colorInputR = UIControls.getController("colorInputR");//make it easier to use Textfield
-    colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
-    colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
-
-    buttons.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, false, "hue", -1));
-    buttons.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, false, "rgb", -1));
-    buttons.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, false, "clear", -1));
-
-    buttons.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, false, "new", 0));//5
-    buttons.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, false, "save", 4));
-    buttons.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, false, "load", 2));
-    buttons.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, false, "image", -1));
-    buttons.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, true, "change map", -1));
-
-    buttons.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, true, "prev", 10));
-    buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, "next", 11));
-    buttons.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, true, "load tile", -1));
-    buttons.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, "load map", 2));
-
-    for(button b : buttons){
-      b.setup();
-    }
-
-    changeVisibility(true);//go to tile map selection display
-
-    //UISetup = true;//ui is setup
-  }//void setup() END
-}//class tileUI END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void changeVisibility(boolean visibility){//change screen
-  if(visibility){//are we going to the tile map loading screen
-    setButtonVis("hue", false);
-    setButtonVis("rgb", false);
-    setButtonVis("clear", false);
-
-    setButtonVis("prev", true);
-    setButtonVis("next", true);
-    setButtonVis("load tile", true);
-    setButtonVis("new", false);
-    setButtonVis("save", false);
-    setButtonVis("load", false);
-    setButtonVis("image", false);
-
-    setButtonVis("load map", true);
-    setButtonVis("change map", false);
-
-    scrollSlider.setVisible(false);//scrollSlider is not visible
-    RSlider.setVisible(false);//RSlider is not visible
-    GSlider.setVisible(false);//GSlider is not visible
-    BSlider.setVisible(false);//BSlider is not visible
+  if(backgroundRed > gLower && backgroundRed < gUpper && backgroundGreen > gLower && backgroundGreen < gUpper && backgroundBlue > gLower && backgroundBlue < gUpper){//if the color is gray-ish
+    stroke(0);//Make it black
   }else{
-    setButtonVis("hue", true);
-    setButtonVis("rgb", true);
-    setButtonVis("clear", true);
+    stroke(255 - backgroundRed, 255 - backgroundGreen, 255 - backgroundBlue);//Invert line color
+  }
 
-    setButtonVis("prev", false);
-    setButtonVis("next", false);
-    setButtonVis("load tile", false);
-    setButtonVis("new", true);
-    setButtonVis("save", true);
-    setButtonVis("load", true);
-    setButtonVis("image", true);
+  if(drawLines){//if the tile xy is not reset and we're should draw lines
+    for(int i = screenX1; i < screenX2 + 2; i++){//for however many horizontal squares there are
+      line(i * scl, screenY1 * scl, i * scl, (screenY2 + 2) * scl);//draw lines
+    }
+    for(int i = screenY1; i < screenY2 + 2; i++){//for however many vertical squares there are
+      line(screenX1 * scl, i * scl, (screenX2 + 2) * scl, i * scl);//draw lines
+    }
+  }
+}//void draw() END
 
-    setButtonVis("load map", false);
-    setButtonVis("change map", true);
+//---------------------------------------------------------------------------------------------------------------------------------------
 
-    scrollSlider.setVisible(true);//scrollSlider is visible
-    RSlider.setVisible(true);//RSlider is visible
-    GSlider.setVisible(true);//GSlider is visible
-    BSlider.setVisible(true);//BSlider is visible
+void drawBorder(){//draw the red border
+  strokeWeight(borderThickness);//Thicker
+  stroke(255, 0, 0);//RED
+  line(1, 0, 1, rows*scl);//Draw Left line
+  line((scl * cols) - 1, 0, (scl * cols) - 1, rows*scl);//Draw Right line
+  line(0, 1, cols*scl, 1);//Draw Top Line
+  line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Bottom Line
+}//void border() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void drawUI(){
+  fill(0);//black
+  noStroke();//no line around the ui background
+  rect(0, 0, width, scl * 2);//ui background
+
+  strokeWeight(1);//default
+  stroke(0);
+  fill(255);//Set background color to white
+  rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
+  for(int i = 0; i < rowLength && tileImages.length != 0; i++){//Go through all the tiles
+    if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
+      if((rowLength*tileRow)+i == tileN){//If displaying selected tile
+        fill(RSlider.getValue(), GSlider.getValue(), BSlider.getValue());//Set background color to the RGB value set by user
+        rect(scl*i, 0, scl, scl);//Display color behind the tile
+      }
+      if(tileImages[(rowLength*tileRow)+i] != null){
+        image(tileImages[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
+      }
+      if((rowLength*tileRow)+i == tileN){
+        noFill();
+        rect(scl*i, 0, scl - 1, scl - 1);//Display color behind the tile
+      }
+    }
+  }//Went through all the tiles
+
+  fill(255, 0, 0);//red text
+  stroke(0);//no outline
+  textSize(24);//larger text size
+
+  int tmp = 0;//how many tiles are there total
+
+  for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+    for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+      tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
+    }
+  }
+  if(tmpTile != null){//if we're dragging a tile
+    tmp += 1;//count it too
+  }
+      
+  float tmpX1 = (scl * 16) + (scl / 8);
+  float tmpX2 = scl * 25;
+  float tmpX3 = (scl * 27) + (scl / 2);
+      
+  float tmpY1 = (scl / 1.25);
+  float tmpY2 = (scl * 1.75);
+
+  text("Tiles: " + tmp, tmpX1, tmpY1);//Tiles:(tmp)
+  text("Drawn: " + drawnTiles, tmpX1, tmpY2);//Drawn:(drawnTiles)
+
+  text("X:" + floor(-screenX/scl), tmpX2, tmpY1);//X:(screenX)
+  text("Y:" + floor(-screenY/scl), tmpX2, tmpY2);//Y:(screenY)
+
+  if(mouseY < UIBottom * scl){
+    text("X:UI", tmpX3, tmpY1);//X:UI
+    text("Y:UI", tmpX3, tmpY2);//Y:UI
+  }else{
+    text("X:" + mouseTileX, tmpX3, tmpY1);//X:(mouseTileX)
+    text("Y:" + mouseTileY, tmpX3, tmpY2);//Y:(mouseTileY)
+  }
+
+  textSize(12);//Default text size
+}//void draw() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void updateUI(){
+  if(colorWheel.isVisible() || colorInputR.isVisible()){//if using color wheel or color inputs
+    noTile = true;//disallow tile placement
+  }
+
+  scrollAmount = (int)scrollSlider.getValue();//update scroll amount
+
+  RSlider.setColorBackground(color(RSlider.getValue(), 0, 0));//update background color (Red)
+  GSlider.setColorBackground(color(0, GSlider.getValue(), 0));//update background color (Green)
+  BSlider.setColorBackground(color(0, 0, BSlider.getValue()));//update background color (Blue)
+
+  setButtonColorBack("hue", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+  setButtonColorBack("rgb", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+
+  int tmpVal = 150;
+  setButtonColorText("hue", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+  setButtonColorText("rgb", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+
+  if(colorTiles){
+    setButtonColorBack("clear", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+    setButtonColorText("clear", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+  }else{
+    setButtonColorBack("clear", BLACK);
+    setButtonColorText("clear", WHITE);
+  }
+}//void update() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void setupUI(){
+  //loadButtonImages();
+
+  UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, (scl + 1.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
+  UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, (scl + 12.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
+  UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(scl, (scl + 23.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
+  RSlider = UIControls.getController("RSlider");//make it easier to use Slider
+  GSlider = UIControls.getController("GSlider");//make it easier to use Slider
+  BSlider = UIControls.getController("BSlider");//make it easier to use Slider
+
+  UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 6.05, scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+  scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
+
+  UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
+    .onChange(new CallbackListener(){//when changed
+    public void controlEvent(CallbackEvent theEvent){
+      RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());//make sure all values are the same
+      GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());//make sure all values are the same
+      BSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").b());//make sure all values are the same
+    }
+  }
+  );
+  colorWheel = UIControls.getController("colorWheel");//make it easier to use ColorWheel
+
+  UIControls.addTextfield("colorInputR").setPosition(scl * 4, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
+  UIControls.addTextfield("colorInputG").setPosition(scl * 4, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
+  UIControls.addTextfield("colorInputB").setPosition(scl * 4, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
+  colorInputR = UIControls.getController("colorInputR");//make it easier to use Textfield
+  colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
+  colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
+
+  buttons.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, false, "hue", -1));
+  buttons.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, false, "rgb", -1));
+  buttons.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, false, "clear", -1));
+
+  buttons.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, false, "new", 0));//5
+  buttons.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, false, "save", 4));
+  buttons.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, false, "load", 2));
+  buttons.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, false, "image", -1));
+  buttons.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, true, "change map", -1));
+
+  buttons.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, true, "prev", 10));
+  buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, "next", 11));
+  buttons.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, true, "load tile", -1));
+  buttons.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, "load map", 2));
+
+  for(button b : buttons){
+    b.setup();
+  }
+
+  changeVisibility(_TILEMAPUI_);//go to tile map selection display
+}//void setup() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void changeVisibility(int ui){//change screen
+  if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
+    tilemapUIButtonsSetVis(true);
+    mapUIButtonsSetVis(false);
+  }else if(ui == _MAPUI_){
+    tilemapUIButtonsSetVis(false);
+    mapUIButtonsSetVis(true);
+  }else{
+    println("ERROR UI TYPE DOES NOT EXIST");
   }
 }//void changeVisibility(boolean visibility) END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void tilemapUIButtonsSetVis(boolean vis){
+  setButtonVis("prev", vis);
+  setButtonVis("next", vis);
+  setButtonVis("load tile", vis);
+  setButtonVis("load map", vis);
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void mapUIButtonsSetVis(boolean vis){
+  setButtonVis("hue", vis);
+  setButtonVis("rgb", vis);
+  setButtonVis("clear", vis);
+  setButtonVis("new", vis);
+  setButtonVis("save", vis);
+  setButtonVis("load", vis);
+  setButtonVis("image", vis);
+  setButtonVis("change map", vis);
+  scrollSlider.setVisible(vis);//scrollSlider is visible
+  RSlider.setVisible(vis);//RSlider is visible
+  GSlider.setVisible(vis);//GSlider is visible
+  BSlider.setVisible(vis);//BSlider is visible
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -315,7 +283,7 @@ void buttonLoadTileMap(){
   updateTileRow();//make sure we're on the correct row
   noTile = false;//allowed to place tiles
   selectingTileMap = false;//no longer selecting a tile map
-  changeVisibility(false);//go to normal display
+  changeVisibility(_MAPUI_);//go to normal display
   screenX = tmpScreenX;//reload our position
   screenY = tmpScreenY;//reload our position
 }

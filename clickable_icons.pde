@@ -56,17 +56,6 @@ void clearClickableTilesArray(){//delete all the icons
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void drawIcons(){//draw all icons
-  for(int i = 0; i < icons.size(); i++){//Go through all the clickable icons
-    icons.get(i).draw();//draw the icon
-    if(icons.get(i).mouseOver()){//if mouse hovering over icon
-      icons.get(i).drawText();//draw the icons text
-    }
-  }
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
 boolean checkMouseOverIcon(boolean loadMap){
   if(dragging || deleting){//were we dragging or deleting a tile or were we dragging the mouse
     //do nothing

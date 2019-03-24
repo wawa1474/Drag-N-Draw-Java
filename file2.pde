@@ -5,6 +5,28 @@ ArrayList<tileMap> tileMaps = new ArrayList<tileMap>(0);//arraylist of tile maps
 PImage[] tileImages = new PImage[0];//Tile Images Array
 int loadedTileMap = -1;//what tile map is loaded
 
+void drawTileBackground(){
+  background(255);//white background
+  if(tileMaps.size() != 0){
+    image(tileMaps.get(tileMapShow).tileMapImage, 0, scl);//display tile map
+  }
+}
+
+void drawTileUI(){
+  fill(0);//black box
+  //rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);//text box background
+  rect(scl * 11.5, 0, scl * 5, scl);//text box background
+  fill(255);//white text
+  //text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
+  if(tileMaps.size() != 0){
+    text(tileMaps.get(tileMapShow).tileMapName, scl * 12, scl / 2);//display tile map name
+  }else{
+    text("No Tile Maps Exist!", scl * 12, scl / 2);//display tile map name
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
 void loadTileMap(){
   if(tileMaps.size() != 0){//if a tile map exists
     tileImages = tileMaps.get(tileMapShow).splitTiles();//split the tile map into individual tiles
