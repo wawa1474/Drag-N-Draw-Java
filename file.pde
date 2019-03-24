@@ -1,4 +1,4 @@
-int _FILEVERSION_ = 4;//what version of file saving and loading
+int _FILEVERSION_ = 5;//what version of file saving and loading
 static final String _magicText = "wawa1474DragDraw";//make sure the file is ours
 
 ArrayList<Byte> mapFile = new ArrayList<Byte>(0);//temporary byte array
@@ -8,34 +8,30 @@ PImage missingTexture;//missingTexture Image
 String fileName = "Error";//File Name
 int tileMapShow = 0;//display which tile map
 String loadedTileMapName = "Classic";//tile map name
-boolean loadingTileMap = true;//are we loading the tile map
 
-boolean preloading = true;//are we preloading
-boolean prepreloading = true;//are we prepreloading
+boolean selectingTileMap = true;//are we selecting a tile map
+boolean loadingMap = true;//are we loading a map
 
 void buttonLoadMap(){
   noLoop();//don't allow drawing
   selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
   //println("File Selected!");
-  while(prepreloading == true){delay(500);}//small delay
+  while(loadingMap == true){delay(500);}//small delay
   //println("File Loaded");
   loadTileMap();//load selected tile map
   tileN = 1;//make sure we're on the first tile
   updateTileRow();//make sure we're on the correct row
   noTile = false;//allowed to place tiles
   changeVisibility(false);//normal screen
-  loadingTileMap = false;//not loading tile map
-  preloading = false;//no longer preloading
+  selectingTileMap = false;//no longer selecting a tile map
   screenX = tmpScreenX;//reload our position
   screenY = tmpScreenY;//reload our position
   loop();//allow drawing
 }
 
 void buttonChangeTileMap(){
-  preloading = true;//now preloading
-  prepreloading = true;//now prepreloading
-  UISetup = false;//ui is setup
-  loadingTileMap = true;//loading tile map
+  selectingTileMap = true;//selecting a tile map
+  //loadingMap = true;//now prepreloading
   changeVisibility(true);//tile map loading screen
   tmpScreenX = screenX;//save our position
   tmpScreenY = screenY;//save our position
@@ -82,7 +78,7 @@ void fileSaveMapSelect(File selection){//map file save select callback
 void FileLoadMapSelect(File selection){//map file load select callback
   if (selection == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
-    prepreloading = false;///---------------------------------------------------------------do we want this?
+    loadingMap = false;//since user canceled loading a map we're no longer loading a map
   } else {//we selected a file
     //println("User selected " + selection.getAbsolutePath() + " for loading");
     fileName = selection.getAbsolutePath();//get the path to the file
@@ -168,13 +164,19 @@ void fileSaveMap(){//Save the Map to file
   mapFile.add((byte)0x00);//02
   mapFile.add((byte)0x00);//03
   
-  //Tile map name and location
-  mapFile.add((byte)loadedTileMapName.length());//04
-  mapFile.add((byte)tileMaps.get(tileMapShow).tileMapLocation.length());//05
+  //map file width and height
+  mapFile.add((byte)(cols >> 8));
+  mapFile.add((byte)(cols));
+  mapFile.add((byte)(rows >> 8));
+  mapFile.add((byte)(rows));
   
-  int tmp = 0;//temporary variable
+  //background color
+  mapFile.add((byte)BG.r);//14
+  mapFile.add((byte)BG.g);//15
+  mapFile.add((byte)BG.b);//16
   
   //Map Tiles Amount
+  int tmp = 0;//temporary variable
   for(int x = 0; x < mapTiles.size(); x++){//go through all columns
     for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
       tmp += mapTiles.get(x).get(y).size();//count the number of tiles
@@ -191,20 +193,17 @@ void fileSaveMap(){//Save the Map to file
   mapFile.add((byte)(icons.size() >> 8));//12
   mapFile.add((byte)icons.size());//13
   
-  //background color
-  mapFile.add((byte)BG.r);//14
-  mapFile.add((byte)BG.g);//15
-  mapFile.add((byte)BG.b);//16
-  
   //Tile Map Name
   for(int i = 0; i < loadedTileMapName.length(); i++){
     mapFile.add((byte)loadedTileMapName.charAt(i));//??
   }
+  mapFile.add((byte)0);//null terminated
   
   //Tile Map Location
   for(int i = 0; i < tileMaps.get(tileMapShow).tileMapLocation.length(); i++){
     mapFile.add((byte)tileMaps.get(tileMapShow).tileMapLocation.charAt(i));//??
   }
+  mapFile.add((byte)0);//null terminated
   
   padMapFileArray();//pad to a 16 byte boundary
   
@@ -213,7 +212,7 @@ void fileSaveMap(){//Save the Map to file
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
-  if(_FILEVERSION_ == 4){// || _FILEVERSION_ == 3){//whats the file version
+  if(_FILEVERSION_ == 5){//whats the file version
     //Map Tiles
     for(int x = 0; x < mapTiles.size(); x++){//loop through all columns
       for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through all rows
@@ -249,19 +248,17 @@ void fileSaveMap(){//Save the Map to file
       mapFile.add((byte)(icons.get(i).x / scl));
       mapFile.add((byte)(icons.get(i).y / scl));
       
-      //Image Number
-      mapFile.add((byte)icons.get(i).file.length());
-      mapFile.add((byte)icons.get(i).hoverText.length());
-      
-      //Tile Map Name
+      //clickable tile file name
       for(int j = 0; j < icons.get(i).file.length(); j++){
         mapFile.add((byte)icons.get(i).file.charAt(j));//Add the file name
       }
-  
-      //Tile Map Location
+      mapFile.add((byte)0);//null terminated
+      
+      //clickable tile hover text
       for(int k = 0; k < icons.get(i).hoverText.length(); k++){
         mapFile.add((byte)icons.get(i).hoverText.charAt(k));//Add the hover text
       }
+      mapFile.add((byte)0);//null terminated
       
       padMapFileArray();//pad to a 16 byte boundary
       
@@ -320,21 +317,22 @@ void FileLoadMap(){//load map from file
   for(int l = 0; l < _magicText.length(); l++){
     magic += (char)mapFile[(mapFile.length - _magicText.length()) + l];
   }
-
+  
   if(!magic.equals(_magicText)){//is the file ours
-    prepreloading = false;///---------------------------------------------------------------do we want this?
+    loadingMap = false;//since this file was not ours we're no longer loading a map
     loop();
     return;//file was not one of ours
   }
   
   int fileVersion;//what file version is the file
   int headerLength;//how long is the header
-  String headerTileName;//what is the tile map name
-  int nameLength;//how long is the tile map name
-  String headerTileLocation;//where is the tile map
-  int locationLength;//how long is the tile map location string
+  int mapWidth;//how many tiles wide is the map
+  int mapHeight;//how many tiles tall is the map
   int mapTilesAmount;//how many tiles are there
   int iconsAmount;//how many icons are there
+  String headerTileName = null;//what is the tile map name
+  String headerTileLocation;//where is the tile map
+  
   
   clearMapTilesArray();//get ready to load a new map
   clearClickableTilesArray();//get ready to load a new map
@@ -346,64 +344,58 @@ void FileLoadMap(){//load map from file
   
   headerLength = int(mapFile[2] << 8);//Header Length
   headerLength |= int(mapFile[3]);//Header Length
-  
-  nameLength = int(mapFile[4]);
-  locationLength = int(mapFile[5]);
-  
-  //Map Tiles Amount
-  mapTilesAmount = convertFourBytesToInt(mapFile[6], mapFile[7], mapFile[8], mapFile[9]);
-  //println(mapTilesAmount + " Tiles Loaded");
-  
-  //Clickable Icons Amount
-  iconsAmount = convertFourBytesToInt(mapFile[10], mapFile[11], mapFile[12], mapFile[13]);
-  
-  //background color
-  BG.r = int(mapFile[14]);
-  BG.g = int(mapFile[15]);
-  BG.b = int(mapFile[16]);
-  
-  //Tile Map Name
-  headerTileName = "";
-  for(int i = 0; i < nameLength; i++){
-    headerTileName += str((char)mapFile[17 + i]);//get the name
-  }
-  //println("Tile Map Name: " + headerTileName);
-  
-  headerTileLocation = "";
-  for(int i = 0; i < locationLength; i++){
-    headerTileLocation += str((char)mapFile[17 + nameLength + i]);//get the location
-  }
-  //println("Tile Map Location: " + headerTileLocation);
-  
-  if(!loadedTileMapName.equals(headerTileName)){//if map names aren't equal
-    //println("Changing Tile Map");
-    boolean skip = false;
-    for(int i = 0; i < tileMaps.size() && !skip; i++){
-      if(tileMaps.get(i).tileMapName.equals(headerTileName)){
-        tileMapShow = i;
-        skip = true;
-      }
-    }
-    loadTileMap();//load selected tile map
-  }else{
-    
-  }
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
   if(fileVersion == 4){//whats the file version
+    int nameLength = int(mapFile[4]);//how long is the tile map name
+    int locationLength = int(mapFile[5]);//how long is the tile map location string
+  
+    //Map Tiles Amount
+    mapTilesAmount = convertFourBytesToInt(mapFile[6], mapFile[7], mapFile[8], mapFile[9]);
+    //println(mapTilesAmount + " Tiles Loaded");
+  
+    //Clickable Icons Amount
+    iconsAmount = convertFourBytesToInt(mapFile[10], mapFile[11], mapFile[12], mapFile[13]);
+  
+    //background color
+    BG.r = int(mapFile[14]);
+    BG.g = int(mapFile[15]);
+    BG.b = int(mapFile[16]);
+  
+    //Tile Map Name
+    headerTileName = "";
+    for(int i = 0; i < nameLength; i++){
+      headerTileName += str((char)mapFile[17 + i]);//get the name
+    }
+  
+    headerTileLocation = "";
+    for(int i = 0; i < locationLength; i++){
+      headerTileLocation += str((char)mapFile[17 + nameLength + i]);//get the location
+    }
+
+    if(!loadedTileMapName.equals(headerTileName)){//if map names aren't equal
+      //println("Changing Tile Map");
+      boolean skip = false;
+      for(int i = 0; i < tileMaps.size() && !skip; i++){
+        if(tileMaps.get(i).tileMapName.equals(headerTileName)){
+          tileMapShow = i;
+          skip = true;
+        }
+      }
+      loadTileMap();//load selected tile map
+    }
     
     //Load Map Tiles
     for(int i = 0; i < mapTilesAmount; i++){//Loop through all the rows
       int tmp = (i * 8) + headerLength;
       
-      boolean CLEAR = false;//tile is not clear
+      boolean CLEAR = true;//tile is not clear
       if((mapFile[tmp + 7] & 0x01) == 1){//Is Tile Clear
-        CLEAR = true;//tile is clear
+        CLEAR = false;//tile is clear
       }
       
       int imageNumber = (mapFile[tmp + 2] << 8) & 0xFF;
       imageNumber |= (mapFile[tmp + 3]) & 0xFF;
-      
       //.get(x).get(y).add(new mTile(tile number, red, green, blue, is tile clear?));
       mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(imageNumber, int(mapFile[tmp + 4]), int(mapFile[tmp + 5]), int(mapFile[tmp + 6]), CLEAR));
     }
@@ -438,12 +430,130 @@ void FileLoadMap(){//load map from file
       iconsAddress = clickTextAddress + (16 - ((clickTextAddress % 16) % 16));
       //println("Sequential Icons Address: " + iconsAddress);
     }
-  }else{//we don't know that file version
+  }else if(fileVersion == 5){//whats the file version{//we don't know that file version
+    //map width and height in tiles
+    mapWidth = convertFourBytesToInt((byte)0, (byte)0, mapFile[4], mapFile[5]);
+    mapHeight = convertFourBytesToInt((byte)0, (byte)0, mapFile[6], mapFile[7]);
+    
+    //background color
+    BG.r = int(mapFile[8]);
+    BG.g = int(mapFile[9]);
+    BG.b = int(mapFile[10]);
+    
+    //Map Tiles Amount
+    mapTilesAmount = convertFourBytesToInt(mapFile[11], mapFile[12], mapFile[13], mapFile[14]);
+    //println(mapTilesAmount + " Tiles Loaded");
+  
+    //Clickable Icons Amount
+    iconsAmount = convertFourBytesToInt(mapFile[15], mapFile[16], mapFile[17], mapFile[18]);
+  
+    //Tile Map Name
+    headerTileName = "";
+    boolean more = true;
+    int current = 0;
+    while(more){
+      char character = (char)mapFile[17 + current];
+      if(character == 0){
+        more = false;
+      }else{
+        headerTileName += str(character);//get the name
+      }
+      current++;
+    }
+    
+    //tile map location
+    headerTileLocation = "";
+    int nameLength = current;
+    more = true;
+    current = 0;
+    while(more){
+      char character = (char)mapFile[17 + nameLength + current];
+      if(character == 0){
+        more = false;
+      }else{
+        headerTileLocation += str(character);//get the name
+      }
+      current++;
+    }
+
+    if(!loadedTileMapName.equals(headerTileName)){//if map names aren't equal
+      //println("Changing Tile Map");
+      boolean skip = false;
+      for(int i = 0; i < tileMaps.size() && !skip; i++){
+        if(tileMaps.get(i).tileMapName.equals(headerTileName)){
+          tileMapShow = i;
+          skip = true;
+        }
+      }
+      loadTileMap();//load selected tile map
+    }
+    
+    //Load Map Tiles
+    for(int i = 0; i < mapTilesAmount; i++){//Loop through all the rows
+      int tmp = (i * 8) + headerLength;
+      
+      boolean colored = false;//tile is not clear
+      if((mapFile[tmp + 7] & 0x01) == 1){//Is Tile Clear
+        colored = true;//tile is clear
+      }
+      
+      int imageNumber = (mapFile[tmp + 2] << 8) & 0xFF;
+      imageNumber |= (mapFile[tmp + 3]) & 0xFF;
+      //.get(x).get(y).add(new mTile(tile number, red, green, blue, is tile clear?));
+      mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(imageNumber, int(mapFile[tmp + 4]), int(mapFile[tmp + 5]), int(mapFile[tmp + 6]), colored));
+    }
+    
+    int mapTilesLength = (mapTilesAmount * 8) + ((16 - floor(mapTilesAmount * 8) % 16) % 16) + headerLength;
+    
+    //Load Clickable Tiles
+    
+    int iconsAddress = mapTilesLength;
+    //println("Starting Icons Address: " + iconsAddress);
+    
+    for(int i = 0; i < iconsAmount; i++){//Loop through all the rows
+    
+      int clickFileAddress = iconsAddress + 2;
+      
+      //clickable tile file name
+      String clickableFile = "";
+      more = true;
+      current = clickFileAddress;
+      while(more){
+        char character = (char)mapFile[current];
+        if(character == 0){
+          more = false;
+        }else{
+          clickableFile += str(character);//get the name
+        }
+        current++;
+      }
+    
+      //clickable tile hover text
+      String clickableHover = "";
+      nameLength = current;
+      more = true;
+      while(more){
+        char character = (char)mapFile[current];
+        if(character == 0){
+          more = false;
+        }else{
+          clickableHover += str(character);//get the name
+        }
+        current++;
+      }
+    
+      //.add(new clickableIcon(x, y, tile image number, is tile clear?));
+      icons.add(new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl, (mapFile[iconsAddress + 1] & 0xFF) * scl, clickableFile, clickableHover));
+      
+      iconsAddress = current + (16 - ((current % 16) % 16));
+      //println("Sequential Icons Address: " + iconsAddress);
+    }
+  }else{
     println("File Version Error (Loading).");//throw error
   }
   
   loop();//allow drawing
-  prepreloading = false;//no longer prepreloading
+  loadingMap = false;//no longer loading a map
   
   fileName = "Error";
 }//void FileLoadMap() END

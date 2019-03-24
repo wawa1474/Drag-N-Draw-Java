@@ -20,9 +20,11 @@ void mousePressed(){//We pressed a mouse button
     return;
   }
 
-  if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
+  if(selectingTileMap != true){//if selecting a Tile Map do nothing
   
-  checkMouseOverIcon(true);//is the mouse over an icon? if so load the file
+  if(checkMouseOverIcon(true)){//is the mouse over an icon? if so load the file
+    return;//and make sure to not place a tile
+  }
 
   if(noTile){//if we're not allowed to place tiles
     return;//do nothing
@@ -111,12 +113,12 @@ void mousePressed(){//We pressed a mouse button
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mouseDragged(){//We dragged the mouse while holding a button
-  if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
+  if(selectingTileMap != true){//if selecting a Tile Map do nothing
   
   clickdrag = true;//we're dragging the mouse
   
   if(checkMouseOverIcon(false)){//if the mouse over an icon?
-    return;
+    return;//do nothing
   }
   
   if(mouseButton == RIGHT){//We clicked with the right button
@@ -167,7 +169,7 @@ void mouseDragged(){//We dragged the mouse while holding a button
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mouseReleased(){//We released the mouse button
-  if(preloading == true || UISetup == false){}else{//if preloading or UI not setup do nothing
+  if(selectingTileMap != true){//if selecting a Tile Map do nothing
   
     clickdrag = false;//we're no longer dragging the mouse
   

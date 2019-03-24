@@ -32,7 +32,7 @@ class clickableIcon{//clickableIcon Object
   void drawText(){//draw the hovering text
     fill(0);//black
     textSize(24);//larger
-    text(this.hoverText, mouseX - screenX, mouseY - screenY);//tie the text to the mouse
+    text(this.hoverText, mouseX - screenX, mouseY - screenY - (scl * 2));//tie the text to the mouse
   }
   
   void loadMap(){
@@ -41,7 +41,7 @@ class clickableIcon{//clickableIcon Object
   }
   
   boolean mouseOver(){//are we hovering over the icon
-    if(mouseX - screenX > this.x - 5 && mouseY - screenY > this.y - 5 && mouseX - screenX < this.x + scl + 5 && mouseY - screenY < this.y + scl + 5){//are we within the bounds of this icon?
+    if(mouseX - screenX > this.x - 5 && mouseY - screenY - (scl * 2) > this.y - 5 && mouseX - screenX < this.x + scl + 5 && mouseY - screenY - (scl * 2) < this.y + scl + 5){//are we within the bounds of this icon?
       return true;//yes we're hovering over the icon
     }
     return false;//no we aren't hovering over the icon
@@ -68,7 +68,7 @@ void drawIcons(){//draw all icons
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean checkMouseOverIcon(boolean loadMap){
-  if(dragging || deleting || clickdrag){//were we dragging or deleting a tile or were we dragging the mouse
+  if(dragging || deleting){//were we dragging or deleting a tile or were we dragging the mouse
     //do nothing
   }else{
     for(int i = 0; i < icons.size(); i++){//go through all icons

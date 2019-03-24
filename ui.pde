@@ -21,7 +21,6 @@ Controller colorInputR, colorInputG, colorInputB;//number input
 Controller colorWheel;//color wheel
 
 tileUI UI = new tileUI();//Create a UI
-boolean UISetup = false;//Are we setting up the ui?
 canvasBG BG = new canvasBG();//Create a background
 int borderThickness = 4;//how thick is the canvas border
 
@@ -38,7 +37,7 @@ class canvasBG{//The background
   int gLower = 90;//middle-ish
 
   void draw(){//Draw the background
-    if(preloading == true){
+    if(selectingTileMap == true){//if selecting a Tile Map
       background(255);//white background
       if(tileMaps.size() != 0){
         image(tileMaps.get(tileMapShow).tileMapImage, 0, scl);//display tile map
@@ -78,7 +77,7 @@ class canvasBG{//The background
 
 class tileUI{
   void draw(){
-    if(preloading == true){
+    if(selectingTileMap == true){//if selecting a Tile Map
       fill(0);//black box
       //rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);//text box background
       rect(scl * 11.5, 0, scl * 5, scl);//text box background
@@ -161,10 +160,6 @@ class tileUI{
   }//void draw() END
 
   void update(){
-    if(UISetup == false){//is ui not setup
-      UISetup = true;//ui is setup
-    }
-
     if(colorWheel.isVisible() || colorInputR.isVisible()){//if using color wheel or color inputs
       noTile = true;//disallow tile placement
     }
@@ -319,8 +314,7 @@ void buttonLoadTileMap(){
   tileN = 1;//make sure were on tile 1
   updateTileRow();//make sure we're on the correct row
   noTile = false;//allowed to place tiles
-  loadingTileMap = false;//no longer loading map
-  preloading = false;//no longer preloading
+  selectingTileMap = false;//no longer selecting a tile map
   changeVisibility(false);//go to normal display
   screenX = tmpScreenX;//reload our position
   screenY = tmpScreenY;//reload our position

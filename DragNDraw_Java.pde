@@ -26,7 +26,7 @@ void draw(){//Draw the canvas
   
   BG.draw();//Draw the background and grid
   
-  if(preloading != true){//if preloading
+  if(selectingTileMap != true){//are we selecting a tile map
     drawSpots();//draw tiles
   
     BG.border();//Draw the RED border

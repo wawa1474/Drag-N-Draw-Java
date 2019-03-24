@@ -1,5 +1,5 @@
-int cols = 8;//Columns
-int rows = 8;//Rows
+int cols = 256;//Columns
+int rows = 256;//Rows
 
 int tileDepth = 16;//16;//how many tiles are drawn per space
 int screenX1, screenX2, screenY1, screenY2;//0 -> cols/rows
