@@ -346,94 +346,16 @@ void FileLoadMap(){//load map from file
   headerLength |= int(mapFile[3]);//Header Length
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
-  if(fileVersion == 4){//whats the file version
-    int nameLength = int(mapFile[4]);//how long is the tile map name
-    int locationLength = int(mapFile[5]);//how long is the tile map location string
-  
-    //Map Tiles Amount
-    mapTilesAmount = convertFourBytesToInt(mapFile[6], mapFile[7], mapFile[8], mapFile[9]);
-    //println(mapTilesAmount + " Tiles Loaded");
-  
-    //Clickable Icons Amount
-    iconsAmount = convertFourBytesToInt(mapFile[10], mapFile[11], mapFile[12], mapFile[13]);
-  
-    //background color
-    BG.r = int(mapFile[14]);
-    BG.g = int(mapFile[15]);
-    BG.b = int(mapFile[16]);
-  
-    //Tile Map Name
-    headerTileName = "";
-    for(int i = 0; i < nameLength; i++){
-      headerTileName += str((char)mapFile[17 + i]);//get the name
-    }
-  
-    headerTileLocation = "";
-    for(int i = 0; i < locationLength; i++){
-      headerTileLocation += str((char)mapFile[17 + nameLength + i]);//get the location
-    }
-
-    if(!loadedTileMapName.equals(headerTileName)){//if map names aren't equal
-      //println("Changing Tile Map");
-      boolean skip = false;
-      for(int i = 0; i < tileMaps.size() && !skip; i++){
-        if(tileMaps.get(i).tileMapName.equals(headerTileName)){
-          tileMapShow = i;
-          skip = true;
-        }
-      }
-      loadTileMap();//load selected tile map
-    }
-    
-    //Load Map Tiles
-    for(int i = 0; i < mapTilesAmount; i++){//Loop through all the rows
-      int tmp = (i * 8) + headerLength;
-      
-      boolean CLEAR = true;//tile is not clear
-      if((mapFile[tmp + 7] & 0x01) == 1){//Is Tile Clear
-        CLEAR = false;//tile is clear
-      }
-      
-      int imageNumber = (mapFile[tmp + 2] << 8) & 0xFF;
-      imageNumber |= (mapFile[tmp + 3]) & 0xFF;
-      //.get(x).get(y).add(new mTile(tile number, red, green, blue, is tile clear?));
-      mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(imageNumber, int(mapFile[tmp + 4]), int(mapFile[tmp + 5]), int(mapFile[tmp + 6]), CLEAR));
-    }
-    
-    int mapTilesLength = (mapTilesAmount * 8) + ((16 - floor(mapTilesAmount * 8) % 16) % 16) + headerLength;
-    
-    //Load Clickable Tiles
-    
-    int iconsAddress = mapTilesLength;
-    //println("Starting Icons Address: " + iconsAddress);
-    
-    for(int i = 0; i < iconsAmount; i++){//Loop through all the rows
-    
-      int clickFileAddress = iconsAddress + 4;
-      int clickTextAddress = clickFileAddress + int(mapFile[iconsAddress + 2]);
-      
-      String clickableFile = "";
-      for(int j = 0; j < mapFile[iconsAddress + 2]; j++){
-        clickableFile += str((char)mapFile[clickFileAddress + j]);
-      }
-      //println("Clickable Tile File: " + clickableFile);
-      
-      String clickableHover = "";
-      for(int j = 0; j < mapFile[iconsAddress + 3]; j++){
-        clickableHover += str((char)mapFile[clickTextAddress + j]);
-      }
-      //println("Clickable Tile Text: " + clickableHover);
-    
-      //.add(new clickableIcon(x, y, tile image number, is tile clear?));
-      icons.add(new clickableIcon((mapFile[iconsAddress] & 0xFF) * scl, (mapFile[iconsAddress + 1] & 0xFF) * scl, clickableFile, clickableHover));
-      
-      iconsAddress = clickTextAddress + (16 - ((clickTextAddress % 16) % 16));
-      //println("Sequential Icons Address: " + iconsAddress);
-    }
-  }else if(fileVersion == 5){//whats the file version{//we don't know that file version
+  if(fileVersion == 5){//whats the file version{//we don't know that file version
     //map width and height in tiles
     mapWidth = convertFourBytesToInt((byte)0, (byte)0, mapFile[4], mapFile[5]);
     mapHeight = convertFourBytesToInt((byte)0, (byte)0, mapFile[6], mapFile[7]);
+    
+    if(cols != mapWidth || rows != mapHeight){//make sure we have room for all the tiles
+      cols = mapWidth;//update our width
+      rows = mapHeight;//update our height
+      clearMapTilesArray();//fix the map tiles array to reflect our new dimensions
+    }
     
     //background color
     BG.r = int(mapFile[8]);
