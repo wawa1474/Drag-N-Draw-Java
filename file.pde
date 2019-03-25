@@ -22,7 +22,7 @@ void buttonLoadMap(){
   tileN = 1;//make sure we're on the first tile
   updateTileRow();//make sure we're on the correct row
   noTile = false;//allowed to place tiles
-  changeVisibility(_MAPUI_);//normal screen
+  changeUI(_EDITORUI_);//normal screen
   selectingTileMap = false;//no longer selecting a tile map
   screenX = tmpScreenX;//reload our position
   screenY = tmpScreenY;//reload our position
@@ -32,7 +32,7 @@ void buttonLoadMap(){
 void buttonChangeTileMap(){
   selectingTileMap = true;//selecting a tile map
   //loadingMap = true;//now prepreloading
-  changeVisibility(_TILEMAPUI_);//tile map loading screen
+  changeUI(_TILEMAPUI_);//tile map loading screen
   tmpScreenX = screenX;//save our position
   tmpScreenY = screenY;//save our position
   screenX = 0;//go back to the top left for looking at tile maps

@@ -5,23 +5,16 @@ ArrayList<tileMap> tileMaps = new ArrayList<tileMap>(0);//arraylist of tile maps
 PImage[] tileImages = new PImage[0];//Tile Images Array
 int loadedTileMap = -1;//what tile map is loaded
 
-void drawTileBackground(){
-  background(255);//white background
-  if(tileMaps.size() != 0){
-    image(tileMaps.get(tileMapShow).tileMapImage, 0, scl);//display tile map
-  }
-}
-
-void drawTileUI(){
-  fill(0);//black box
-  //rect(scl * 11.5 - SX, 0 - SY, scl * 5, scl);//text box background
+void drawTileMapUI(){
+  fill(BLACK);//black box
+  noStroke();//dont draw box around our black box
   rect(scl * 11.5, 0, scl * 5, scl);//text box background
-  fill(255);//white text
-  //text(tileInfoTable.getString(tileMapShow + 1,"name"), scl * 12 - SX, scl / 2 - SY);//display tile map name
-  if(tileMaps.size() != 0){
+  
+  fill(WHITE);//white text
+  if(tileMaps.size() != 0){//if there a tile map to show
     text(tileMaps.get(tileMapShow).tileMapName, scl * 12, scl / 2);//display tile map name
   }else{
-    text("No Tile Maps Exist!", scl * 12, scl / 2);//display tile map name
+    text("No Tile Maps Exist!", scl * 12, scl / 2);//display an error message
   }
 }
 
@@ -66,7 +59,7 @@ class tileMap{
   int colorTile;//colortile
   String tileMapName;//name
   
-  public tileMap(String loc, int rows, int cols, int tileWidth, int tileHeight, int num, int colorTile, String name){
+  public tileMap(String loc, int cols, int rows, int tileWidth, int tileHeight, int num, int colorTile, String name){
     this.tileMapLocation = loc;
     this.tileMapCols = cols;
     this.tileMapRows = rows;

@@ -24,16 +24,20 @@ void draw(){//Draw the canvas
   pushMatrix();//go back to crazy space?
   translate(screenX, screenY + (scl * 2));//shift screen around
   
-  
-  
   if(selectingTileMap == true){//are we selecting a tile map
-    drawTileBackground();
+    background(255);//white background
+    if(tileMaps.size() != 0){
+      image(tileMaps.get(tileMapShow).tileMapImage, 0, 0);//display tile map
+      
+      tileMap tmp = tileMaps.get(tileMapShow);
+      drawBorder(0, tmp.tileMapCols * tmp.tileWidth, 0, tmp.tileMapRows * tmp.tileHeight);//show image bounds
+    }
   }else{
-    drawBackground();//Draw the background and grid
+    drawEditorBackground();//Draw the background and grid
     
     drawTilesAndIcons();//draw tiles
   
-    drawBorder();//Draw the RED border
+    drawBorder(0, cols * scl, 0, rows * scl);//Draw the RED border
   
     drawTileGroupOutlines();//draw the necessary outlines
   }
@@ -42,13 +46,13 @@ void draw(){//Draw the canvas
   
   updateUI();//Update the UI position
   
-  if(selectingTileMap == true){
-    drawTileUI();
+  if(selectingTileMap == true){//are we selecting a tile map
+    drawTileMapUI();//Draw the tile map selection ui
   }else{
-    drawUI();//Draw the UI
+    drawEditorUI();//Draw the Editor UI
   }
   
-  for(button b : buttons){
-    b.draw();
+  for(button b : buttons){//loop through all buttons
+    b.draw();//draw the button
   }
 }//void draw() END

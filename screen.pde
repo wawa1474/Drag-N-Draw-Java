@@ -1,5 +1,5 @@
-int cols = 8;//Columns
-int rows = 8;//Rows
+int cols = 256;//Columns
+int rows = 127;//Rows
 
 int tileDepth = 16;//16;//how many tiles are drawn per space
 int screenX1, screenX2, screenY1, screenY2;//0 -> cols/rows
@@ -60,12 +60,12 @@ void updateScreenBounds(){
   screenX1 = screenX2 - floor(width / scl);
   screenY1 = (screenY2 - floor(height / scl));
   
-  if(screenX2 > rows){
-    screenX2 = rows;
+  if(screenX2 > cols){
+    screenX2 = cols;
   }
   
-  if(screenY2 > cols){
-    screenY2 = cols;
+  if(screenY2 > rows){
+    screenY2 = rows;
   }
 
   //println(screenX1 + ", " + screenY1 + ", " + screenX2 + ", " + screenY2);

@@ -9,6 +9,7 @@ int fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1
 int UIRight = 22;//How many tiles long is the UI?
 int UIBottom = 2;//How many tiles tall is the UI?
 
+color RED = color(255,0,0);
 color BLACK = color(0);
 color WHITE = color(255);
 color GREY = color(127);
@@ -24,8 +25,8 @@ Controller scrollSlider;//slider
 Controller colorInputR, colorInputG, colorInputB;//number input
 Controller colorWheel;//color wheel
 
-int _TILEMAPUI_ = 0;
-int _MAPUI_ = 1;
+int _TILEMAPUI_ = 0;//UI defines?
+int _EDITORUI_ = 1;//UI defines?
 
 int borderThickness = 4;//how thick is the canvas border
 
@@ -33,7 +34,7 @@ int lowerx = 2147483647, lowery = 2147483647;//store lowest xy of tiles
 int upperx = -2147483648, uppery = -2147483648;//store highest xy of tiles
 boolean drawLines = true;//do we draw the background lines?
 
-void drawBackground(){//Draw the background
+void drawEditorBackground(){//Draw the background
   int gUpper = 150;//middle-ish
   int gLower = 90;//middle-ish
 
@@ -58,25 +59,25 @@ void drawBackground(){//Draw the background
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void drawBorder(){//draw the red border
+void drawBorder(int x1, int x2, int y1, int y2){//draw the red border
   strokeWeight(borderThickness);//Thicker
   stroke(255, 0, 0);//RED
-  line(1, 0, 1, rows*scl);//Draw Left line
-  line((scl * cols) - 1, 0, (scl * cols) - 1, rows*scl);//Draw Right line
-  line(0, 1, cols*scl, 1);//Draw Top Line
-  line(0, (scl * rows) - 1, cols*scl, (scl * rows) - 1);//Draw Bottom Line
+  line(x1 + 1, y1, x1 + 1, y2);//Draw Left line
+  line(x2 - 2, y1, x2 - 2, y2);//Draw Right line
+  line(x1, y1 + 1, x2, y1 + 1);//Draw Top Line
+  line(x1, y2 - 2, x2, y2 - 2);//Draw Bottom Line
 }//void border() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void drawUI(){
-  fill(0);//black
+void drawEditorUI(){
+  fill(BLACK);//black
   noStroke();//no line around the ui background
   rect(0, 0, width, scl * 2);//ui background
 
   strokeWeight(1);//default
   stroke(0);
-  fill(255);//Set background color to white
+  fill(WHITE);//Set background color to white
   rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
   for(int i = 0; i < rowLength && tileImages.length != 0; i++){//Go through all the tiles
     if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
@@ -94,7 +95,7 @@ void drawUI(){
     }
   }//Went through all the tiles
 
-  fill(255, 0, 0);//red text
+  fill(RED);//red text
   stroke(0);//no outline
   textSize(24);//larger text size
 
@@ -214,18 +215,18 @@ void setupUI(){
     b.setup();
   }
 
-  changeVisibility(_TILEMAPUI_);//go to tile map selection display
+  changeUI(_TILEMAPUI_);//go to tile map selection display
 }//void setup() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void changeVisibility(int ui){//change screen
+void changeUI(int ui){//change screen
   if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
     tilemapUIButtonsSetVis(true);
-    mapUIButtonsSetVis(false);
-  }else if(ui == _MAPUI_){
+    editorUIButtonsSetVis(false);
+  }else if(ui == _EDITORUI_){
     tilemapUIButtonsSetVis(false);
-    mapUIButtonsSetVis(true);
+    editorUIButtonsSetVis(true);
   }else{
     println("ERROR UI TYPE DOES NOT EXIST");
   }
@@ -242,7 +243,7 @@ void tilemapUIButtonsSetVis(boolean vis){
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void mapUIButtonsSetVis(boolean vis){
+void editorUIButtonsSetVis(boolean vis){
   setButtonVis("hue", vis);
   setButtonVis("rgb", vis);
   setButtonVis("clear", vis);
@@ -283,7 +284,7 @@ void buttonLoadTileMap(){
   updateTileRow();//make sure we're on the correct row
   noTile = false;//allowed to place tiles
   selectingTileMap = false;//no longer selecting a tile map
-  changeVisibility(_MAPUI_);//go to normal display
+  changeUI(_EDITORUI_);//go to normal display
   screenX = tmpScreenX;//reload our position
   screenY = tmpScreenY;//reload our position
 }
