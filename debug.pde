@@ -1,5 +1,5 @@
-int _DEBUG_ = -1;//what are we debugging
-int _DEBUGAMOUNT_ = 5000000;//5000000;//how many are we debugging
+final int _DEBUG_ = -1;//what are we debugging
+final int _DEBUGAMOUNT_ = 5000000;//5000000;//how many are we debugging
 
 void debug(){
   if(_DEBUG_ == 0){

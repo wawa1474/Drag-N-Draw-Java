@@ -23,6 +23,7 @@ void drawTileMapUI(){
 void loadTileMap(){
   if(tileMaps.size() != 0){//if a tile map exists
     tileImages = tileMaps.get(tileMapShow).splitTiles();//split the tile map into individual tiles
+    tileN = 0;//make sure we're on the first tile
   }
 }
 

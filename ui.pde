@@ -1,18 +1,18 @@
 int totalImages = 32 * 4 - 1;//Total Images
-int rowLength = 16;//How many tiles per row?
+final int rowLength = 16;//How many tiles per row?
 int tileRow = 0;//Which row of tiles are we looking at?
-int tileN = 1;//Which tile is the cursor over?
-boolean colorTiles = true;//Are we placing clear tiles
+int tileN = 0;//Which tile is the cursor over?
+boolean colorTiles = true;//Are we placing colored tiles
 
 int fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
 
-int UIRight = 22;//How many tiles long is the UI?
-int UIBottom = 2;//How many tiles tall is the UI?
+final int UIRight = 22;//How many tiles long is the UI?
+final int UIBottom = 2;//How many tiles tall is the UI?
 
-color RED = color(255,0,0);
-color BLACK = color(0);
-color WHITE = color(255);
-color GREY = color(127);
+final color RED = color(255,0,0);
+final color BLACK = color(0);
+final color WHITE = color(255);
+final color GREY = color(127);
 
 int backgroundRed = 255;//red
 int backgroundGreen = 255;//green
@@ -24,11 +24,12 @@ Controller RSlider, GSlider, BSlider;//sliders
 Controller scrollSlider;//slider
 Controller colorInputR, colorInputG, colorInputB;//number input
 Controller colorWheel;//color wheel
+boolean RGBInputVis = false;//are the rgb number inputs visible
 
-int _TILEMAPUI_ = 0;//UI defines?
-int _EDITORUI_ = 1;//UI defines?
+final int _TILEMAPUI_ = 0;//UI defines?
+final int _EDITORUI_ = 1;//UI defines?
 
-int borderThickness = 4;//how thick is the canvas border
+final int borderThickness = 4;//how thick is the canvas border
 
 int lowerx = 2147483647, lowery = 2147483647;//store lowest xy of tiles
 int upperx = -2147483648, uppery = -2147483648;//store highest xy of tiles
@@ -136,7 +137,7 @@ void drawEditorUI(){
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void updateUI(){
+void updateEditorUI(){
   if(colorWheel.isVisible() || colorInputR.isVisible()){//if using color wheel or color inputs
     noTile = true;//disallow tile placement
   }
@@ -147,19 +148,19 @@ void updateUI(){
   GSlider.setColorBackground(color(0, GSlider.getValue(), 0));//update background color (Green)
   BSlider.setColorBackground(color(0, 0, BSlider.getValue()));//update background color (Blue)
 
-  setButtonColorBack("hue", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-  setButtonColorBack("rgb", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+  setButtonColorBack(btnIDs.hueWheelVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+  setButtonColorBack(btnIDs.rgbInputVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
 
   int tmpVal = 150;
-  setButtonColorText("hue", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
-  setButtonColorText("rgb", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+  setButtonColorText(btnIDs.hueWheelVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+  setButtonColorText(btnIDs.rgbInputVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
 
   if(colorTiles){
-    setButtonColorBack("clear", color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-    setButtonColorText("clear", color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+    setButtonColorBack(btnIDs.colorToggle, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+    setButtonColorText(btnIDs.colorToggle, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
   }else{
-    setButtonColorBack("clear", BLACK);
-    setButtonColorText("clear", WHITE);
+    setButtonColorBack(btnIDs.colorToggle, BLACK);
+    setButtonColorText(btnIDs.colorToggle, WHITE);
   }
 }//void update() END
 
@@ -196,20 +197,20 @@ void setupUI(){
   colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
   colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
 
-  buttons.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, false, "hue", -1));
-  buttons.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, false, "rgb", -1));
-  buttons.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, false, "clear", -1));
+  buttons.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, false, btnIDs.hueWheelVis, -1));
+  buttons.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, false, btnIDs.rgbInputVis, -1));
+  buttons.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, false, btnIDs.colorToggle, -1));
 
-  buttons.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, false, "new", 0));//5
-  buttons.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, false, "save", 4));
-  buttons.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, false, "load", 2));
-  buttons.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, false, "image", -1));
-  buttons.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, true, "change map", -1));
+  buttons.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, false, btnIDs.newMap, 0));//5
+  buttons.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, false, btnIDs.saveMap, 4));
+  buttons.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, false, btnIDs.loadMap, 2));
+  buttons.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, false, btnIDs.saveImage, -1));
+  buttons.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, true, btnIDs.changeTileMap, -1));
 
-  buttons.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, true, "prev", 10));
-  buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, "next", 11));
-  buttons.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, true, "load tile", -1));
-  buttons.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, "load map", 2));
+  buttons.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, true, btnIDs.prevTileMap, 10));
+  buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, btnIDs.nextTileMap, 11));
+  buttons.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, true, btnIDs.loadTileMap, -1));
+  buttons.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, btnIDs.loadMapAndTileMap, 2));
 
   for(button b : buttons){
     b.setup();
@@ -224,98 +225,39 @@ void changeUI(int ui){//change screen
   if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
     tilemapUIButtonsSetVis(true);
     editorUIButtonsSetVis(false);
-  }else if(ui == _EDITORUI_){
+  }else if(ui == _EDITORUI_){////are we going to the editor screen
     tilemapUIButtonsSetVis(false);
     editorUIButtonsSetVis(true);
   }else{
-    println("ERROR UI TYPE DOES NOT EXIST");
+    println("ERROR: UI DOES NOT EXIST");
   }
 }//void changeVisibility(boolean visibility) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void tilemapUIButtonsSetVis(boolean vis){
-  setButtonVis("prev", vis);
-  setButtonVis("next", vis);
-  setButtonVis("load tile", vis);
-  setButtonVis("load map", vis);
+void tilemapUIButtonsSetVis(boolean vis){//set visibility for all items on the tile map selection UI
+  setButtonVis(btnIDs.prevTileMap, vis);
+  setButtonVis(btnIDs.nextTileMap, vis);
+  setButtonVis(btnIDs.loadTileMap, vis);
+  setButtonVis(btnIDs.loadMapAndTileMap, vis);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void editorUIButtonsSetVis(boolean vis){
-  setButtonVis("hue", vis);
-  setButtonVis("rgb", vis);
-  setButtonVis("clear", vis);
-  setButtonVis("new", vis);
-  setButtonVis("save", vis);
-  setButtonVis("load", vis);
-  setButtonVis("image", vis);
-  setButtonVis("change map", vis);
-  scrollSlider.setVisible(vis);//scrollSlider is visible
-  RSlider.setVisible(vis);//RSlider is visible
-  GSlider.setVisible(vis);//GSlider is visible
-  BSlider.setVisible(vis);//BSlider is visible
+void editorUIButtonsSetVis(boolean vis){//set visibility for all items on the editors UI
+  setButtonVis(btnIDs.hueWheelVis, vis);
+  setButtonVis(btnIDs.rgbInputVis, vis);
+  setButtonVis(btnIDs.colorToggle, vis);
+  setButtonVis(btnIDs.newMap, vis);
+  setButtonVis(btnIDs.saveMap, vis);
+  setButtonVis(btnIDs.loadMap, vis);
+  setButtonVis(btnIDs.saveImage, vis);
+  setButtonVis(btnIDs.changeTileMap, vis);
+  scrollSlider.setVisible(vis);
+  RSlider.setVisible(vis);
+  GSlider.setVisible(vis);
+  BSlider.setVisible(vis);
 }
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void buttonPrevTileMap(){
-  tileMapShow--;//go to previous tile map
-  if(tileMapShow < 0){//make sure we don't go below zero
-    tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
-  }
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void buttonNextTileMap(){
-  tileMapShow++;//go to next tile map
-  if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
-    tileMapShow = 0;//set to 0
-  }
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void buttonLoadTileMap(){
-  loadTileMap();//load selected tile map
-  tileN = 1;//make sure were on tile 1
-  updateTileRow();//make sure we're on the correct row
-  noTile = false;//allowed to place tiles
-  selectingTileMap = false;//no longer selecting a tile map
-  changeUI(_EDITORUI_);//go to normal display
-  screenX = tmpScreenX;//reload our position
-  screenY = tmpScreenY;//reload our position
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void clearToggle(){//called when clearToggle is clicked
-  if(colorTiles){//is variable set
-    colorTiles = false;//don't place clear tiles
-  }else{
-    colorTiles = true;//place clear tiles
-  }
-}//void clearToggle() END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void colorSelect(){//called when colorSelect is clicked
-  colorWheel.setVisible(!colorWheel.isVisible());//invert visibility
-  noTile = !noTile;//ivert whether tiles can be placed
-}//void colorSelect() END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void colorInput(){//called when colorInput is clicked
-  //UIControls.get(Textfield.class, "colorInputR").setVisible(!UIControls.get(Textfield.class, "colorInputR").isVisible());
-  colorInputR.setVisible(!colorInputR.isVisible());//invert visibility
-  colorInputG.setVisible(!colorInputG.isVisible());//invert visibility
-  colorInputB.setVisible(!colorInputB.isVisible());//invert visibility
-  noKeyboard = !noKeyboard;//invert whether keyboard keys work
-  noTile = !noTile;//ivert whether tiles can be placed
-}//void colorInput() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 

@@ -5,7 +5,7 @@ boolean noTile = false;//Are we blocking placement of tiles?
 int screenX = 0, screenY = 0;//Screen XY
 int tmpScreenX = 0, tmpScreenY = 0;//saved Screen XY
 int mouseTileX = 0, mouseTileY = 0;//what tile is the mouse on
-int fudgeValue = 1;//Fudge Value to make sure we're really clicking inside something
+final int fudgeValue = 1;//Fudge Value to make sure we're really clicking inside something
 
 
 void updateMouseXY(){//Update the XY position of the mouse

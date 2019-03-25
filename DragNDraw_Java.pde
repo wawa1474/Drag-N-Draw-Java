@@ -44,11 +44,10 @@ void draw(){//Draw the canvas
   
   popMatrix();//go back to normal space?
   
-  updateUI();//Update the UI position
-  
   if(selectingTileMap == true){//are we selecting a tile map
     drawTileMapUI();//Draw the tile map selection ui
   }else{
+    updateEditorUI();//Update the Editors UI
     drawEditorUI();//Draw the Editor UI
   }
   

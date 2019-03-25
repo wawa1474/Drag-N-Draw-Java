@@ -5,10 +5,7 @@ int tileGroupCols = 0;//how many columns of copied tiles
 int tileGroupRows = 0;//how many rows of copied tiles
 int X1,X2,Y1,Y2;//Setup Variables
 
-
 ArrayList<ArrayList<ArrayList<mTile>>> mapTilesCopy = new ArrayList<ArrayList<ArrayList<mTile>>>(0);//the hellish 3 dimensional ArrayList of tiles to copy, paste, or cut
-
-
 
 void tileGroup(String button){//mess with tiles in square group
   int XLines, YLines;//define number of XY lines

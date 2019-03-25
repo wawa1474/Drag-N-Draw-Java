@@ -17,7 +17,7 @@ void keyPressed(){//We pressed a key
 void keyTyped(){//We typed a key
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(key == 'f'){//We pressed 'F'
-      clearToggle();
+      colorTiles = !colorTiles;
     }else if(key == 'q' && noTile == false){//We pressed 'Q'
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step

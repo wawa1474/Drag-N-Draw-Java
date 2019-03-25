@@ -1,5 +1,5 @@
-int _FILEVERSION_ = 5;//what version of file saving and loading
-static final String _magicText = "wawa1474DragDraw";//make sure the file is ours
+final int _FILEVERSION_ = 5;//what version of file saving and loading
+final String _magicText = "wawa1474DragDraw";//make sure the file is ours
 
 ArrayList<Byte> mapFile = new ArrayList<Byte>(0);//temporary byte array
 
@@ -11,35 +11,6 @@ String loadedTileMapName = "Classic";//tile map name
 
 boolean selectingTileMap = true;//are we selecting a tile map
 boolean loadingMap = true;//are we loading a map
-
-void buttonLoadMap(){
-  noLoop();//don't allow drawing
-  selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
-  //println("File Selected!");
-  while(loadingMap == true){delay(500);}//small delay
-  //println("File Loaded");
-  loadTileMap();//load selected tile map
-  tileN = 1;//make sure we're on the first tile
-  updateTileRow();//make sure we're on the correct row
-  noTile = false;//allowed to place tiles
-  changeUI(_EDITORUI_);//normal screen
-  selectingTileMap = false;//no longer selecting a tile map
-  screenX = tmpScreenX;//reload our position
-  screenY = tmpScreenY;//reload our position
-  loop();//allow drawing
-}
-
-void buttonChangeTileMap(){
-  selectingTileMap = true;//selecting a tile map
-  //loadingMap = true;//now prepreloading
-  changeUI(_TILEMAPUI_);//tile map loading screen
-  tmpScreenX = screenX;//save our position
-  tmpScreenY = screenY;//save our position
-  screenX = 0;//go back to the top left for looking at tile maps
-  screenY = (scl * 2);//go back to the top left for looking at tile maps
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
 
 void FileSaveCanvasSelect(File selection){//map canvas save select callback
   if (selection == null) {//we didn't select a file
@@ -231,7 +202,7 @@ void fileSaveMap(){//Save the Map to file
       
           //Blue/Flags
           mapFile.add((byte)mapTiles.get(x).get(y).get(z).b);//blue
-          if(mapTiles.get(x).get(y).get(z).colored){//is the tile clear
+          if(mapTiles.get(x).get(y).get(z).colored){//is the tile colored
             mapFlags |= 1;//yes
           }
           mapFile.add((byte)mapFlags);//flags
@@ -414,10 +385,7 @@ void FileLoadMap(){//load map from file
     for(int i = 0; i < mapTilesAmount; i++){//Loop through all the rows
       int tmp = (i * 8) + headerLength;
       
-      boolean colored = false;//tile is not clear
-      if((mapFile[tmp + 7] & 0x01) == 1){//Is Tile Clear
-        colored = true;//tile is clear
-      }
+      boolean colored = ((mapFile[tmp + 7] & 0x01) == 1);//is tile colored
       
       int imageNumber = (mapFile[tmp + 2] << 8) & 0xFF;
       imageNumber |= (mapFile[tmp + 3]) & 0xFF;

@@ -1,4 +1,4 @@
-int scl = 32;//Square Scale
+final int scl = 32;//Square Scale
 
 ArrayList<ArrayList<ArrayList<mTile>>> mapTiles = new ArrayList<ArrayList<ArrayList<mTile>>>(0);//the hellish 3 dimensional ArrayList of tiles
 
