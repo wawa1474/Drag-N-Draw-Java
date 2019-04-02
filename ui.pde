@@ -229,8 +229,11 @@ void setupUI(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void changeUI(int ui){//change screen
-  if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
-    slidersSetVis(false);
+  slidersSetVis(false);
+  
+  if(ui == _MAINMENU_){//are we going to the tile map loading screen
+    currentUI = _MAINMENU_;
+  }else if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
     currentUI = _TILEMAPUI_;
   }else if(ui == _EDITORUI_){//are we going to the editor screen
     slidersSetVis(true);

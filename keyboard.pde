@@ -2,6 +2,11 @@ boolean noKeyboard = false;//Are We Blocking keyTyped() and keyPressed()?
 int scrollAmount = 1;//How many squares to scroll when pressing WASD
 
 void keyPressed(){//We pressed a key
+  //maybe have a menu system tied to the escape key
+  if(key == ESC){
+    changeUI(_MAINMENU_);
+    key = 0;  // Fools! don't let them escape!
+  }
   //println(keyCode);//What key did we press?
   if(noKeyboard == false){//are we blocking keyboard functions?
     if (keyCode == /*SHIFT*/16){//We pressed shift
@@ -15,10 +20,6 @@ void keyPressed(){//We pressed a key
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void keyTyped(){//We typed a key
-  //maybe have a menu system tied to the escape key
-  //if (key == ESC) {
-  //  key = 0;  // Fools! don't let them escape!
-  //}
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(key == 'f'){//We pressed 'F'
       colorTiles = !colorTiles;

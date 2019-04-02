@@ -1,14 +1,20 @@
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
 
-PImage texttest1;
+//PImage texttest1;
+PImage main_menu_button_background;
+PImage main_menu_text;
+PImage main_menu_button_selected;
 
 void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   noSmooth();//text looks 'nicer'
   
-  texttest1 = loadImage("assets/texttest1.png");
+  //texttest1 = loadImage("assets/texttest1.png");
+  main_menu_button_background = loadImage("assets/main_menu_button_background.png");//main_menu_button_background
+  main_menu_text = loadImage("assets/main_menu_text.png");//main_menu_text
+  main_menu_button_selected = loadImage("assets/main_menu_button_selected.png");//main_menu_button_selected
   //set title bar icon
   //PImage titlebaricon = loadImage("myicon.png");
   //surface.setIcon(titlebaricon);
@@ -28,16 +34,12 @@ void draw(){//Draw the canvas
   updateScreenBounds();//where on the map is the screen
   updateMouseXY();//Update the XY position of the mouse
   
-  if(currentUI != _MAINMENU_){
-    pushMatrix();//go back to crazy space?
-    translate(screenX, screenY + (scl * 2));//shift screen around
-  }
+  //if(currentUI != _MAINMENU_){
+  pushMatrix();//go back to crazy space?
+  translate(screenX, screenY + (scl * 2));//shift screen around
+  //}
   
   switch(currentUI){
-    case _MAINMENU_:
-      image(texttest1,scl,scl);
-      break;
-
     case _TILEMAPUI_:
       background(255);//white background
       if(tileMaps.size() != 0){
@@ -56,18 +58,25 @@ void draw(){//Draw the canvas
       break;
   }
   
-  if(currentUI != _MAINMENU_){
-    popMatrix();//go back to normal space?
-  }
+  //if(currentUI != _MAINMENU_){
+  popMatrix();//go back to normal space?
+  //}
   
   switch(currentUI){
+    case _MAINMENU_:
+      background(137);//white background
+      image(main_menu_button_background,scl,scl);
+      image(main_menu_text,scl,scl);
+      checkMenuButtons();
+      break;
+
     case _TILEMAPUI_:
       drawTileMapUI();//Draw the tile map selection ui
       for(button b : buttons_tilemapUI){//loop through all buttons
         b.draw();//draw the button
       }
       break;
-    
+
     case _EDITORUI_:
       updateEditorUI();//Update the Editors UI
       drawEditorUI();//Draw the Editor UI

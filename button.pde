@@ -234,3 +234,83 @@ boolean checkButtons(){
   }
   return false;
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+int menuButton = -1;
+final int menuButtonVP = 0;
+final int menuButtonDND = 1;
+final int menuButtonPF = 2;
+final int menuButtonTNS = 3;
+final int menuButtonRNP = 4;
+final int menuButtonOPTIONS = 5;
+final int menuButtonEXIT = 99;
+
+void checkMenuButtons(){
+  int buttonWidth = 298;
+  int vpTop = 0;
+  int vpBottom = 57;
+  int dndTop = 58;
+  int dndBottom = 115;
+  int pfTop = 116;
+  int pfBottom = 173;
+  int tnsTop = 174;
+  int tnsBottom = 231;
+  int rnpTop = 232;
+  int rnpBottom = 289;
+  int optionsTop = 290;
+  int optionsBottom = 347;
+  int exitTop = 348;
+  int exitBottom = 405;
+  
+  menuButton = -1;
+  if(mouseX > scl){
+    if(mouseX < scl + buttonWidth){
+      if(mouseY > scl + vpTop && mouseY < scl + vpBottom){
+        //image(main_menu_button_selected,scl,scl + vpTop);
+        text("not yet implemented", mouseX, mouseY);
+        menuButton = menuButtonVP;
+      }
+      
+      if(mouseY > scl + dndTop && mouseY < scl + dndBottom){
+        image(main_menu_button_selected,scl,scl + dndTop);
+        text("a tile based map maker", mouseX, mouseY);
+        menuButton = menuButtonDND;
+      }
+      
+      if(mouseY > scl + pfTop && mouseY < scl + pfBottom){
+        //image(main_menu_button_selected,scl,scl + pfTop);
+        text("not yet implemented", mouseX, mouseY);
+        menuButton = menuButtonPF;
+        return;
+      }
+      
+      if(mouseY > scl + tnsTop && mouseY < scl + tnsBottom){
+        //image(main_menu_button_selected,scl,scl + tnsTop);
+        text("not yet implemented", mouseX, mouseY);
+        menuButton = menuButtonTNS;
+        return;
+      }
+      
+      if(mouseY > scl + rnpTop && mouseY < scl + rnpBottom){
+        //image(main_menu_button_selected,scl,scl + rnpTop);
+        text("not yet implemented", mouseX, mouseY);
+        menuButton = menuButtonRNP;
+        return;
+      }
+      
+      if(mouseY > scl + optionsTop && mouseY < scl + optionsBottom){
+        //image(main_menu_button_selected,scl,scl + optionsTop);
+        text("not yet implemented", mouseX, mouseY);
+        menuButton = menuButtonOPTIONS;
+        return;
+      }
+      
+      if(mouseY > scl + exitTop && mouseY < scl + exitBottom){
+        image(main_menu_button_selected,scl,scl + exitTop);
+        text("exit the program", mouseX, mouseY);
+        menuButton = menuButtonEXIT;
+        return;
+      }
+    }
+  }
+}

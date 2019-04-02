@@ -16,6 +16,18 @@ void updateMouseXY(){//Update the XY position of the mouse
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mousePressed(){//We pressed a mouse button
+  if(currentUI == _MAINMENU_){
+    switch(menuButton){
+      case menuButtonDND:
+        changeUI(_TILEMAPUI_);
+        return;
+
+      case menuButtonEXIT:
+        exit();
+        return;
+    }
+  }
+
   if(checkButtons()){
     return;
   }
