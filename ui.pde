@@ -26,8 +26,11 @@ Controller colorInputR, colorInputG, colorInputB;//number input
 Controller colorWheel;//color wheel
 boolean RGBInputVis = false;//are the rgb number inputs visible
 
-final int _TILEMAPUI_ = 0;//UI defines?
-final int _EDITORUI_ = 1;//UI defines?
+final int _MAINMENU_ = 0;
+final int _TILEMAPUI_ = 1;//UI defines?
+final int _EDITORUI_ = 2;//UI defines?
+
+int currentUI = _MAINMENU_;
 
 final int borderThickness = 4;//how thick is the canvas border
 
@@ -148,19 +151,19 @@ void updateEditorUI(){
   GSlider.setColorBackground(color(0, GSlider.getValue(), 0));//update background color (Green)
   BSlider.setColorBackground(color(0, 0, BSlider.getValue()));//update background color (Blue)
 
-  setButtonColorBack(btnIDs.hueWheelVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-  setButtonColorBack(btnIDs.rgbInputVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+  setButtonColorBack(button_editorUI_hueWheelVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+  setButtonColorBack(button_editorUI_rgbInputVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
 
   int tmpVal = 150;
-  setButtonColorText(btnIDs.hueWheelVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
-  setButtonColorText(btnIDs.rgbInputVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+  setButtonColorText(button_editorUI_hueWheelVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+  setButtonColorText(button_editorUI_rgbInputVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
 
   if(colorTiles){
-    setButtonColorBack(btnIDs.colorToggle, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-    setButtonColorText(btnIDs.colorToggle, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+    setButtonColorBack(button_editorUI_colorToggle, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+    setButtonColorText(button_editorUI_colorToggle, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
   }else{
-    setButtonColorBack(btnIDs.colorToggle, BLACK);
-    setButtonColorText(btnIDs.colorToggle, WHITE);
+    setButtonColorBack(button_editorUI_colorToggle, BLACK);
+    setButtonColorText(button_editorUI_colorToggle, WHITE);
   }
 }//void update() END
 
@@ -169,14 +172,14 @@ void updateEditorUI(){
 void setupUI(){
   //loadButtonImages();
 
-  UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, (scl + 1.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-  UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, (scl + 12.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-  UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(scl, (scl + 23.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
+  UIControls.addSlider("RSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl, (scl + 1.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
+  UIControls.addSlider("GSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl, (scl + 12.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
+  UIControls.addSlider("BSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl, (scl + 23.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
   RSlider = UIControls.getController("RSlider");//make it easier to use Slider
   GSlider = UIControls.getController("GSlider");//make it easier to use Slider
   BSlider = UIControls.getController("BSlider");//make it easier to use Slider
 
-  UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 6.05, scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 6.05, scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
   scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
   UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
@@ -197,37 +200,41 @@ void setupUI(){
   colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
   colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
 
-  buttons.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, false, btnIDs.hueWheelVis, -1));
-  buttons.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, false, btnIDs.rgbInputVis, -1));
-  buttons.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, false, btnIDs.colorToggle, -1));
+  buttons_editorUI.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, button_editorUI_hueWheelVis, -1));
+  buttons_editorUI.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, button_editorUI_rgbInputVis, -1));
+  buttons_editorUI.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, button_editorUI_colorToggle, -1));
 
-  buttons.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, false, btnIDs.newMap, 0));//5
-  buttons.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, false, btnIDs.saveMap, 4));
-  buttons.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, false, btnIDs.loadMap, 2));
-  buttons.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, false, btnIDs.saveImage, -1));
-  buttons.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, true, btnIDs.changeTileMap, -1));
+  buttons_editorUI.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, button_editorUI_newMap, 0));//5
+  buttons_editorUI.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, button_editorUI_saveMap, 4));
+  buttons_editorUI.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, button_editorUI_loadMap, 2));
+  buttons_editorUI.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, button_editorUI_saveImage, -1));
+  buttons_editorUI.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, button_editorUI_changeTileMap, -1));
 
-  buttons.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, true, btnIDs.prevTileMap, 10));
-  buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, btnIDs.nextTileMap, 11));
-  buttons.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, true, btnIDs.loadTileMap, -1));
-  buttons.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, btnIDs.loadMapAndTileMap, 2));
+  buttons_tilemapUI.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, button_tilemapUI_prevTileMap, 10));
+  buttons_tilemapUI.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, button_tilemapUI_nextTileMap, 11));
+  buttons_tilemapUI.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, button_tilemapUI_loadTileMap, -1));
+  buttons_tilemapUI.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, button_tilemapUI_loadMapAndTileMap, 2));
 
-  for(button b : buttons){
+  for(button b : buttons_editorUI){
+    b.setup();
+  }
+  
+  for(button b : buttons_tilemapUI){
     b.setup();
   }
 
-  changeUI(_TILEMAPUI_);//go to tile map selection display
+  //changeUI(_TILEMAPUI_);//go to tile map selection display
 }//void setup() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void changeUI(int ui){//change screen
   if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
-    tilemapUIButtonsSetVis(true);
-    editorUIButtonsSetVis(false);
+    slidersSetVis(false);
+    currentUI = _TILEMAPUI_;
   }else if(ui == _EDITORUI_){//are we going to the editor screen
-    tilemapUIButtonsSetVis(false);
-    editorUIButtonsSetVis(true);
+    slidersSetVis(true);
+    currentUI = _EDITORUI_;
   }else{
     println("ERROR: UI DOES NOT EXIST");
   }
@@ -235,24 +242,7 @@ void changeUI(int ui){//change screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void tilemapUIButtonsSetVis(boolean vis){//set visibility for all items on the tile map selection UI
-  setButtonVis(btnIDs.prevTileMap, vis);
-  setButtonVis(btnIDs.nextTileMap, vis);
-  setButtonVis(btnIDs.loadTileMap, vis);
-  setButtonVis(btnIDs.loadMapAndTileMap, vis);
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void editorUIButtonsSetVis(boolean vis){//set visibility for all items on the editors UI
-  setButtonVis(btnIDs.hueWheelVis, vis);
-  setButtonVis(btnIDs.rgbInputVis, vis);
-  setButtonVis(btnIDs.colorToggle, vis);
-  setButtonVis(btnIDs.newMap, vis);
-  setButtonVis(btnIDs.saveMap, vis);
-  setButtonVis(btnIDs.loadMap, vis);
-  setButtonVis(btnIDs.saveImage, vis);
-  setButtonVis(btnIDs.changeTileMap, vis);
+void slidersSetVis(boolean vis){//set visibility for all items on the editors UI
   scrollSlider.setVisible(vis);
   RSlider.setVisible(vis);
   GSlider.setVisible(vis);

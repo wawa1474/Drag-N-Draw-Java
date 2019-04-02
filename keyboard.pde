@@ -93,19 +93,19 @@ void keyTyped(){//We typed a key
       }
     }
     if(key == 's'){//We pressed 'S'
-      if(rows > height / scl || selectingTileMap == true){
+      if(rows > height / scl || currentUI == _TILEMAPUI_){
         screenY -= (scl * scrollAmount);//go down
         
-        if(screenY < -((scl * (rows + 2)) - height) && selectingTileMap == false){//if we're to far down
+        if(screenY < -((scl * (rows + 2)) - height) && currentUI != _TILEMAPUI_){//if we're to far down
           screenY = -((scl * (rows + 2)) - height) + 1;//make it not so
         }
       }
     }
     if(key == 'd'){//We pressed 'D'
-      if(cols > width / scl || selectingTileMap == true){
+      if(cols > width / scl || currentUI == _TILEMAPUI_){
         screenX -= (scl * scrollAmount);//go right
         
-        if(screenX < -((scl * cols) - width) && selectingTileMap == false){//if we're to far right
+        if(screenX < -((scl * cols) - width) && currentUI != _TILEMAPUI_){//if we're to far right
           screenX = -((scl * cols) - width) + 1;//make it not so
         }
       }

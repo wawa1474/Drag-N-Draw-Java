@@ -28,35 +28,53 @@ void draw(){//Draw the canvas
   updateScreenBounds();//where on the map is the screen
   updateMouseXY();//Update the XY position of the mouse
   
-  pushMatrix();//go back to crazy space?
-  translate(screenX, screenY + (scl * 2));//shift screen around
+  if(currentUI != _MAINMENU_){
+    pushMatrix();//go back to crazy space?
+    translate(screenX, screenY + (scl * 2));//shift screen around
+  }
   
-  if(selectingTileMap == true){//are we selecting a tile map
-    background(255);//white background
-    if(tileMaps.size() != 0){
-      image(tileMaps.get(tileMapShow).tileMapImage, 0, 0);//display tile map
+  switch(currentUI){
+    case _MAINMENU_:
+      image(texttest1,scl,scl);
+      break;
+
+    case _TILEMAPUI_:
+      background(255);//white background
+      if(tileMaps.size() != 0){
+        image(tileMaps.get(tileMapShow).tileMapImage, 0, 0);//display tile map
       
-      tileMap tmp = tileMaps.get(tileMapShow);
-      drawBorder(0, tmp.tileMapCols * tmp.tileWidth, 0, tmp.tileMapRows * tmp.tileHeight);//show image bounds
-    }
-  }else{
-    drawEditorBackground();//Draw the background and grid
-    drawTilesAndIcons();//draw tiles
-    drawBorder(0, cols * scl, 0, rows * scl);//Draw the RED border
-    drawTileGroupOutlines();//draw the necessary outlines
-    image(texttest1,scl,scl);
+        tileMap tmp = tileMaps.get(tileMapShow);
+        drawBorder(0, tmp.tileMapCols * tmp.tileWidth, 0, tmp.tileMapRows * tmp.tileHeight);//show image bounds
+      }
+      break;
+
+    case _EDITORUI_:
+      drawEditorBackground();//Draw the background and grid
+      drawTilesAndIcons();//draw tiles
+      drawBorder(0, cols * scl, 0, rows * scl);//Draw the RED border
+      drawTileGroupOutlines();//draw the necessary outlines
+      break;
   }
   
-  popMatrix();//go back to normal space?
-  
-  if(selectingTileMap == true){//are we selecting a tile map
-    drawTileMapUI();//Draw the tile map selection ui
-  }else{
-    updateEditorUI();//Update the Editors UI
-    drawEditorUI();//Draw the Editor UI
+  if(currentUI != _MAINMENU_){
+    popMatrix();//go back to normal space?
   }
   
-  for(button b : buttons){//loop through all buttons
-    b.draw();//draw the button
+  switch(currentUI){
+    case _TILEMAPUI_:
+      drawTileMapUI();//Draw the tile map selection ui
+      for(button b : buttons_tilemapUI){//loop through all buttons
+        b.draw();//draw the button
+      }
+      break;
+    
+    case _EDITORUI_:
+      updateEditorUI();//Update the Editors UI
+      drawEditorUI();//Draw the Editor UI
+      for(button b : buttons_editorUI){//loop through all buttons
+        b.draw();//draw the button
+      }
+      break;
+    
   }
 }//void draw() END

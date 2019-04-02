@@ -9,7 +9,6 @@ String fileName = "Error";//File Name
 int tileMapShow = 0;//display which tile map
 String loadedTileMapName = "Classic";//tile map name
 
-boolean selectingTileMap = true;//are we selecting a tile map
 boolean loadingMap = true;//are we loading a map
 
 void FileSaveCanvasSelect(File selection){//map canvas save select callback

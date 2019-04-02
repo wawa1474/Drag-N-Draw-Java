@@ -20,7 +20,9 @@ void mousePressed(){//We pressed a mouse button
     return;
   }
 
-  if(selectingTileMap != true){//if selecting a Tile Map do nothing
+  if(currentUI == _TILEMAPUI_){
+    //if selecting a Tile Map do nothing
+  }else{
   
   if(checkMouseOverIcon(true)){//is the mouse over an icon? if so load the file
     return;//and make sure to not place a tile
@@ -113,7 +115,9 @@ void mousePressed(){//We pressed a mouse button
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mouseDragged(){//We dragged the mouse while holding a button
-  if(selectingTileMap != true){//if selecting a Tile Map do nothing
+  if(currentUI == _TILEMAPUI_){
+    //if selecting a Tile Map do nothing
+  }else{
   
   clickdrag = true;//we're dragging the mouse
   
@@ -169,7 +173,9 @@ void mouseDragged(){//We dragged the mouse while holding a button
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mouseReleased(){//We released the mouse button
-  if(selectingTileMap != true){//if selecting a Tile Map do nothing
+  if(currentUI == _TILEMAPUI_){
+    //if selecting a Tile Map do nothing
+  }else{
   
     clickdrag = false;//we're no longer dragging the mouse
   
