@@ -20,11 +20,11 @@ void updateMouseXY(){//Update the XY position of the mouse
 void mousePressed(){//We pressed a mouse button
   if(currentUI == _MAINMENU_){
     switch(menuButton){
-      case menuButtonDND:
+      case button_mainMenuUI_dragNDraw:
         changeUI(_TILEMAPUI_);
         return;
 
-      case menuButtonEXIT:
+      case button_mainMenuUI_exit:
         exit();
         return;
     }

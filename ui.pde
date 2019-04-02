@@ -210,18 +210,26 @@ void setupUI(){
   buttons_editorUI.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, button_editorUI_saveImage, -1));
   buttons_editorUI.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, button_editorUI_changeTileMap, -1));
 
+  for(button b : buttons_editorUI){
+    b.setup();
+  }
+
   buttons_tilemapUI.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, button_tilemapUI_prevTileMap, 10));
   buttons_tilemapUI.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, button_tilemapUI_nextTileMap, 11));
   buttons_tilemapUI.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, button_tilemapUI_loadTileMap, -1));
   buttons_tilemapUI.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, button_tilemapUI_loadMapAndTileMap, 2));
-
-  for(button b : buttons_editorUI){
-    b.setup();
-  }
   
   for(button b : buttons_tilemapUI){
     b.setup();
   }
+  
+  buttons_mainMenuUI.add(new button(scl, scl + 0, 298, 57, RED, "", RED, 0, button_mainMenuUI_villagerPillager, -1));
+  buttons_mainMenuUI.add(new button(scl, scl + 58, 298, 57, RED, "", RED, 0, button_mainMenuUI_dragNDraw, -1));
+  buttons_mainMenuUI.add(new button(scl, scl + 116, 298, 57, RED, "", RED, 0, button_mainMenuUI_playerFlayer, -1));
+  buttons_mainMenuUI.add(new button(scl, scl + 174, 298, 57, RED, "", RED, 0, button_mainMenuUI_tileNStyle, -1));
+  buttons_mainMenuUI.add(new button(scl, scl + 232, 298, 57, RED, "", RED, 0, button_mainMenuUI_roleNPlay, -1));
+  buttons_mainMenuUI.add(new button(scl, scl + 290, 298, 57, RED, "", RED, 0, button_mainMenuUI_options, -1));
+  buttons_mainMenuUI.add(new button(scl, scl + 348, 298, 57, RED, "", RED, 0, button_mainMenuUI_exit, -1));
 
   //changeUI(_TILEMAPUI_);//go to tile map selection display
 }//void setup() END

@@ -1,6 +1,7 @@
 //button button = new button(32,32,32,32,color(0,127,127),"LOAD",color(255), 8);
-ArrayList<button> buttons_editorUI = new ArrayList<button>(0);
+ArrayList<button> buttons_mainMenuUI = new ArrayList<button>(0);
 ArrayList<button> buttons_tilemapUI = new ArrayList<button>(0);
+ArrayList<button> buttons_editorUI = new ArrayList<button>(0);
 PImage[] gui;
 
 final int button_editorUI_hueWheelVis = 0;
@@ -17,16 +18,24 @@ final int button_tilemapUI_nextTileMap = 1;
 final int button_tilemapUI_loadTileMap = 2;
 final int button_tilemapUI_loadMapAndTileMap = 3;
 
+final int button_mainMenuUI_villagerPillager = 0;
+final int button_mainMenuUI_dragNDraw = 1;
+final int button_mainMenuUI_playerFlayer = 2;
+final int button_mainMenuUI_tileNStyle = 3;
+final int button_mainMenuUI_roleNPlay = 4;
+final int button_mainMenuUI_options = 5;
+final int button_mainMenuUI_exit = 99;
+
 
 int menuButton = -1;//what menu button are we hovering over
 
-final int menuButtonVP = 0;//Villager Pillager
-final int menuButtonDND = 1;//Drag N' Draw
-final int menuButtonPF = 2;//Player Flayer
-final int menuButtonTNS = 3;//Tile N' Style
-final int menuButtonRNP = 4;//Role N' Play
-final int menuButtonOPTIONS = 5;//Options
-final int menuButtonEXIT = 99;//Exit
+//final int menuButtonVP = 0;//Villager Pillager
+//final int menuButtonDND = 1;//Drag N' Draw
+//final int menuButtonPF = 2;//Player Flayer
+//final int menuButtonTNS = 3;//Tile N' Style
+//final int menuButtonRNP = 4;//Role N' Play
+//final int menuButtonOPTIONS = 5;//Options
+//final int menuButtonEXIT = 99;//Exit
 
 void loadButtonImages(){
   PImage ui = loadImage("/assets/UI/Icons_byVellidragon.png");
@@ -249,71 +258,114 @@ boolean checkButtons(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void checkMenuButtons(){
-  int buttonWidth = 298;
-  int vpTop = 0;
-  int vpBottom = 57;
-  int dndTop = 58;
-  int dndBottom = 115;
-  int pfTop = 116;
-  int pfBottom = 173;
-  int tnsTop = 174;
-  int tnsBottom = 231;
-  int rnpTop = 232;
-  int rnpBottom = 289;
-  int optionsTop = 290;
-  int optionsBottom = 347;
-  int exitTop = 348;
-  int exitBottom = 405;
+  //int buttonWidth = 298;
+  //int vpTop = 0;
+  //int vpBottom = 57;
+  //int dndTop = 58;
+  //int dndBottom = 115;
+  //int pfTop = 116;
+  //int pfBottom = 173;
+  //int tnsTop = 174;
+  //int tnsBottom = 231;
+  //int rnpTop = 232;
+  //int rnpBottom = 289;
+  //int optionsTop = 290;
+  //int optionsBottom = 347;
+  //int exitTop = 348;
+  //int exitBottom = 405;
   
   menuButton = -1;
-  if(mouseX > scl){
-    if(mouseX < scl + buttonWidth){
-      if(mouseY > scl + vpTop && mouseY < scl + vpBottom){
-        //image(main_menu_button_selected,scl,scl + vpTop);
-        text("not yet implemented", mouseX, mouseY);
-        menuButton = menuButtonVP;
-      }
-      
-      if(mouseY > scl + dndTop && mouseY < scl + dndBottom){
-        image(main_menu_button_selected,scl,scl + dndTop);
-        text("a tile based map maker", mouseX, mouseY);
-        menuButton = menuButtonDND;
-      }
-      
-      if(mouseY > scl + pfTop && mouseY < scl + pfBottom){
-        //image(main_menu_button_selected,scl,scl + pfTop);
-        text("not yet implemented", mouseX, mouseY);
-        menuButton = menuButtonPF;
-        return;
-      }
-      
-      if(mouseY > scl + tnsTop && mouseY < scl + tnsBottom){
-        //image(main_menu_button_selected,scl,scl + tnsTop);
-        text("not yet implemented", mouseX, mouseY);
-        menuButton = menuButtonTNS;
-        return;
-      }
-      
-      if(mouseY > scl + rnpTop && mouseY < scl + rnpBottom){
-        //image(main_menu_button_selected,scl,scl + rnpTop);
-        text("not yet implemented", mouseX, mouseY);
-        menuButton = menuButtonRNP;
-        return;
-      }
-      
-      if(mouseY > scl + optionsTop && mouseY < scl + optionsBottom){
-        //image(main_menu_button_selected,scl,scl + optionsTop);
-        text("not yet implemented", mouseX, mouseY);
-        menuButton = menuButtonOPTIONS;
-        return;
-      }
-      
-      if(mouseY > scl + exitTop && mouseY < scl + exitBottom){
-        image(main_menu_button_selected,scl,scl + exitTop);
-        text("exit the program", mouseX, mouseY);
-        menuButton = menuButtonEXIT;
-        return;
+  if(currentUI == _MAINMENU_){
+    for(button b : buttons_mainMenuUI){
+      if(b.wasClicked()){
+        menuButton = b.identifier;
+        switch(b.identifier){
+          case button_mainMenuUI_villagerPillager:
+            //image(main_menu_button_selected,scl,scl + vpTop);
+            text("not yet implemented", mouseX, mouseY);
+            break;
+        
+          case button_mainMenuUI_dragNDraw:
+            image(main_menu_button_selected,b.x,b.y);
+            text("a tile based map maker", mouseX, mouseY);
+            break;
+        
+          case button_mainMenuUI_playerFlayer:
+            //image(main_menu_button_selected,scl,scl + pfTop);
+            text("not yet implemented", mouseX, mouseY);
+            break;
+        
+          case button_mainMenuUI_tileNStyle:
+            //image(main_menu_button_selected,scl,scl + tnsTop);
+            text("not yet implemented", mouseX, mouseY);
+            break;
+          
+          case button_mainMenuUI_roleNPlay:
+            //image(main_menu_button_selected,scl,scl + rnpTop);
+            text("not yet implemented", mouseX, mouseY);
+            break;
+        
+          case button_mainMenuUI_options:
+            //image(main_menu_button_selected,scl,scl + optionsTop);
+            text("not yet implemented", mouseX, mouseY);
+            break;
+        
+          case button_mainMenuUI_exit:
+            image(main_menu_button_selected,b.x,b.y);
+            text("exit the program", mouseX, mouseY);
+            break;
+        }
       }
     }
   }
+  //if(mouseX > scl){
+  //  if(mouseX < scl + buttonWidth){
+  //    if(mouseY > scl + vpTop && mouseY < scl + vpBottom){
+  //      //image(main_menu_button_selected,scl,scl + vpTop);
+  //      text("not yet implemented", mouseX, mouseY);
+  //      menuButton = menuButtonVP;
+  //    }
+      
+  //    if(mouseY > scl + dndTop && mouseY < scl + dndBottom){
+  //      image(main_menu_button_selected,scl,scl + dndTop);
+  //      text("a tile based map maker", mouseX, mouseY);
+  //      menuButton = menuButtonDND;
+  //    }
+      
+  //    if(mouseY > scl + pfTop && mouseY < scl + pfBottom){
+  //      //image(main_menu_button_selected,scl,scl + pfTop);
+  //      text("not yet implemented", mouseX, mouseY);
+  //      menuButton = menuButtonPF;
+  //      return;
+  //    }
+      
+  //    if(mouseY > scl + tnsTop && mouseY < scl + tnsBottom){
+  //      //image(main_menu_button_selected,scl,scl + tnsTop);
+  //      text("not yet implemented", mouseX, mouseY);
+  //      menuButton = menuButtonTNS;
+  //      return;
+  //    }
+      
+  //    if(mouseY > scl + rnpTop && mouseY < scl + rnpBottom){
+  //      //image(main_menu_button_selected,scl,scl + rnpTop);
+  //      text("not yet implemented", mouseX, mouseY);
+  //      menuButton = menuButtonRNP;
+  //      return;
+  //    }
+      
+  //    if(mouseY > scl + optionsTop && mouseY < scl + optionsBottom){
+  //      //image(main_menu_button_selected,scl,scl + optionsTop);
+  //      text("not yet implemented", mouseX, mouseY);
+  //      menuButton = menuButtonOPTIONS;
+  //      return;
+  //    }
+      
+  //    if(mouseY > scl + exitTop && mouseY < scl + exitBottom){
+  //      image(main_menu_button_selected,scl,scl + exitTop);
+  //      text("exit the program", mouseX, mouseY);
+  //      menuButton = menuButtonEXIT;
+  //      return;
+  //    }
+  //  }
+  //}
 }
