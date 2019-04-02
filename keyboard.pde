@@ -15,7 +15,19 @@ void keyPressed(){//We pressed a key
       nextRowC();//Next Tile Row
     }
   }
+  
+  if(keyCode == /*CTRL*/17){//holding Control
+    scrollRows = true;
+  }
 }//void keyPressed() END
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void keyReleased(){
+  if(keyCode == /*CTRL*/17){//released Control
+    scrollRows = false;
+  }
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 

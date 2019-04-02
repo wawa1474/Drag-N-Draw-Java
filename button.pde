@@ -17,6 +17,17 @@ final int button_tilemapUI_nextTileMap = 1;
 final int button_tilemapUI_loadTileMap = 2;
 final int button_tilemapUI_loadMapAndTileMap = 3;
 
+
+int menuButton = -1;//what menu button are we hovering over
+
+final int menuButtonVP = 0;//Villager Pillager
+final int menuButtonDND = 1;//Drag N' Draw
+final int menuButtonPF = 2;//Player Flayer
+final int menuButtonTNS = 3;//Tile N' Style
+final int menuButtonRNP = 4;//Role N' Play
+final int menuButtonOPTIONS = 5;//Options
+final int menuButtonEXIT = 99;//Exit
+
 void loadButtonImages(){
   PImage ui = loadImage("/assets/UI/Icons_byVellidragon.png");
   gui = new PImage[30];
@@ -236,14 +247,6 @@ boolean checkButtons(){
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
-int menuButton = -1;
-final int menuButtonVP = 0;
-final int menuButtonDND = 1;
-final int menuButtonPF = 2;
-final int menuButtonTNS = 3;
-final int menuButtonRNP = 4;
-final int menuButtonOPTIONS = 5;
-final int menuButtonEXIT = 99;
 
 void checkMenuButtons(){
   int buttonWidth = 298;
