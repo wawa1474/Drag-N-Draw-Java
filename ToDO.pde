@@ -2,6 +2,12 @@
 redo how context switching is done
   make a menu system
 
+Player Flayer will be a character creator
+Tile N' Style will make tile maps and the necessary meta data files
+Villager Pillager will make NPCs and monsters
+Drag N' Draw will make the map files
+Roll N' Play will be a role-playing game
+
 redo tile map system
   allow multiple tile maps at once
   redo how they are shown and used by user

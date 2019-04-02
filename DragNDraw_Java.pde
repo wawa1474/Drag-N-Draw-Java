@@ -1,10 +1,17 @@
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
 
+PImage texttest1;
+
 void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
   noSmooth();//text looks 'nicer'
+  
+  texttest1 = loadImage("assets/texttest1.png");
+  //set title bar icon
+  //PImage titlebaricon = loadImage("myicon.png");
+  //surface.setIcon(titlebaricon);
   
   clearMapTilesArray();//setup map tiles array
   loadTileMapInfo();//load tile map info files
@@ -34,12 +41,10 @@ void draw(){//Draw the canvas
     }
   }else{
     drawEditorBackground();//Draw the background and grid
-    
     drawTilesAndIcons();//draw tiles
-  
     drawBorder(0, cols * scl, 0, rows * scl);//Draw the RED border
-  
     drawTileGroupOutlines();//draw the necessary outlines
+    image(texttest1,scl,scl);
   }
   
   popMatrix();//go back to normal space?

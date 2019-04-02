@@ -225,7 +225,7 @@ void changeUI(int ui){//change screen
   if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
     tilemapUIButtonsSetVis(true);
     editorUIButtonsSetVis(false);
-  }else if(ui == _EDITORUI_){////are we going to the editor screen
+  }else if(ui == _EDITORUI_){//are we going to the editor screen
     tilemapUIButtonsSetVis(false);
     editorUIButtonsSetVis(true);
   }else{

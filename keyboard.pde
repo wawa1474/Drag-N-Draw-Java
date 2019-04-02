@@ -15,6 +15,10 @@ void keyPressed(){//We pressed a key
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void keyTyped(){//We typed a key
+  //maybe have a menu system tied to the escape key
+  //if (key == ESC) {
+  //  key = 0;  // Fools! don't let them escape!
+  //}
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(key == 'f'){//We pressed 'F'
       colorTiles = !colorTiles;

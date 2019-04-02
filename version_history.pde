@@ -5,8 +5,9 @@ final int[] VERSIONB = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//<- = pre-alpha
 
 
 /*
-String VERSION = "PRE_ALPHA";//what version do we display
-int[] VERSIONB = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//<- = pre-alpha
-
+VERSION = "PRE_ALPHA";//what version do we display
+VERSIONB = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//<- = pre-alpha
   all the things
+
+
 */
