@@ -24,6 +24,10 @@ void mousePressed(){//We pressed a mouse button
         changeUI(_TILEMAPUI_);
         return;
 
+      case button_mainMenuUI_options:
+        changeUI(_OPTIONSMENU_);
+        return;
+
       case button_mainMenuUI_exit:
         exit();
         return;

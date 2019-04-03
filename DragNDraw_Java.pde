@@ -6,6 +6,8 @@ PImage main_menu_button_background;
 PImage main_menu_text;
 PImage main_menu_button_selected;
 
+PImage options_menu_mockup;
+
 void setup(){//Setup everything
   size(960,540);//make a canvas (X, Y)
   surface.setResizable(true);//allow resizing of the window
@@ -15,6 +17,8 @@ void setup(){//Setup everything
   main_menu_button_background = loadImage("assets/main_menu_button_background.png");//main_menu_button_background
   main_menu_text = loadImage("assets/main_menu_text.png");//main_menu_text
   main_menu_button_selected = loadImage("assets/main_menu_button_selected.png");//main_menu_button_selected
+  
+  options_menu_mockup = loadImage("assets/options_menu_mockup.png");//main_menu_button_selected
   //set title bar icon
   //PImage titlebaricon = loadImage("myicon.png");
   //surface.setIcon(titlebaricon);
@@ -83,6 +87,11 @@ void draw(){//Draw the canvas
       for(button b : buttons_editorUI){//loop through all buttons
         b.draw();//draw the button
       }
+      break;
+    
+    case _OPTIONSMENU_:
+      background(137);//white background
+      image(options_menu_mockup,scl,scl);
       break;
     
   }

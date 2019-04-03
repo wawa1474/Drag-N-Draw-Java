@@ -306,8 +306,8 @@ void checkMenuButtons(){
             break;
         
           case button_mainMenuUI_options:
-            //image(main_menu_button_selected,scl,scl + optionsTop);
-            text("not yet implemented", mouseX, mouseY);
+            image(main_menu_button_selected,b.x,b.y);
+            text("change things", mouseX, mouseY);
             break;
         
           case button_mainMenuUI_exit:

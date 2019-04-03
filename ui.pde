@@ -29,6 +29,7 @@ boolean RGBInputVis = false;//are the rgb number inputs visible
 final int _MAINMENU_ = 0;
 final int _TILEMAPUI_ = 1;//UI defines?
 final int _EDITORUI_ = 2;//UI defines?
+final int _OPTIONSMENU_ = 3;//UI defines?
 
 int currentUI = _MAINMENU_;
 
@@ -246,6 +247,8 @@ void changeUI(int ui){//change screen
   }else if(ui == _EDITORUI_){//are we going to the editor screen
     slidersSetVis(true);
     currentUI = _EDITORUI_;
+  }else if(ui == _OPTIONSMENU_){//are we going to the editor screen
+    currentUI = _OPTIONSMENU_;
   }else{
     println("ERROR: UI DOES NOT EXIST");
   }
