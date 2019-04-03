@@ -9,7 +9,8 @@ PImage main_menu_button_selected;
 PImage options_menu_mockup;
 
 void setup(){//Setup everything
-  size(960,540);//make a canvas (X, Y)
+  //size(960,540);//make a canvas (X, Y)
+  size(362, 470);
   surface.setResizable(true);//allow resizing of the window
   noSmooth();//text looks 'nicer'
   
@@ -18,7 +19,7 @@ void setup(){//Setup everything
   main_menu_text = loadImage("assets/main_menu_text.png");//main_menu_text
   main_menu_button_selected = loadImage("assets/main_menu_button_selected.png");//main_menu_button_selected
   
-  options_menu_mockup = loadImage("assets/options_menu_mockup.png");//main_menu_button_selected
+  options_menu_mockup = loadImage("assets/options_menu_mockup_v2.png");//main_menu_button_selected
   //set title bar icon
   //PImage titlebaricon = loadImage("myicon.png");
   //surface.setIcon(titlebaricon);
@@ -38,10 +39,8 @@ void draw(){//Draw the canvas
   updateScreenBounds();//where on the map is the screen
   updateMouseXY();//Update the XY position of the mouse
   
-  //if(currentUI != _MAINMENU_){
   pushMatrix();//go back to crazy space?
   translate(screenX, screenY + (scl * 2));//shift screen around
-  //}
   
   switch(currentUI){
     case _TILEMAPUI_:
@@ -50,21 +49,19 @@ void draw(){//Draw the canvas
         image(tileMaps.get(tileMapShow).tileMapImage, 0, 0);//display tile map
       
         tileMap tmp = tileMaps.get(tileMapShow);
-        drawBorder(0, tmp.tileMapCols * tmp.tileWidth, 0, tmp.tileMapRows * tmp.tileHeight);//show image bounds
+        drawBorder(0, tmp.tileMapCols * tmp.tileWidth, 0, tmp.tileMapRows * tmp.tileHeight, 1);//show image bounds
       }
       break;
 
     case _EDITORUI_:
       drawEditorBackground();//Draw the background and grid
       drawTilesAndIcons();//draw tiles
-      drawBorder(0, cols * scl, 0, rows * scl);//Draw the RED border
+      drawBorder(1, (cols * scl) - 2, 1, (rows * scl) - 2, borderThickness);//Draw the RED border
       drawTileGroupOutlines();//draw the necessary outlines
       break;
   }
   
-  //if(currentUI != _MAINMENU_){
   popMatrix();//go back to normal space?
-  //}
   
   switch(currentUI){
     case _MAINMENU_:

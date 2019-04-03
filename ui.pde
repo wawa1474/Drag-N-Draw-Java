@@ -64,13 +64,13 @@ void drawEditorBackground(){//Draw the background
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void drawBorder(int x1, int x2, int y1, int y2){//draw the red border
-  strokeWeight(borderThickness);//Thicker
+void drawBorder(int x1, int x2, int y1, int y2, float thiccc){//draw the red border
+  strokeWeight(thiccc);//Thicker
   stroke(255, 0, 0);//RED
-  line(x1 + 1, y1, x1 + 1, y2);//Draw Left line
-  line(x2 - 2, y1, x2 - 2, y2);//Draw Right line
-  line(x1, y1 + 1, x2, y1 + 1);//Draw Top Line
-  line(x1, y2 - 2, x2, y2 - 2);//Draw Bottom Line
+  line(x1, y1, x1, y2);//Draw Left line
+  line(x2, y1, x2, y2);//Draw Right line
+  line(x1, y1, x2, y1);//Draw Top Line
+  line(x1, y2, x2, y2);//Draw Bottom Line
 }//void border() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -232,7 +232,7 @@ void setupUI(){
   buttons_mainMenuUI.add(new button(scl, scl + 290, 298, 57, RED, "", RED, 0, button_mainMenuUI_options, -1));
   buttons_mainMenuUI.add(new button(scl, scl + 348, 298, 57, RED, "", RED, 0, button_mainMenuUI_exit, -1));
 
-  //changeUI(_TILEMAPUI_);//go to tile map selection display
+  changeUI(_MAINMENU_);//go to tile map selection display
 }//void setup() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -241,13 +241,16 @@ void changeUI(int ui){//change screen
   slidersSetVis(false);
   
   if(ui == _MAINMENU_){//are we going to the tile map loading screen
+    surface.setSize(298 + (scl * 2), 406 + (scl * 2));//298 x 406
     currentUI = _MAINMENU_;
   }else if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
+    surface.setSize(960, 960);//458 x 254
     currentUI = _TILEMAPUI_;
   }else if(ui == _EDITORUI_){//are we going to the editor screen
     slidersSetVis(true);
     currentUI = _EDITORUI_;
   }else if(ui == _OPTIONSMENU_){//are we going to the editor screen
+    surface.setSize(458 + (scl * 2), 254 + (scl * 2));//458 x 254
     currentUI = _OPTIONSMENU_;
   }else{
     println("ERROR: UI DOES NOT EXIST");
