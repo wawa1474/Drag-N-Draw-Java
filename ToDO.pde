@@ -2,6 +2,20 @@
 redo how context switching is done
   make a menu system
 
+make it so the user can resize the map field
+
+add menu bar in order to clean up ui
+  file, edit, view, history?, tools, help
+
+get rid of number things in ui?
+  total tiles
+  drawn tiles
+  mouse xy
+  screen xy
+
+clean up keyboard mappings
+  figure out how to make them remappable
+
 Player Flayer will be a character creator
 Tile N' Style will make tile maps and the necessary meta data files
 Villager Pillager will make NPCs and monsters

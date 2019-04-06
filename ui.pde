@@ -100,43 +100,43 @@ void drawEditorUI(){
     }
   }//Went through all the tiles
 
-  fill(RED);//red text
-  stroke(0);//no outline
-  textSize(24);//larger text size
+  //fill(RED);//red text
+  //stroke(0);//no outline
+  //textSize(24);//larger text size
 
-  int tmp = 0;//how many tiles are there total
+  //int tmp = 0;//how many tiles are there total
 
-  for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-    for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
-      tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
-    }
-  }
-  if(tmpTile != null){//if we're dragging a tile
-    tmp += 1;//count it too
-  }
+  //for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+  //  for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+  //    tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
+  //  }
+  //}
+  //if(tmpTile != null){//if we're dragging a tile
+  //  tmp += 1;//count it too
+  //}
       
-  float tmpX1 = (scl * 16) + (scl / 8);
-  float tmpX2 = scl * 25;
-  float tmpX3 = (scl * 27) + (scl / 2);
+  //float tmpX1 = (scl * 16) + (scl / 8);
+  //float tmpX2 = scl * 25;
+  //float tmpX3 = (scl * 27) + (scl / 2);
       
-  float tmpY1 = (scl / 1.25);
-  float tmpY2 = (scl * 1.75);
+  //float tmpY1 = (scl / 1.25);
+  //float tmpY2 = (scl * 1.75);
 
-  text("Tiles: " + tmp, tmpX1, tmpY1);//Tiles:(tmp)
-  text("Drawn: " + drawnTiles, tmpX1, tmpY2);//Drawn:(drawnTiles)
+  //text("Tiles: " + tmp, tmpX1, tmpY1);//Tiles:(tmp)
+  //text("Drawn: " + drawnTiles, tmpX1, tmpY2);//Drawn:(drawnTiles)
 
-  text("X:" + floor(-screenX/scl), tmpX2, tmpY1);//X:(screenX)
-  text("Y:" + floor(-screenY/scl), tmpX2, tmpY2);//Y:(screenY)
+  //text("X:" + floor(-screenX/scl), tmpX2, tmpY1);//X:(screenX)
+  //text("Y:" + floor(-screenY/scl), tmpX2, tmpY2);//Y:(screenY)
 
-  if(mouseY < UIBottom * scl){
-    text("X:UI", tmpX3, tmpY1);//X:UI
-    text("Y:UI", tmpX3, tmpY2);//Y:UI
-  }else{
-    text("X:" + mouseTileX, tmpX3, tmpY1);//X:(mouseTileX)
-    text("Y:" + mouseTileY, tmpX3, tmpY2);//Y:(mouseTileY)
-  }
+  //if(mouseY < UIBottom * scl){
+  //  text("X:UI", tmpX3, tmpY1);//X:UI
+  //  text("Y:UI", tmpX3, tmpY2);//Y:UI
+  //}else{
+  //  text("X:" + mouseTileX, tmpX3, tmpY1);//X:(mouseTileX)
+  //  text("Y:" + mouseTileY, tmpX3, tmpY2);//Y:(mouseTileY)
+  //}
 
-  textSize(12);//Default text size
+  //textSize(12);//Default text size
 }//void draw() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
