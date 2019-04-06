@@ -205,10 +205,10 @@ void setupUI(){
   buttons_editorUI.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, button_editorUI_rgbInputVis, -1));
   buttons_editorUI.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, button_editorUI_colorToggle, -1));
 
-  buttons_editorUI.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, button_editorUI_newMap, 0));//5
-  buttons_editorUI.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, button_editorUI_saveMap, 4));
-  buttons_editorUI.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, button_editorUI_loadMap, 2));
-  buttons_editorUI.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, button_editorUI_saveImage, -1));
+  //buttons_editorUI.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, button_editorUI_newMap, 0));//5
+  //buttons_editorUI.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, button_editorUI_saveMap, 4));
+  //buttons_editorUI.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, button_editorUI_loadMap, 2));
+  //buttons_editorUI.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, button_editorUI_saveImage, -1));
   buttons_editorUI.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, button_editorUI_changeTileMap, -1));
 
   for(button b : buttons_editorUI){

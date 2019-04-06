@@ -7,16 +7,16 @@ void keyPressed(){//We pressed a key
     changeUI(_MAINMENU_);
     key = 0;  // Fools! don't let them escape!
   }
-  //println(keyCode);//What key did we press?
-  if(noKeyboard == false){//are we blocking keyboard functions?
-    if (keyCode == /*SHIFT*/16){//We pressed shift
-      prevRowC();//Previous Tile row
-    }else if (keyCode == /*SPACE*/32){//We pressed space
-      nextRowC();//Next Tile Row
-    }
-  }
+  println(keyCode);//What key did we press?
+  //if(noKeyboard == false){//are we blocking keyboard functions?
+  //  if (keyCode == /*SHIFT*/16){//We pressed shift
+  //    prevRowC();//Previous Tile row
+  //  }else if (keyCode == /*SPACE*/32){//We pressed space
+  //    nextRowC();//Next Tile Row
+  //  }
+  //}
   
-  if(keyCode == /*CTRL*/17){//holding Control
+  if(keyCode == /*SHIFT*/16){//holding Control
     scrollRows = true;
   }
 }//void keyPressed() END
@@ -24,7 +24,7 @@ void keyPressed(){//We pressed a key
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void keyReleased(){
-  if(keyCode == /*CTRL*/17){//released Control
+  if(keyCode == /*SHIFT*/16){//released Control
     scrollRows = false;
   }
 }
@@ -32,6 +32,27 @@ void keyReleased(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void keyTyped(){//We typed a key
+  println(hex(key));
+  if(currentUI == _EDITORUI_){
+    switch(key){
+      case 0x0005://ctrl + shift + e
+        selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
+        scrollRows = false;//fixes a bug
+        break;
+        
+      case 0x000E://ctrl + n
+        clearMapTilesArray();//clear the map
+        break;
+        
+      case 0x000F://ctrl + o
+        selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
+        break;
+        
+      case 0x0013://ctrl + s
+        selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+        break;
+    }
+  }
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(key == 'f'){//We pressed 'F'
       colorTiles = !colorTiles;

@@ -15,6 +15,14 @@ get rid of number things in ui?
 
 clean up keyboard mappings
   figure out how to make them remappable
+  have complex key binds
+    save map = ctrl + s
+    export image ?= ctrl + shift + e
+    new map = ctrl + n
+    open map = ctrl + o
+    cut = ctrl + x
+    copy = ctrl + c
+    paste = ctrl + v
 
 Player Flayer will be a character creator
 Tile N' Style will make tile maps and the necessary meta data files

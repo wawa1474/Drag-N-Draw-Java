@@ -8,6 +8,8 @@ PImage main_menu_button_selected;
 
 PImage options_menu_mockup;
 
+PImage menu_bar_mockup;
+
 void setup(){//Setup everything
   //size(960,540);//make a canvas (X, Y)
   size(362, 470);
@@ -20,6 +22,8 @@ void setup(){//Setup everything
   main_menu_button_selected = loadImage("assets/main_menu_button_selected.png");//main_menu_button_selected
   
   options_menu_mockup = loadImage("assets/options_menu_mockup_v2.png");//main_menu_button_selected
+  
+  menu_bar_mockup = loadImage("assets/menu_bar_mockup.png");//main_menu_button_selected
   //set title bar icon
   //PImage titlebaricon = loadImage("myicon.png");
   //surface.setIcon(titlebaricon);
@@ -84,6 +88,7 @@ void draw(){//Draw the canvas
       for(button b : buttons_editorUI){//loop through all buttons
         b.draw();//draw the button
       }
+      image(menu_bar_mockup, 0,0);
       break;
     
     case _OPTIONSMENU_:
