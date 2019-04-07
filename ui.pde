@@ -32,6 +32,7 @@ final int _EDITORUI_ = 2;//UI defines?
 final int _OPTIONSMENU_ = 3;//UI defines?
 
 int currentUI = _MAINMENU_;
+int previousUI = -1;
 
 final int borderThickness = 4;//how thick is the canvas border
 
@@ -241,6 +242,12 @@ void setupUI(){
 
 void changeUI(int ui){//change screen
   slidersSetVis(false);
+  displayedMenuBar = -1;
+  altHeld = false;
+  ctrlHeld = false;
+  shiftHeld = false;
+  lastKey = -1;
+  previousUI = currentUI;
   
   if(ui == _MAINMENU_){//are we going to the tile map loading screen
     surface.setSize(298 + (scl * 2), 406 + (scl * 2));//298 x 406
@@ -249,6 +256,7 @@ void changeUI(int ui){//change screen
     surface.setSize(960, 960);//458 x 254
     currentUI = _TILEMAPUI_;
   }else if(ui == _EDITORUI_){//are we going to the editor screen
+    surface.setSize(960, 960);//458 x 254
     slidersSetVis(true);
     currentUI = _EDITORUI_;
   }else if(ui == _OPTIONSMENU_){//are we going to the editor screen

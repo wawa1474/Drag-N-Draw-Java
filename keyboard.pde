@@ -6,11 +6,6 @@ boolean shiftHeld = false;
 int lastKey = -1;
 
 void keyPressed(){//We pressed a key
-  //maybe have a menu system tied to the escape key
-  if(key == ESC){
-    changeUI(_MAINMENU_);
-    key = 0;  // Fools! don't let them escape!
-  }
   //println(keyCode);//What key did we press?
   //if(noKeyboard == false){//are we blocking keyboard functions?
   //  if (keyCode == /*SHIFT*/16){//We pressed shift
@@ -32,6 +27,16 @@ void keyPressed(){//We pressed a key
     case 18://alt
       altHeld = true;
       break;
+    
+    case ESC:
+      if(currentUI != _MAINMENU_){
+        changeUI(_MAINMENU_);
+        key = 0;  // Fools! don't let them escape!
+      }else{
+        //changeUI(previousUI);
+        //key = 0;  // Fools! don't let them escape!
+      }
+      return;
   }
   lastKey = keyCode;
 }//void keyPressed() END
