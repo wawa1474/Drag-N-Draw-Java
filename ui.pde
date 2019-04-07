@@ -152,19 +152,14 @@ void updateEditorUI(){
   GSlider.setColorBackground(color(0, GSlider.getValue(), 0));//update background color (Green)
   BSlider.setColorBackground(color(0, 0, BSlider.getValue()));//update background color (Blue)
 
-  setButtonColorBack(button_editorUI_hueWheelVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-  setButtonColorBack(button_editorUI_rgbInputVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-
   int tmpVal = 150;
-  setButtonColorText(button_editorUI_hueWheelVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
-  setButtonColorText(button_editorUI_rgbInputVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+  setButtonColors(button_editorUI_hueWheelVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()), color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+  setButtonColors(button_editorUI_rgbInputVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()), color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
 
   if(colorTiles){
-    setButtonColorBack(button_editorUI_colorToggle, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-    setButtonColorText(button_editorUI_colorToggle, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+    setButtonColors(button_editorUI_colorToggle, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()), color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
   }else{
-    setButtonColorBack(button_editorUI_colorToggle, BLACK);
-    setButtonColorText(button_editorUI_colorToggle, WHITE);
+    setButtonColors(button_editorUI_colorToggle, BLACK, WHITE);
   }
 }//void update() END
 
@@ -224,20 +219,20 @@ void setupUI(){
     b.setup();
   }
   
-  buttons_mainMenuUI.add(new button(scl, scl + 0, 298, 57, RED, "", RED, 0, button_mainMenuUI_villagerPillager, -1));
-  buttons_mainMenuUI.add(new button(scl, scl + 58, 298, 57, RED, "", RED, 0, button_mainMenuUI_dragNDraw, -1));
-  buttons_mainMenuUI.add(new button(scl, scl + 116, 298, 57, RED, "", RED, 0, button_mainMenuUI_playerFlayer, -1));
-  buttons_mainMenuUI.add(new button(scl, scl + 174, 298, 57, RED, "", RED, 0, button_mainMenuUI_tileNStyle, -1));
-  buttons_mainMenuUI.add(new button(scl, scl + 232, 298, 57, RED, "", RED, 0, button_mainMenuUI_roleNPlay, -1));
-  buttons_mainMenuUI.add(new button(scl, scl + 290, 298, 57, RED, "", RED, 0, button_mainMenuUI_options, -1));
-  buttons_mainMenuUI.add(new button(scl, scl + 348, 298, 57, RED, "", RED, 0, button_mainMenuUI_exit, -1));
+  buttons_mainMenuUI.add(new clickRect(scl, scl + 0, 298, 57, button_mainMenuUI_villagerPillager));
+  buttons_mainMenuUI.add(new clickRect(scl, scl + 58, 298, 57, button_mainMenuUI_dragNDraw));
+  buttons_mainMenuUI.add(new clickRect(scl, scl + 116, 298, 57, button_mainMenuUI_playerFlayer));
+  buttons_mainMenuUI.add(new clickRect(scl, scl + 174, 298, 57, button_mainMenuUI_tileNStyle));
+  buttons_mainMenuUI.add(new clickRect(scl, scl + 232, 298, 57, button_mainMenuUI_roleNPlay));
+  buttons_mainMenuUI.add(new clickRect(scl, scl + 290, 298, 57, button_mainMenuUI_options));
+  buttons_mainMenuUI.add(new clickRect(scl, scl + 348, 298, 57, button_mainMenuUI_exit));
   
-  buttons_menuBar.add(new button(0, 0, 30, 16, RED, "", RED, 0, button_menuBar_file, -1));
-  buttons_menuBar.add(new button(30, 0, 32, 16, RED, "", RED, 0, button_menuBar_edit, -1));
-  buttons_menuBar.add(new button(62, 0, 41, 16, RED, "", RED, 0, button_menuBar_view, -1));
-  buttons_menuBar.add(new button(103, 0, 41, 16, RED, "", RED, 0, button_menuBar_color, -1));
-  buttons_menuBar.add(new button(144, 0, 40, 16, RED, "", RED, 0, button_menuBar_tools, -1));
-  buttons_menuBar.add(new button(184, 0, 35, 16, RED, "", RED, 0, button_menuBar_help, -1));
+  buttons_menuBar.add(new clickRect(0, 0, 30, 16, button_menuBar_file));
+  buttons_menuBar.add(new clickRect(30, 0, 32, 16, button_menuBar_edit));
+  buttons_menuBar.add(new clickRect(62, 0, 41, 16, button_menuBar_view));
+  buttons_menuBar.add(new clickRect(103, 0, 41, 16, button_menuBar_color));
+  buttons_menuBar.add(new clickRect(144, 0, 40, 16, button_menuBar_tools));
+  buttons_menuBar.add(new clickRect(184, 0, 35, 16, button_menuBar_help));
 
   changeUI(_MAINMENU_);//go to tile map selection display
 }//void setup() END

@@ -1,8 +1,8 @@
 //button button = new button(32,32,32,32,color(0,127,127),"LOAD",color(255), 8);
-ArrayList<button> buttons_mainMenuUI = new ArrayList<button>(0);
+ArrayList<clickRect> buttons_mainMenuUI = new ArrayList<clickRect>(0);
 ArrayList<button> buttons_tilemapUI = new ArrayList<button>(0);
 ArrayList<button> buttons_editorUI = new ArrayList<button>(0);
-ArrayList<button> buttons_menuBar = new ArrayList<button>(0);
+ArrayList<clickRect> buttons_menuBar = new ArrayList<clickRect>(0);
 PImage[] gui;
 
 final int button_editorUI_hueWheelVis = 0;
@@ -51,32 +51,47 @@ void loadButtonImages(){
   }
 }
 
-class button{
+class clickRect{
   float x;//button x position
   float y;//button y position
   float h;//button height
   float w;//button width
+  
+  int identifier;//button identifier
+  
+  clickRect(float x_, float y_, float w_, float h_, int identifier_){
+    this.x = x_;
+    this.y = y_;
+    this.h = h_;
+    this.w = w_;
+    this.identifier = identifier_;
+  }
+
+  boolean wasClicked(){//are we clicking on a visible button
+    return(mouseX > this.x + fudgeValue && mouseX < this.x + this.w - fudgeValue && mouseY > this.y + fudgeValue && mouseY < this.y + this.h - fudgeValue);//Are we clicking on the button
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+class button extends clickRect{
   String t;//button text
   float tSize = 0;//button text size
   float tX;//button text x position
   float tY;//button text y position
   color bColor;//button background color
   color tColor;//button text color
-  int identifier;//button identifier
   int image;//button image
   
   public button(float x_, float y_, float w_, float h_, color bC_, String t_, color tC_, float tS_, int identifier_, int image_){
-    this.x = x_;
-    this.y = y_;
-    this.h = h_;
-    this.w = w_;
+    super(x_, y_, w_, h_, identifier_);
+    
     this.bColor = bC_;
     
     this.t = t_;
     this.tColor = tC_;
     this.tSize = tS_;
-    
-    this.identifier = identifier_;
+
     this.image = image_;
   }
   
@@ -92,10 +107,6 @@ class button{
     }else{
       this.tX = this.x + tmp;
     }
-  }
-  
-  boolean wasClicked(){//are we clicking on a visible button
-    return(mouseX > this.x + fudgeValue && mouseX < this.x + this.w - fudgeValue && mouseY > this.y + fudgeValue && mouseY < this.y + this.h - fudgeValue);//Are we clicking on the button
   }
   
   void draw(){
@@ -130,6 +141,17 @@ void setButtonColorText(int button, color c){//set a buttons text color
   for(button b : buttons_editorUI){//go through all the buttons
     if(b.identifier == button){//if we've found our button
       b.tColor = c;//update its text color
+    }
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+
+void setButtonColors(int button, color bC, color tC){//set a buttons text color
+  for(button b : buttons_editorUI){//go through all the buttons
+    if(b.identifier == button){//if we've found our button
+      b.bColor = bC;//update its background color
+      b.tColor = tC;//update its text color
     }
   }
 }
@@ -252,7 +274,7 @@ boolean checkButtons(){
       }
     }
     
-    for(button b : buttons_menuBar){
+    for(clickRect b : buttons_menuBar){
       if(b.wasClicked()){
         switch(b.identifier){
           case button_menuBar_file:
@@ -288,25 +310,9 @@ boolean checkButtons(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void checkMenuButtons(){
-  //int buttonWidth = 298;
-  //int vpTop = 0;
-  //int vpBottom = 57;
-  //int dndTop = 58;
-  //int dndBottom = 115;
-  //int pfTop = 116;
-  //int pfBottom = 173;
-  //int tnsTop = 174;
-  //int tnsBottom = 231;
-  //int rnpTop = 232;
-  //int rnpBottom = 289;
-  //int optionsTop = 290;
-  //int optionsBottom = 347;
-  //int exitTop = 348;
-  //int exitBottom = 405;
-  
   mainMenuButton = -1;
   if(currentUI == _MAINMENU_){
-    for(button b : buttons_mainMenuUI){
+    for(clickRect b : buttons_mainMenuUI){
       if(b.wasClicked()){
         mainMenuButton = b.identifier;
         switch(b.identifier){
@@ -348,54 +354,4 @@ void checkMenuButtons(){
       }
     }
   }
-  //if(mouseX > scl){
-  //  if(mouseX < scl + buttonWidth){
-  //    if(mouseY > scl + vpTop && mouseY < scl + vpBottom){
-  //      //image(main_menu_button_selected,scl,scl + vpTop);
-  //      text("not yet implemented", mouseX, mouseY);
-  //      menuButton = menuButtonVP;
-  //    }
-      
-  //    if(mouseY > scl + dndTop && mouseY < scl + dndBottom){
-  //      image(main_menu_button_selected,scl,scl + dndTop);
-  //      text("a tile based map maker", mouseX, mouseY);
-  //      menuButton = menuButtonDND;
-  //    }
-      
-  //    if(mouseY > scl + pfTop && mouseY < scl + pfBottom){
-  //      //image(main_menu_button_selected,scl,scl + pfTop);
-  //      text("not yet implemented", mouseX, mouseY);
-  //      menuButton = menuButtonPF;
-  //      return;
-  //    }
-      
-  //    if(mouseY > scl + tnsTop && mouseY < scl + tnsBottom){
-  //      //image(main_menu_button_selected,scl,scl + tnsTop);
-  //      text("not yet implemented", mouseX, mouseY);
-  //      menuButton = menuButtonTNS;
-  //      return;
-  //    }
-      
-  //    if(mouseY > scl + rnpTop && mouseY < scl + rnpBottom){
-  //      //image(main_menu_button_selected,scl,scl + rnpTop);
-  //      text("not yet implemented", mouseX, mouseY);
-  //      menuButton = menuButtonRNP;
-  //      return;
-  //    }
-      
-  //    if(mouseY > scl + optionsTop && mouseY < scl + optionsBottom){
-  //      //image(main_menu_button_selected,scl,scl + optionsTop);
-  //      text("not yet implemented", mouseX, mouseY);
-  //      menuButton = menuButtonOPTIONS;
-  //      return;
-  //    }
-      
-  //    if(mouseY > scl + exitTop && mouseY < scl + exitBottom){
-  //      image(main_menu_button_selected,scl,scl + exitTop);
-  //      text("exit the program", mouseX, mouseY);
-  //      menuButton = menuButtonEXIT;
-  //      return;
-  //    }
-  //  }
-  //}
 }

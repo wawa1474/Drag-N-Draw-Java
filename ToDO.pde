@@ -7,8 +7,6 @@ make it so the user can resize the map field
 add menu bar in order to clean up ui
   file, edit, view, history?, tools, help
 
-have "button" class be an extension of "clickable rect" class
-
 get rid of number things in ui?
   total tiles
   drawn tiles
@@ -17,6 +15,10 @@ get rid of number things in ui?
 
 clean up keyboard mappings
   figure out how to make them remappable
+  have alt + key binds
+    file = alt + f
+    edit = alt + e
+    etc.
   have complex key binds
     save map = ctrl + s
     export image ?= ctrl + shift + e
