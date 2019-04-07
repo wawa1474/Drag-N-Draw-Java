@@ -2,8 +2,6 @@ boolean dragging = false;// Is a tile being dragged?
 boolean deleting = false;//Are we deleting tiles?
 boolean noTile = false;//Are we blocking placement of tiles?
 
-boolean scrollRows = false;//do we scroll a full row
-
 int screenX = 0, screenY = 0;//Screen XY
 int tmpScreenX = 0, tmpScreenY = 0;//saved Screen XY
 int mouseTileX = 0, mouseTileY = 0;//what tile is the mouse on
@@ -220,13 +218,13 @@ void mouseReleased(){//We released the mouse button
 
 void mouseWheel(MouseEvent event){//We Scrolled The Mouse Wheel
   if(event.getCount() < 0){//If Scrolling Up
-    if(scrollRows){//holding Control
+    if(shiftHeld){//holding Control
       nextRowC();//Move To Next Row
     }else{
       nextTileC();//Move To Next Tile
     }
   }else{
-    if(scrollRows){//holding Control
+    if(shiftHeld){//holding Control
       prevRowC();//Move To Previous Row
     }else{
       prevTileC();//Move To Previous Tile

@@ -1,6 +1,9 @@
 boolean noKeyboard = false;//Are We Blocking keyTyped() and keyPressed()?
 int scrollAmount = 1;//How many squares to scroll when pressing WASD
 boolean altHeld = false;
+boolean ctrlHeld = false;
+boolean shiftHeld = false;
+int lastKey = -1;
 
 void keyPressed(){//We pressed a key
   //maybe have a menu system tied to the escape key
@@ -8,7 +11,7 @@ void keyPressed(){//We pressed a key
     changeUI(_MAINMENU_);
     key = 0;  // Fools! don't let them escape!
   }
-  println(keyCode);//What key did we press?
+  //println(keyCode);//What key did we press?
   //if(noKeyboard == false){//are we blocking keyboard functions?
   //  if (keyCode == /*SHIFT*/16){//We pressed shift
   //    prevRowC();//Previous Tile row
@@ -17,35 +20,107 @@ void keyPressed(){//We pressed a key
   //  }
   //}
   
-  if(keyCode == /*SHIFT*/16){//holding Control
-    scrollRows = true;
-  }
-  
   switch(keyCode){
-    case 18:
+    case 16://shift
+      shiftHeld = true;
+      break;
+
+    case 17://ctrl
+      ctrlHeld = true;
+      break;
+
+    case 18://alt
       altHeld = true;
       break;
   }
+  lastKey = keyCode;
 }//void keyPressed() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void keyReleased(){
-  if(keyCode == /*SHIFT*/16){//released Control
-    scrollRows = false;
-  }
-  
   switch(keyCode){
-    case 18:
+    case 16://shift
+      shiftHeld = false;
+      break;
+
+    case 17://ctrl
+      ctrlHeld = false;
+      break;
+
+    case 18://alt
       altHeld = false;
+      if(lastKey == 18){//alt
+        displayedMenuBar = -1;
+        lastKey = -1;
+      }
       break;
   }
+}
+
+boolean keyHandler(int k, String keybind){
+  String[] list = split(keybind, " ");
+  String specialKeys = "";
+  
+  switch(list.length){
+    case 0:
+    case 1:
+      return false;
+
+    case 4:
+      specialKeys = list[0] + " " + list[1] + " " + list[2];
+      break;
+
+    case 3:
+      specialKeys = list[0] + " " + list[1];
+      break;
+
+    case 2:
+      specialKeys = list[0];
+      break;
+  }
+  
+  if(str(list[list.length - 1].charAt(0)).toLowerCase().equals(str(char(k)).toLowerCase())){
+    switch(specialKeys){
+      case "ctrl":
+        if(ctrlHeld == true && altHeld != true && shiftHeld != true){
+          return true;
+        }
+      case "alt":
+        if(ctrlHeld != true && altHeld == true && shiftHeld != true){
+          return true;
+        }
+      case "shift":
+        if(ctrlHeld != true && altHeld != true && shiftHeld == true){
+          return true;
+        }
+      case "ctrl alt":
+        if(ctrlHeld == true && altHeld == true && shiftHeld != true){
+          return true;
+        }
+      case "ctrl shift":
+        if(ctrlHeld == true && altHeld != true && shiftHeld == true){
+          return true;
+        }
+      case "alt shift":
+        if(ctrlHeld != true && altHeld == true && shiftHeld == true){
+          return true;
+        }
+      case "ctrl alt shift":
+        if(ctrlHeld == true && altHeld == true && shiftHeld == true){
+          return true;
+        }
+      case "":
+    }
+  }
+  
+  return false;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void keyTyped(){//We typed a key
-  println(hex(key));
+  //println(hex(key));
   if(currentUI == _EDITORUI_){
     switch(displayedMenuBar){
       case button_menuBar_file:
@@ -74,13 +149,19 @@ void keyTyped(){//We typed a key
         }
 
       case button_menuBar_edit:
+        if(keyHandler(lastKey, "alt t")){
+          if(tileGroupStep == 2){//we're on step two of group selection
+            tileGroupCutCopy('x');//cut group selection
+          }
+          return;
+        }
         if(altHeld == true){
           switch(key){
             case 0x0074://alt + t
-              if(tileGroupStep == 2){//we're on step two of group selection
-                tileGroupCutCopy('x');//cut group selection
-              }
-              return;
+              //if(tileGroupStep == 2){//we're on step two of group selection
+              //  tileGroupCutCopy('x');//cut group selection
+              //}
+              //return;
 
             case 0x0063://alt + c
               if(tileGroupStep == 2){//we're on step two of group selection
@@ -104,7 +185,7 @@ void keyTyped(){//We typed a key
     switch(key){
       case 0x0005://ctrl + shift + e
         selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
-        scrollRows = false;//fixes a bug
+        shiftHeld = false;
         return;
 
       case 0x000E://ctrl + n
