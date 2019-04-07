@@ -19,7 +19,7 @@ void updateMouseXY(){//Update the XY position of the mouse
 
 void mousePressed(){//We pressed a mouse button
   if(currentUI == _MAINMENU_){
-    switch(menuButton){
+    switch(mainMenuButton){
       case button_mainMenuUI_dragNDraw:
         changeUI(_TILEMAPUI_);
         return;
@@ -94,7 +94,7 @@ void mousePressed(){//We pressed a mouse button
   }
 
   for(int i = 0; i < rowLength; i++){//Go through all the tiles in the row
-    if(mouseX > (scl * i) + fudgeValue && mouseX < (scl * (i + 1)) - fudgeValue && mouseY > 0 + fudgeValue && mouseY < scl - fudgeValue){//Are we clicking on the tile UI
+    if(mouseX > (scl * i) + fudgeValue && mouseX < (scl * (i + 1)) - fudgeValue && mouseY > scl + fudgeValue && mouseY < (scl * 2) - fudgeValue){//Are we clicking on the tile UI
       noTile = true;//Dont allow tile placement
       if(tileImages[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
       tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on

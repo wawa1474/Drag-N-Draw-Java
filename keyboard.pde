@@ -7,7 +7,7 @@ void keyPressed(){//We pressed a key
     changeUI(_MAINMENU_);
     key = 0;  // Fools! don't let them escape!
   }
-  println(keyCode);//What key did we press?
+  //println(keyCode);//What key did we press?
   //if(noKeyboard == false){//are we blocking keyboard functions?
   //  if (keyCode == /*SHIFT*/16){//We pressed shift
   //    prevRowC();//Previous Tile row
@@ -32,7 +32,7 @@ void keyReleased(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void keyTyped(){//We typed a key
-  println(hex(key));
+  //println(hex(key));
   if(currentUI == _EDITORUI_){
     switch(key){
       case 0x0005://ctrl + shift + e

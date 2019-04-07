@@ -2,6 +2,7 @@
 ArrayList<button> buttons_mainMenuUI = new ArrayList<button>(0);
 ArrayList<button> buttons_tilemapUI = new ArrayList<button>(0);
 ArrayList<button> buttons_editorUI = new ArrayList<button>(0);
+ArrayList<button> buttons_menuBar = new ArrayList<button>(0);
 PImage[] gui;
 
 final int button_editorUI_hueWheelVis = 0;
@@ -18,24 +19,23 @@ final int button_tilemapUI_nextTileMap = 1;
 final int button_tilemapUI_loadTileMap = 2;
 final int button_tilemapUI_loadMapAndTileMap = 3;
 
-final int button_mainMenuUI_villagerPillager = 0;
-final int button_mainMenuUI_dragNDraw = 1;
-final int button_mainMenuUI_playerFlayer = 2;
-final int button_mainMenuUI_tileNStyle = 3;
-final int button_mainMenuUI_roleNPlay = 4;
-final int button_mainMenuUI_options = 5;
-final int button_mainMenuUI_exit = 99;
+int mainMenuButton = -1;//what menu button are we hovering over
+final int button_mainMenuUI_villagerPillager = 0;//Villager Pillager
+final int button_mainMenuUI_dragNDraw = 1;//Drag N' Draw
+final int button_mainMenuUI_playerFlayer = 2;//Player Flayer
+final int button_mainMenuUI_tileNStyle = 3;//Tile N' Style
+final int button_mainMenuUI_roleNPlay = 4;//Role N' Play
+final int button_mainMenuUI_options = 5;//Options
+final int button_mainMenuUI_exit = 99;//Exit
 
 
-int menuButton = -1;//what menu button are we hovering over
-
-//final int menuButtonVP = 0;//Villager Pillager
-//final int menuButtonDND = 1;//Drag N' Draw
-//final int menuButtonPF = 2;//Player Flayer
-//final int menuButtonTNS = 3;//Tile N' Style
-//final int menuButtonRNP = 4;//Role N' Play
-//final int menuButtonOPTIONS = 5;//Options
-//final int menuButtonEXIT = 99;//Exit
+int menuBarButton = -1;//what menu button are we hovering over
+final int button_menuBar_file = 0;
+final int button_menuBar_edit = 1;
+final int button_menuBar_view = 2;
+final int button_menuBar_color = 3;
+final int button_menuBar_tools = 4;
+final int button_menuBar_help = 5;
 
 void loadButtonImages(){
   PImage ui = loadImage("/assets/UI/Icons_byVellidragon.png");
@@ -251,6 +251,36 @@ boolean checkButtons(){
         }
       }
     }
+    
+    for(button b : buttons_menuBar){
+      if(b.wasClicked()){
+        switch(b.identifier){
+          case button_menuBar_file:
+            println("file");
+            break;
+        
+          case button_menuBar_edit:
+            println("edit");
+            break;
+        
+          case button_menuBar_view:
+            println("view");
+            break;
+        
+          case button_menuBar_color:
+            println("color");
+            break;
+          
+          case button_menuBar_tools:
+            println("tools");
+            break;
+        
+          case button_menuBar_help:
+            println("help");
+            break;
+        }
+      }
+    }
   }
   return false;
 }
@@ -274,11 +304,11 @@ void checkMenuButtons(){
   //int exitTop = 348;
   //int exitBottom = 405;
   
-  menuButton = -1;
+  mainMenuButton = -1;
   if(currentUI == _MAINMENU_){
     for(button b : buttons_mainMenuUI){
       if(b.wasClicked()){
-        menuButton = b.identifier;
+        mainMenuButton = b.identifier;
         switch(b.identifier){
           case button_mainMenuUI_villagerPillager:
             //image(main_menu_button_selected,scl,scl + vpTop);

@@ -83,19 +83,19 @@ void drawEditorUI(){
   strokeWeight(1);//default
   stroke(0);
   fill(WHITE);//Set background color to white
-  rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
+  rect(0, scl, scl*rowLength, scl);//Create rectangle behind tiles UI
   for(int i = 0; i < rowLength && tileImages.length != 0; i++){//Go through all the tiles
     if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
       if((rowLength*tileRow)+i == tileN){//If displaying selected tile
         fill(RSlider.getValue(), GSlider.getValue(), BSlider.getValue());//Set background color to the RGB value set by user
-        rect(scl*i, 0, scl, scl);//Display color behind the tile
+        rect(scl*i, scl, scl, scl);//Display color behind the tile
       }
       if(tileImages[(rowLength*tileRow)+i] != null){
-        image(tileImages[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
+        image(tileImages[(rowLength*tileRow)+i], scl*i, scl);//Draw tile
       }
       if((rowLength*tileRow)+i == tileN){
         noFill();
-        rect(scl*i, 0, scl - 1, scl - 1);//Display color behind the tile
+        rect(scl*i, scl, scl - 1, scl - 1);//Display color behind the tile
       }
     }
   }//Went through all the tiles
@@ -173,17 +173,17 @@ void updateEditorUI(){
 void setupUI(){
   //loadButtonImages();
 
-  UIControls.addSlider("RSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl, (scl + 1.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-  UIControls.addSlider("GSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl, (scl + 12.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-  UIControls.addSlider("BSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl, (scl + 23.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
+  UIControls.addSlider("RSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 9, 0.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
+  UIControls.addSlider("GSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 9, 11.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
+  UIControls.addSlider("BSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 9, 22.3).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
   RSlider = UIControls.getController("RSlider");//make it easier to use Slider
   GSlider = UIControls.getController("GSlider");//make it easier to use Slider
   BSlider = UIControls.getController("BSlider");//make it easier to use Slider
 
-  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 6.05, scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 14.05, 0).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
   scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
-  UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
+  UIControls.addColorWheel("colorWheel").setPosition(scl * 8, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
     .onChange(new CallbackListener(){//when changed
     public void controlEvent(CallbackEvent theEvent){
       RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());//make sure all values are the same
@@ -194,22 +194,22 @@ void setupUI(){
   );
   colorWheel = UIControls.getController("colorWheel");//make it easier to use ColorWheel
 
-  UIControls.addTextfield("colorInputR").setPosition(scl * 4, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
-  UIControls.addTextfield("colorInputG").setPosition(scl * 4, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
-  UIControls.addTextfield("colorInputB").setPosition(scl * 4, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
+  UIControls.addTextfield("colorInputR").setPosition(scl * 12, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
+  UIControls.addTextfield("colorInputG").setPosition(scl * 12, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
+  UIControls.addTextfield("colorInputB").setPosition(scl * 12, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
   colorInputR = UIControls.getController("colorInputR");//make it easier to use Textfield
   colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
   colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
 
-  buttons_editorUI.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, button_editorUI_hueWheelVis, -1));
-  buttons_editorUI.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, button_editorUI_rgbInputVis, -1));
-  buttons_editorUI.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, button_editorUI_colorToggle, -1));
+  buttons_editorUI.add(new button(scl * 8, 0, scl - 1, scl, BLACK, "HUE", WHITE, 12, button_editorUI_hueWheelVis, -1));
+  buttons_editorUI.add(new button(scl * 12, 0, scl - 1, scl, BLACK, "RGB", WHITE, 12, button_editorUI_rgbInputVis, -1));
+  buttons_editorUI.add(new button(scl * 13, 0, scl, scl, BLACK, "Color", WHITE, 12, button_editorUI_colorToggle, -1));
 
   //buttons_editorUI.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, button_editorUI_newMap, 0));//5
   //buttons_editorUI.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, button_editorUI_saveMap, 4));
   //buttons_editorUI.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, button_editorUI_loadMap, 2));
   //buttons_editorUI.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, button_editorUI_saveImage, -1));
-  buttons_editorUI.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, button_editorUI_changeTileMap, -1));
+  buttons_editorUI.add(new button(scl * 16.1, 0, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, button_editorUI_changeTileMap, -1));
 
   for(button b : buttons_editorUI){
     b.setup();
@@ -231,6 +231,13 @@ void setupUI(){
   buttons_mainMenuUI.add(new button(scl, scl + 232, 298, 57, RED, "", RED, 0, button_mainMenuUI_roleNPlay, -1));
   buttons_mainMenuUI.add(new button(scl, scl + 290, 298, 57, RED, "", RED, 0, button_mainMenuUI_options, -1));
   buttons_mainMenuUI.add(new button(scl, scl + 348, 298, 57, RED, "", RED, 0, button_mainMenuUI_exit, -1));
+  
+  buttons_menuBar.add(new button(0, 0, 30, 16, RED, "", RED, 0, button_menuBar_file, -1));
+  buttons_menuBar.add(new button(30, 0, 32, 16, RED, "", RED, 0, button_menuBar_edit, -1));
+  buttons_menuBar.add(new button(62, 0, 41, 16, RED, "", RED, 0, button_menuBar_view, -1));
+  buttons_menuBar.add(new button(103, 0, 41, 16, RED, "", RED, 0, button_menuBar_color, -1));
+  buttons_menuBar.add(new button(144, 0, 40, 16, RED, "", RED, 0, button_menuBar_tools, -1));
+  buttons_menuBar.add(new button(184, 0, 35, 16, RED, "", RED, 0, button_menuBar_help, -1));
 
   changeUI(_MAINMENU_);//go to tile map selection display
 }//void setup() END

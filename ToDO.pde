@@ -7,6 +7,8 @@ make it so the user can resize the map field
 add menu bar in order to clean up ui
   file, edit, view, history?, tools, help
 
+have "button" class be an extension of "clickable rect" class
+
 get rid of number things in ui?
   total tiles
   drawn tiles
