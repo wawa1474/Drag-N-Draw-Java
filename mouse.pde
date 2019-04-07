@@ -81,7 +81,7 @@ void mousePressed(){//We pressed a mouse button
     }else{//otherwise
       for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-          if(x == mouseTileX && y == mouseTileY){//Are we clicking on the tile
+          if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(0);//grab the bottom tile
             tmp.r = (int)RSlider.getValue();//set tile red value
             tmp.g = (int)GSlider.getValue();//set tile green value

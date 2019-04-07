@@ -308,7 +308,6 @@ boolean checkButtons(){
             return true;
         }
       }
-      //println(displayedMenuBar);
     }
   }
   return false;
