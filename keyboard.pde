@@ -38,21 +38,34 @@ void keyTyped(){//We typed a key
       case 0x0005://ctrl + shift + e
         selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
         scrollRows = false;//fixes a bug
-        break;
-        
+        return;
+
       case 0x000E://ctrl + n
         clearMapTilesArray();//clear the map
-        break;
-        
+        return;
+
       case 0x000F://ctrl + o
         selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
-        break;
-        
+        return;
+
       case 0x0013://ctrl + s
         selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
-        break;
+        return;
+
+      case 0x0066://alt + f
+        displayedMenuBar = button_menuBar_file;
+        return;
+
+      case 0x0065://alt + e
+        displayedMenuBar = button_menuBar_edit;
+        return;
+
+      case 0x0076://alt + v
+        displayedMenuBar = button_menuBar_view;
+        return;
     }
   }
+  displayedMenuBar = -1;
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(key == 'f'){//We pressed 'F'
       colorTiles = !colorTiles;
@@ -98,7 +111,7 @@ void keyTyped(){//We typed a key
       //  for(int y = 0; y < mapTiles.get(x).size(); y++){//loop through rows
       for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-          if(x == mouseTileX && y == mouseTileY){//Are we clicking on the tile
+          if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() > 0){//Are we clicking on the tile
             mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
             loadColors(tmp);
           }

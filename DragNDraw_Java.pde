@@ -24,6 +24,12 @@ void setup(){//Setup everything
   options_menu_mockup = loadImage("assets/options_menu_mockup_v2.png");//main_menu_button_selected
   
   menu_bar_mockup = loadImage("assets/menu_bar_mockup.png");//main_menu_button_selected
+  
+  menuBar_Images = new PImage[3];
+  menuBar_Images[button_menuBar_file] = loadImage("assets/menu_bar_file_mockup.png");
+  menuBar_Images[button_menuBar_edit] = loadImage("assets/menu_bar_edit_mockup.png");
+  menuBar_Images[button_menuBar_view] = loadImage("assets/menu_bar_view_mockup.png");
+  
   //set title bar icon
   //PImage titlebaricon = loadImage("myicon.png");
   //surface.setIcon(titlebaricon);
@@ -89,6 +95,21 @@ void draw(){//Draw the canvas
         b.draw();//draw the button
       }
       image(menu_bar_mockup, 0,0);
+      if(displayedMenuBar != -1){
+        switch(displayedMenuBar){
+          case button_menuBar_file:
+            image(menuBar_Images[button_menuBar_file],0 ,17);
+            break;
+
+          case button_menuBar_edit:
+            image(menuBar_Images[button_menuBar_edit],30 ,17);
+            break;
+
+          case button_menuBar_view:
+            image(menuBar_Images[button_menuBar_view],62 ,17);
+            break;
+        }
+      }
       break;
     
     case _OPTIONSMENU_:

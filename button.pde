@@ -5,6 +5,10 @@ ArrayList<button> buttons_editorUI = new ArrayList<button>(0);
 ArrayList<clickRect> buttons_menuBar = new ArrayList<clickRect>(0);
 PImage[] gui;
 
+PImage[] menuBar_Images;
+int displayedMenuBar = -1;
+
+
 final int button_editorUI_hueWheelVis = 0;
 final int button_editorUI_rgbInputVis = 1;
 final int button_editorUI_colorToggle = 2;
@@ -275,33 +279,36 @@ boolean checkButtons(){
     }
     
     for(clickRect b : buttons_menuBar){
+      displayedMenuBar = -1;
       if(b.wasClicked()){
+        displayedMenuBar = b.identifier;
         switch(b.identifier){
           case button_menuBar_file:
             println("file");
-            break;
+            return true;
         
           case button_menuBar_edit:
             println("edit");
-            break;
+            return true;
         
           case button_menuBar_view:
             println("view");
-            break;
+            return true;
         
           case button_menuBar_color:
             println("color");
-            break;
+            return true;
           
           case button_menuBar_tools:
             println("tools");
-            break;
+            return true;
         
           case button_menuBar_help:
             println("help");
-            break;
+            return true;
         }
       }
+      //println(displayedMenuBar);
     }
   }
   return false;
