@@ -14,6 +14,7 @@ get rid of number things in ui?
   screen xy
 
 clean up keyboard mappings
+  dont use ctrl + alt as that messes up international key boards
   figure out how to make them remappable
   have alt + key binds
     file = alt + f

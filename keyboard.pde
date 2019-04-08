@@ -65,61 +65,39 @@ void keyReleased(){
 
 boolean keyHandler(int k, String keybind){
   String[] list = split(keybind, " ");
-  String specialKeys = "";
   
-  switch(list.length){
-    case 0:
-    case 1:
-      return false;
-
-    case 4:
-      specialKeys = list[0] + " " + list[1] + " " + list[2];
-      break;
-
-    case 3:
-      specialKeys = list[0] + " " + list[1];
-      break;
-
-    case 2:
-      specialKeys = list[0];
-      break;
+  if(list.length == 0){
+    return false;
   }
   
   if(str(list[list.length - 1].charAt(0)).toLowerCase().equals(str(char(k)).toLowerCase())){
-    switch(specialKeys){
-      case "ctrl":
-        if(ctrlHeld == true && altHeld != true && shiftHeld != true){
-          return true;
+    boolean skip = false;
+    for(int i = 0; i < list.length; i++){
+      String tmp = list[i].toLowerCase();
+      if(tmp.equals("ctrl")){
+        if(ctrlHeld == false){
+          return false;
         }
-      case "alt":
-        if(ctrlHeld != true && altHeld == true && shiftHeld != true){
-          return true;
+        skip = true;
+      }
+      if(tmp.equals("alt") && skip == false){
+        if(altHeld == false){
+          return false;
         }
-      case "shift":
-        if(ctrlHeld != true && altHeld != true && shiftHeld == true){
-          return true;
+        skip = true;
+      }
+      if(tmp.equals("shift") && skip == false){
+        if(shiftHeld == false){
+          return false;
         }
-      case "ctrl alt":
-        if(ctrlHeld == true && altHeld == true && shiftHeld != true){
-          return true;
-        }
-      case "ctrl shift":
-        if(ctrlHeld == true && altHeld != true && shiftHeld == true){
-          return true;
-        }
-      case "alt shift":
-        if(ctrlHeld != true && altHeld == true && shiftHeld == true){
-          return true;
-        }
-      case "ctrl alt shift":
-        if(ctrlHeld == true && altHeld == true && shiftHeld == true){
-          return true;
-        }
-      case "":
+      }
+      skip = false;
     }
+  }else{
+    return false;
   }
   
-  return false;
+  return true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -154,7 +132,7 @@ void keyTyped(){//We typed a key
         }
 
       case button_menuBar_edit:
-        if(keyHandler(lastKey, "alt t")){
+        if(keyHandler(lastKey, "ALT + R")){
           if(tileGroupStep == 2){//we're on step two of group selection
             tileGroupCutCopy('x');//cut group selection
           }
@@ -166,7 +144,7 @@ void keyTyped(){//We typed a key
               //if(tileGroupStep == 2){//we're on step two of group selection
               //  tileGroupCutCopy('x');//cut group selection
               //}
-              //return;
+              return;
 
             case 0x0063://alt + c
               if(tileGroupStep == 2){//we're on step two of group selection
