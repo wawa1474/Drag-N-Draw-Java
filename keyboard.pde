@@ -107,97 +107,93 @@ void keyTyped(){//We typed a key
   if(currentUI == _EDITORUI_){
     switch(displayedMenuBar){
       case button_menuBar_file:
-        if(altHeld == true){
-          switch(key){
-            case 0x0065://alt + e
-              selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
-              return;
-
-            case 0x006E://alt + n
-              clearMapTilesArray();//clear the map
-              return;
-
-            case 0x006F://alt + o
-              selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
-              return;
-
-            case 0x0073://alt + s
-              selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
-              return;
-
-            case 0x0078://alt + x
-              exit();
-              return;
-          }
+        if(keyHandler(lastKey, "ALT + E")){
+          selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
+          return;
+        }
+        
+        if(keyHandler(lastKey, "ALT + N")){
+          clearMapTilesArray();//clear the map
+          return;
+        }
+        
+        if(keyHandler(lastKey, "ALT + O")){
+          selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
+          return;
+        }
+        
+        if(keyHandler(lastKey, "ALT + O")){
+          selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+          return;
+        }
+        
+        if(keyHandler(lastKey, "ALT + X")){
+          exit();
+          return;
         }
 
       case button_menuBar_edit:
-        if(keyHandler(lastKey, "ALT + R")){
+        if(keyHandler(lastKey, "ALT + T")){
           if(tileGroupStep == 2){//we're on step two of group selection
             tileGroupCutCopy('x');//cut group selection
           }
           return;
         }
-        if(altHeld == true){
-          switch(key){
-            case 0x0074://alt + t
-              //if(tileGroupStep == 2){//we're on step two of group selection
-              //  tileGroupCutCopy('x');//cut group selection
-              //}
-              return;
-
-            case 0x0063://alt + c
-              if(tileGroupStep == 2){//we're on step two of group selection
-                tileGroupCutCopy('c');//copy group selection
-              }
-              return;
-
-            case 0x0070://alt + p
-              if(tileGroupStep != 3){//set it up for pasting
-                tileGroupStep = 3;//paste step is 3
-              }else if(tileGroupStep == 3){//cancel pasting
-                tileGroupStep = 0;//paste step is 0
-              }
-              return;
+        
+        if(keyHandler(lastKey, "ALT + C")){
+          if(tileGroupStep == 2){//we're on step two of group selection
+            tileGroupCutCopy('c');//copy group selection
           }
+          return;
+        }
+        
+        if(keyHandler(lastKey, "ALT + P")){
+          if(tileGroupStep != 3){//set it up for pasting
+            tileGroupStep = 3;//paste step is 3
+          }else if(tileGroupStep == 3){//cancel pasting
+            tileGroupStep = 0;//paste step is 0
+          }
+          return;
         }
 
       case button_menuBar_view:
+        break;
     }
     
-    switch(key){
-      case 0x0005://ctrl + shift + e
-        selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
-        shiftHeld = false;
-        return;
-
-      case 0x000E://ctrl + n
-        clearMapTilesArray();//clear the map
-        return;
-
-      case 0x000F://ctrl + o
-        selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
-        return;
-
-      case 0x0013://ctrl + s
-        selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
-        return;
+    if(keyHandler(lastKey, "CTRL + SHIFT + E")){
+      selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
+      shiftHeld = false;
+      return;
     }
     
-    if(altHeld == true){
-      switch(key){
-        case 0x0066://alt + f
-          displayedMenuBar = button_menuBar_file;
-          return;
-
-        case 0x0065://alt + e
-          displayedMenuBar = button_menuBar_edit;
-          return;
-
-        case 0x0076://alt + v
-          displayedMenuBar = button_menuBar_view;
-          return;
-      }
+    if(keyHandler(lastKey, "CTRL + N")){
+      clearMapTilesArray();//clear the map
+      return;
+    }
+    
+    if(keyHandler(lastKey, "CTRL + O")){
+      selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
+      return;
+    }
+    
+    if(keyHandler(lastKey, "CTRL + S")){
+      selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+      return;
+    }
+    
+    if(keyHandler(lastKey, "ALT + F")){
+      displayedMenuBar = button_menuBar_file;
+      return;
+    }
+    
+    if(keyHandler(lastKey, "ALT + E")){
+      displayedMenuBar = button_menuBar_edit;
+      return;
+    }
+    
+    if(keyHandler(lastKey, "ALT + V")){
+      displayedMenuBar = button_menuBar_view;
+      return;
     }
   }
   displayedMenuBar = -1;
