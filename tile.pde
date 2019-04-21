@@ -116,7 +116,7 @@ void loadTile(int x, int y, int z){//Set current image to tile image
 }//void loadTile() END
 
 void loadTile(mTile tmp){//Set current image to tile image
-  if(tmp != null){
+  if(tmp != null && tmp.image != tileMaps.get(tileMapShow).colorTile){
     tileN = tmp.image;//Set current image to tile image
     updateTileRow();//make sure we're on the right tile row
   }
