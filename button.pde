@@ -8,7 +8,6 @@ PImage[] gui;
 PImage[] menuBar_Images;
 int displayedMenuBar = -1;
 
-
 final int button_editorUI_hueWheelVis = 0;
 final int button_editorUI_rgbInputVis = 1;
 final int button_editorUI_colorToggle = 2;
@@ -185,179 +184,191 @@ void setButtonColors(int button, color bC, color tC){//set a buttons text color
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean checkButtons(){
-  if(currentUI == _TILEMAPUI_){
-    for(button b : buttons_tilemapUI){
-      if(b.wasClicked()){
-        switch(b.identifier){
-          case button_tilemapUI_prevTileMap:
-            tileMapShow--;//go to previous tile map
-            if(tileMapShow < 0){//make sure we don't go below zero
-              tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
-            }
-            return true;
-        
-          case button_tilemapUI_nextTileMap:
-            tileMapShow++;//go to next tile map
-            if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
-              tileMapShow = 0;//set to 0
-            }
-            return true;
-        
-          case button_tilemapUI_loadTileMap:
-            loadTileMap();//load selected tile map
-            updateTileRow();//make sure we're on the correct row
-            noTile = false;//allowed to place tiles
-            changeUI(_EDITORUI_);//go to normal display
-            screenX = tmpScreenX;//reload our position
-            screenY = tmpScreenY;//reload our position
-            return true;
-        
-          case button_tilemapUI_loadMapAndTileMap:
-            noLoop();//don't allow drawing
-            selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
-            while(loadingMap == true){delay(500);}//small delay
-            loadTileMap();//load selected tile map
-            updateTileRow();//make sure we're on the correct row
-            noTile = false;//allowed to place tiles
-            changeUI(_EDITORUI_);//normal screen
-            screenX = tmpScreenX;//reload our position
-            screenY = tmpScreenY;//reload our position
-            loop();//allow drawing
-            return true;
+  switch(currentUI){
+    case _MAINMENU_:
+      mainMenuButton = -1;
+      for(clickRect b : buttons_mainMenuUI){
+        if(b.wasClicked()){
+          mainMenuButton = b.identifier;
+          switch(b.identifier){
+            case button_mainMenuUI_villagerPillager:
+              //image(main_menu_button_selected,scl,scl + vpTop);
+              text("not yet implemented", mouseX, mouseY);
+              break;
+          
+            case button_mainMenuUI_dragNDraw:
+              image(main_menu_button_selected,b.x,b.y);
+              text("a tile based map maker", mouseX, mouseY);
+              break;
+          
+            case button_mainMenuUI_playerFlayer:
+              //image(main_menu_button_selected,scl,scl + pfTop);
+              text("not yet implemented", mouseX, mouseY);
+              break;
+          
+            case button_mainMenuUI_tileNStyle:
+              //image(main_menu_button_selected,scl,scl + tnsTop);
+              text("not yet implemented", mouseX, mouseY);
+              break;
+            
+            case button_mainMenuUI_roleNPlay:
+              //image(main_menu_button_selected,scl,scl + rnpTop);
+              text("not yet implemented", mouseX, mouseY);
+              break;
+          
+            case button_mainMenuUI_options:
+              image(main_menu_button_selected,b.x,b.y);
+              text("change things", mouseX, mouseY);
+              break;
+          
+            case button_mainMenuUI_exit:
+              image(main_menu_button_selected,b.x,b.y);
+              text("exit the program", mouseX, mouseY);
+              break;
+          }
         }
       }
-    }
+      break;//_MAINMENU_ END
+
+    case _TILEMAPUI_:
+      for(button b : buttons_tilemapUI){
+        if(b.wasClicked()){
+          switch(b.identifier){
+            case button_tilemapUI_prevTileMap:
+              tileMapShow--;//go to previous tile map
+              if(tileMapShow < 0){//make sure we don't go below zero
+                tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
+              }
+              return true;
+          
+            case button_tilemapUI_nextTileMap:
+              tileMapShow++;//go to next tile map
+              if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
+                tileMapShow = 0;//set to 0
+              }
+              return true;
+          
+            case button_tilemapUI_loadTileMap:
+              loadTileMap();//load selected tile map
+              updateTileRow();//make sure we're on the correct row
+              noTile = false;//allowed to place tiles
+              changeUI(_EDITORUI_);//go to normal display
+              screenX = tmpScreenX;//reload our position
+              screenY = tmpScreenY;//reload our position
+              return true;
+          
+            case button_tilemapUI_loadMapAndTileMap:
+              noLoop();//don't allow drawing
+              selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
+              while(loadingMap == true){delay(500);}//small delay
+              loadTileMap();//load selected tile map
+              updateTileRow();//make sure we're on the correct row
+              noTile = false;//allowed to place tiles
+              changeUI(_EDITORUI_);//normal screen
+              screenX = tmpScreenX;//reload our position
+              screenY = tmpScreenY;//reload our position
+              loop();//allow drawing
+              return true;
+          }
+        }
+      }
+      break;//_TILEMAPUI_ END
+
+    case _EDITORUI_:
+      for(button b : buttons_editorUI){//go through all the buttons
+        if(b.wasClicked()){//if we clicked this button
+          switch(b.identifier){//go do whatever its function is
+            case button_editorUI_hueWheelVis:
+              colorWheel.setVisible(!colorWheel.isVisible());//invert visibility
+              noTile = !noTile;//ivert whether tiles can be placed
+              return true;
+          
+            case button_editorUI_rgbInputVis:
+              RGBInputVis = !RGBInputVis;//invert visibility
+              colorInputR.setVisible(RGBInputVis);//change visibility
+              colorInputG.setVisible(RGBInputVis);//change visibility
+              colorInputB.setVisible(RGBInputVis);//change visibility
+              noKeyboard = !noKeyboard;//invert whether keyboard functions work
+              noTile = !noTile;//ivert whether tiles can be placed
+              return true;
+          
+            case button_editorUI_colorToggle:
+              colorTiles = !colorTiles;//invert whether we're placing colored tile or not
+              return true;
+          
+            case button_editorUI_changeTileMap:
+              changeUI(_TILEMAPUI_);//tile map loading screen
+              tmpScreenX = screenX;//save our position
+              tmpScreenY = screenY;//save our position
+              screenX = 0;//go back to the top left for looking at tile maps
+              screenY = (scl * 2);//go back to the top left for looking at tile maps
+              return true;
+          
+            case button_editorUI_newMap:
+              clearMapTilesArray();//clear the map
+              return true;
+          
+            case button_editorUI_saveMap:
+              selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+              return true;
+          
+            case button_editorUI_loadMap:
+              selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
+              return true;
+          
+            case button_editorUI_saveImage:
+              selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
+              return true;
+          }
+        }
+      }
+      
+      for(clickRect b : buttons_menuBar){
+        if(b.wasClicked()){
+          if(changeDisplayedMenuBar(b.identifier)){
+            return true;
+          }
+          switch(b.identifier){
+            case button_menuBar_file:
+              println("file");
+              return true;
+          
+            case button_menuBar_edit:
+              println("edit");
+              return true;
+          
+            case button_menuBar_view:
+              println("view");
+              return true;
+          
+            case button_menuBar_color:
+              println("color");
+              return true;
+            
+            case button_menuBar_tools:
+              println("tools");
+              return true;
+          
+            case button_menuBar_help:
+              println("help");
+              return true;
+          }
+        }
+      }
+      displayedMenuBar = -1;
+      break;//_EDITORUI_ END
   }
   
-  if(currentUI == _EDITORUI_){
-    for(button b : buttons_editorUI){//go through all the buttons
-      if(b.wasClicked()){//if we clicked this button
-        switch(b.identifier){//go do whatever its function is
-          case button_editorUI_hueWheelVis:
-            colorWheel.setVisible(!colorWheel.isVisible());//invert visibility
-            noTile = !noTile;//ivert whether tiles can be placed
-            return true;
-        
-          case button_editorUI_rgbInputVis:
-            RGBInputVis = !RGBInputVis;//invert visibility
-            colorInputR.setVisible(RGBInputVis);//change visibility
-            colorInputG.setVisible(RGBInputVis);//change visibility
-            colorInputB.setVisible(RGBInputVis);//change visibility
-            noKeyboard = !noKeyboard;//invert whether keyboard functions work
-            noTile = !noTile;//ivert whether tiles can be placed
-            return true;
-        
-          case button_editorUI_colorToggle:
-            colorTiles = !colorTiles;//invert whether we're placing colored tile or not
-            return true;
-        
-          case button_editorUI_changeTileMap:
-            changeUI(_TILEMAPUI_);//tile map loading screen
-            tmpScreenX = screenX;//save our position
-            tmpScreenY = screenY;//save our position
-            screenX = 0;//go back to the top left for looking at tile maps
-            screenY = (scl * 2);//go back to the top left for looking at tile maps
-            return true;
-        
-          case button_editorUI_newMap:
-            clearMapTilesArray();//clear the map
-            return true;
-        
-          case button_editorUI_saveMap:
-            selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
-            return true;
-        
-          case button_editorUI_loadMap:
-            selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
-            return true;
-        
-          case button_editorUI_saveImage:
-            selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
-            return true;
-        }
-      }
-    }
-    
-    for(clickRect b : buttons_menuBar){
-      displayedMenuBar = -1;
-      if(b.wasClicked()){
-        displayedMenuBar = b.identifier;
-        switch(b.identifier){
-          case button_menuBar_file:
-            println("file");
-            return true;
-        
-          case button_menuBar_edit:
-            println("edit");
-            return true;
-        
-          case button_menuBar_view:
-            println("view");
-            return true;
-        
-          case button_menuBar_color:
-            println("color");
-            return true;
-          
-          case button_menuBar_tools:
-            println("tools");
-            return true;
-        
-          case button_menuBar_help:
-            println("help");
-            return true;
-        }
-      }
-    }
-  }
   return false;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void checkMenuButtons(){
-  mainMenuButton = -1;
-  if(currentUI == _MAINMENU_){
-    for(clickRect b : buttons_mainMenuUI){
-      if(b.wasClicked()){
-        mainMenuButton = b.identifier;
-        switch(b.identifier){
-          case button_mainMenuUI_villagerPillager:
-            //image(main_menu_button_selected,scl,scl + vpTop);
-            text("not yet implemented", mouseX, mouseY);
-            break;
-        
-          case button_mainMenuUI_dragNDraw:
-            image(main_menu_button_selected,b.x,b.y);
-            text("a tile based map maker", mouseX, mouseY);
-            break;
-        
-          case button_mainMenuUI_playerFlayer:
-            //image(main_menu_button_selected,scl,scl + pfTop);
-            text("not yet implemented", mouseX, mouseY);
-            break;
-        
-          case button_mainMenuUI_tileNStyle:
-            //image(main_menu_button_selected,scl,scl + tnsTop);
-            text("not yet implemented", mouseX, mouseY);
-            break;
-          
-          case button_mainMenuUI_roleNPlay:
-            //image(main_menu_button_selected,scl,scl + rnpTop);
-            text("not yet implemented", mouseX, mouseY);
-            break;
-        
-          case button_mainMenuUI_options:
-            image(main_menu_button_selected,b.x,b.y);
-            text("change things", mouseX, mouseY);
-            break;
-        
-          case button_mainMenuUI_exit:
-            image(main_menu_button_selected,b.x,b.y);
-            text("exit the program", mouseX, mouseY);
-            break;
-        }
-      }
-    }
+boolean changeDisplayedMenuBar(int bar){
+  if(displayedMenuBar == bar){
+    displayedMenuBar = -1;
+    return true;
   }
+  displayedMenuBar = bar;
+  return false;
 }

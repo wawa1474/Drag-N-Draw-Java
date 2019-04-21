@@ -78,7 +78,7 @@ void draw(){//Draw the canvas
       background(137);//white background
       image(main_menu_button_background,scl,scl);
       image(main_menu_text,scl,scl);
-      checkMenuButtons();
+      checkButtons();
       break;
 
     case _TILEMAPUI_:

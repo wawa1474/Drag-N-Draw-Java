@@ -182,17 +182,17 @@ void keyTyped(){//We typed a key
     }
     
     if(keyHandler(lastKey, "ALT + F")){
-      displayedMenuBar = button_menuBar_file;
+      changeDisplayedMenuBar(button_menuBar_file);
       return;
     }
     
     if(keyHandler(lastKey, "ALT + E")){
-      displayedMenuBar = button_menuBar_edit;
+      changeDisplayedMenuBar(button_menuBar_edit);
       return;
     }
     
     if(keyHandler(lastKey, "ALT + V")){
-      displayedMenuBar = button_menuBar_view;
+      changeDisplayedMenuBar(button_menuBar_view);
       return;
     }
   }
