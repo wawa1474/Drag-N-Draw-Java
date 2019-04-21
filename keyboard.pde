@@ -5,6 +5,8 @@ boolean ctrlHeld = false;
 boolean shiftHeld = false;
 int lastKey = -1;
 
+//boolean[] pressedKeys = new boolean[65536];
+
 void keyPressed(){//We pressed a key
   //println(keyCode);//What key did we press?
   //if(noKeyboard == false){//are we blocking keyboard functions?
@@ -16,15 +18,15 @@ void keyPressed(){//We pressed a key
   //}
   
   switch(keyCode){
-    case 16://shift
+    case SHIFT://shift(16)
       shiftHeld = true;
       break;
 
-    case 17://ctrl
+    case CONTROL://ctrl(17)
       ctrlHeld = true;
       break;
 
-    case 18://alt
+    case ALT://alt(18)
       altHeld = true;
       break;
     
@@ -45,17 +47,17 @@ void keyPressed(){//We pressed a key
 
 void keyReleased(){
   switch(keyCode){
-    case 16://shift
+    case SHIFT://shift(16)
       shiftHeld = false;
       break;
 
-    case 17://ctrl
+    case CONTROL://ctrl(17)
       ctrlHeld = false;
       break;
 
-    case 18://alt
+    case ALT://alt(18)
       altHeld = false;
-      if(lastKey == 18){//alt
+      if(lastKey == ALT){//alt
         displayedMenuBar = -1;
         lastKey = -1;
       }
@@ -71,8 +73,8 @@ boolean keyHandler(int k, String keybind){
   }
   
   if(str(list[list.length - 1].charAt(0)).toLowerCase().equals(str(char(k)).toLowerCase())){
-    boolean skip = false;
     for(int i = 0; i < list.length; i++){
+      boolean skip = false;
       String tmp = list[i].toLowerCase();
       if(tmp.equals("ctrl")){
         if(ctrlHeld == false){
@@ -91,7 +93,6 @@ boolean keyHandler(int k, String keybind){
           return false;
         }
       }
-      skip = false;
     }
   }else{
     return false;

@@ -1,5 +1,6 @@
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
+final String _magicText = "wawa1474DragDraw";//make sure the file is ours
 
 //PImage texttest1;
 PImage main_menu_button_background;
