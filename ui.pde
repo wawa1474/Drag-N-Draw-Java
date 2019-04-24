@@ -65,13 +65,13 @@ void drawEditorBackground(){//Draw the background
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void drawBorder(int x1, int x2, int y1, int y2, float thiccc){//draw the red border
-  strokeWeight(thiccc);//Thicker
+void drawBorder(int x1_, int x2_, int y1_, int y2_, float thiccc_){//draw the red border
+  strokeWeight(thiccc_);//Thicker
   stroke(255, 0, 0);//RED
-  line(x1, y1, x1, y2);//Draw Left line
-  line(x2, y1, x2, y2);//Draw Right line
-  line(x1, y1, x2, y1);//Draw Top Line
-  line(x1, y2, x2, y2);//Draw Bottom Line
+  line(x1_, y1_, x1_, y2_);//Draw Left line
+  line(x2_, y1_, x2_, y2_);//Draw Right line
+  line(x1_, y1_, x2_, y1_);//Draw Top Line
+  line(x1_, y2_, x2_, y2_);//Draw Bottom Line
 }//void border() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -240,7 +240,7 @@ void setupUI(){
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void changeUI(int ui){//change screen
+void changeUI(int ui_){//change screen
   slidersSetVis(false);
   displayedMenuBar = -1;
   altHeld = false;
@@ -249,17 +249,17 @@ void changeUI(int ui){//change screen
   lastKey = -1;
   previousUI = currentUI;
   
-  if(ui == _MAINMENU_){//are we going to the tile map loading screen
+  if(ui_ == _MAINMENU_){//are we going to the tile map loading screen
     surface.setSize(298 + (scl * 2), 406 + (scl * 2));//298 x 406
     currentUI = _MAINMENU_;
-  }else if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
+  }else if(ui_ == _TILEMAPUI_){//are we going to the tile map loading screen
     surface.setSize(960, 960);//458 x 254
     currentUI = _TILEMAPUI_;
-  }else if(ui == _EDITORUI_){//are we going to the editor screen
+  }else if(ui_ == _EDITORUI_){//are we going to the editor screen
     surface.setSize(960, 960);//458 x 254
     slidersSetVis(true);
     currentUI = _EDITORUI_;
-  }else if(ui == _OPTIONSMENU_){//are we going to the editor screen
+  }else if(ui_ == _OPTIONSMENU_){//are we going to the editor screen
     surface.setSize(458 + (scl * 2), 254 + (scl * 2));//458 x 254
     currentUI = _OPTIONSMENU_;
   }else{
@@ -269,39 +269,39 @@ void changeUI(int ui){//change screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void slidersSetVis(boolean vis){//set visibility for all items on the editors UI
-  scrollSlider.setVisible(vis);
-  RSlider.setVisible(vis);
-  GSlider.setVisible(vis);
-  BSlider.setVisible(vis);
+void slidersSetVis(boolean vis_){//set visibility for all items on the editors UI
+  scrollSlider.setVisible(vis_);
+  RSlider.setVisible(vis_);
+  GSlider.setVisible(vis_);
+  BSlider.setVisible(vis_);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void colorInputR(String value){//called when colorInputR updates
-  RSlider.setValue(int(value));//make sure all values are the same
+void colorInputR(String value_){//called when colorInputR updates
+  RSlider.setValue(int(value_));//make sure all values are the same
 }//void colorInputR(String value) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void colorInputG(String value){//called when colorInputG updates
-  GSlider.setValue(int(value));//make sure all values are the same
+void colorInputG(String value_){//called when colorInputG updates
+  GSlider.setValue(int(value_));//make sure all values are the same
 }//void colorInputG(String value) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void colorInputB(String value){//called when colorInputB updates
-  BSlider.setValue(int(value));//make sure all values are the same
+void colorInputB(String value_){//called when colorInputB updates
+  BSlider.setValue(int(value_));//make sure all values are the same
 }//void colorInputB(String value) END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void loadColors(mTile tmp){//Load RGB Sliders and RGB Inputs with value from tile
-  if(tmp != null){
-    if(tmp.colored){//----------------------------------------------------------------------------do we want to check this?
-      RSlider.setValue(tmp.r);//Set Red Slider value to Red value of the tile
-      GSlider.setValue(tmp.g);//Set Green Slider value to Green value of the tile
-      BSlider.setValue(tmp.b);//Set Blue Slider value to Blue value of the tile
+void loadColors(mTile tile_){//Load RGB Sliders and RGB Inputs with value from tile
+  if(tile_ != null){
+    if(tile_.colored){//----------------------------------------------------------------------------do we want to check this?
+      RSlider.setValue(tile_.red);//Set Red Slider value to Red value of the tile
+      GSlider.setValue(tile_.green);//Set Green Slider value to Green value of the tile
+      BSlider.setValue(tile_.blue);//Set Blue Slider value to Blue value of the tile
     }
   }
 }//void loadColors(int tile) END

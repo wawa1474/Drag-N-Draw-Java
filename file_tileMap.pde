@@ -61,17 +61,17 @@ class tileMap{
   int colorTile;//colortile
   String tileMapName;//name
   
-  public tileMap(String loc, int cols, int rows, int tileWidth, int tileHeight, int num, int colorTile, String name){
-    this.tileMapLocation = loc;
-    this.tileMapCols = cols;
-    this.tileMapRows = rows;
-    this.tileWidth = tileWidth;
-    this.tileHeight = tileHeight;
-    this.numImages = num;
-    this.colorTile = colorTile;
-    this.tileMapName = name;
+  public tileMap(String tileMapLocation_, int tileMapCols_, int tileMapRows_, int tileWidth_, int tileHeight_, int numImages_, int colorTile_, String tileMapName_){
+    this.tileMapLocation = tileMapLocation_;
+    this.tileMapCols = tileMapCols_;
+    this.tileMapRows = tileMapRows_;
+    this.tileWidth = tileWidth_;
+    this.tileHeight = tileHeight_;
+    this.numImages = numImages_;
+    this.colorTile = colorTile_;
+    this.tileMapName = tileMapName_;
     
-    this.tileMapImage = loadImage(this.tileMapLocation);
+    this.tileMapImage = loadImage(tileMapLocation_);
   }
   
   //ArrayList<PImage> splitTiles(){
@@ -99,9 +99,9 @@ class tileMap{
   }
 }
 
-void loadTileMapInfo(String directory, String fileLocation){
+void loadTileMapInfo(String directory_, String fileLocation_){
   Table tileInfoTable = new Table();//tile map info table
-  tileInfoTable = loadTable(fileLocation, "header, csv");// + ".csv", "header");//Load the csv
+  tileInfoTable = loadTable(fileLocation_, "header, csv");// + ".csv", "header");//Load the csv
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   int fileVersion = int(tileInfoTable.getInt(0,"location"));//File Version
@@ -126,7 +126,7 @@ void loadTileMapInfo(String directory, String fileLocation){
       //        tileInfoTable.getString(i,"name"));//tile map name
 
       //String loc, int rows, int cols, int tileWidth, int tileHeight, int num, int colorTile, String name
-      tileMaps.add(new tileMap(directory + "\\" + tileInfoTable.getString(i,"location"),//what is the images name
+      tileMaps.add(new tileMap(directory_ + "\\" + tileInfoTable.getString(i,"location"),//what is the images name
                                tileInfoTable.getInt(i,"tileMapColumns"), tileInfoTable.getInt(i,"tileMapRows"),//how many columns and rows are in the tile map
                                tileInfoTable.getInt(i,"tileWidth"), tileInfoTable.getInt(i,"tileHeight"),//how many pixels wide and tall are the tiles
                                tileInfoTable.getInt(i,"images"), tileInfoTable.getInt(i,"colortile"),//how many images are there and what is the 'clear' tile
@@ -208,26 +208,26 @@ void loadTileMapInfo(String directory, String fileLocation){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 // Function to get a list of all files in a directory and all subdirectories
-ArrayList<File> listFilesRecursive(String dir) {
+ArrayList<File> listFilesRecursive(String dir_) {
   ArrayList<File> fileList = new ArrayList<File>(); 
-  recurseDir(fileList, dir);
+  recurseDir(fileList, dir_);
   return fileList;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 // Recursive function to traverse subdirectories
-void recurseDir(ArrayList<File> a, String dir) {
-  File file = new File(dir);
+void recurseDir(ArrayList<File> a_, String dir_) {
+  File file = new File(dir_);
   if (file.isDirectory()) {
     // If you want to include directories in the list
-    a.add(file);  
+    a_.add(file);  
     File[] subfiles = file.listFiles();
     for (int i = 0; i < subfiles.length; i++) {
       // Call this function on all files in this directory
-      recurseDir(a, subfiles[i].getAbsolutePath());
+      recurseDir(a_, subfiles[i].getAbsolutePath());
     }
   } else {
-    a.add(file);
+    a_.add(file);
   }
 }

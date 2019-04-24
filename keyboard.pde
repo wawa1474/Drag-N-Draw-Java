@@ -65,14 +65,14 @@ void keyReleased(){
   }
 }
 
-boolean keyHandler(int k, String keybind){
-  String[] list = split(keybind, " ");
+boolean keyHandler(int key_, String keybind_){
+  String[] list = split(keybind_, " ");
   
   if(list.length == 0){
     return false;
   }
   
-  if(str(list[list.length - 1].charAt(0)).toLowerCase().equals(str(char(k)).toLowerCase())){
+  if(str(list[list.length - 1].charAt(0)).toLowerCase().equals(str(char(key_)).toLowerCase())){
     for(int i = 0; i < list.length; i++){
       boolean skip = false;
       String tmp = list[i].toLowerCase();
@@ -244,7 +244,7 @@ void keyTyped(){//We typed a key
           for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
             if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
               mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
-              println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.r + ", Green Amount: " + tmp.g + ", Blue Amount: " + tmp.b + ", Tile Image #: " + tmp.image + ", Is Tile Colored: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
+              println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.red + ", Green Amount: " + tmp.green + ", Blue Amount: " + tmp.blue + ", Tile Image #: " + tmp.image + ", Is Tile Colored: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
             }
           }
         }

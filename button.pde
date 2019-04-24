@@ -130,31 +130,31 @@ class button extends clickRect{
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void setButtonColorBack(int button, color c){//set a buttons background color
+void setButtonColorBack(int button_, color c_){//set a buttons background color
   for(button b : buttons_editorUI){//go through all the buttons
-    if(b.identifier == button){//if we've found our button
-      b.bColor = c;//update its background color
+    if(b.identifier == button_){//if we've found our button
+      b.bColor = c_;//update its background color
     }
   }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void setButtonColorText(int button, color c){//set a buttons text color
+void setButtonColorText(int button_, color c_){//set a buttons text color
   for(button b : buttons_editorUI){//go through all the buttons
-    if(b.identifier == button){//if we've found our button
-      b.tColor = c;//update its text color
+    if(b.identifier == button_){//if we've found our button
+      b.tColor = c_;//update its text color
     }
   }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void setButtonColors(int button, color bC, color tC){//set a buttons text color
+void setButtonColors(int button_, color bC_, color tC_){//set a buttons text color
   for(button b : buttons_editorUI){//go through all the buttons
-    if(b.identifier == button){//if we've found our button
-      b.bColor = bC;//update its background color
-      b.tColor = tC;//update its text color
+    if(b.identifier == button_){//if we've found our button
+      b.bColor = bC_;//update its background color
+      b.tColor = tC_;//update its text color
     }
   }
 }
@@ -364,11 +364,11 @@ boolean checkButtons(){
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean changeDisplayedMenuBar(int bar){
-  if(displayedMenuBar == bar){
+boolean changeDisplayedMenuBar(int bar_){
+  if(displayedMenuBar == bar_){
     displayedMenuBar = -1;
     return true;
   }
-  displayedMenuBar = bar;
+  displayedMenuBar = bar_;
   return false;
 }

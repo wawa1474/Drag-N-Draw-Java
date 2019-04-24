@@ -18,4 +18,4 @@ sixteen (16) bytes - application version
 sixteen (16) bytes - magic text ("wawa1474DragDraw")
 */
 
-final int _FILEVERSION_SETTINGS_ = 5;//what version of file saving and loading
+final int _FILEVERSION_SETTINGS_ = 0;//what version of file saving and loading

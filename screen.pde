@@ -73,6 +73,6 @@ void updateScreenBounds(){
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean checkBounds(int x, int y){
-  return !(x >= cols || y >= rows || x < 0 || y < 0);//true if within bounds
+boolean checkBounds(int x_, int y_){
+  return !(x_ >= cols || y_ >= rows || x_ < 0 || y_ < 0);//true if within bounds
 }

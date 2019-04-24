@@ -9,11 +9,11 @@ class clickableIcon{//clickableIcon Object
   color borderColor = color(255,0,0);//what color is the border? (red)
   boolean showBorder = true;//do we show the border
 
-  public clickableIcon(int x, int y, String file, String hoverText){//clickableIcon Object
-    this.x = x;//Store X Position
-    this.y = y;//Store Y Position
-    this.file = file;//store what file to load
-    this.hoverText = hoverText;//text to show when mouse is hovering over
+  public clickableIcon(int x_, int y_, String file_, String hoverText_){//clickableIcon Object
+    this.x = x_;//Store X Position
+    this.y = y_;//Store Y Position
+    this.file = file_;//store what file to load
+    this.hoverText = hoverText_;//text to show when mouse is hovering over
   }//public clickableIcon(int x, int y, String file) END
   
   void draw(){//draw the icon
@@ -56,13 +56,13 @@ void clearClickableTilesArray(){//delete all the icons
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean checkMouseOverIcon(boolean loadMap){
+boolean checkMouseOverIcon(boolean loadMap_){
   if(dragging || deleting){//were we dragging or deleting a tile or were we dragging the mouse
     //do nothing
   }else{
     for(int i = 0; i < icons.size(); i++){//go through all icons
       if(icons.get(i).mouseOver()){//if we clicked on one
-        if(loadMap == true){ icons.get(i).loadMap(); }
+        if(loadMap_ == true){ icons.get(i).loadMap(); }
         return true;//do nothing
       }
     }

@@ -97,12 +97,12 @@ String loadedTileMapName = "Classic";//tile map name
 
 boolean loadingMap = true;//are we loading a map
 
-void FileSaveCanvasSelect(File selection){//map canvas save select callback
-  if (selection == null) {//we didn't select a file
+void FileSaveCanvasSelect(File selection_){//map canvas save select callback
+  if (selection_ == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
   } else {//we selected a file
     //println("User selected " + selection.getAbsolutePath() + " for saving");
-    fileName = selection.getAbsolutePath();//get the path to the file
+    fileName = selection_.getAbsolutePath();//get the path to the file
     if(split(fileName, '.').length > 1){//does the file have an extension
       //Already has file type
     }else{
@@ -114,12 +114,12 @@ void FileSaveCanvasSelect(File selection){//map canvas save select callback
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void fileSaveMapSelect(File selection){//map file save select callback
-  if (selection == null) {//we didn't select a file
+void fileSaveMapSelect(File selection_){//map file save select callback
+  if (selection_ == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
   } else {//we selected a file
     //println("User selected " + selection.getAbsolutePath() + " for saving");
-    fileName = selection.getAbsolutePath();//get the path to the file
+    fileName = selection_.getAbsolutePath();//get the path to the file
     if(split(fileName, '.').length > 1){//does the file have an extension
       //Already has file type
     }else{
@@ -131,13 +131,13 @@ void fileSaveMapSelect(File selection){//map file save select callback
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void FileLoadMapSelect(File selection){//map file load select callback
-  if (selection == null) {//we didn't select a file
+void FileLoadMapSelect(File selection_){//map file load select callback
+  if (selection_ == null) {//we didn't select a file
     println("Window was closed or the user hit cancel.");
     loadingMap = false;//since user canceled loading a map we're no longer loading a map
   } else {//we selected a file
     //println("User selected " + selection.getAbsolutePath() + " for loading");
-    fileName = selection.getAbsolutePath();//get the path to the file
+    fileName = selection_.getAbsolutePath();//get the path to the file
     FileLoadMap();//load the map
   }
 }//void FileLoadMapSelect(File selection) END
@@ -165,7 +165,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
     for(int y = 0; y < rows; y++){//for all the rows
       for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//for all the tiles in that space
         if(mapTiles.get(x).get(y).get(z).colored){//Is the tile colored
-          fullCanvas.fill(mapTiles.get(x).get(y).get(z).r,mapTiles.get(x).get(y).get(z).g,mapTiles.get(x).get(y).get(z).b);//Set Tile background color
+          fullCanvas.fill(mapTiles.get(x).get(y).get(z).red,mapTiles.get(x).get(y).get(z).green,mapTiles.get(x).get(y).get(z).blue);//Set Tile background color
           fullCanvas.rect((x * scl) - lowerx,(y * scl) - lowery,scl,scl);//Draw colored square behind tile
         }
         fullCanvas.image(tileImages[mapTiles.get(x).get(y).get(z).image], (x * scl) - lowerx, (y * scl) - lowery);//Draw tile
@@ -282,11 +282,11 @@ void fileSaveMap(){//Save the Map to file
           mapFile.add((byte)mapTiles.get(x).get(y).get(z).image);//lower byte
       
           //Red/Green
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).r);//red
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).g);//green
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).red);//red
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).green);//green
       
           //Blue/Flags
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).b);//blue
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).blue);//blue
           if(mapTiles.get(x).get(y).get(z).colored){//is the tile colored
             mapFlags |= 1;//yes
           }
@@ -344,16 +344,16 @@ void fileSaveMap(){//Save the Map to file
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-int convertFourBytesToInt(byte a, byte b, byte c, byte d){//convert from four bytes to an integer
+int convertFourBytesToInt(byte a_, byte b_, byte c_, byte d_){//convert from four bytes to an integer
   int returnValue = 0;//start with zero
   
-  returnValue = a & 0xFF;//set it to the most significant byte
+  returnValue = a_ & 0xFF;//set it to the most significant byte
   returnValue = returnValue << 8;//shift it 8 bits to the left
-  returnValue |= b & 0xFF;//add the upper middle byte
+  returnValue |= b_ & 0xFF;//add the upper middle byte
   returnValue = returnValue << 8;//shift it 8 bits to the left
-  returnValue |= c & 0xFF;//add the lower middle byte
+  returnValue |= c_ & 0xFF;//add the lower middle byte
   returnValue = returnValue << 8;//shift it 8 bits to the left
-  returnValue |= d & 0xFF;//add the least significant byte
+  returnValue |= d_ & 0xFF;//add the least significant byte
   
   return returnValue;//return the int
 }

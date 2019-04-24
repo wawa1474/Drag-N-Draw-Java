@@ -44,7 +44,7 @@ make "tool" system
   recolor tool (currently right-click) would be a selectable tool
   place tile (currently left-click) would be a selectable tool
   place color tile (currently middle-click) would be a selectable tool
-  anything else? group selection maybe instead of a button?
+  anything else? group selection tool maybe instead of a button?
 
 use a pallette based color system to compress color data?
   256 or 65536 color pallette

@@ -9,30 +9,30 @@ int tmpTileY = 0;//its y position
 
 class mTile{//Tile Object
   int image;//Store Image Number
-  int r, g, b;//Store RGB Value
+  int red, green, blue;//Store RGB Value
   boolean colored;//does the tile have a background color
 
-  public mTile(int image, int r, int g, int b, boolean colored){//Tile Object
-    this.image = image;//Store Image Number
-    this.r = r;//Store Red Value
-    this.g = g;//Store Green Value
-    this.b = b;//Store Blue Value
-    this.colored = colored;//Is the tile clear
+  public mTile(int image_, int red_, int green_, int blue_, boolean colored_){//Tile Object
+    this.image = image_;//Store Image Number
+    this.red = red_;//Store Red Value
+    this.green = green_;//Store Green Value
+    this.blue = blue_;//Store Blue Value
+    this.colored = colored_;//Is the tile clear
     //this.lore = lore || 0;//The LORE? of the tile
   }//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
   
-  void draw(int x, int y){
+  void draw(int x_, int y_){
     if(this.colored || this.image == tileMaps.get(tileMapShow).colorTile){//Is the tile colored
       if(!drawLines){noStroke();}else{strokeWeight(1); stroke(BLACK);}
-      fill(this.r,this.g,this.b);//Set Tile background color
-      rect(x,y,scl,scl);//Draw colored square behind tile
+      fill(this.red,this.green,this.blue);//Set Tile background color
+      rect(x_,y_,scl,scl);//Draw colored square behind tile
     }
     
     if(tileMaps.size() != 0 && this.image != tileMaps.get(tileMapShow).colorTile){
       if(this.image <= totalImages && tileImages.length != 0 && tileImages[this.image] != null){//if tile image is not 0 and tile image exists
-        image(tileImages[this.image], x, y);//Draw tile
+        image(tileImages[this.image], x_, y_);//Draw tile
       }else if(missingTexture != null && !this.colored){//image is not blank
-        image(missingTexture, x, y);//Draw tile
+        image(missingTexture, x_, y_);//Draw tile
       }
     }
   }
@@ -40,8 +40,8 @@ class mTile{//Tile Object
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean tileOnScreen(float x, float y){//is this tile on screen
-  if(x > -scl - screenX && x  < width - screenX && y > -scl - screenY && y < height - screenY){//is the tile within the screen bounds
+boolean tileOnScreen(float x_, float y_){//is this tile on screen
+  if(x_ > -scl - screenX && x_  < width - screenX && y_ > -scl - screenY && y_ < height - screenY){//is the tile within the screen bounds
     return true;//yes
   }
   return false;//no
@@ -49,9 +49,9 @@ boolean tileOnScreen(float x, float y){//is this tile on screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void deleteTile(int x, int y, int z){//Delete a tile and update the array
-  if(mapTiles.get(x).get(y).size() > 0){//if there are tiles
-    mapTiles.get(x).get(y).remove(z);//delete the top most one
+void deleteTile(int x_, int y_, int z_){//Delete a tile and update the array
+  if(mapTiles.get(x_).get(y_).size() > 0){//if there are tiles
+    mapTiles.get(x_).get(y_).remove(z_);//delete the top most one
   }
 }//void deleteTile() END
 
@@ -109,28 +109,28 @@ void resetLHXY(){//reset the lower/higher xy for background drawing
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void loadTile(int x, int y, int z){//Set current image to tile image
-  if(mapTiles.get(x).get(y).size() != 0){//if there are tiles in this spot
-    tileN = mapTiles.get(x).get(y).get(z).image;//Set current image to tile image
+void loadTile(int x_, int y_, int z_){//Set current image to tile image
+  if(mapTiles.get(x_).get(y_).size() != 0){//if there are tiles in this spot
+    tileN = mapTiles.get(x_).get(y_).get(z_).image;//Set current image to tile image
   }
 }//void loadTile() END
 
-void loadTile(mTile tmp){//Set current image to tile image
-  if(tmp != null && tmp.image != tileMaps.get(tileMapShow).colorTile){
-    tileN = tmp.image;//Set current image to tile image
+void loadTile(mTile tile_){//Set current image to tile image
+  if(tile_ != null && tile_.image != tileMaps.get(tileMapShow).colorTile){
+    tileN = tile_.image;//Set current image to tile image
     updateTileRow();//make sure we're on the right tile row
   }
 }//void loadTile() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean checkImage(int tile){//check if tile about to place has same image as tile mouse is on
+boolean checkImage(int tile_){//check if tile about to place has same image as tile mouse is on
   for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       if(checkBounds(x, y)){
         for(int z = mapTiles.get(x).get(y).size() - 1; z >= 0; z--){
           if(x == mouseTileX && y == mouseTileY){//Is the mouse cursor on the tile we're checking?
-            if(tile == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
+            if(tile_ == mapTiles.get(x).get(y).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
               return false;//Don't place tile
             }
           }

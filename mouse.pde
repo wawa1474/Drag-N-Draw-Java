@@ -82,9 +82,9 @@ void mousePressed(){//We pressed a mouse button
             for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
               if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
                 mTile tmp = mapTiles.get(x).get(y).get(0);//grab the bottom tile
-                tmp.r = (int)RSlider.getValue();//set tile red value
-                tmp.g = (int)GSlider.getValue();//set tile green value
-                tmp.b = (int)BSlider.getValue();//set tile blue value
+                tmp.red = (int)RSlider.getValue();//set tile red value
+                tmp.green = (int)GSlider.getValue();//set tile green value
+                tmp.blue = (int)BSlider.getValue();//set tile blue value
               }
             }
           }//Went through all the tiles
@@ -152,9 +152,9 @@ void mouseDragged(){//We dragged the mouse while holding a button
           for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
             if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
               mTile tmp = mapTiles.get(x).get(y).get(0);//get the tile
-              tmp.r = (int)RSlider.getValue();//set tile red value
-              tmp.g = (int)GSlider.getValue();//set tile green value
-              tmp.b = (int)BSlider.getValue();//set tile blue value
+              tmp.red = (int)RSlider.getValue();//set tile red value
+              tmp.green = (int)GSlider.getValue();//set tile green value
+              tmp.blue = (int)BSlider.getValue();//set tile blue value
             }
           }
         }//Went through all the tiles
@@ -228,7 +228,7 @@ void mouseReleased(){//We released the mouse button
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void mouseWheel(MouseEvent event){//We Scrolled The Mouse Wheel
+void mouseWheel(MouseEvent event_){//We Scrolled The Mouse Wheel
   switch(currentUI){
     case _TILEMAPUI_:
       break;
@@ -237,7 +237,7 @@ void mouseWheel(MouseEvent event){//We Scrolled The Mouse Wheel
       break;
     
     case _EDITORUI_:
-      if(event.getCount() < 0){//If Scrolling Up
+      if(event_.getCount() < 0){//If Scrolling Up
         if(shiftHeld){//holding Control
           nextRowC();//Move To Next Row
         }else{
