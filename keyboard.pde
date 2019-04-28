@@ -105,6 +105,10 @@ boolean keyHandler(int key_, String keybind_){
 
 void keyTyped(){//We typed a key
   //println(hex(key));
+  if(currentUI == _OPENING_){
+    changeUI(_MAINMENU_);
+  }
+  
   if(currentUI == _EDITORUI_){
     switch(displayedMenuBar){
       case button_menuBar_file:
@@ -115,6 +119,7 @@ void keyTyped(){//We typed a key
         
         if(keyHandler(lastKey, "ALT + N")){
           clearMapTilesArray();//clear the map
+          clearClickableTilesArray();//clear the map
           return;
         }
         
@@ -169,6 +174,7 @@ void keyTyped(){//We typed a key
     
     if(keyHandler(lastKey, "CTRL + N")){
       clearMapTilesArray();//clear the map
+      clearClickableTilesArray();//clear the map
       return;
     }
     

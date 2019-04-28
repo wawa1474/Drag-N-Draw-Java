@@ -26,12 +26,13 @@ Controller colorInputR, colorInputG, colorInputB;//number input
 Controller colorWheel;//color wheel
 boolean RGBInputVis = false;//are the rgb number inputs visible
 
+final int _OPENING_ = -1;
 final int _MAINMENU_ = 0;
 final int _TILEMAPUI_ = 1;//UI defines?
 final int _EDITORUI_ = 2;//UI defines?
 final int _OPTIONSMENU_ = 3;//UI defines?
 
-int currentUI = _MAINMENU_;
+int currentUI = _OPENING_;
 int previousUI = -1;
 
 final int borderThickness = 4;//how thick is the canvas border
@@ -235,7 +236,8 @@ void setupUI(){
   buttons_menuBar.add(new clickRect(144, 0, 40, 16, button_menuBar_tools));
   buttons_menuBar.add(new clickRect(184, 0, 35, 16, button_menuBar_help));
 
-  changeUI(_MAINMENU_);//go to tile map selection display
+  //changeUI(_MAINMENU_);//go to tile map selection display
+  changeUI(_OPENING_);//go to tile map selection display
 }//void setup() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -249,7 +251,10 @@ void changeUI(int ui_){//change screen
   lastKey = -1;
   previousUI = currentUI;
   
-  if(ui_ == _MAINMENU_){//are we going to the tile map loading screen
+  if(ui_ == _OPENING_){//are we going to the tile map loading screen
+    surface.setSize(800, 600);
+    currentUI = _OPENING_;
+  }else if(ui_ == _MAINMENU_){//are we going to the tile map loading screen
     surface.setSize(298 + (scl * 2), 406 + (scl * 2));//298 x 406
     currentUI = _MAINMENU_;
   }else if(ui_ == _TILEMAPUI_){//are we going to the tile map loading screen

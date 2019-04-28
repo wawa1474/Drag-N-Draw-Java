@@ -11,9 +11,11 @@ PImage options_menu_mockup;
 
 PImage menu_bar_mockup;
 
+PImage opening_mockup;
+
 void setup(){//Setup everything
   //size(960,540);//make a canvas (X, Y)
-  size(362, 470);
+  size(800, 600);
   surface.setResizable(true);//allow resizing of the window
   noSmooth();//text looks 'nicer'
   
@@ -31,11 +33,14 @@ void setup(){//Setup everything
   menuBar_Images[button_menuBar_edit] = loadImage("assets/menu_bar_edit_mockup.png");
   menuBar_Images[button_menuBar_view] = loadImage("assets/menu_bar_view_mockup.png");
   
+  opening_mockup = loadImage("assets/opening_mockup.png");//main_menu_button_selected
+  
   //set title bar icon
   //PImage titlebaricon = loadImage("myicon.png");
   //surface.setIcon(titlebaricon);
   
   clearMapTilesArray();//setup map tiles array
+  clearClickableTilesArray();//setup clickable tiles array
   loadTileMapInfo();//load tile map info files
   
   UIControls = new ControlP5(this);//set up all the control stuff
@@ -75,6 +80,11 @@ void draw(){//Draw the canvas
   popMatrix();//go back to normal space?
   
   switch(currentUI){
+    case _OPENING_:
+      background(137);//white background
+      image(opening_mockup,0,0);
+      break;
+
     case _MAINMENU_:
       background(137);//white background
       image(main_menu_button_background,scl,scl);

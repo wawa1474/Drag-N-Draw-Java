@@ -12,15 +12,17 @@ void drawTilesAndIcons(){
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       boolean skip = false;//do we skip drawing the rest of the tiles in this spot?
       if(checkBounds(x, y)){
-        for(int z = mapTiles.get(x).get(y).size() - tileDepth; z < mapTiles.get(x).get(y).size() && !skip; z++){//loop through all drawn tiles in this xy position
-          if(z >= 0){//if there's a tile to be drawn
-            mapTiles.get(x).get(y).get(z).draw(x * scl, y * scl);//draw it
-            drawnTiles++;//how many tiles are being drawn?
-            //if(!mapTiles.get(x).get(y).get(z).clear){//if there's a non-clear tile thats not at the bottom
-            //  skip = true;//don't draw anything below it
-            //}
+        //if(mapTiles != null){
+          for(int z = mapTiles.get(x).get(y).size() - tileDepth; z < mapTiles.get(x).get(y).size() && !skip; z++){//loop through all drawn tiles in this xy position
+            if(z >= 0){//if there's a tile to be drawn
+              mapTiles.get(x).get(y).get(z).draw(x * scl, y * scl);//draw it
+              drawnTiles++;//how many tiles are being drawn?
+              //if(!mapTiles.get(x).get(y).get(z).clear){//if there's a non-clear tile thats not at the bottom
+              //  skip = true;//don't draw anything below it
+              //}
+            }
           }
-        }
+        //}
       }
     }
   }
