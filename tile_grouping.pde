@@ -67,19 +67,20 @@ void tileGroupCutCopy(char button_){//mess with tiles in square group
   tileGroupCols = (X2 - X1);//how many x lines
   tileGroupRows = (Y2 - Y1);//how many y lines
   
-  mapTilesCopy.clear();//delete all tiles
-  for(int x = 0; x < tileGroupCols; x++){//and make as many columns as needed
-    mapTilesCopy.add(new ArrayList<ArrayList<mTile>>());//add a column
-    for(int y = 0; y < tileGroupRows; y++){//and make as many rows as needed
-      mapTilesCopy.get(x).add(new ArrayList<mTile>());//add a row
-    }
-  }
+  clearMapTilesArray();//delete all tiles
   
   for(int i = 0; i < tileGroupCols; i++){//loop through all columns
     for(int j = 0; j < tileGroupRows; j++){//loop through all rows
       hadTile = false;//square does not have tile
       if(checkBounds(X1 + i, Y1 + j)){//if its a negetive number
-        if(button_ == 'x'){//we clicked middle button on a tile
+        if(button_ == 'd'){//we clicked middle button on a tile
+          for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
+            hadTile = true;//square has tile
+          }
+          if(hadTile == true){//if there was a tile in the space
+            mapTiles.get(X1 + i).get(Y1 + j).clear();//delete all tiles in the space
+          }
+        }else if(button_ == 'x'){//we clicked middle button on a tile
           for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
             mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
             mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.red, tmp.green, tmp.blue, tmp.colored));//copy the tile

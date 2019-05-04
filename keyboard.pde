@@ -225,6 +225,12 @@ void keyTyped(){//We typed a key
         }
         break;
 
+      case DELETE://we pressed 'DELETE'
+        if(tileGroupStep == 2){//we're on step two of group selection
+          tileGroupCutCopy('d');//cut group selection
+        }
+        break;
+
       case 'x'://We pressed 'X'
         if(tileGroupStep == 2){//we're on step two of group selection
           tileGroupCutCopy('x');//cut group selection

@@ -1,4 +1,8 @@
 /*
+do we switch all custom buttons and sliders to G4P
+or redo custom image buttons with controlP5
+
+
 redo how context switching is done
   make a menu system
 
