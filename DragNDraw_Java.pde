@@ -1,3 +1,5 @@
+import g4p_controls.*;
+
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
 final String _magicText = "wawa1474DragDraw";//make sure the file is ours
@@ -17,7 +19,18 @@ void setup(){//Setup everything
   //size(960,540);//make a canvas (X, Y)
   size(800, 600);
   surface.setResizable(true);//allow resizing of the window
+  surface.setTitle("Drag 'N' Draw Java - " + VERSION);
   noSmooth();//text looks 'nicer'
+  createGUI();
+  main_menu_button_VP.fireAllEvents(true);
+  main_menu_button_DND.fireAllEvents(true);
+  main_menu_button_PF.fireAllEvents(true);
+  main_menu_button_TNS.fireAllEvents(true);
+  main_menu_button_RNP.fireAllEvents(true);
+  main_menu_button_OPTIONS.fireAllEvents(true);
+  main_menu_button_EXIT.fireAllEvents(true);
+  //panel1.setCollapsed(true);
+  //panel1.setVisible(false);
   
   //texttest1 = loadImage("assets/texttest1.png");
   main_menu_button_background = loadImage("assets/main_menu_button_background.png");//main_menu_button_background
@@ -86,10 +99,10 @@ void draw(){//Draw the canvas
       break;
 
     case _MAINMENU_:
-      background(137);//white background
-      image(main_menu_button_background,scl,scl);
-      image(main_menu_text,scl,scl);
-      checkButtons();
+      background(137);//grayish background
+      //image(main_menu_button_background,scl,scl);
+      //image(main_menu_text,scl,scl);
+      //checkButtons();
       break;
 
     case _TILEMAPUI_:

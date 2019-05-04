@@ -22,14 +22,14 @@ final int button_tilemapUI_nextTileMap = 1;
 final int button_tilemapUI_loadTileMap = 2;
 final int button_tilemapUI_loadMapAndTileMap = 3;
 
-int mainMenuButton = -1;//what menu button are we hovering over
-final int button_mainMenuUI_villagerPillager = 0;//Villager Pillager
-final int button_mainMenuUI_dragNDraw = 1;//Drag N' Draw
-final int button_mainMenuUI_playerFlayer = 2;//Player Flayer
-final int button_mainMenuUI_tileNStyle = 3;//Tile N' Style
-final int button_mainMenuUI_roleNPlay = 4;//Role N' Play
-final int button_mainMenuUI_options = 5;//Options
-final int button_mainMenuUI_exit = 99;//Exit
+//int mainMenuButton = -1;//what menu button are we hovering over
+//final int button_mainMenuUI_villagerPillager = 0;//Villager Pillager
+//final int button_mainMenuUI_dragNDraw = 1;//Drag N' Draw
+//final int button_mainMenuUI_playerFlayer = 2;//Player Flayer
+//final int button_mainMenuUI_tileNStyle = 3;//Tile N' Style
+//final int button_mainMenuUI_roleNPlay = 4;//Role N' Play
+//final int button_mainMenuUI_options = 5;//Options
+//final int button_mainMenuUI_exit = 99;//Exit
 
 
 int menuBarButton = -1;//what menu button are we hovering over
@@ -53,6 +53,62 @@ void loadButtonImages(){
     }
   }
 }
+
+GPanel main_menu_panel; 
+GImageButton main_menu_button_VP; 
+GImageButton main_menu_button_DND; 
+GImageButton main_menu_button_PF; 
+GImageButton main_menu_button_TNS; 
+GImageButton main_menu_button_RNP; 
+GImageButton main_menu_button_OPTIONS; 
+GImageButton main_menu_button_EXIT; 
+
+public void createGUI(){
+  G4P.messagesEnabled(false);
+  main_menu_panel = new GPanel(this, 32, 32, 304, 448, "");
+  main_menu_panel.setCollapsible(false);
+  main_menu_panel.setDraggable(false);
+  main_menu_panel.setOpaque(false);
+  //main_menu_panel.addEventHandler(this, "main_menu_panel");
+  main_menu_button_VP = new GImageButton(this, 0, 0, new String[] { "main_menu_VP_normal.png", "main_menu_VP_mouseOver.png", "main_menu_VP_pressed.png" } );
+  main_menu_button_VP.addEventHandler(this, "main_menu_button_handler");
+  main_menu_button_DND = new GImageButton(this, 0, 64, new String[] { "main_menu_DND_normal.png", "main_menu_DND_mouseOver.png", "main_menu_DND_pressed.png" } );
+  main_menu_button_DND.addEventHandler(this, "main_menu_button_handler");
+  main_menu_button_PF = new GImageButton(this, 0, 128, new String[] { "main_menu_PF_normal.png", "main_menu_PF_mouseOver.png", "main_menu_PF_pressed.png" } );
+  main_menu_button_PF.addEventHandler(this, "main_menu_button_handler");
+  main_menu_button_TNS = new GImageButton(this, 0, 192, new String[] { "main_menu_TNS_normal.png", "main_menu_TNS_mouseOver.png", "main_menu_TNS_pressed.png" } );
+  main_menu_button_TNS.addEventHandler(this, "main_menu_button_handler");
+  main_menu_button_RNP = new GImageButton(this, 0, 256, new String[] { "main_menu_RNP_normal.png", "main_menu_RNP_mouseOver.png", "main_menu_RNP_pressed.png" } );
+  main_menu_button_RNP.addEventHandler(this, "main_menu_button_handler");
+  main_menu_button_OPTIONS = new GImageButton(this, 0, 320, new String[] { "main_menu_OPTIONS_normal.png", "main_menu_OPTIONS_mouseOver.png", "main_menu_OPTIONS_pressed.png" } );
+  main_menu_button_OPTIONS.addEventHandler(this, "main_menu_button_handler");
+  main_menu_button_EXIT = new GImageButton(this, 0, 384, new String[] { "main_menu_EXIT_normal.png", "main_menu_EXIT_mouseOver.png", "main_menu_EXIT_pressed.png" } );
+  main_menu_button_EXIT.addEventHandler(this, "main_menu_button_handler");
+  main_menu_panel.addControl(main_menu_button_VP);
+  main_menu_panel.addControl(main_menu_button_DND);
+  main_menu_panel.addControl(main_menu_button_PF);
+  main_menu_panel.addControl(main_menu_button_TNS);
+  main_menu_panel.addControl(main_menu_button_RNP);
+  main_menu_panel.addControl(main_menu_button_OPTIONS);
+  main_menu_panel.addControl(main_menu_button_EXIT);
+}
+
+//public void main_menu_panel(GImageButton source, GEvent event) {}
+
+public void main_menu_button_handler(GImageButton source, GEvent event) { //_CODE_:main_menu_EXIT:319074:
+  //print("main_menu_EXIT - GImageButton >> GEvent." + event + " @ ");
+  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    if(source == main_menu_button_DND){
+      changeUI(_TILEMAPUI_);
+    }else if(source == main_menu_button_OPTIONS){
+      changeUI(_OPTIONSMENU_);
+    }else if(source == main_menu_button_EXIT){
+      exit();
+    }else{
+      //println("error");
+    }
+  }
+} //_CODE_:main_menu_EXIT:319074:
 
 class clickRect{
   float x;//button x position
@@ -186,48 +242,48 @@ void setButtonColors(int button_, color bC_, color tC_){//set a buttons text col
 boolean checkButtons(){
   switch(currentUI){
     case _MAINMENU_:
-      mainMenuButton = -1;
-      for(clickRect b : buttons_mainMenuUI){
-        if(b.wasClicked()){
-          mainMenuButton = b.identifier;
-          switch(b.identifier){
-            case button_mainMenuUI_villagerPillager:
-              //image(main_menu_button_selected,scl,scl + vpTop);
-              text("not yet implemented", mouseX, mouseY);
-              break;
+      //mainMenuButton = -1;
+      //for(clickRect b : buttons_mainMenuUI){
+      //  if(b.wasClicked()){
+      //    mainMenuButton = b.identifier;
+      //    switch(b.identifier){
+      //      case button_mainMenuUI_villagerPillager:
+      //        //image(main_menu_button_selected,scl,scl + vpTop);
+      //        text("not yet implemented", mouseX, mouseY);
+      //        break;
           
-            case button_mainMenuUI_dragNDraw:
-              image(main_menu_button_selected,b.x,b.y);
-              text("a tile based map maker", mouseX, mouseY);
-              break;
+      //      case button_mainMenuUI_dragNDraw:
+      //        image(main_menu_button_selected,b.x,b.y);
+      //        text("a tile based map maker", mouseX, mouseY);
+      //        break;
           
-            case button_mainMenuUI_playerFlayer:
-              //image(main_menu_button_selected,scl,scl + pfTop);
-              text("not yet implemented", mouseX, mouseY);
-              break;
+      //      case button_mainMenuUI_playerFlayer:
+      //        //image(main_menu_button_selected,scl,scl + pfTop);
+      //        text("not yet implemented", mouseX, mouseY);
+      //        break;
           
-            case button_mainMenuUI_tileNStyle:
-              //image(main_menu_button_selected,scl,scl + tnsTop);
-              text("not yet implemented", mouseX, mouseY);
-              break;
+      //      case button_mainMenuUI_tileNStyle:
+      //        //image(main_menu_button_selected,scl,scl + tnsTop);
+      //        text("not yet implemented", mouseX, mouseY);
+      //        break;
             
-            case button_mainMenuUI_roleNPlay:
-              //image(main_menu_button_selected,scl,scl + rnpTop);
-              text("not yet implemented", mouseX, mouseY);
-              break;
+      //      case button_mainMenuUI_roleNPlay:
+      //        //image(main_menu_button_selected,scl,scl + rnpTop);
+      //        text("not yet implemented", mouseX, mouseY);
+      //        break;
           
-            case button_mainMenuUI_options:
-              image(main_menu_button_selected,b.x,b.y);
-              text("change things", mouseX, mouseY);
-              break;
+      //      case button_mainMenuUI_options:
+      //        image(main_menu_button_selected,b.x,b.y);
+      //        text("change things", mouseX, mouseY);
+      //        break;
           
-            case button_mainMenuUI_exit:
-              image(main_menu_button_selected,b.x,b.y);
-              text("exit the program", mouseX, mouseY);
-              break;
-          }
-        }
-      }
+      //      case button_mainMenuUI_exit:
+      //        image(main_menu_button_selected,b.x,b.y);
+      //        text("exit the program", mouseX, mouseY);
+      //        break;
+      //    }
+      //  }
+      //}
       break;//_MAINMENU_ END
 
     case _TILEMAPUI_:

@@ -221,13 +221,13 @@ void setupUI(){
     b.setup();
   }
   
-  buttons_mainMenuUI.add(new clickRect(scl, scl + 0, 298, 57, button_mainMenuUI_villagerPillager));
-  buttons_mainMenuUI.add(new clickRect(scl, scl + 58, 298, 57, button_mainMenuUI_dragNDraw));
-  buttons_mainMenuUI.add(new clickRect(scl, scl + 116, 298, 57, button_mainMenuUI_playerFlayer));
-  buttons_mainMenuUI.add(new clickRect(scl, scl + 174, 298, 57, button_mainMenuUI_tileNStyle));
-  buttons_mainMenuUI.add(new clickRect(scl, scl + 232, 298, 57, button_mainMenuUI_roleNPlay));
-  buttons_mainMenuUI.add(new clickRect(scl, scl + 290, 298, 57, button_mainMenuUI_options));
-  buttons_mainMenuUI.add(new clickRect(scl, scl + 348, 298, 57, button_mainMenuUI_exit));
+  //buttons_mainMenuUI.add(new clickRect(scl, scl + 0, 298, 57, button_mainMenuUI_villagerPillager));
+  //buttons_mainMenuUI.add(new clickRect(scl, scl + 58, 298, 57, button_mainMenuUI_dragNDraw));
+  //buttons_mainMenuUI.add(new clickRect(scl, scl + 116, 298, 57, button_mainMenuUI_playerFlayer));
+  //buttons_mainMenuUI.add(new clickRect(scl, scl + 174, 298, 57, button_mainMenuUI_tileNStyle));
+  //buttons_mainMenuUI.add(new clickRect(scl, scl + 232, 298, 57, button_mainMenuUI_roleNPlay));
+  //buttons_mainMenuUI.add(new clickRect(scl, scl + 290, 298, 57, button_mainMenuUI_options));
+  //buttons_mainMenuUI.add(new clickRect(scl, scl + 348, 298, 57, button_mainMenuUI_exit));
   
   buttons_menuBar.add(new clickRect(0, 0, 30, 16, button_menuBar_file));
   buttons_menuBar.add(new clickRect(30, 0, 32, 16, button_menuBar_edit));
@@ -251,12 +251,15 @@ void changeUI(int ui_){//change screen
   lastKey = -1;
   previousUI = currentUI;
   
+  main_menu_panel.setVisible(false);
+  
   if(ui_ == _OPENING_){//are we going to the tile map loading screen
     surface.setSize(800, 600);
     currentUI = _OPENING_;
   }else if(ui_ == _MAINMENU_){//are we going to the tile map loading screen
-    surface.setSize(298 + (scl * 2), 406 + (scl * 2));//298 x 406
+    surface.setSize(298 + (scl * 2), 384 + 58 + (scl * 2));// 406 + (scl * 2));//298 x 406
     currentUI = _MAINMENU_;
+    main_menu_panel.setVisible(true);
   }else if(ui_ == _TILEMAPUI_){//are we going to the tile map loading screen
     surface.setSize(960, 960);//458 x 254
     currentUI = _TILEMAPUI_;
@@ -265,7 +268,7 @@ void changeUI(int ui_){//change screen
     slidersSetVis(true);
     currentUI = _EDITORUI_;
   }else if(ui_ == _OPTIONSMENU_){//are we going to the editor screen
-    surface.setSize(458 + (scl * 2), 254 + (scl * 2));//458 x 254
+    surface.setSize(458 + (scl * 2), 254 + (scl * 2));//458 x 254 = 522 x 318
     currentUI = _OPTIONSMENU_;
   }else{
     println("ERROR: UI DOES NOT EXIST");

@@ -29,19 +29,19 @@ void mousePressed(){//We pressed a mouse button
       break;//_TILEMAPUI_ END
 
     case _MAINMENU_:
-      switch(mainMenuButton){
-        case button_mainMenuUI_dragNDraw:
-          changeUI(_TILEMAPUI_);
-          return;
+      //switch(mainMenuButton){
+      //  case button_mainMenuUI_dragNDraw:
+      //    changeUI(_TILEMAPUI_);
+      //    return;
   
-        case button_mainMenuUI_options:
-          changeUI(_OPTIONSMENU_);
-          return;
+      //  case button_mainMenuUI_options:
+      //    changeUI(_OPTIONSMENU_);
+      //    return;
   
-        case button_mainMenuUI_exit:
-          exit();
-          return;
-      }
+      //  case button_mainMenuUI_exit:
+      //    exit();
+      //    return;
+      //}
       break;//_MAINMENU_ END
     
     case _EDITORUI_:
