@@ -29,8 +29,9 @@ void setup(){//Setup everything
   main_menu_button_RNP.fireAllEvents(true);
   main_menu_button_OPTIONS.fireAllEvents(true);
   main_menu_button_EXIT.fireAllEvents(true);
-  //panel1.setCollapsed(true);
-  //panel1.setVisible(false);
+  //main_menu_panel.setCollapsed(true);
+  //main_menu_panel.setVisible(false);
+  //main_menu_panel.moveTo(0,0);
   
   //texttest1 = loadImage("assets/texttest1.png");
   main_menu_button_background = loadImage("assets/main_menu_button_background.png");//main_menu_button_background
