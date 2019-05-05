@@ -18,7 +18,6 @@ int backgroundRed = 255;//red
 int backgroundGreen = 255;//green
 int backgroundBlue = 255;//blue
 
-import controlP5.*;//import the library
 ControlP5 UIControls;//ui controls
 Controller RSlider, GSlider, BSlider;//sliders
 Controller scrollSlider;//slider
@@ -154,6 +153,8 @@ void updateEditorUI(){
   GSlider.setColorBackground(color(0, GSlider.getValue(), 0));//update background color (Green)
   BSlider.setColorBackground(color(0, 0, BSlider.getValue()));//update background color (Blue)
 
+  //test.setLocalColor((int)scrollSlider.getValue(), color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
+
   int tmpVal = 150;
   setButtonColors(button_editorUI_hueWheelVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()), color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
   setButtonColors(button_editorUI_rgbInputVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()), color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
@@ -177,7 +178,7 @@ void setupUI(){
   GSlider = UIControls.getController("GSlider");//make it easier to use Slider
   BSlider = UIControls.getController("BSlider");//make it easier to use Slider
 
-  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 14.05, 0).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 14.05, 0).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(0, 16).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
   scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
   UIControls.addColorWheel("colorWheel").setPosition(scl * 8, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
@@ -212,14 +213,14 @@ void setupUI(){
     b.setup();
   }
 
-  buttons_tilemapUI.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, button_tilemapUI_prevTileMap, 10));
-  buttons_tilemapUI.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, button_tilemapUI_nextTileMap, 11));
-  buttons_tilemapUI.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, button_tilemapUI_loadTileMap, -1));
-  buttons_tilemapUI.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, button_tilemapUI_loadMapAndTileMap, 2));
+  //buttons_tilemapUI.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, button_tilemapUI_prevTileMap, 10));
+  //buttons_tilemapUI.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, button_tilemapUI_nextTileMap, 11));
+  //buttons_tilemapUI.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, button_tilemapUI_loadTileMap, -1));
+  //buttons_tilemapUI.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, button_tilemapUI_loadMapAndTileMap, 2));
   
-  for(button b : buttons_tilemapUI){
-    b.setup();
-  }
+  //for(button b : buttons_tilemapUI){
+  //  b.setup();
+  //}
   
   //buttons_mainMenuUI.add(new clickRect(scl, scl + 0, 298, 57, button_mainMenuUI_villagerPillager));
   //buttons_mainMenuUI.add(new clickRect(scl, scl + 58, 298, 57, button_mainMenuUI_dragNDraw));
@@ -251,23 +252,25 @@ void changeUI(int ui_){//change screen
   lastKey = -1;
   previousUI = currentUI;
   
-  main_menu_panel.setVisible(false);
-  menu_bar_panel.setVisible(false);
+  main_menu_button_panel.setVisible(false);
+  menu_bar_button_panel.setVisible(false);
+  tilemap_button_panel.setVisible(false);
   
   if(ui_ == _OPENING_){//are we going to the tile map loading screen
     surface.setSize(800, 600);
     currentUI = _OPENING_;
   }else if(ui_ == _MAINMENU_){//are we going to the tile map loading screen
     surface.setSize(298 + (scl * 2), 384 + 58 + (scl * 2));// 406 + (scl * 2));//298 x 406
-    main_menu_panel.setVisible(true);
+    main_menu_button_panel.setVisible(true);
     currentUI = _MAINMENU_;
   }else if(ui_ == _TILEMAPUI_){//are we going to the tile map loading screen
     surface.setSize(960, 960);//458 x 254
+    tilemap_button_panel.setVisible(true);
     currentUI = _TILEMAPUI_;
   }else if(ui_ == _EDITORUI_){//are we going to the editor screen
     surface.setSize(960, 960);//458 x 254
     slidersSetVis(true);
-    menu_bar_panel.setVisible(true);
+    menu_bar_button_panel.setVisible(true);
     currentUI = _EDITORUI_;
   }else if(ui_ == _OPTIONSMENU_){//are we going to the editor screen
     surface.setSize(458 + (scl * 2), 254 + (scl * 2));//458 x 254 = 522 x 318

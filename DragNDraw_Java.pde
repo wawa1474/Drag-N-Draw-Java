@@ -1,4 +1,5 @@
-import g4p_controls.*;
+import g4p_controls.*;//buttons
+import controlP5.*;//sliders and color wheel
 
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
@@ -108,9 +109,9 @@ void draw(){//Draw the canvas
 
     case _TILEMAPUI_:
       drawTileMapUI();//Draw the tile map selection ui
-      for(button b : buttons_tilemapUI){//loop through all buttons
-        b.draw();//draw the button
-      }
+      //for(button b : buttons_tilemapUI){//loop through all buttons
+      //  b.draw();//draw the button
+      //}
       break;
 
     case _EDITORUI_:
