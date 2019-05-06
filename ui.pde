@@ -164,6 +164,16 @@ void updateEditorUI(){
   }else{
     setButtonColors(button_editorUI_colorToggle, BLACK, WHITE);
   }
+  
+  editor_slider_red.setLocalColor(5, color(red(currentTileColor), 0, 0));
+  editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
+  editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
+  
+
+  editor_slider_hue.setLocalColor(5, currentTileColor);
+  editor_slider_saturation.setLocalColor(5, currentTileColor);
+  editor_slider_brightness.setLocalColor(5, currentTileColor);
+  //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
 }//void update() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -271,6 +281,7 @@ void changeUI(int ui_){//change screen
     surface.setSize(960, 960);//458 x 254
     slidersSetVis(true);
     menu_bar_button_panel.setVisible(true);
+    editor_colorTools_panel.setDragArea();
     currentUI = _EDITORUI_;
   }else if(ui_ == _OPTIONSMENU_){//are we going to the editor screen
     surface.setSize(458 + (scl * 2), 254 + (scl * 2));//458 x 254 = 522 x 318

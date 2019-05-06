@@ -1,6 +1,10 @@
 import g4p_controls.*;//buttons
 import controlP5.*;//sliders and color wheel
 
+final int scl = 32;//Square Scale
+color currentTileColor = color(127,127,127);
+color screen_Amber = #FFCC00;
+
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
 final String _magicText = "wawa1474DragDraw";//make sure the file is ours
@@ -15,6 +19,9 @@ PImage options_menu_mockup;
 PImage menu_bar_mockup;
 
 PImage opening_mockup;
+
+int oldScreenW = 0;
+int oldScreenH = 0;
 
 void setup(){//Setup everything
   //size(960,540);//make a canvas (X, Y)
@@ -62,7 +69,19 @@ void setup(){//Setup everything
   setupUI();//Setup all of the UI stuff
   
   debug();//run whatever debug option is set
+  
+  registerMethod("pre", this);
 }//void setup() END
+
+void pre() {
+  if (currentUI == _EDITORUI_ && (oldScreenW != width || oldScreenH != height)) {
+    // Sketch window has resized
+    oldScreenW = width;
+    oldScreenH = height;
+    // Do what you need to do here
+    editor_colorTools_panel.setDragArea();
+  }
+}
 
 void draw(){//Draw the canvas
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + padFPS());// + " : " + mapTiles.length);

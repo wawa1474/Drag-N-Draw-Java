@@ -16,6 +16,10 @@ void updateMouseXY(){//Update the XY position of the mouse
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mousePressed(){//We pressed a mouse button
+  if(mouseOver_colorToolsPanel()){
+    return;
+  }
+
   if(currentUI == _OPENING_){
     changeUI(_MAINMENU_);
   }
@@ -137,6 +141,10 @@ void mousePressed(){//We pressed a mouse button
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mouseDragged(){//We dragged the mouse while holding a button
+  if(mouseOver_colorToolsPanel()){
+    return;
+  }
+
   switch(currentUI){
     case _TILEMAPUI_:
       break;

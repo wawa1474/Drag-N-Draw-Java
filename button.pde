@@ -77,11 +77,21 @@ GImageButton tilemap_button_NEXT;
 GImageButton tilemap_button_LOADTILES;
 GImageButton tilemap_button_LOADMAP;
 
+GPanel editor_colorTools_panel;
+int editor_colorTools_panel_Width = scl * 10;
+int editor_colorTools_panel_Height = scl * 10;
+
 //GButton test;
 
-//GSlider editor_slider_red;
-//GSlider editor_slider_green;
-//GSlider editor_slider_blue;
+GSlider editor_slider_red;
+GSlider editor_slider_green;
+GSlider editor_slider_blue;
+
+GSlider editor_slider_hue;
+GSlider editor_slider_saturation;
+GSlider editor_slider_brightness;
+
+//GTextField textfield1;//GEvents.CHANGED, ENTERED, SELECTION_CHANGED
 
 public void createGUI(){
   G4P.messagesEnabled(false);
@@ -161,16 +171,60 @@ public void createGUI(){
   tilemap_button_panel.addControl(tilemap_button_LOADTILES);
   tilemap_button_panel.addControl(tilemap_button_LOADMAP);
   
+  editor_colorTools_panel = new GPanel(this, scl * 3, scl * 3, editor_colorTools_panel_Width, editor_colorTools_panel_Height, "color tools");
+  editor_colorTools_panel.addEventHandler(this, "editor_colorTools_panel_handler");
+  
   //test = new GButton(this, scl * 7, scl * 7, 34, 34, "HUE");
   //test.setLocalColor(2, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
   //2 = text color, 3 = border, 4 = background, 6 = mouse over, 14 = click
   
-  //editor_slider_red = new GSlider(this, scl * 9, 50, scl * 3, 10, 8);
-  //editor_slider_red.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
-  //editor_slider_green = new GSlider(this, scl * 9, 60, scl * 3, 10, 8);
-  //editor_slider_green.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
-  //editor_slider_blue = new GSlider(this, scl * 9, 70, scl * 3, 10, 8);
-  //editor_slider_blue.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
+  editor_slider_red = new GSlider(this, scl * 9, 50, scl * 3, 16, 16);
+  editor_slider_red.setLimits(127, 0, 255);
+  editor_slider_red.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
+  editor_slider_red.setLocalColor(3, screen_Amber);
+  editor_slider_red.setLocalColor(5, color(127, 0, 0));
+  editor_slider_red.addEventHandler(this, "editor_RGBSlider_handler");
+  
+  editor_slider_green = new GSlider(this, scl * 9, 66, scl * 3, 16, 16);
+  editor_slider_green.setLimits(127, 0, 255);
+  editor_slider_green.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
+  editor_slider_green.setLocalColor(3, screen_Amber);
+  editor_slider_green.setLocalColor(5, color(0, 127, 0));
+  editor_slider_green.addEventHandler(this, "editor_RGBSlider_handler");
+  
+  editor_slider_blue = new GSlider(this, scl * 9, 82, scl * 3, 16, 16);
+  editor_slider_blue.setLimits(127, 0, 255);
+  editor_slider_blue.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
+  editor_slider_blue.setLocalColor(3, screen_Amber);
+  editor_slider_blue.setLocalColor(5, color(0, 0, 127));
+  editor_slider_blue.addEventHandler(this, "editor_RGBSlider_handler");
+  //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
+  
+  colorMode(HSB, 255);
+  
+  editor_slider_hue = new GSlider(this, scl * 13, 50, scl * 3, 16, 16);
+  editor_slider_hue.setLimits(127, 0, 255);
+  editor_slider_hue.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
+  editor_slider_hue.setLocalColor(3, screen_Amber);
+  editor_slider_hue.setLocalColor(5, color(127, 127, 127));
+  editor_slider_hue.addEventHandler(this, "editor_HSBSlider_handler");
+  
+  editor_slider_saturation = new GSlider(this, scl * 13, 66, scl * 3, 16, 16);
+  editor_slider_saturation.setLimits(127, 0, 255);
+  editor_slider_saturation.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
+  editor_slider_saturation.setLocalColor(3, screen_Amber);
+  editor_slider_saturation.setLocalColor(5, color(127, 127, 127));
+  editor_slider_saturation.addEventHandler(this, "editor_HSBSlider_handler");
+  
+  editor_slider_brightness = new GSlider(this, scl * 13, 82, scl * 3, 16, 16);
+  editor_slider_brightness.setLimits(127, 0, 255);
+  editor_slider_brightness.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
+  editor_slider_brightness.setLocalColor(3, screen_Amber);
+  editor_slider_brightness.setLocalColor(5, color(127, 127, 127));
+  editor_slider_brightness.addEventHandler(this, "editor_HSBSlider_handler");
+  
+  colorMode(RGB, 255);
+  
   //editor_slider_red.setVisible(false);
   //editor_slider_green.setVisible(false);
   //editor_slider_blue.setVisible(false);
@@ -178,8 +232,91 @@ public void createGUI(){
 
 //public void main_menu_panel(GImageButton source, GEvent event) {}
 
-public void main_menu_button_handler(GImageButton source, GEvent event) { //_CODE_:main_menu_EXIT:319074:
-  //print("main_menu_EXIT - GImageButton >> GEvent." + event + " @ ");
+boolean mouseOver_colorToolsPanel(){
+  boolean Xinside = false;
+  boolean Yinside = false;
+  boolean inside = false;
+  
+  if(mouseX > editor_colorTools_panel.getX()){
+    if(editor_colorTools_panel.isCollapsed()){
+      
+    }else if(mouseX < editor_colorTools_panel.getX() + editor_colorTools_panel_Width){
+      Xinside = true;
+    }
+  }
+  
+  if(mouseY > editor_colorTools_panel.getY()){
+    if(editor_colorTools_panel.isCollapsed()){
+      
+    }else if(mouseY < editor_colorTools_panel.getY() + editor_colorTools_panel_Height){
+      Yinside = true;
+    }
+  }
+  
+  inside = editor_colorTools_panel.isOver(mouseX, mouseY) || editor_colorTools_panel.isDragging();
+  
+  return (Xinside && Yinside) || inside;
+}
+
+public void editor_colorTools_panel_handler(GPanel source, GEvent event){
+  //GEvent.COLLAPSED, EXPANDED, DRAGGED
+  if(event == GEvent.COLLAPSED){
+    colorWheel.setVisible(false);
+  }else if(event == GEvent.EXPANDED){
+    colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
+    colorWheel.setVisible(true);
+  }else if(event == GEvent.DRAGGED){
+    colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
+  }
+}
+
+public void editor_RGBSlider_handler(GSlider source, GEvent event){
+  //GEvent.VALUE_STEADY
+  println(event);
+  currentTileColor = color(editor_slider_red.getValueF(),editor_slider_green.getValueF(),editor_slider_blue.getValueF());
+  
+  //if(source != editor_slider_red){
+  //  editor_slider_red.setValue(red(currentTileColor));
+  //}
+  
+  //if(source != editor_slider_green){
+  //  editor_slider_green.setValue(green(currentTileColor));
+  //}
+  
+  //if(source != editor_slider_blue){
+  //  editor_slider_blue.setValue(blue(currentTileColor));
+  //}
+  
+  //editor_slider_hue.setValue(hue(currentTileColor));
+  //editor_slider_saturation.setValue(saturation(currentTileColor));
+  //editor_slider_brightness.setValue(brightness(currentTileColor));
+}
+
+public void editor_HSBSlider_handler(GSlider source, GEvent event){
+  //GEvent.VALUE_STEADY
+  
+  colorMode(HSB, 255);
+  currentTileColor = color(editor_slider_hue.getValueF(),editor_slider_saturation.getValueF(),editor_slider_brightness.getValueF());
+  colorMode(RGB, 255);
+  
+  //if(source != editor_slider_hue){
+  //  editor_slider_hue.setValue(hue(currentTileColor));
+  //}
+  
+  //if(source != editor_slider_saturation){
+  //  editor_slider_saturation.setValue(saturation(currentTileColor));
+  //}
+  
+  //if(source != editor_slider_brightness){
+  //  editor_slider_brightness.setValue(brightness(currentTileColor));
+  //}
+  
+  //editor_slider_red.setValue(red(currentTileColor));
+  //editor_slider_green.setValue(green(currentTileColor));
+  //editor_slider_blue.setValue(blue(currentTileColor));
+}
+
+public void main_menu_button_handler(GImageButton source, GEvent event){
   if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
     if(source == main_menu_button_DND){
       changeUI(_TILEMAPUI_);
@@ -191,10 +328,9 @@ public void main_menu_button_handler(GImageButton source, GEvent event) { //_COD
       //println("error");
     }
   }
-} //_CODE_:main_menu_EXIT:319074:
+}
 
-public void menu_bar_button_handler(GImageButton source, GEvent event) { //_CODE_:main_menu_EXIT:319074:
-  //print("main_menu_EXIT - GImageButton >> GEvent." + event + " @ ");
+public void menu_bar_button_handler(GImageButton source, GEvent event){
   if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
     if(source == menu_bar_button_FILE){
       changeDisplayedMenuBar(button_menuBar_file);
@@ -210,10 +346,9 @@ public void menu_bar_button_handler(GImageButton source, GEvent event) { //_CODE
       changeDisplayedMenuBar(button_menuBar_help);
     }
   }
-} //_CODE_:main_menu_EXIT:319074:
+}
 
-public void tilemap_button_handler(GImageButton source, GEvent event) { //_CODE_:main_menu_EXIT:319074:
-  //print("main_menu_EXIT - GImageButton >> GEvent." + event + " @ ");
+public void tilemap_button_handler(GImageButton source, GEvent event){
   if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
     if(source == tilemap_button_PREV){
       tileMapShow--;//go to previous tile map
@@ -245,7 +380,7 @@ public void tilemap_button_handler(GImageButton source, GEvent event) { //_CODE_
       loop();//allow drawing
     }
   }
-} //_CODE_:main_menu_EXIT:319074:
+}
 
 class clickRect{
   float x;//button x position
