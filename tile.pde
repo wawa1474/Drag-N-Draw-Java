@@ -58,7 +58,7 @@ void deleteTile(int x_, int y_, int z_){//Delete a tile and update the array
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void placeTile(){//Place a tile at the mouses location
-  if(mouseY > (UIBottom * scl) + fudgeValue && mouseY < height - fudgeValue && mouseX < width - fudgeValue && mouseX > 0 + fudgeValue && checkBounds(mouseTileX, mouseTileY)){//We're not on the UI and we're within the screen bounds
+  if(mouseY > (UIBottom/* * scl*/) + fudgeValue && mouseY < height - fudgeValue && mouseX < width - fudgeValue && mouseX > 0 + fudgeValue && checkBounds(mouseTileX, mouseTileY)){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
       //.get(x).get(y).add(new mTile(color tile, red, green, blue, tile is clear));
       mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image

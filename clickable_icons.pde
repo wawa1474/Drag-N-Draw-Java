@@ -32,7 +32,7 @@ class clickableIcon{//clickableIcon Object
   void drawText(){//draw the hovering text
     fill(BLACK);//black
     textSize(24);//larger
-    text(this.hoverText, mouseX - screenX, mouseY - screenY - (scl * 2));//tie the text to the mouse
+    text(this.hoverText, mouseX - screenX, mouseY - screenY - (UIBottom));//tie the text to the mouse
   }
   
   void loadMap(){
@@ -41,7 +41,7 @@ class clickableIcon{//clickableIcon Object
   }
   
   boolean mouseOver(){//are we hovering over the icon
-    if(mouseX - screenX > this.x - 5 && mouseY - screenY - (scl * 2) > this.y - 5 && mouseX - screenX < this.x + scl + 5 && mouseY - screenY - (scl * 2) < this.y + scl + 5){//are we within the bounds of this icon?
+    if(mouseX - screenX > this.x - 5 && mouseY - screenY - (UIBottom) > this.y - 5 && mouseX - screenX < this.x + scl + 5 && mouseY - screenY - (UIBottom) < this.y + scl + 5){//are we within the bounds of this icon?
       return true;//yes we're hovering over the icon
     }
     return false;//no we aren't hovering over the icon

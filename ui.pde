@@ -7,7 +7,7 @@ boolean colorTiles = true;//Are we placing colored tiles
 int fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
 
 final int UIRight = 22;//How many tiles long is the UI?
-final int UIBottom = 2;//How many tiles tall is the UI?
+final int UIBottom = scl * 3;//How many tiles tall is the UI?
 
 final color RED = color(255,0,0);
 final color BLACK = color(0);
@@ -79,7 +79,7 @@ void drawBorder(int x1_, int x2_, int y1_, int y2_, float thiccc_){//draw the re
 void drawEditorUI(){
   fill(BLACK);//black
   noStroke();//no line around the ui background
-  rect(0, 0, width, scl * 2);//ui background
+  rect(0, 0, width, UIBottom);//ui background
 
   strokeWeight(1);//default
   stroke(0);
@@ -181,7 +181,7 @@ void setupUI(){
   UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 14.05, 0).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(0, 16).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
   scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
-  UIControls.addColorWheel("colorWheel").setPosition(scl * 8, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
+  UIControls.addColorWheel("colorWheel").setPosition(scl * 8, UIBottom).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
     .onChange(new CallbackListener(){//when changed
     public void controlEvent(CallbackEvent theEvent){
       RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());//make sure all values are the same
@@ -192,9 +192,9 @@ void setupUI(){
   );
   colorWheel = UIControls.getController("colorWheel");//make it easier to use ColorWheel
 
-  UIControls.addTextfield("colorInputR").setPosition(scl * 12, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
-  UIControls.addTextfield("colorInputG").setPosition(scl * 12, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
-  UIControls.addTextfield("colorInputB").setPosition(scl * 12, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
+  UIControls.addTextfield("colorInputR").setPosition(scl * 12, UIBottom).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
+  UIControls.addTextfield("colorInputG").setPosition(scl * 12, UIBottom + (scl * 0.5)).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
+  UIControls.addTextfield("colorInputB").setPosition(scl * 12, UIBottom + scl).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
   colorInputR = UIControls.getController("colorInputR");//make it easier to use Textfield
   colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
   colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield

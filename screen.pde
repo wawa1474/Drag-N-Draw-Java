@@ -43,7 +43,7 @@ void drawTilesAndIcons(){
   
   if (dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      if(mouseY < UIBottom * scl){
+      if(mouseY < UIBottom/* * scl*/){
         //do nothing
       }else{
         tmpTile.draw(mouseTileX * scl, mouseTileY * scl);//draw the tile on the mouse snapped to the grid

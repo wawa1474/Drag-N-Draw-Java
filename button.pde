@@ -494,7 +494,7 @@ boolean checkButtons(){
               tmpScreenX = screenX;//save our position
               tmpScreenY = screenY;//save our position
               screenX = 0;//go back to the top left for looking at tile maps
-              screenY = (scl * 2);//go back to the top left for looking at tile maps
+              screenY = (UIBottom);//go back to the top left for looking at tile maps
               return true;
           
             case button_editorUI_newMap:

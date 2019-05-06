@@ -23,13 +23,13 @@ void setup(){//Setup everything
   surface.setTitle("Drag 'N' Draw Java - " + VERSION);
   noSmooth();//text looks 'nicer'
   createGUI();
-  main_menu_button_VP.fireAllEvents(true);
-  main_menu_button_DND.fireAllEvents(true);
-  main_menu_button_PF.fireAllEvents(true);
-  main_menu_button_TNS.fireAllEvents(true);
-  main_menu_button_RNP.fireAllEvents(true);
-  main_menu_button_OPTIONS.fireAllEvents(true);
-  main_menu_button_EXIT.fireAllEvents(true);
+  //main_menu_button_VP.fireAllEvents(true);
+  //main_menu_button_DND.fireAllEvents(true);
+  //main_menu_button_PF.fireAllEvents(true);
+  //main_menu_button_TNS.fireAllEvents(true);
+  //main_menu_button_RNP.fireAllEvents(true);
+  //main_menu_button_OPTIONS.fireAllEvents(true);
+  //main_menu_button_EXIT.fireAllEvents(true);
   //main_menu_panel.setCollapsed(true);
   //main_menu_panel.setVisible(false);
   //main_menu_panel.moveTo(0,0);
@@ -71,7 +71,7 @@ void draw(){//Draw the canvas
   updateMouseXY();//Update the XY position of the mouse
   
   pushMatrix();//go back to crazy space?
-  translate(screenX, screenY + (scl * 2));//shift screen around
+  translate(screenX, screenY + UIBottom);//shift screen around
   
   switch(currentUI){
     case _TILEMAPUI_:
