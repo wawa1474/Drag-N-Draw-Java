@@ -180,21 +180,21 @@ public void createGUI(){
   //test.setLocalColor(2, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
   //2 = text color, 3 = border, 4 = background, 6 = mouse over, 14 = click
   
-  editor_slider_red = new GSlider(this, scl * 9, 50, scl * 3, 16, 16);
+  editor_slider_red = new GSlider(this, scl * 6.5, 20, scl * 3, 16, 16);
   editor_slider_red.setLimits(127, 0, 255);
   editor_slider_red.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
   editor_slider_red.setLocalColor(3, screen_Amber);
   editor_slider_red.setLocalColor(5, color(127, 0, 0));
   editor_slider_red.addEventHandler(this, "editor_RGBSlider_handler");
   
-  editor_slider_green = new GSlider(this, scl * 9, 66, scl * 3, 16, 16);
+  editor_slider_green = new GSlider(this, scl * 6.5, 36, scl * 3, 16, 16);
   editor_slider_green.setLimits(127, 0, 255);
   editor_slider_green.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
   editor_slider_green.setLocalColor(3, screen_Amber);
   editor_slider_green.setLocalColor(5, color(0, 127, 0));
   editor_slider_green.addEventHandler(this, "editor_RGBSlider_handler");
   
-  editor_slider_blue = new GSlider(this, scl * 9, 82, scl * 3, 16, 16);
+  editor_slider_blue = new GSlider(this, scl * 6.5, 52, scl * 3, 16, 16);
   editor_slider_blue.setLimits(127, 0, 255);
   editor_slider_blue.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
   editor_slider_blue.setLocalColor(3, screen_Amber);
@@ -204,21 +204,21 @@ public void createGUI(){
   
   colorMode(HSB, 255);
   
-  editor_slider_hue = new GSlider(this, scl * 13, 50, scl * 3, 16, 16);
+  editor_slider_hue = new GSlider(this, scl * 6.5, 84, scl * 3, 16, 16);
   editor_slider_hue.setLimits(127, 0, 255);
   editor_slider_hue.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
   editor_slider_hue.setLocalColor(3, screen_Amber);
   editor_slider_hue.setLocalColor(5, color(127, 127, 127));
   editor_slider_hue.addEventHandler(this, "editor_HSBSlider_handler");
   
-  editor_slider_saturation = new GSlider(this, scl * 13, 66, scl * 3, 16, 16);
+  editor_slider_saturation = new GSlider(this, scl * 6.5, 100, scl * 3, 16, 16);
   editor_slider_saturation.setLimits(127, 0, 255);
   editor_slider_saturation.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
   editor_slider_saturation.setLocalColor(3, screen_Amber);
   editor_slider_saturation.setLocalColor(5, color(127, 127, 127));
   editor_slider_saturation.addEventHandler(this, "editor_HSBSlider_handler");
   
-  editor_slider_brightness = new GSlider(this, scl * 13, 82, scl * 3, 16, 16);
+  editor_slider_brightness = new GSlider(this, scl * 6.5, 116, scl * 3, 16, 16);
   editor_slider_brightness.setLimits(127, 0, 255);
   editor_slider_brightness.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
   editor_slider_brightness.setLocalColor(3, screen_Amber);
@@ -226,6 +226,13 @@ public void createGUI(){
   editor_slider_brightness.addEventHandler(this, "editor_HSBSlider_handler");
   
   colorMode(RGB, 255);
+  
+  editor_colorTools_panel.addControl(editor_slider_red);
+  editor_colorTools_panel.addControl(editor_slider_green);
+  editor_colorTools_panel.addControl(editor_slider_blue);
+  editor_colorTools_panel.addControl(editor_slider_hue);
+  editor_colorTools_panel.addControl(editor_slider_saturation);
+  editor_colorTools_panel.addControl(editor_slider_brightness);
   
   //editor_slider_red.setVisible(false);
   //editor_slider_green.setVisible(false);
@@ -291,6 +298,8 @@ public void editor_RGBSlider_handler(GSlider source, GEvent event){
     editor_slider_hue.setValue(hue(currentTileColor));
     editor_slider_saturation.setValue(saturation(currentTileColor));
     editor_slider_brightness.setValue(brightness(currentTileColor));
+    //UIControls.get(ColorWheel.class,"colorWheel").setHSL(hue(currentTileColor),saturation(currentTileColor),brightness(currentTileColor));
+    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
   }
   
   if(source == editor_slider_red && currentColorSlider == -1){
@@ -342,6 +351,9 @@ public void editor_HSBSlider_handler(GSlider source, GEvent event){
     editor_slider_red.setValue(red(currentTileColor));
     editor_slider_green.setValue(green(currentTileColor));
     editor_slider_blue.setValue(blue(currentTileColor));
+    //UIControls.getController("colorWheel").setRGB(currentTileColor);
+    //colorWheel.setHSL(hue(currentTileColor),saturation(currentTileColor),brightness(currentTileColor));
+    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
   }
   
   if(source == editor_slider_hue && currentColorSlider == -1){

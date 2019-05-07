@@ -18,7 +18,6 @@ int backgroundRed = 255;//red
 int backgroundGreen = 255;//green
 int backgroundBlue = 255;//blue
 
-ControlP5 UIControls;//ui controls
 Controller RSlider, GSlider, BSlider;//sliders
 Controller scrollSlider;//slider
 Controller colorInputR, colorInputG, colorInputB;//number input
@@ -169,10 +168,21 @@ void updateEditorUI(){
   editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
   editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
   
-
-  editor_slider_hue.setLocalColor(5, currentTileColor);
-  editor_slider_saturation.setLocalColor(5, currentTileColor);
-  editor_slider_brightness.setLocalColor(5, currentTileColor);
+  color tmp;
+  color tmp2;
+  
+  colorMode(HSB, 255);
+  tmp = color(hue(currentTileColor), 255, 255);
+  tmp2 = color(hue(currentTileColor), saturation(currentTileColor), 255);
+  colorMode(RGB, 255);
+  
+  //editor_slider_hue.setLocalColor(5, currentTileColor);
+  editor_slider_hue.setLocalColor(5, tmp);
+  //editor_slider_saturation.setLocalColor(5, currentTileColor);
+  //editor_slider_saturation.setLocalColor(5, 255 - (int)saturation(currentTileColor));
+  editor_slider_saturation.setLocalColor(5, tmp2);
+  //editor_slider_brightness.setLocalColor(5, currentTileColor);
+  editor_slider_brightness.setLocalColor(5, (int)brightness(currentTileColor));
   //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
 }//void update() END
 
@@ -194,6 +204,21 @@ void setupUI(){
   UIControls.addColorWheel("colorWheel").setPosition(scl * 8, UIBottom).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
     .onChange(new CallbackListener(){//when changed
     public void controlEvent(CallbackEvent theEvent){
+      if(currentColorSlider == -1){
+        currentColorSlider = 99;
+      }
+      
+      if(currentColorSlider == 99){
+        currentTileColor = UIControls.get(ColorWheel.class, "colorWheel").getRGB();
+        
+        editor_slider_red.setValue(red(currentTileColor));
+        editor_slider_green.setValue(green(currentTileColor));
+        editor_slider_blue.setValue(blue(currentTileColor));
+        editor_slider_hue.setValue(hue(currentTileColor));
+        editor_slider_saturation.setValue(saturation(currentTileColor));
+        editor_slider_brightness.setValue(brightness(currentTileColor));
+      }
+      
       RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());//make sure all values are the same
       GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());//make sure all values are the same
       BSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").b());//make sure all values are the same

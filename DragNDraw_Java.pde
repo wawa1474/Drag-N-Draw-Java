@@ -1,5 +1,6 @@
 import g4p_controls.*;//buttons
 import controlP5.*;//sliders and color wheel
+ControlP5 UIControls;//ui controls
 
 final int scl = 32;//Square Scale
 color currentTileColor = color(127,127,127);
