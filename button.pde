@@ -91,7 +91,9 @@ GSlider editor_slider_hue;
 GSlider editor_slider_saturation;
 GSlider editor_slider_brightness;
 
-//GTextField textfield1;//GEvents.CHANGED, ENTERED, SELECTION_CHANGED
+int currentColorSlider = -1;
+
+//GTextField textfield1;//GEvents.CHANGED, ENTERED, SELECTION_CHANGED, GETS_FOCUS, LOST_FOCUS
 
 public void createGUI(){
   G4P.messagesEnabled(false);
@@ -272,8 +274,36 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
 
 public void editor_RGBSlider_handler(GSlider source, GEvent event){
   //GEvent.VALUE_STEADY
-  println(event);
-  currentTileColor = color(editor_slider_red.getValueF(),editor_slider_green.getValueF(),editor_slider_blue.getValueF());
+  //println(event);
+  //currentTileColor = color(editor_slider_red.getValueF(),editor_slider_green.getValueF(),editor_slider_blue.getValueF());
+  
+  if(currentColorSlider == 3){
+    currentTileColor = color(editor_slider_red.getValueF(),green(currentTileColor),blue(currentTileColor));
+  }
+  if(currentColorSlider == 4){
+    currentTileColor = color(red(currentTileColor),editor_slider_green.getValueF(),blue(currentTileColor));
+  }
+  if(currentColorSlider == 5){
+    currentTileColor = color(red(currentTileColor),green(currentTileColor),editor_slider_blue.getValueF());
+  }
+  
+  if(currentColorSlider == 3 || currentColorSlider == 4 || currentColorSlider == 5){
+    editor_slider_hue.setValue(hue(currentTileColor));
+    editor_slider_saturation.setValue(saturation(currentTileColor));
+    editor_slider_brightness.setValue(brightness(currentTileColor));
+  }
+  
+  if(source == editor_slider_red && currentColorSlider == -1){
+    currentColorSlider = 3;
+  }
+  
+  if(source == editor_slider_green && currentColorSlider == -1){
+    currentColorSlider = 4;
+  }
+  
+  if(source == editor_slider_blue && currentColorSlider == -1){
+    currentColorSlider = 5;
+  }
   
   //if(source != editor_slider_red){
   //  editor_slider_red.setValue(red(currentTileColor));
@@ -294,10 +324,37 @@ public void editor_RGBSlider_handler(GSlider source, GEvent event){
 
 public void editor_HSBSlider_handler(GSlider source, GEvent event){
   //GEvent.VALUE_STEADY
-  
   colorMode(HSB, 255);
-  currentTileColor = color(editor_slider_hue.getValueF(),editor_slider_saturation.getValueF(),editor_slider_brightness.getValueF());
+  if(currentColorSlider == 0){
+    currentTileColor = color(editor_slider_hue.getValueF(),saturation(currentTileColor),brightness(currentTileColor));
+  }
+  if(currentColorSlider == 1){
+    currentTileColor = color(hue(currentTileColor),editor_slider_saturation.getValueF(),brightness(currentTileColor));
+  }
+  if(currentColorSlider == 2){
+    currentTileColor = color(hue(currentTileColor),saturation(currentTileColor),editor_slider_brightness.getValueF());
+  }
+  //colorMode(HSB, 255);
+  //currentTileColor = color(editor_slider_hue.getValueF(),editor_slider_saturation.getValueF(),editor_slider_brightness.getValueF());
   colorMode(RGB, 255);
+  
+  if(currentColorSlider == 0 || currentColorSlider == 1 || currentColorSlider == 2){
+    editor_slider_red.setValue(red(currentTileColor));
+    editor_slider_green.setValue(green(currentTileColor));
+    editor_slider_blue.setValue(blue(currentTileColor));
+  }
+  
+  if(source == editor_slider_hue && currentColorSlider == -1){
+    currentColorSlider = 0;
+  }
+  
+  if(source == editor_slider_saturation && currentColorSlider == -1){
+    currentColorSlider = 1;
+  }
+  
+  if(source == editor_slider_brightness && currentColorSlider == -1){
+    currentColorSlider = 2;
+  }
   
   //if(source != editor_slider_hue){
   //  editor_slider_hue.setValue(hue(currentTileColor));

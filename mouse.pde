@@ -208,6 +208,8 @@ void mouseDragged(){//We dragged the mouse while holding a button
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mouseReleased(){//We released the mouse button
+  currentColorSlider = -1;
+
   switch(currentUI){
     case _TILEMAPUI_:
       break;
