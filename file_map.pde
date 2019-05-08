@@ -165,7 +165,7 @@ void FileSaveCanvas(){//Save the Canvas to a file
     for(int y = 0; y < rows; y++){//for all the rows
       for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//for all the tiles in that space
         if(mapTiles.get(x).get(y).get(z).colored){//Is the tile colored
-          fullCanvas.fill(mapTiles.get(x).get(y).get(z).red,mapTiles.get(x).get(y).get(z).green,mapTiles.get(x).get(y).get(z).blue);//Set Tile background color
+          fullCanvas.fill(mapTiles.get(x).get(y).get(z).tileColor);//Set Tile background color
           fullCanvas.rect((x * scl) - lowerx,(y * scl) - lowery,scl,scl);//Draw colored square behind tile
         }
         fullCanvas.image(tileImages[mapTiles.get(x).get(y).get(z).image], (x * scl) - lowerx, (y * scl) - lowery);//Draw tile
@@ -282,11 +282,11 @@ void fileSaveMap(){//Save the Map to file
           mapFile.add((byte)mapTiles.get(x).get(y).get(z).image);//lower byte
       
           //Red/Green
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).red);//red
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).green);//green
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).getRed());//red
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).getGreen());//green
       
           //Blue/Flags
-          mapFile.add((byte)mapTiles.get(x).get(y).get(z).blue);//blue
+          mapFile.add((byte)mapTiles.get(x).get(y).get(z).getBlue());//blue
           if(mapTiles.get(x).get(y).get(z).colored){//is the tile colored
             mapFlags |= 1;//yes
           }
@@ -475,7 +475,7 @@ void FileLoadMap(){//load map from file
       int imageNumber = (mapFile[tmp + 2] << 8) & 0xFF;
       imageNumber |= (mapFile[tmp + 3]) & 0xFF;
       //.get(x).get(y).add(new mTile(tile number, red, green, blue, is tile clear?));
-      mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(imageNumber, int(mapFile[tmp + 4]), int(mapFile[tmp + 5]), int(mapFile[tmp + 6]), colored));
+      mapTiles.get((mapFile[tmp] & 0xFF)).get((mapFile[tmp + 1] & 0xFF)).add(new mTile(imageNumber, color(int(mapFile[tmp + 4]), int(mapFile[tmp + 5]), int(mapFile[tmp + 6])), colored));
     }
     
     int mapTilesLength = (mapTilesAmount * 8) + ((16 - floor(mapTilesAmount * 8) % 16) % 16) + headerLength;

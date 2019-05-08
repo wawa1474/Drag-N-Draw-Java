@@ -3,8 +3,7 @@ import controlP5.*;//sliders and color wheel
 ControlP5 UIControls;//ui controls
 
 final int scl = 32;//Square Scale
-color currentTileColor = color(127,127,127);
-color screen_Amber = #FFCC00;
+color currentTileColor = color(0,255,255);
 
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
@@ -30,17 +29,6 @@ void setup(){//Setup everything
   surface.setResizable(true);//allow resizing of the window
   surface.setTitle("Drag 'N' Draw Java - " + VERSION);
   noSmooth();//text looks 'nicer'
-  createGUI();
-  //main_menu_button_VP.fireAllEvents(true);
-  //main_menu_button_DND.fireAllEvents(true);
-  //main_menu_button_PF.fireAllEvents(true);
-  //main_menu_button_TNS.fireAllEvents(true);
-  //main_menu_button_RNP.fireAllEvents(true);
-  //main_menu_button_OPTIONS.fireAllEvents(true);
-  //main_menu_button_EXIT.fireAllEvents(true);
-  //main_menu_panel.setCollapsed(true);
-  //main_menu_panel.setVisible(false);
-  //main_menu_panel.moveTo(0,0);
   
   //texttest1 = loadImage("assets/texttest1.png");
   main_menu_button_background = loadImage("assets/main_menu_button_background.png");//main_menu_button_background
@@ -65,6 +53,18 @@ void setup(){//Setup everything
   clearMapTilesArray();//setup map tiles array
   clearClickableTilesArray();//setup clickable tiles array
   loadTileMapInfo();//load tile map info files
+  
+  createGUI();
+  //main_menu_button_VP.fireAllEvents(true);
+  //main_menu_button_DND.fireAllEvents(true);
+  //main_menu_button_PF.fireAllEvents(true);
+  //main_menu_button_TNS.fireAllEvents(true);
+  //main_menu_button_RNP.fireAllEvents(true);
+  //main_menu_button_OPTIONS.fireAllEvents(true);
+  //main_menu_button_EXIT.fireAllEvents(true);
+  //main_menu_panel.setCollapsed(true);
+  //main_menu_panel.setVisible(false);
+  //main_menu_panel.moveTo(0,0);
   
   UIControls = new ControlP5(this);//set up all the control stuff
   setupUI();//Setup all of the UI stuff

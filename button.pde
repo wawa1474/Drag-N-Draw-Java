@@ -173,8 +173,9 @@ public void createGUI(){
   tilemap_button_panel.addControl(tilemap_button_LOADTILES);
   tilemap_button_panel.addControl(tilemap_button_LOADMAP);
   
-  editor_colorTools_panel = new GPanel(this, scl * 3, scl * 3, editor_colorTools_panel_Width, editor_colorTools_panel_Height, "color tools");
+  editor_colorTools_panel = new GPanel(this, scl * 16, 0, editor_colorTools_panel_Width, editor_colorTools_panel_Height, "color tools");
   editor_colorTools_panel.addEventHandler(this, "editor_colorTools_panel_handler");
+  editor_colorTools_panel.setCollapsed(true);
   
   //test = new GButton(this, scl * 7, scl * 7, 34, 34, "HUE");
   //test.setLocalColor(2, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
@@ -186,6 +187,7 @@ public void createGUI(){
   editor_slider_red.setLocalColor(3, screen_Amber);
   editor_slider_red.setLocalColor(5, color(127, 0, 0));
   editor_slider_red.addEventHandler(this, "editor_RGBSlider_handler");
+  editor_slider_red.setVisible(false);
   
   editor_slider_green = new GSlider(this, scl * 6.5, 36, scl * 3, 16, 16);
   editor_slider_green.setLimits(127, 0, 255);
@@ -193,6 +195,7 @@ public void createGUI(){
   editor_slider_green.setLocalColor(3, screen_Amber);
   editor_slider_green.setLocalColor(5, color(0, 127, 0));
   editor_slider_green.addEventHandler(this, "editor_RGBSlider_handler");
+  editor_slider_green.setVisible(false);
   
   editor_slider_blue = new GSlider(this, scl * 6.5, 52, scl * 3, 16, 16);
   editor_slider_blue.setLimits(127, 0, 255);
@@ -200,6 +203,7 @@ public void createGUI(){
   editor_slider_blue.setLocalColor(3, screen_Amber);
   editor_slider_blue.setLocalColor(5, color(0, 0, 127));
   editor_slider_blue.addEventHandler(this, "editor_RGBSlider_handler");
+  editor_slider_blue.setVisible(false);
   //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
   
   colorMode(HSB, 255);
@@ -210,6 +214,7 @@ public void createGUI(){
   editor_slider_hue.setLocalColor(3, screen_Amber);
   editor_slider_hue.setLocalColor(5, color(127, 127, 127));
   editor_slider_hue.addEventHandler(this, "editor_HSBSlider_handler");
+  editor_slider_hue.setVisible(false);
   
   editor_slider_saturation = new GSlider(this, scl * 6.5, 100, scl * 3, 16, 16);
   editor_slider_saturation.setLimits(127, 0, 255);
@@ -217,6 +222,7 @@ public void createGUI(){
   editor_slider_saturation.setLocalColor(3, screen_Amber);
   editor_slider_saturation.setLocalColor(5, color(127, 127, 127));
   editor_slider_saturation.addEventHandler(this, "editor_HSBSlider_handler");
+  editor_slider_saturation.setVisible(false);
   
   editor_slider_brightness = new GSlider(this, scl * 6.5, 116, scl * 3, 16, 16);
   editor_slider_brightness.setLimits(127, 0, 255);
@@ -224,6 +230,7 @@ public void createGUI(){
   editor_slider_brightness.setLocalColor(3, screen_Amber);
   editor_slider_brightness.setLocalColor(5, color(127, 127, 127));
   editor_slider_brightness.addEventHandler(this, "editor_HSBSlider_handler");
+  editor_slider_brightness.setVisible(false);
   
   colorMode(RGB, 255);
   
@@ -271,9 +278,21 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
   //GEvent.COLLAPSED, EXPANDED, DRAGGED
   if(event == GEvent.COLLAPSED){
     colorWheel.setVisible(false);
+    editor_slider_red.setVisible(false);
+    editor_slider_green.setVisible(false);
+    editor_slider_blue.setVisible(false);
+    editor_slider_hue.setVisible(false);
+    editor_slider_saturation.setVisible(false);
+    editor_slider_brightness.setVisible(false);
   }else if(event == GEvent.EXPANDED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
     colorWheel.setVisible(true);
+    editor_slider_red.setVisible(true);
+    editor_slider_green.setVisible(true);
+    editor_slider_blue.setVisible(true);
+    editor_slider_hue.setVisible(true);
+    editor_slider_saturation.setVisible(true);
+    editor_slider_brightness.setVisible(true);
   }else if(event == GEvent.DRAGGED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
   }

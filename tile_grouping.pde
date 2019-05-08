@@ -23,7 +23,7 @@ void tileGroup(String button_){//mess with tiles in square group
       }
       
       if(button_ == "left" && !skip){//we clicked left button
-        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), colorTiles));//Place a tile
+        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileN, currentTileColor, colorTiles));//Place a tile
       }else if(button_ == "center" && tileGroupDeleting == true && !skip){//we clicked middle button on a tile
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
@@ -33,16 +33,14 @@ void tileGroup(String button_){//mess with tiles in square group
           }
         }
       }else if(button_ == "center" && !skip){//we clicked middle button
-        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), true));//Place a tile
+        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileMaps.get(tileMapShow).colorTile, currentTileColor, true));//Place a tile
       }else if(button_ == "right" && !skip){//we clicked right button
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
             if(x == X1 + i && y == Y1 + j){//Are we clicking on the tile
               for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//go through all the tiles in this space
                 mTile tmp = mapTiles.get(x).get(y).get(0);//grab the tile
-                tmp.red = (int)RSlider.getValue();//set tile red value to red slider value
-                tmp.green = (int)GSlider.getValue();//set tile green value to green slider value
-                tmp.blue = (int)BSlider.getValue();//set tile blue value to blue slider value
+                tmp.tileColor = currentTileColor;
                 deleteTile(x, y, 0);//Delete a tile;//delete the old tile
                 mapTiles.get(x).get(y).add(tmp);//and readd it
               }
@@ -67,7 +65,13 @@ void tileGroupCutCopy(char button_){//mess with tiles in square group
   tileGroupCols = (X2 - X1);//how many x lines
   tileGroupRows = (Y2 - Y1);//how many y lines
   
-  clearMapTilesArray();//delete all tiles
+  mapTilesCopy.clear();//delete all tiles
+  for(int x = 0; x < tileGroupCols; x++){//and make as many columns as needed
+    mapTilesCopy.add(new ArrayList<ArrayList<mTile>>());//add a column
+    for(int y = 0; y < tileGroupRows; y++){//and make as many rows as needed
+      mapTilesCopy.get(x).add(new ArrayList<mTile>());//add a row
+    }
+  }
   
   for(int i = 0; i < tileGroupCols; i++){//loop through all columns
     for(int j = 0; j < tileGroupRows; j++){//loop through all rows
@@ -83,7 +87,7 @@ void tileGroupCutCopy(char button_){//mess with tiles in square group
         }else if(button_ == 'x'){//we clicked middle button on a tile
           for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
             mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
-            mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.red, tmp.green, tmp.blue, tmp.colored));//copy the tile
+            mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.tileColor, tmp.colored));//copy the tile
             hadTile = true;//square has tile
           }
           if(hadTile == true){//if there was a tile in the space
@@ -92,8 +96,7 @@ void tileGroupCutCopy(char button_){//mess with tiles in square group
         }else if(button_ == 'c'){//we clicked right button
           for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
             mTile tmp = mapTiles.get(X1 + i).get(Y1 + j).get(z);//copy the tile
-            mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.red, tmp.green, tmp.blue, tmp.colored));//copy the tile
-            hadTile = true;//square has tile
+            mapTilesCopy.get(i).get(j).add(new mTile(tmp.image, tmp.tileColor, tmp.colored));//copy the tile
           }
         }
       }
@@ -121,7 +124,7 @@ void tileGroupPaste(){//Paste The Copied Tiles
         int tmpX = (X1 / scl) + i;//Adjust XY To Be On Tile Border
         int tmpY = (Y1 / scl) + j;//Adjust XY To Be On Tile Border
         if(checkBounds(tmpX, tmpY)){//if we're in a negative area
-          mapTiles.get(tmpX).get(tmpY).add(new mTile(tmp.image, tmp.red, tmp.green, tmp.blue, tmp.colored));//paste tile
+          mapTiles.get(tmpX).get(tmpY).add(new mTile(tmp.image, tmp.tileColor, tmp.colored));//paste tile
         }
       }
     }

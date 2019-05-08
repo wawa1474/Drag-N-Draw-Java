@@ -256,7 +256,7 @@ void keyTyped(){//We typed a key
           for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
             if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
               mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
-              println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.red + ", Green Amount: " + tmp.green + ", Blue Amount: " + tmp.blue + ", Tile Image #: " + tmp.image + ", Is Tile Colored: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
+              println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.getRed() + ", Green Amount: " + tmp.getGreen() + ", Blue Amount: " + tmp.getBlue() + ", Tile Image #: " + tmp.image + ", Is Tile Colored: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
             }
           }
         }
@@ -274,9 +274,9 @@ void keyTyped(){//We typed a key
         break;
 
       case 'p'://We pressed 'P'
-        backgroundRed = (int)RSlider.getValue();//set red
-        backgroundGreen = (int)GSlider.getValue();//set green
-        backgroundBlue = (int)BSlider.getValue();//set blue
+        backgroundRed = red(currentTileColor);//set red
+        backgroundGreen = green(currentTileColor);//set green
+        backgroundBlue = blue(currentTileColor);//set blue
         break;
 
       case 'o'://We pressed 'O'

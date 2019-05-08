@@ -7,22 +7,40 @@ int tmpTileY = 0;//its y position
 
 class mTile{//Tile Object
   int image;//Store Image Number
-  int red, green, blue;//Store RGB Value
+  //int red, green, blue;//Store RGB Value
+  color tileColor;
   boolean colored;//does the tile have a background color
 
-  public mTile(int image_, int red_, int green_, int blue_, boolean colored_){//Tile Object
+  //public mTile(int image_, int red_, int green_, int blue_, boolean colored_){//Tile Object
+  //  this.image = image_;//Store Image Number
+  //  this.tileColor = color(red_, green_, blue_);
+  //  this.colored = colored_;//Is the tile clear
+  //  //this.lore = lore || 0;//The LORE? of the tile
+  //}//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
+  
+  public mTile(int image_, color tileColor_, boolean colored_){//Tile Object
     this.image = image_;//Store Image Number
-    this.red = red_;//Store Red Value
-    this.green = green_;//Store Green Value
-    this.blue = blue_;//Store Blue Value
+    this.tileColor = tileColor_;
     this.colored = colored_;//Is the tile clear
     //this.lore = lore || 0;//The LORE? of the tile
   }//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
   
+  int getRed(){
+    return (int)red(this.tileColor);
+  }
+  
+  int getGreen(){
+    return (int)green(this.tileColor);
+  }
+  
+  int getBlue(){
+    return (int)blue(this.tileColor);
+  }
+  
   void draw(int x_, int y_){
     if(this.colored || this.image == tileMaps.get(tileMapShow).colorTile){//Is the tile colored
       if(!drawLines){noStroke();}else{strokeWeight(1); stroke(BLACK);}
-      fill(this.red,this.green,this.blue);//Set Tile background color
+      fill(this.tileColor);//Set Tile background color
       rect(x_,y_,scl,scl);//Draw colored square behind tile
     }
     
@@ -59,10 +77,10 @@ void placeTile(){//Place a tile at the mouses location
   if(mouseY > (UIBottom/* * scl*/) + fudgeValue && mouseY < height - fudgeValue && mouseX < width - fudgeValue && mouseX > 0 + fudgeValue && checkBounds(mouseTileX, mouseTileY)){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
       //.get(x).get(y).add(new mTile(color tile, red, green, blue, tile is clear));
-      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileMaps.get(tileMapShow).colorTile,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), false));//Place a colored tile with no image
+      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileMaps.get(tileMapShow).colorTile, currentTileColor, false));//Place a colored tile with no image
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //.get(x).get(y).add(new mTile(selected tile image number, red, green, blue, is tile clear?));
-      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileN,(int)RSlider.getValue(),(int)GSlider.getValue(),(int)BSlider.getValue(), colorTiles));//Place a tile
+      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileN, currentTileColor, colorTiles));//Place a tile
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //do nothing
     }
