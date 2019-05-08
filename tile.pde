@@ -154,10 +154,5 @@ boolean checkImage(int tile_){//check if tile about to place has same image as t
       }
     }
   }
-  //for(int z = mapTiles.get(mouseTileY).get(mouseTileY).size() - 1; z >= 0; z--){
-  //  if(tile == mapTiles.get(mouseTileY).get(mouseTileY).get(z).image){//Is the tile image we're on the same as the one we're trying to place?
-  //    return false;//Don't place tile
-  //  }
-  //}
   return true;//Place tile
 }//boolean checkImage(int tile) END

@@ -2,6 +2,11 @@
 do we switch all custom buttons and sliders to G4P
 or redo custom image buttons with controlP5
 
+label color sliders
+add alpha slider
+add hex color number input/output
+add hsv color number input/output
+
 
 redo how context switching is done
   make a menu system

@@ -8,28 +8,8 @@ ArrayList<button> buttons_editorUI = new ArrayList<button>(0);
 PImage[] menuBar_Images;
 int displayedMenuBar = -1;
 
-final int button_editorUI_hueWheelVis = 0;
-final int button_editorUI_rgbInputVis = 1;
 final int button_editorUI_colorToggle = 2;
-final int button_editorUI_newMap = 3;
-final int button_editorUI_saveMap = 4;
-final int button_editorUI_loadMap = 5;
-final int button_editorUI_saveImage = 6;
 final int button_editorUI_changeTileMap = 7;
-
-//final int button_tilemapUI_prevTileMap = 0;
-//final int button_tilemapUI_nextTileMap = 1;
-//final int button_tilemapUI_loadTileMap = 2;
-//final int button_tilemapUI_loadMapAndTileMap = 3;
-
-//int mainMenuButton = -1;//what menu button are we hovering over
-//final int button_mainMenuUI_villagerPillager = 0;//Villager Pillager
-//final int button_mainMenuUI_dragNDraw = 1;//Drag N' Draw
-//final int button_mainMenuUI_playerFlayer = 2;//Player Flayer
-//final int button_mainMenuUI_tileNStyle = 3;//Tile N' Style
-//final int button_mainMenuUI_roleNPlay = 4;//Role N' Play
-//final int button_mainMenuUI_options = 5;//Options
-//final int button_mainMenuUI_exit = 99;//Exit
 
 
 //int menuBarButton = -1;//what menu button are we hovering over
@@ -39,20 +19,6 @@ final int button_menuBar_view = 2;
 final int button_menuBar_color = 3;
 final int button_menuBar_tools = 4;
 final int button_menuBar_help = 5;
-
-//void loadButtonImages(){
-//  PImage ui = loadImage("/assets/UI/Icons_byVellidragon.png");
-//  gui = new PImage[30];
-//  int pos = 0;
-//  for(int y = 0; y < 6; y++){
-//    for(int x = 0; x < 5; x++){
-//      PImage tmp = createImage(32, 32, ARGB);//create a temporary image
-//      tmp.copy(ui, x * 16, y * 16, 16, 16, 0, 0, 32, 32);
-//      gui[pos] = tmp;
-//      pos++;
-//    }
-//  }
-//}
 
 GPanel main_menu_button_panel;
 GImageButton main_menu_button_VP;
@@ -240,10 +206,6 @@ public void createGUI(){
   editor_colorTools_panel.addControl(editor_slider_hue);
   editor_colorTools_panel.addControl(editor_slider_saturation);
   editor_colorTools_panel.addControl(editor_slider_brightness);
-  
-  //editor_slider_red.setVisible(false);
-  //editor_slider_green.setVisible(false);
-  //editor_slider_blue.setVisible(false);
 }
 
 //public void main_menu_panel(GImageButton source, GEvent event) {}
@@ -284,6 +246,9 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     editor_slider_hue.setVisible(false);
     editor_slider_saturation.setVisible(false);
     editor_slider_brightness.setVisible(false);
+    colorInputR.setVisible(false);//change visibility
+    colorInputG.setVisible(false);//change visibility
+    colorInputB.setVisible(false);//change visibility
   }else if(event == GEvent.EXPANDED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
     colorWheel.setVisible(true);
@@ -293,15 +258,24 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     editor_slider_hue.setVisible(true);
     editor_slider_saturation.setVisible(true);
     editor_slider_brightness.setVisible(true);
+    colorInputR.setVisible(true);//change visibility
+    colorInputG.setVisible(true);//change visibility
+    colorInputB.setVisible(true);//change visibility
+    colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
+    colorInputR.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
+    colorInputG.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
+    colorInputB.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
   }else if(event == GEvent.DRAGGED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
+    colorInputR.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
+    colorInputG.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
+    colorInputB.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
   }
 }
 
 public void editor_RGBSlider_handler(GSlider source, GEvent event){
   //GEvent.VALUE_STEADY
   //println(event);
-  //currentTileColor = color(editor_slider_red.getValueF(),editor_slider_green.getValueF(),editor_slider_blue.getValueF());
   
   if(currentColorSlider == 3){
     currentTileColor = color(editor_slider_red.getValueF(),green(currentTileColor),blue(currentTileColor));
@@ -317,7 +291,6 @@ public void editor_RGBSlider_handler(GSlider source, GEvent event){
     editor_slider_hue.setValue(hue(currentTileColor));
     editor_slider_saturation.setValue(saturation(currentTileColor));
     editor_slider_brightness.setValue(brightness(currentTileColor));
-    //UIControls.get(ColorWheel.class,"colorWheel").setHSL(hue(currentTileColor),saturation(currentTileColor),brightness(currentTileColor));
     UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
   }
   
@@ -332,22 +305,6 @@ public void editor_RGBSlider_handler(GSlider source, GEvent event){
   if(source == editor_slider_blue && currentColorSlider == -1){
     currentColorSlider = 5;
   }
-  
-  //if(source != editor_slider_red){
-  //  editor_slider_red.setValue(red(currentTileColor));
-  //}
-  
-  //if(source != editor_slider_green){
-  //  editor_slider_green.setValue(green(currentTileColor));
-  //}
-  
-  //if(source != editor_slider_blue){
-  //  editor_slider_blue.setValue(blue(currentTileColor));
-  //}
-  
-  //editor_slider_hue.setValue(hue(currentTileColor));
-  //editor_slider_saturation.setValue(saturation(currentTileColor));
-  //editor_slider_brightness.setValue(brightness(currentTileColor));
 }
 
 public void editor_HSBSlider_handler(GSlider source, GEvent event){
@@ -362,16 +319,12 @@ public void editor_HSBSlider_handler(GSlider source, GEvent event){
   if(currentColorSlider == 2){
     currentTileColor = color(hue(currentTileColor),saturation(currentTileColor),editor_slider_brightness.getValueF());
   }
-  //colorMode(HSB, 255);
-  //currentTileColor = color(editor_slider_hue.getValueF(),editor_slider_saturation.getValueF(),editor_slider_brightness.getValueF());
   colorMode(RGB, 255);
   
   if(currentColorSlider == 0 || currentColorSlider == 1 || currentColorSlider == 2){
     editor_slider_red.setValue(red(currentTileColor));
     editor_slider_green.setValue(green(currentTileColor));
     editor_slider_blue.setValue(blue(currentTileColor));
-    //UIControls.getController("colorWheel").setRGB(currentTileColor);
-    //colorWheel.setHSL(hue(currentTileColor),saturation(currentTileColor),brightness(currentTileColor));
     UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
   }
   
@@ -386,22 +339,6 @@ public void editor_HSBSlider_handler(GSlider source, GEvent event){
   if(source == editor_slider_brightness && currentColorSlider == -1){
     currentColorSlider = 2;
   }
-  
-  //if(source != editor_slider_hue){
-  //  editor_slider_hue.setValue(hue(currentTileColor));
-  //}
-  
-  //if(source != editor_slider_saturation){
-  //  editor_slider_saturation.setValue(saturation(currentTileColor));
-  //}
-  
-  //if(source != editor_slider_brightness){
-  //  editor_slider_brightness.setValue(brightness(currentTileColor));
-  //}
-  
-  //editor_slider_red.setValue(red(currentTileColor));
-  //editor_slider_green.setValue(green(currentTileColor));
-  //editor_slider_blue.setValue(blue(currentTileColor));
 }
 
 public void main_menu_button_handler(GImageButton source, GEvent event){
@@ -546,26 +483,6 @@ class button extends clickRect{
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-//void setButtonColorBack(int button_, color c_){//set a buttons background color
-//  for(button b : buttons_editorUI){//go through all the buttons
-//    if(b.identifier == button_){//if we've found our button
-//      b.bColor = c_;//update its background color
-//    }
-//  }
-//}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-//void setButtonColorText(int button_, color c_){//set a buttons text color
-//  for(button b : buttons_editorUI){//go through all the buttons
-//    if(b.identifier == button_){//if we've found our button
-//      b.tColor = c_;//update its text color
-//    }
-//  }
-//}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
 void setButtonColors(int button_, color bC_, color tC_){//set a buttons text color
   for(button b : buttons_editorUI){//go through all the buttons
     if(b.identifier == button_){//if we've found our button
@@ -577,137 +494,18 @@ void setButtonColors(int button_, color bC_, color tC_){//set a buttons text col
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-//void setButtonVis(int button, boolean vis){//set a buttons visibility
-//  for(button b : buttons){//go through all the buttons
-//    if(b.identifier == button){//if we've found our button
-//      b.visible = vis;//update its visibility
-//    }
-//  }
-//}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-//void setButtonPos(int button, int x, int y){//set a buttons xy position
-//  for(button b : buttons){//go through all the buttons
-//    if(b.identifier == button){//if we've found our button
-//      b.x = x;//update its x position
-//      b.y = y;//update its y position
-//      b.setup();//update its properties so its text is drawn correctly
-//    }
-//  }
-//}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
 boolean checkButtons(){
   switch(currentUI){
     case _MAINMENU_:
-      //mainMenuButton = -1;
-      //for(clickRect b : buttons_mainMenuUI){
-      //  if(b.wasClicked()){
-      //    mainMenuButton = b.identifier;
-      //    switch(b.identifier){
-      //      case button_mainMenuUI_villagerPillager:
-      //        //image(main_menu_button_selected,scl,scl + vpTop);
-      //        text("not yet implemented", mouseX, mouseY);
-      //        break;
-          
-      //      case button_mainMenuUI_dragNDraw:
-      //        image(main_menu_button_selected,b.x,b.y);
-      //        text("a tile based map maker", mouseX, mouseY);
-      //        break;
-          
-      //      case button_mainMenuUI_playerFlayer:
-      //        //image(main_menu_button_selected,scl,scl + pfTop);
-      //        text("not yet implemented", mouseX, mouseY);
-      //        break;
-          
-      //      case button_mainMenuUI_tileNStyle:
-      //        //image(main_menu_button_selected,scl,scl + tnsTop);
-      //        text("not yet implemented", mouseX, mouseY);
-      //        break;
-            
-      //      case button_mainMenuUI_roleNPlay:
-      //        //image(main_menu_button_selected,scl,scl + rnpTop);
-      //        text("not yet implemented", mouseX, mouseY);
-      //        break;
-          
-      //      case button_mainMenuUI_options:
-      //        image(main_menu_button_selected,b.x,b.y);
-      //        text("change things", mouseX, mouseY);
-      //        break;
-          
-      //      case button_mainMenuUI_exit:
-      //        image(main_menu_button_selected,b.x,b.y);
-      //        text("exit the program", mouseX, mouseY);
-      //        break;
-      //    }
-      //  }
-      //}
       break;//_MAINMENU_ END
 
     case _TILEMAPUI_:
-      //for(button b : buttons_tilemapUI){
-      //  if(b.wasClicked()){
-      //    switch(b.identifier){
-      //      case button_tilemapUI_prevTileMap:
-      //        tileMapShow--;//go to previous tile map
-      //        if(tileMapShow < 0){//make sure we don't go below zero
-      //          tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
-      //        }
-      //        return true;
-          
-      //      case button_tilemapUI_nextTileMap:
-      //        tileMapShow++;//go to next tile map
-      //        if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
-      //          tileMapShow = 0;//set to 0
-      //        }
-      //        return true;
-          
-      //      case button_tilemapUI_loadTileMap:
-      //        loadTileMap();//load selected tile map
-      //        updateTileRow();//make sure we're on the correct row
-      //        noTile = false;//allowed to place tiles
-      //        changeUI(_EDITORUI_);//go to normal display
-      //        screenX = tmpScreenX;//reload our position
-      //        screenY = tmpScreenY;//reload our position
-      //        return true;
-          
-      //      case button_tilemapUI_loadMapAndTileMap:
-      //        noLoop();//don't allow drawing
-      //        selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
-      //        while(loadingMap == true){delay(500);}//small delay
-      //        loadTileMap();//load selected tile map
-      //        updateTileRow();//make sure we're on the correct row
-      //        noTile = false;//allowed to place tiles
-      //        changeUI(_EDITORUI_);//normal screen
-      //        screenX = tmpScreenX;//reload our position
-      //        screenY = tmpScreenY;//reload our position
-      //        loop();//allow drawing
-      //        return true;
-      //    }
-      //  }
-      //}
       break;//_TILEMAPUI_ END
 
     case _EDITORUI_:
       for(button b : buttons_editorUI){//go through all the buttons
         if(b.wasClicked()){//if we clicked this button
           switch(b.identifier){//go do whatever its function is
-            case button_editorUI_hueWheelVis:
-              colorWheel.setVisible(!colorWheel.isVisible());//invert visibility
-              noTile = !noTile;//ivert whether tiles can be placed
-              return true;
-          
-            case button_editorUI_rgbInputVis:
-              RGBInputVis = !RGBInputVis;//invert visibility
-              colorInputR.setVisible(RGBInputVis);//change visibility
-              colorInputG.setVisible(RGBInputVis);//change visibility
-              colorInputB.setVisible(RGBInputVis);//change visibility
-              noKeyboard = !noKeyboard;//invert whether keyboard functions work
-              noTile = !noTile;//ivert whether tiles can be placed
-              return true;
-          
             case button_editorUI_colorToggle:
               colorTiles = !colorTiles;//invert whether we're placing colored tile or not
               return true;
@@ -719,59 +517,9 @@ boolean checkButtons(){
               screenX = 0;//go back to the top left for looking at tile maps
               screenY = (UIBottom);//go back to the top left for looking at tile maps
               return true;
-          
-            case button_editorUI_newMap:
-              clearMapTilesArray();//clear the map
-              return true;
-          
-            case button_editorUI_saveMap:
-              selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
-              return true;
-          
-            case button_editorUI_loadMap:
-              selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
-              return true;
-          
-            case button_editorUI_saveImage:
-              selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
-              return true;
           }
         }
       }
-      
-      //for(clickRect b : buttons_menuBar){
-      //  if(b.wasClicked()){
-      //    if(changeDisplayedMenuBar(b.identifier)){
-      //      return true;
-      //    }
-      //    switch(b.identifier){
-      //      case button_menuBar_file:
-      //        println("file");
-      //        return true;
-          
-      //      case button_menuBar_edit:
-      //        println("edit");
-      //        return true;
-          
-      //      case button_menuBar_view:
-      //        println("view");
-      //        return true;
-          
-      //      case button_menuBar_color:
-      //        println("color");
-      //        return true;
-            
-      //      case button_menuBar_tools:
-      //        println("tools");
-      //        return true;
-          
-      //      case button_menuBar_help:
-      //        println("help");
-      //        return true;
-      //    }
-      //  }
-      //}
-      //displayedMenuBar = -1;
       break;//_EDITORUI_ END
   }
   

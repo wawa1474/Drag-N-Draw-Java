@@ -62,9 +62,6 @@ void setup(){//Setup everything
   //main_menu_button_RNP.fireAllEvents(true);
   //main_menu_button_OPTIONS.fireAllEvents(true);
   //main_menu_button_EXIT.fireAllEvents(true);
-  //main_menu_panel.setCollapsed(true);
-  //main_menu_panel.setVisible(false);
-  //main_menu_panel.moveTo(0,0);
   
   UIControls = new ControlP5(this);//set up all the control stuff
   setupUI();//Setup all of the UI stuff
@@ -79,7 +76,6 @@ void pre() {
     // Sketch window has resized
     oldScreenW = width;
     oldScreenH = height;
-    // Do what you need to do here
     editor_colorTools_panel.setDragArea();
   }
 }
@@ -122,16 +118,10 @@ void draw(){//Draw the canvas
 
     case _MAINMENU_:
       background(137);//grayish background
-      //image(main_menu_button_background,scl,scl);
-      //image(main_menu_text,scl,scl);
-      //checkButtons();
       break;
 
     case _TILEMAPUI_:
       drawTileMapUI();//Draw the tile map selection ui
-      //for(button b : buttons_tilemapUI){//loop through all buttons
-      //  b.draw();//draw the button
-      //}
       break;
 
     case _EDITORUI_:

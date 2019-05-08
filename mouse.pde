@@ -33,19 +33,6 @@ void mousePressed(){//We pressed a mouse button
       break;//_TILEMAPUI_ END
 
     case _MAINMENU_:
-      //switch(mainMenuButton){
-      //  case button_mainMenuUI_dragNDraw:
-      //    changeUI(_TILEMAPUI_);
-      //    return;
-  
-      //  case button_mainMenuUI_options:
-      //    changeUI(_OPTIONSMENU_);
-      //    return;
-  
-      //  case button_mainMenuUI_exit:
-      //    exit();
-      //    return;
-      //}
       break;//_MAINMENU_ END
     
     case _EDITORUI_:
@@ -229,9 +216,7 @@ void mouseReleased(){//We released the mouse button
     
       deleting = false;//Quit deleting
       dragging = false;//Quit dragging
-      if(!colorWheel.isVisible() && !colorInputR.isVisible()){//if not using color wheel or color inputs
-        noTile = false;//Allow tile placement
-      }
+      noTile = false;//Allow tile placement
       break;
   }
 }//void mouseReleased() END

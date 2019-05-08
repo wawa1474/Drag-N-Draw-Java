@@ -100,9 +100,6 @@ void tileGroupCutCopy(char button_){//mess with tiles in square group
           }
         }
       }
-      //if(hadTile == false){//if square did not have tile
-      //  mapTilesCopy.add(null);//insert null tile
-      //}
     }
   }
   tileGroupStep = 0;//reset step count
