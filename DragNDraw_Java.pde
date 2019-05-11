@@ -130,22 +130,22 @@ void draw(){//Draw the canvas
       for(button b : buttons_editorUI){//loop through all buttons
         b.draw();//draw the button
       }
-      image(menu_bar_mockup, 0,0);
-      if(displayedMenuBar != -1){
-        switch(displayedMenuBar){
-          case button_menuBar_file:
-            image(menuBar_Images[button_menuBar_file],0 ,17);
-            break;
+      //image(menu_bar_mockup, 0,0);
+      //if(displayedMenuBar != -1){
+      //  switch(displayedMenuBar){
+      //    case button_menuBar_file:
+      //      image(menuBar_Images[button_menuBar_file],0 ,17);
+      //      break;
 
-          case button_menuBar_edit:
-            image(menuBar_Images[button_menuBar_edit],30 ,17);
-            break;
+      //    case button_menuBar_edit:
+      //      image(menuBar_Images[button_menuBar_edit],30 ,17);
+      //      break;
 
-          case button_menuBar_view:
-            image(menuBar_Images[button_menuBar_view],62 ,17);
-            break;
-        }
-      }
+      //    case button_menuBar_view:
+      //      image(menuBar_Images[button_menuBar_view],62 ,17);
+      //      break;
+      //  }
+      //}
       break;
     
     case _OPTIONSMENU_:

@@ -238,6 +238,9 @@ void changeUI(int ui_){//change screen
   
   main_menu_button_panel.setVisible(false);
   menu_bar_button_panel.setVisible(false);
+  menu_bar_FILE_dropDown_panel.setVisible(false);
+  menu_bar_EDIT_dropDown_panel.setVisible(false);
+  menu_bar_VIEW_dropDown_panel.setVisible(false);
   tilemap_button_panel.setVisible(false);
   editor_colorTools_panel.setVisible(false);
   colorWheel.setVisible(false);

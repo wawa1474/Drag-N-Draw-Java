@@ -37,6 +37,27 @@ GImageButton menu_bar_button_COLOR;
 GImageButton menu_bar_button_TOOLS;
 GImageButton menu_bar_button_HELP;
 
+GPanel menu_bar_FILE_dropDown_panel;
+GImageButton menu_bar_FILE_dropDown_NEW;
+GImageButton menu_bar_FILE_dropDown_OPEN;
+GImageButton menu_bar_FILE_dropDown_SAVE;
+GImageButton menu_bar_FILE_dropDown_SAVEAS;
+GImageButton menu_bar_FILE_dropDown_EXPORT;
+GImageButton menu_bar_FILE_dropDown_EXIT;
+
+GPanel menu_bar_EDIT_dropDown_panel;
+GImageButton menu_bar_EDIT_dropDown_CUT;
+GImageButton menu_bar_EDIT_dropDown_COPY;
+GImageButton menu_bar_EDIT_dropDown_PASTE;
+
+GPanel menu_bar_VIEW_dropDown_panel;
+GImageButton menu_bar_VIEW_dropDown_VP;
+GImageButton menu_bar_VIEW_dropDown_DND;
+GImageButton menu_bar_VIEW_dropDown_PF;
+GImageButton menu_bar_VIEW_dropDown_TNS;
+GImageButton menu_bar_VIEW_dropDown_RNP;
+GImageButton menu_bar_VIEW_dropDown_OPTIONS;
+
 GPanel tilemap_button_panel;
 GImageButton tilemap_button_PREV;
 GImageButton tilemap_button_NEXT;
@@ -96,23 +117,23 @@ public void createGUI(){
   menu_bar_button_panel.setDraggable(false);
   menu_bar_button_panel.setOpaque(false);
   //main_menu_panel.addEventHandler(this, "main_menu_panel");
-  float menu_bar_panel_FILE_x = 0;
-  menu_bar_button_FILE = new GImageButton(this, menu_bar_panel_FILE_x, 0, new String[] {"assets/buttons/menu bar/menu_bar_FILE.png", "assets/buttons/menu bar/menu_bar_FILE_mouseOver.png"});
+  float tmpX = 0;
+  menu_bar_button_FILE = new GImageButton(this, tmpX, 0, new String[] {"assets/buttons/menu bar/menu_bar_FILE.png", "assets/buttons/menu bar/menu_bar_FILE_mouseOver.png"});
   menu_bar_button_FILE.addEventHandler(this, "menu_bar_button_handler");
-  float menu_bar_panel_EDIT_x = menu_bar_button_FILE.getWidth();
-  menu_bar_button_EDIT = new GImageButton(this, menu_bar_panel_EDIT_x, 0, new String[] {"assets/buttons/menu bar/menu_bar_EDIT.png", "assets/buttons/menu bar/menu_bar_EDIT_mouseOver.png"});
+  tmpX = menu_bar_button_FILE.getWidth();
+  menu_bar_button_EDIT = new GImageButton(this, tmpX, 0, new String[] {"assets/buttons/menu bar/menu_bar_EDIT.png", "assets/buttons/menu bar/menu_bar_EDIT_mouseOver.png"});
   menu_bar_button_EDIT.addEventHandler(this, "menu_bar_button_handler");
-  float menu_bar_panel_VIEW_x = menu_bar_panel_EDIT_x + menu_bar_button_EDIT.getWidth();
-  menu_bar_button_VIEW = new GImageButton(this, menu_bar_panel_VIEW_x, 0, new String[] {"assets/buttons/menu bar/menu_bar_VIEW.png", "assets/buttons/menu bar/menu_bar_VIEW_mouseOver.png"});
+  tmpX = tmpX + menu_bar_button_EDIT.getWidth();
+  menu_bar_button_VIEW = new GImageButton(this, tmpX, 0, new String[] {"assets/buttons/menu bar/menu_bar_VIEW.png", "assets/buttons/menu bar/menu_bar_VIEW_mouseOver.png"});
   menu_bar_button_VIEW.addEventHandler(this, "menu_bar_button_handler");
-  float menu_bar_panel_COLOR_x = menu_bar_panel_VIEW_x + menu_bar_button_VIEW.getWidth();
-  menu_bar_button_COLOR = new GImageButton(this, menu_bar_panel_COLOR_x, 0, new String[] {"assets/buttons/menu bar/menu_bar_COLOR.png", "assets/buttons/menu bar/menu_bar_COLOR_mouseOver.png"});
+  tmpX = tmpX + menu_bar_button_VIEW.getWidth();
+  menu_bar_button_COLOR = new GImageButton(this, tmpX, 0, new String[] {"assets/buttons/menu bar/menu_bar_COLOR.png", "assets/buttons/menu bar/menu_bar_COLOR_mouseOver.png"});
   menu_bar_button_COLOR.addEventHandler(this, "menu_bar_button_handler");
-  float menu_bar_panel_TOOLS_x = menu_bar_panel_COLOR_x + menu_bar_button_COLOR.getWidth();
-  menu_bar_button_TOOLS = new GImageButton(this, menu_bar_panel_TOOLS_x, 0, new String[] {"assets/buttons/menu bar/menu_bar_TOOLS.png", "assets/buttons/menu bar/menu_bar_TOOLS_mouseOver.png"});
+  tmpX = tmpX + menu_bar_button_COLOR.getWidth();
+  menu_bar_button_TOOLS = new GImageButton(this, tmpX, 0, new String[] {"assets/buttons/menu bar/menu_bar_TOOLS.png", "assets/buttons/menu bar/menu_bar_TOOLS_mouseOver.png"});
   menu_bar_button_TOOLS.addEventHandler(this, "menu_bar_button_handler");
-  float menu_bar_panel_HELP_x = menu_bar_panel_TOOLS_x + menu_bar_button_TOOLS.getWidth();
-  menu_bar_button_HELP = new GImageButton(this, menu_bar_panel_HELP_x, 0, new String[] {"assets/buttons/menu bar/menu_bar_HELP.png", "assets/buttons/menu bar/menu_bar_HELP_mouseOver.png"});
+  tmpX = tmpX + menu_bar_button_TOOLS.getWidth();
+  menu_bar_button_HELP = new GImageButton(this, tmpX, 0, new String[] {"assets/buttons/menu bar/menu_bar_HELP.png", "assets/buttons/menu bar/menu_bar_HELP_mouseOver.png"});
   menu_bar_button_HELP.addEventHandler(this, "menu_bar_button_handler");
   menu_bar_button_panel.addControl(menu_bar_button_FILE);
   menu_bar_button_panel.addControl(menu_bar_button_EDIT);
@@ -120,6 +141,84 @@ public void createGUI(){
   menu_bar_button_panel.addControl(menu_bar_button_COLOR);
   menu_bar_button_panel.addControl(menu_bar_button_TOOLS);
   menu_bar_button_panel.addControl(menu_bar_button_HELP);
+  
+  float tmpY = 0;
+  menu_bar_FILE_dropDown_NEW = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/file dropdown/menu_bar_FILE_NEW.png", "assets/buttons/menu bar/file dropdown/menu_bar_FILE_NEW_mouseOver.png"});
+  menu_bar_FILE_dropDown_NEW.addEventHandler(this, "menu_bar_FILE_dropDown_button_handler");
+  tmpY = menu_bar_FILE_dropDown_NEW.getHeight();
+  menu_bar_FILE_dropDown_OPEN = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/file dropdown/menu_bar_FILE_OPEN.png", "assets/buttons/menu bar/file dropdown/menu_bar_FILE_OPEN_mouseOver.png"});
+  menu_bar_FILE_dropDown_OPEN.addEventHandler(this, "menu_bar_FILE_dropDown_button_handler");
+  tmpY = tmpY + menu_bar_FILE_dropDown_OPEN.getHeight();
+  menu_bar_FILE_dropDown_SAVE = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/file dropdown/menu_bar_FILE_SAVE.png", "assets/buttons/menu bar/file dropdown/menu_bar_FILE_SAVE_mouseOver.png"});
+  menu_bar_FILE_dropDown_SAVE.addEventHandler(this, "menu_bar_FILE_dropDown_button_handler");
+  tmpY = tmpY + menu_bar_FILE_dropDown_SAVE.getHeight();
+  menu_bar_FILE_dropDown_SAVEAS = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/file dropdown/menu_bar_FILE_SAVEAS.png", "assets/buttons/menu bar/file dropdown/menu_bar_FILE_SAVEAS_mouseOver.png"});
+  menu_bar_FILE_dropDown_SAVEAS.addEventHandler(this, "menu_bar_FILE_dropDown_button_handler");
+  tmpY = tmpY + menu_bar_FILE_dropDown_SAVEAS.getHeight();
+  menu_bar_FILE_dropDown_EXPORT = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/file dropdown/menu_bar_FILE_EXPORT.png", "assets/buttons/menu bar/file dropdown/menu_bar_FILE_EXPORT_mouseOver.png"});
+  menu_bar_FILE_dropDown_EXPORT.addEventHandler(this, "menu_bar_FILE_dropDown_button_handler");
+  tmpY = tmpY + menu_bar_FILE_dropDown_EXPORT.getHeight();
+  menu_bar_FILE_dropDown_EXIT = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/file dropdown/menu_bar_FILE_EXIT.png", "assets/buttons/menu bar/file dropdown/menu_bar_FILE_EXIT_mouseOver.png"});
+  menu_bar_FILE_dropDown_EXIT.addEventHandler(this, "menu_bar_FILE_dropDown_button_handler");
+  menu_bar_FILE_dropDown_panel = new GPanel(this, 0, menu_bar_button_FILE.getHeight(), menu_bar_FILE_dropDown_EXPORT.getX() + menu_bar_FILE_dropDown_EXPORT.getWidth(), menu_bar_FILE_dropDown_EXPORT.getY() + menu_bar_FILE_dropDown_EXPORT.getHeight() + scl, "");
+  menu_bar_FILE_dropDown_panel.setCollapsible(false);
+  menu_bar_FILE_dropDown_panel.setDraggable(false);
+  menu_bar_FILE_dropDown_panel.setOpaque(false);
+  //main_menu_panel.addEventHandler(this, "main_menu_panel");
+  menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_NEW);
+  menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_OPEN);
+  menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_SAVE);
+  menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_SAVEAS);
+  menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_EXPORT);
+  menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_EXIT);
+  
+  tmpY = 0;
+  menu_bar_EDIT_dropDown_CUT = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/edit dropdown/menu_bar_EDIT_CUT.png", "assets/buttons/menu bar/edit dropdown/menu_bar_EDIT_CUT_mouseOver.png"});
+  menu_bar_EDIT_dropDown_CUT.addEventHandler(this, "menu_bar_EDIT_dropDown_button_handler");
+  tmpY = menu_bar_EDIT_dropDown_CUT.getHeight();
+  menu_bar_EDIT_dropDown_COPY = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/edit dropdown/menu_bar_EDIT_COPY.png", "assets/buttons/menu bar/edit dropdown/menu_bar_EDIT_COPY_mouseOver.png"});
+  menu_bar_EDIT_dropDown_COPY.addEventHandler(this, "menu_bar_EDIT_dropDown_button_handler");
+  tmpY = tmpY + menu_bar_EDIT_dropDown_COPY.getHeight();
+  menu_bar_EDIT_dropDown_PASTE = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/edit dropdown/menu_bar_EDIT_PASTE.png", "assets/buttons/menu bar/edit dropdown/menu_bar_EDIT_PASTE_mouseOver.png"});
+  menu_bar_EDIT_dropDown_PASTE.addEventHandler(this, "menu_bar_EDIT_dropDown_button_handler");
+  menu_bar_EDIT_dropDown_panel = new GPanel(this, menu_bar_button_FILE.getWidth(), menu_bar_button_EDIT.getHeight(), menu_bar_EDIT_dropDown_PASTE.getX() + menu_bar_EDIT_dropDown_PASTE.getWidth(), menu_bar_EDIT_dropDown_PASTE.getY() + menu_bar_EDIT_dropDown_PASTE.getHeight() + scl, "");
+  menu_bar_EDIT_dropDown_panel.setCollapsible(false);
+  menu_bar_EDIT_dropDown_panel.setDraggable(false);
+  menu_bar_EDIT_dropDown_panel.setOpaque(false);
+  //main_menu_panel.addEventHandler(this, "main_menu_panel");
+  menu_bar_EDIT_dropDown_panel.addControl(menu_bar_EDIT_dropDown_CUT);
+  menu_bar_EDIT_dropDown_panel.addControl(menu_bar_EDIT_dropDown_COPY);
+  menu_bar_EDIT_dropDown_panel.addControl(menu_bar_EDIT_dropDown_PASTE);
+  
+  tmpY = 0;
+  menu_bar_VIEW_dropDown_VP = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/view dropdown/menu_bar_VIEW_VP.png", "assets/buttons/menu bar/view dropdown/menu_bar_VIEW_VP_mouseOver.png"});
+  menu_bar_VIEW_dropDown_VP.addEventHandler(this, "menu_bar_VIEW_dropDown_button_handler");
+  tmpY = menu_bar_VIEW_dropDown_VP.getHeight();
+  menu_bar_VIEW_dropDown_DND = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/view dropdown/menu_bar_VIEW_DND.png", "assets/buttons/menu bar/view dropdown/menu_bar_VIEW_DND_mouseOver.png"});
+  menu_bar_VIEW_dropDown_DND.addEventHandler(this, "menu_bar_VIEW_dropDown_button_handler");
+  tmpY = tmpY + menu_bar_VIEW_dropDown_DND.getHeight();
+  menu_bar_VIEW_dropDown_PF = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/view dropdown/menu_bar_VIEW_PF.png", "assets/buttons/menu bar/view dropdown/menu_bar_VIEW_PF_mouseOver.png"});
+  menu_bar_VIEW_dropDown_PF.addEventHandler(this, "menu_bar_VIEW_dropDown_button_handler");
+  tmpY = tmpY + menu_bar_VIEW_dropDown_PF.getHeight();
+  menu_bar_VIEW_dropDown_TNS = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/view dropdown/menu_bar_VIEW_TNS.png", "assets/buttons/menu bar/view dropdown/menu_bar_VIEW_TNS_mouseOver.png"});
+  menu_bar_VIEW_dropDown_TNS.addEventHandler(this, "menu_bar_VIEW_dropDown_button_handler");
+  tmpY = tmpY + menu_bar_VIEW_dropDown_TNS.getHeight();
+  menu_bar_VIEW_dropDown_RNP = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/view dropdown/menu_bar_VIEW_RNP.png", "assets/buttons/menu bar/view dropdown/menu_bar_VIEW_RNP_mouseOver.png"});
+  menu_bar_VIEW_dropDown_RNP.addEventHandler(this, "menu_bar_VIEW_dropDown_button_handler");
+  tmpY = tmpY + menu_bar_VIEW_dropDown_RNP.getHeight();
+  menu_bar_VIEW_dropDown_OPTIONS = new GImageButton(this, 0, tmpY, new String[] {"assets/buttons/menu bar/view dropdown/menu_bar_VIEW_OPTIONS.png", "assets/buttons/menu bar/view dropdown/menu_bar_VIEW_OPTIONS_mouseOver.png"});
+  menu_bar_VIEW_dropDown_OPTIONS.addEventHandler(this, "menu_bar_VIEW_dropDown_button_handler");
+  menu_bar_VIEW_dropDown_panel = new GPanel(this, menu_bar_button_FILE.getWidth() + menu_bar_button_EDIT.getWidth(), menu_bar_button_VIEW.getHeight(), menu_bar_VIEW_dropDown_OPTIONS.getX() + menu_bar_VIEW_dropDown_OPTIONS.getWidth(), menu_bar_VIEW_dropDown_OPTIONS.getY() + menu_bar_VIEW_dropDown_OPTIONS.getHeight() + scl, "");
+  menu_bar_VIEW_dropDown_panel.setCollapsible(false);
+  menu_bar_VIEW_dropDown_panel.setDraggable(false);
+  menu_bar_VIEW_dropDown_panel.setOpaque(false);
+  //main_menu_panel.addEventHandler(this, "main_menu_panel");
+  menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_VP);
+  menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_DND);
+  menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_PF);
+  menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_TNS);
+  menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_RNP);
+  menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_OPTIONS);
   
   tilemap_button_panel = new GPanel(this, 0, 0, 1, 1, "");
   tilemap_button_panel.setCollapsible(false);
@@ -218,7 +317,7 @@ boolean mouseOver_colorToolsPanel(){
   if(mouseX > editor_colorTools_panel.getX()){
     if(editor_colorTools_panel.isCollapsed()){
       
-    }else if(mouseX < editor_colorTools_panel.getX() + editor_colorTools_panel_Width){
+    }else if(mouseX < editor_colorTools_panel.getX() + editor_colorTools_panel.getWidth()){
       Xinside = true;
     }
   }
@@ -226,7 +325,7 @@ boolean mouseOver_colorToolsPanel(){
   if(mouseY > editor_colorTools_panel.getY()){
     if(editor_colorTools_panel.isCollapsed()){
       
-    }else if(mouseY < editor_colorTools_panel.getY() + editor_colorTools_panel_Height){
+    }else if(mouseY < editor_colorTools_panel.getY() + editor_colorTools_panel.getHeight()){
       Yinside = true;
     }
   }
@@ -371,6 +470,138 @@ public void menu_bar_button_handler(GImageButton source, GEvent event){
       changeDisplayedMenuBar(button_menuBar_help);
     }
   }
+}
+
+public void menu_bar_FILE_dropDown_button_handler(GImageButton source, GEvent event){
+  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    if(source == menu_bar_FILE_dropDown_NEW){
+      
+    }else if(source == menu_bar_FILE_dropDown_OPEN){
+      
+    }else if(source == menu_bar_FILE_dropDown_SAVE){
+      
+    }else if(source == menu_bar_FILE_dropDown_SAVEAS){
+      
+    }else if(source == menu_bar_FILE_dropDown_EXPORT){
+      
+    }else if(source == menu_bar_FILE_dropDown_EXIT){
+      
+    }else{
+      //println("error");
+    }
+  }
+}
+
+public void menu_bar_EDIT_dropDown_button_handler(GImageButton source, GEvent event){
+  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    if(source == menu_bar_EDIT_dropDown_CUT){
+      
+    }else if(source == menu_bar_EDIT_dropDown_COPY){
+      
+    }else if(source == menu_bar_EDIT_dropDown_PASTE){
+      
+    }else{
+      //println("error");
+    }
+  }
+}
+
+public void menu_bar_VIEW_dropDown_button_handler(GImageButton source, GEvent event){
+  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    if(source == menu_bar_VIEW_dropDown_VP){
+      
+    }else if(source == menu_bar_VIEW_dropDown_DND){
+      
+    }else if(source == menu_bar_VIEW_dropDown_PF){
+      
+    }else if(source == menu_bar_VIEW_dropDown_TNS){
+      
+    }else if(source == menu_bar_VIEW_dropDown_RNP){
+      
+    }else if(source == menu_bar_VIEW_dropDown_OPTIONS){
+      
+    }else{
+      //println("error");
+    }
+  }
+}
+
+boolean mouseOver_FILEdropDownPanel(){
+  boolean Xinside = false;
+  boolean Yinside = false;
+  boolean inside = false;
+  
+  if(mouseX > menu_bar_FILE_dropDown_panel.getX()){
+    if(menu_bar_FILE_dropDown_panel.isCollapsed()){
+      
+    }else if(mouseX < menu_bar_FILE_dropDown_panel.getX() + menu_bar_FILE_dropDown_panel.getWidth()){
+      Xinside = true;
+    }
+  }
+  
+  if(mouseY > menu_bar_FILE_dropDown_panel.getY()){
+    if(menu_bar_FILE_dropDown_panel.isCollapsed()){
+      
+    }else if(mouseY < menu_bar_FILE_dropDown_panel.getY() + menu_bar_FILE_dropDown_panel.getHeight() + fudgeValue){
+      Yinside = true;
+    }
+  }
+  
+  inside = menu_bar_FILE_dropDown_panel.isOver(mouseX, mouseY) || menu_bar_FILE_dropDown_panel.isDragging();
+  
+  return ((Xinside && Yinside) || inside) && menu_bar_FILE_dropDown_panel.isVisible();
+}
+
+boolean mouseOver_EDITdropDownPanel(){
+  boolean Xinside = false;
+  boolean Yinside = false;
+  boolean inside = false;
+  
+  if(mouseX > menu_bar_EDIT_dropDown_panel.getX()){
+    if(menu_bar_EDIT_dropDown_panel.isCollapsed()){
+      
+    }else if(mouseX < menu_bar_EDIT_dropDown_panel.getX() + menu_bar_EDIT_dropDown_panel.getWidth()){
+      Xinside = true;
+    }
+  }
+  
+  if(mouseY > menu_bar_EDIT_dropDown_panel.getY()){
+    if(menu_bar_EDIT_dropDown_panel.isCollapsed()){
+      
+    }else if(mouseY < menu_bar_EDIT_dropDown_panel.getY() + menu_bar_EDIT_dropDown_panel.getHeight() + fudgeValue){
+      Yinside = true;
+    }
+  }
+  
+  inside = menu_bar_EDIT_dropDown_panel.isOver(mouseX, mouseY) || menu_bar_EDIT_dropDown_panel.isDragging();
+  
+  return ((Xinside && Yinside) || inside) && menu_bar_EDIT_dropDown_panel.isVisible();
+}
+
+boolean mouseOver_VIEWdropDownPanel(){
+  boolean Xinside = false;
+  boolean Yinside = false;
+  boolean inside = false;
+  
+  if(mouseX > menu_bar_VIEW_dropDown_panel.getX()){
+    if(menu_bar_VIEW_dropDown_panel.isCollapsed()){
+      
+    }else if(mouseX < menu_bar_VIEW_dropDown_panel.getX() + menu_bar_VIEW_dropDown_panel.getWidth()){
+      Xinside = true;
+    }
+  }
+  
+  if(mouseY > menu_bar_VIEW_dropDown_panel.getY()){
+    if(menu_bar_VIEW_dropDown_panel.isCollapsed()){
+      
+    }else if(mouseY < menu_bar_VIEW_dropDown_panel.getY() + menu_bar_VIEW_dropDown_panel.getHeight() + fudgeValue){
+      Yinside = true;
+    }
+  }
+  
+  inside = menu_bar_VIEW_dropDown_panel.isOver(mouseX, mouseY) || menu_bar_VIEW_dropDown_panel.isDragging();
+  
+  return ((Xinside && Yinside) || inside) && menu_bar_VIEW_dropDown_panel.isVisible();
 }
 
 public void tilemap_button_handler(GImageButton source, GEvent event){
@@ -529,10 +760,27 @@ boolean checkButtons(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 boolean changeDisplayedMenuBar(int bar_){
+  menu_bar_FILE_dropDown_panel.setVisible(false);
+  menu_bar_EDIT_dropDown_panel.setVisible(false);
+  menu_bar_VIEW_dropDown_panel.setVisible(false);
+  
   if(displayedMenuBar == bar_){
     displayedMenuBar = -1;
     return true;
   }
   displayedMenuBar = bar_;
+  switch(displayedMenuBar){
+    case button_menuBar_file:
+      menu_bar_FILE_dropDown_panel.setVisible(true);
+      break;
+
+    case button_menuBar_edit:
+      menu_bar_EDIT_dropDown_panel.setVisible(true);
+      break;
+
+    case button_menuBar_view:
+      menu_bar_VIEW_dropDown_panel.setVisible(true);
+      break;
+  }
   return false;
 }

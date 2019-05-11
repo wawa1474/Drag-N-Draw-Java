@@ -16,7 +16,7 @@ void updateMouseXY(){//Update the XY position of the mouse
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mousePressed(){//We pressed a mouse button
-  if(mouseOver_colorToolsPanel()){
+  if(mouseOver_colorToolsPanel() || mouseOver_FILEdropDownPanel() || mouseOver_EDITdropDownPanel() || mouseOver_VIEWdropDownPanel()){
     return;
   }
 
@@ -126,7 +126,7 @@ void mousePressed(){//We pressed a mouse button
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mouseDragged(){//We dragged the mouse while holding a button
-  if(mouseOver_colorToolsPanel()){
+  if(mouseOver_colorToolsPanel() || mouseOver_FILEdropDownPanel() || mouseOver_EDITdropDownPanel() || mouseOver_VIEWdropDownPanel()){
     return;
   }
 
