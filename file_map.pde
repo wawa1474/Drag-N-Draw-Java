@@ -339,7 +339,7 @@ void fileSaveMap(){//Save the Map to file
   
   mapFile.clear();//clear up memory
   
-  fileName = "Error";//reset so we can know if an error occurs
+  //fileName = "Error";//reset so we can know if an error occurs
 }//void fileSaveLoad() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------

@@ -172,6 +172,12 @@ void keyTyped(){//We typed a key
       return;
     }
     
+    if(keyHandler(lastKey, "CTRL + SHIFT + S")){
+      selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+      shiftHeld = false;
+      return;
+    }
+    
     if(keyHandler(lastKey, "CTRL + N")){
       clearMapTilesArray();//clear the map
       clearClickableTilesArray();//clear the map
@@ -184,7 +190,12 @@ void keyTyped(){//We typed a key
     }
     
     if(keyHandler(lastKey, "CTRL + S")){
-      selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+      //selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+      if(fileName.equals("Error")){//if no file was selected
+        selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+      }else{
+        fileSaveMap();
+      }
       return;
     }
     

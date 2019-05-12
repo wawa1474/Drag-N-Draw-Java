@@ -482,7 +482,11 @@ public void menu_bar_FILE_dropDown_button_handler(GImageButton source, GEvent ev
     }else if(source == menu_bar_FILE_dropDown_OPEN){
       selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
     }else if(source == menu_bar_FILE_dropDown_SAVE){
-      selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+      if(fileName.equals("Error")){//if no file was selected
+        selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
+      }else{
+        fileSaveMap();
+      }
     }else if(source == menu_bar_FILE_dropDown_SAVEAS){
       selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
     }else if(source == menu_bar_FILE_dropDown_EXPORT){
