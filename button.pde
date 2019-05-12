@@ -13,6 +13,7 @@ final int button_editorUI_changeTileMap = 7;
 
 
 //int menuBarButton = -1;//what menu button are we hovering over
+final int button_menuBar_NONE = -1;
 final int button_menuBar_file = 0;
 final int button_menuBar_edit = 1;
 final int button_menuBar_view = 2;
@@ -474,18 +475,20 @@ public void menu_bar_button_handler(GImageButton source, GEvent event){
 
 public void menu_bar_FILE_dropDown_button_handler(GImageButton source, GEvent event){
   if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    changeDisplayedMenuBar(button_menuBar_NONE);
     if(source == menu_bar_FILE_dropDown_NEW){
-      
+      clearMapTilesArray();//clear the map
+      clearClickableTilesArray();//clear the map
     }else if(source == menu_bar_FILE_dropDown_OPEN){
-      
+      selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
     }else if(source == menu_bar_FILE_dropDown_SAVE){
-      
+      selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
     }else if(source == menu_bar_FILE_dropDown_SAVEAS){
-      
+      selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
     }else if(source == menu_bar_FILE_dropDown_EXPORT){
-      
+      selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
     }else if(source == menu_bar_FILE_dropDown_EXIT){
-      
+      exit();
     }else{
       //println("error");
     }
@@ -494,12 +497,21 @@ public void menu_bar_FILE_dropDown_button_handler(GImageButton source, GEvent ev
 
 public void menu_bar_EDIT_dropDown_button_handler(GImageButton source, GEvent event){
   if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    changeDisplayedMenuBar(button_menuBar_NONE);
     if(source == menu_bar_EDIT_dropDown_CUT){
-      
+      if(tileGroupStep == 2){//we're on step two of group selection
+        tileGroupCutCopy('x');//cut group selection
+      }
     }else if(source == menu_bar_EDIT_dropDown_COPY){
-      
+      if(tileGroupStep == 2){//we're on step two of group selection
+        tileGroupCutCopy('c');//copy group selection
+      }
     }else if(source == menu_bar_EDIT_dropDown_PASTE){
-      
+      if(tileGroupStep != 3){//set it up for pasting
+        tileGroupStep = 3;//paste step is 3
+      }else if(tileGroupStep == 3){//cancel pasting
+        tileGroupStep = 0;//paste step is 0
+      }
     }else{
       //println("error");
     }
@@ -508,10 +520,11 @@ public void menu_bar_EDIT_dropDown_button_handler(GImageButton source, GEvent ev
 
 public void menu_bar_VIEW_dropDown_button_handler(GImageButton source, GEvent event){
   if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    changeDisplayedMenuBar(button_menuBar_NONE);
     if(source == menu_bar_VIEW_dropDown_VP){
       
     }else if(source == menu_bar_VIEW_dropDown_DND){
-      
+      changeUI(_TILEMAPUI_);//tile map loading screen
     }else if(source == menu_bar_VIEW_dropDown_PF){
       
     }else if(source == menu_bar_VIEW_dropDown_TNS){
@@ -519,7 +532,7 @@ public void menu_bar_VIEW_dropDown_button_handler(GImageButton source, GEvent ev
     }else if(source == menu_bar_VIEW_dropDown_RNP){
       
     }else if(source == menu_bar_VIEW_dropDown_OPTIONS){
-      
+      changeUI(_OPTIONSMENU_);
     }else{
       //println("error");
     }
