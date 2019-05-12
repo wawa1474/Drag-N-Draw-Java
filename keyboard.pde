@@ -108,6 +108,16 @@ void keyTyped(){//We typed a key
   if(currentUI == _OPENING_){
     changeUI(_MAINMENU_);
   }
+
+  switch(key){
+    case 'g':
+      //zoom += 0.1;
+      break;
+    
+    case 'b':
+      //zoom -= 0.1;
+      break;
+  }
   
   if(currentUI == _EDITORUI_){
     switch(displayedMenuBar){

@@ -16,6 +16,9 @@ make it so the user can resize the map field
 add menu bar in order to clean up ui
   file, edit, view, history?, tools, help
 
+change file drop down "exit" to "quit"
+add edit drop down "delete"
+
 get rid of number things in ui?
   total tiles
   drawn tiles

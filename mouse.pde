@@ -9,8 +9,8 @@ final int fudgeValue = 1;//Fudge Value to make sure we're really clicking inside
 
 
 void updateMouseXY(){//Update the XY position of the mouse
-  mouseTileX = floor((mouseX - screenX) / scl);
-  mouseTileY = floor(((mouseY - screenY) - (UIBottom)) / scl);
+  mouseTileX = floor(((mouseX - screenX) / zoom) / scl);
+  mouseTileY = floor((((mouseY - screenY) - (UIBottom)) / zoom) / scl);
 }//void updateXY() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------

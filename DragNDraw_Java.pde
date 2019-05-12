@@ -80,14 +80,19 @@ void pre() {
   }
 }
 
+float zoom = 1;
+
 void draw(){//Draw the canvas
   surface.setTitle("Drag 'N' Draw Java - " + VERSION + " - FPS:" + padFPS());// + " : " + mapTiles.length);
   
   updateScreenBounds();//where on the map is the screen
   updateMouseXY();//Update the XY position of the mouse
   
+  background(137);//default grayish background
+  
   pushMatrix();//go back to crazy space?
   translate(screenX, screenY + UIBottom);//shift screen around
+  //scale(zoom);
   
   switch(currentUI){
     case _TILEMAPUI_:
@@ -112,12 +117,12 @@ void draw(){//Draw the canvas
   
   switch(currentUI){
     case _OPENING_:
-      background(137);//white background
+      //background(137);//white background
       image(opening_mockup,0,0);
       break;
 
     case _MAINMENU_:
-      background(137);//grayish background
+      //background(137);//grayish background
       break;
 
     case _TILEMAPUI_:
@@ -130,26 +135,10 @@ void draw(){//Draw the canvas
       for(button b : buttons_editorUI){//loop through all buttons
         b.draw();//draw the button
       }
-      //image(menu_bar_mockup, 0,0);
-      //if(displayedMenuBar != -1){
-      //  switch(displayedMenuBar){
-      //    case button_menuBar_file:
-      //      image(menuBar_Images[button_menuBar_file],0 ,17);
-      //      break;
-
-      //    case button_menuBar_edit:
-      //      image(menuBar_Images[button_menuBar_edit],30 ,17);
-      //      break;
-
-      //    case button_menuBar_view:
-      //      image(menuBar_Images[button_menuBar_view],62 ,17);
-      //      break;
-      //  }
-      //}
       break;
     
     case _OPTIONSMENU_:
-      background(137);//white background
+      //background(137);//white background
       image(options_menu_mockup,scl,scl);
       break;
     
