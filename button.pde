@@ -1,26 +1,3 @@
-//button button = new button(32,32,32,32,color(0,127,127),"LOAD",color(255), 8);
-//ArrayList<clickRect> buttons_mainMenuUI = new ArrayList<clickRect>(0);
-//ArrayList<button> buttons_tilemapUI = new ArrayList<button>(0);
-//ArrayList<button> buttons_editorUI = new ArrayList<button>(0);
-//ArrayList<clickRect> buttons_menuBar = new ArrayList<clickRect>(0);
-//PImage[] gui;
-
-PImage[] menuBar_Images;
-int displayedMenuBar = -1;
-
-//final int button_editorUI_colorToggle = 2;
-//final int button_editorUI_changeTileMap = 7;
-
-
-//int menuBarButton = -1;//what menu button are we hovering over
-final int button_menuBar_NONE = -1;
-final int button_menuBar_file = 0;
-final int button_menuBar_edit = 1;
-final int button_menuBar_view = 2;
-final int button_menuBar_color = 3;
-final int button_menuBar_tools = 4;
-final int button_menuBar_help = 5;
-
 GPanel main_menu_button_panel;
 GImageButton main_menu_button_VP;
 GImageButton main_menu_button_DND;
@@ -33,7 +10,16 @@ GImageButton main_menu_button_EXIT;
 GButton editor_button_coloredToggle;
 GButton editor_button_changeTileMap;
 
+final int button_menuBar_NONE = -1;
+final int button_menuBar_file = 0;
+final int button_menuBar_edit = 1;
+final int button_menuBar_view = 2;
+final int button_menuBar_color = 3;
+final int button_menuBar_tools = 4;
+final int button_menuBar_help = 5;
+
 GPanel menu_bar_button_panel;
+int displayedMenuBar = -1;
 GImageButton menu_bar_button_FILE;
 GImageButton menu_bar_button_EDIT;
 GImageButton menu_bar_button_VIEW;
@@ -71,18 +57,13 @@ GButton tilemap_button_LOADMAP;
 GPanel editor_colorTools_panel;
 int editor_colorTools_panel_Width = scl * 10;
 int editor_colorTools_panel_Height = scl * 10;
-
-//GButton test;
-
+int currentColorSlider = -1;
 GSlider editor_slider_red;
 GSlider editor_slider_green;
 GSlider editor_slider_blue;
-
 GSlider editor_slider_hue;
 GSlider editor_slider_saturation;
 GSlider editor_slider_brightness;
-
-int currentColorSlider = -1;
 
 //GTextField textfield1;//GEvents.CHANGED, ENTERED, SELECTION_CHANGED, GETS_FOCUS, LOST_FOCUS
 
@@ -120,7 +101,6 @@ public void createGUI(){
   menu_bar_button_panel.setCollapsible(false);
   menu_bar_button_panel.setDraggable(false);
   menu_bar_button_panel.setOpaque(false);
-  //main_menu_panel.addEventHandler(this, "main_menu_panel");
   float tmpX = 0;
   menu_bar_button_FILE = new GImageButton(this, tmpX, 0, new String[] {"assets/buttons/menu bar/menu_bar_FILE.png", "assets/buttons/menu bar/menu_bar_FILE_mouseOver.png"});
   menu_bar_button_FILE.addEventHandler(this, "menu_bar_button_handler");
@@ -168,7 +148,6 @@ public void createGUI(){
   menu_bar_FILE_dropDown_panel.setCollapsible(false);
   menu_bar_FILE_dropDown_panel.setDraggable(false);
   menu_bar_FILE_dropDown_panel.setOpaque(false);
-  //main_menu_panel.addEventHandler(this, "main_menu_panel");
   menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_NEW);
   menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_OPEN);
   menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_SAVE);
@@ -189,7 +168,6 @@ public void createGUI(){
   menu_bar_EDIT_dropDown_panel.setCollapsible(false);
   menu_bar_EDIT_dropDown_panel.setDraggable(false);
   menu_bar_EDIT_dropDown_panel.setOpaque(false);
-  //main_menu_panel.addEventHandler(this, "main_menu_panel");
   menu_bar_EDIT_dropDown_panel.addControl(menu_bar_EDIT_dropDown_CUT);
   menu_bar_EDIT_dropDown_panel.addControl(menu_bar_EDIT_dropDown_COPY);
   menu_bar_EDIT_dropDown_panel.addControl(menu_bar_EDIT_dropDown_PASTE);
@@ -216,7 +194,6 @@ public void createGUI(){
   menu_bar_VIEW_dropDown_panel.setCollapsible(false);
   menu_bar_VIEW_dropDown_panel.setDraggable(false);
   menu_bar_VIEW_dropDown_panel.setOpaque(false);
-  //main_menu_panel.addEventHandler(this, "main_menu_panel");
   menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_VP);
   menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_DND);
   menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_PF);
@@ -228,7 +205,6 @@ public void createGUI(){
   tilemap_button_panel.setCollapsible(false);
   tilemap_button_panel.setDraggable(false);
   tilemap_button_panel.setOpaque(false);
-  //main_menu_panel.addEventHandler(this, "main_menu_panel");
   tilemap_button_PREV = new GImageButton(this, 0, 0, new String[] {"assets/buttons/left_arrow_blue.png"});
   tilemap_button_PREV.addEventHandler(this, "tilemap_imageButton_handler");
   tilemap_button_NEXT = new GImageButton(this, scl * 2, 0, new String[] {"assets/buttons/right_arrow.png"});
@@ -245,10 +221,6 @@ public void createGUI(){
   editor_colorTools_panel = new GPanel(this, scl * 16, 0, editor_colorTools_panel_Width, editor_colorTools_panel_Height, "color tools");
   editor_colorTools_panel.addEventHandler(this, "editor_colorTools_panel_handler");
   editor_colorTools_panel.setCollapsed(true);
-  
-  //test = new GButton(this, scl * 7, scl * 7, 34, 34, "HUE");
-  //test.setLocalColor(2, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-  //2 = text color, 3 = border, 4 = background, 6 = mouse over, 14 = click
   
   editor_slider_red = new GSlider(this, scl * 6.5, 20, scl * 3, 16, 16);
   editor_slider_red.setLimits(127, 0, 255);
@@ -332,32 +304,6 @@ public void editor_button_handler(GButton source, GEvent event){
       //println("error");
     }
   }
-}
-
-boolean mouseOver_colorToolsPanel(){
-  boolean Xinside = false;
-  boolean Yinside = false;
-  boolean inside = false;
-  
-  if(mouseX > editor_colorTools_panel.getX()){
-    if(editor_colorTools_panel.isCollapsed()){
-      
-    }else if(mouseX < editor_colorTools_panel.getX() + editor_colorTools_panel.getWidth()){
-      Xinside = true;
-    }
-  }
-  
-  if(mouseY > editor_colorTools_panel.getY()){
-    if(editor_colorTools_panel.isCollapsed()){
-      
-    }else if(mouseY < editor_colorTools_panel.getY() + editor_colorTools_panel.getHeight()){
-      Yinside = true;
-    }
-  }
-  
-  inside = editor_colorTools_panel.isOver(mouseX, mouseY) || editor_colorTools_panel.isDragging();
-  
-  return (Xinside && Yinside) || inside;
 }
 
 public void editor_colorTools_panel_handler(GPanel source, GEvent event){
@@ -567,6 +513,72 @@ public void menu_bar_VIEW_dropDown_button_handler(GImageButton source, GEvent ev
   }
 }
 
+public void tilemap_imageButton_handler(GImageButton source, GEvent event){
+  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    if(source == tilemap_button_PREV){
+      tileMapShow--;//go to previous tile map
+      if(tileMapShow < 0){//make sure we don't go below zero
+        tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
+      }
+    }else if(source == tilemap_button_NEXT){
+      tileMapShow++;//go to next tile map
+      if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
+        tileMapShow = 0;//set to 0
+      }
+    }
+  }
+}
+
+public void tilemap_button_handler(GButton source, GEvent event){
+  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    if(source == tilemap_button_LOADTILES){
+      loadTileMap();//load selected tile map
+      updateTileRow();//make sure we're on the correct row
+      noTile = false;//allowed to place tiles
+      changeUI(_EDITORUI_);//go to normal display
+      screenX = tmpScreenX;//reload our position
+      screenY = tmpScreenY;//reload our position
+    }else if(source == tilemap_button_LOADMAP){
+      noLoop();//don't allow drawing
+      selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
+      while(loadingMap == true){delay(500);}//small delay
+      loadTileMap();//load selected tile map
+      updateTileRow();//make sure we're on the correct row
+      noTile = false;//allowed to place tiles
+      changeUI(_EDITORUI_);//normal screen
+      screenX = tmpScreenX;//reload our position
+      screenY = tmpScreenY;//reload our position
+      loop();//allow drawing
+    }
+  }
+}
+
+boolean mouseOver_colorToolsPanel(){
+  boolean Xinside = false;
+  boolean Yinside = false;
+  boolean inside = false;
+  
+  if(mouseX > editor_colorTools_panel.getX()){
+    if(editor_colorTools_panel.isCollapsed()){
+      
+    }else if(mouseX < editor_colorTools_panel.getX() + editor_colorTools_panel.getWidth()){
+      Xinside = true;
+    }
+  }
+  
+  if(mouseY > editor_colorTools_panel.getY()){
+    if(editor_colorTools_panel.isCollapsed()){
+      
+    }else if(mouseY < editor_colorTools_panel.getY() + editor_colorTools_panel.getHeight()){
+      Yinside = true;
+    }
+  }
+  
+  inside = editor_colorTools_panel.isOver(mouseX, mouseY) || editor_colorTools_panel.isDragging();
+  
+  return (Xinside && Yinside) || inside;
+}
+
 boolean mouseOver_FILEdropDownPanel(){
   boolean Xinside = false;
   boolean Yinside = false;
@@ -643,46 +655,6 @@ boolean mouseOver_VIEWdropDownPanel(){
   inside = menu_bar_VIEW_dropDown_panel.isOver(mouseX, mouseY) || menu_bar_VIEW_dropDown_panel.isDragging();
   
   return ((Xinside && Yinside) || inside) && menu_bar_VIEW_dropDown_panel.isVisible();
-}
-
-public void tilemap_imageButton_handler(GImageButton source, GEvent event){
-  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
-    if(source == tilemap_button_PREV){
-      tileMapShow--;//go to previous tile map
-      if(tileMapShow < 0){//make sure we don't go below zero
-        tileMapShow = tileMaps.size() - 1;//set to maxixmum tile map
-      }
-    }else if(source == tilemap_button_NEXT){
-      tileMapShow++;//go to next tile map
-      if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
-        tileMapShow = 0;//set to 0
-      }
-    }
-  }
-}
-
-public void tilemap_button_handler(GButton source, GEvent event){
-  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
-    if(source == tilemap_button_LOADTILES){
-      loadTileMap();//load selected tile map
-      updateTileRow();//make sure we're on the correct row
-      noTile = false;//allowed to place tiles
-      changeUI(_EDITORUI_);//go to normal display
-      screenX = tmpScreenX;//reload our position
-      screenY = tmpScreenY;//reload our position
-    }else if(source == tilemap_button_LOADMAP){
-      noLoop();//don't allow drawing
-      selectInput("Select a File to load:", "FileLoadMapSelect");//load a map
-      while(loadingMap == true){delay(500);}//small delay
-      loadTileMap();//load selected tile map
-      updateTileRow();//make sure we're on the correct row
-      noTile = false;//allowed to place tiles
-      changeUI(_EDITORUI_);//normal screen
-      screenX = tmpScreenX;//reload our position
-      screenY = tmpScreenY;//reload our position
-      loop();//allow drawing
-    }
-  }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
