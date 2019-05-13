@@ -19,6 +19,15 @@ add menu bar in order to clean up ui
 change file drop down "exit" to "quit"
 add edit drop down "delete"
 
+add zoom? theres some "problems"
+  clickable icons mouse over
+  update mouse XY
+  update screen bouds
+  check bounds
+  tile on screen?
+  setupXXYY
+  mouse to XXYY
+
 get rid of number things in ui?
   total tiles
   drawn tiles

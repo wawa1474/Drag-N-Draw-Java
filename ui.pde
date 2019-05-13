@@ -148,9 +148,11 @@ void updateEditorUI(){
   int tmpVal = 150;
 
   if(colorTiles){
-    setButtonColors(button_editorUI_colorToggle, currentTileColor, color(tmpVal - red(currentTileColor), tmpVal - green(currentTileColor), blue(currentTileColor)));
+    editor_button_coloredToggle.setLocalColor(4, currentTileColor);
+    editor_button_coloredToggle.setLocalColor(2, color(tmpVal - red(currentTileColor), tmpVal - green(currentTileColor), blue(currentTileColor)));
   }else{
-    setButtonColors(button_editorUI_colorToggle, BLACK, WHITE);
+    editor_button_coloredToggle.setLocalColor(4, BLACK);
+    editor_button_coloredToggle.setLocalColor(2, WHITE);
   }
   
   editor_slider_red.setLocalColor(5, color(red(currentTileColor), 0, 0));
@@ -174,7 +176,7 @@ void updateEditorUI(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void setupUI(){
-  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(scl * 9, 0).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(0, 16).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth(), 0).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(0, 16).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
   scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
   UIControls.addColorWheel("colorWheel").setVisible(false).setRGB(currentTileColor).setCaptionLabel("")//create ColorWheel
@@ -205,14 +207,6 @@ void setupUI(){
   colorInputR = UIControls.getController("colorInputR");//make it easier to use Textfield
   colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
   colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
-
-  buttons_editorUI.add(new button(scl * 8, 0, scl, scl, BLACK, "Color", WHITE, 12, button_editorUI_colorToggle, -1));
-
-  buttons_editorUI.add(new button(scl * 11, 0, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, button_editorUI_changeTileMap, -1));
-
-  for(button b : buttons_editorUI){
-    b.setup();
-  }
   
   editor_slider_red.setValue(red(currentTileColor));
   editor_slider_green.setValue(green(currentTileColor));
@@ -247,6 +241,8 @@ void changeUI(int ui_){//change screen
   colorInputR.setVisible(false);//change visibility
   colorInputG.setVisible(false);//change visibility
   colorInputB.setVisible(false);//change visibility
+  editor_button_coloredToggle.setVisible(false);//change visibility
+  editor_button_changeTileMap.setVisible(false);//change visibility
   
   if(ui_ == _OPENING_){//are we going to the tile map loading screen
     surface.setSize(800, 600);
@@ -266,6 +262,8 @@ void changeUI(int ui_){//change screen
     editor_colorTools_panel.setVisible(true);
     editor_colorTools_panel.setDragArea();
     editor_colorTools_panel.setCollapsed(true);
+    editor_button_coloredToggle.setVisible(true);//change visibility
+    editor_button_changeTileMap.setVisible(true);//change visibility
     currentUI = _EDITORUI_;
   }else if(ui_ == _OPTIONSMENU_){//are we going to the editor screen
     surface.setSize(458 + (scl * 2), 254 + (scl * 2));//458 x 254 = 522 x 318

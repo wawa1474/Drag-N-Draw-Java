@@ -24,10 +24,6 @@ void mousePressed(){//We pressed a mouse button
     changeUI(_MAINMENU_);
   }
 
-  if(checkButtons()){
-    return;
-  }
-
   switch(currentUI){
     case _TILEMAPUI_:
       break;//_TILEMAPUI_ END

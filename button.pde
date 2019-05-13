@@ -1,15 +1,15 @@
 //button button = new button(32,32,32,32,color(0,127,127),"LOAD",color(255), 8);
 //ArrayList<clickRect> buttons_mainMenuUI = new ArrayList<clickRect>(0);
 //ArrayList<button> buttons_tilemapUI = new ArrayList<button>(0);
-ArrayList<button> buttons_editorUI = new ArrayList<button>(0);
+//ArrayList<button> buttons_editorUI = new ArrayList<button>(0);
 //ArrayList<clickRect> buttons_menuBar = new ArrayList<clickRect>(0);
 //PImage[] gui;
 
 PImage[] menuBar_Images;
 int displayedMenuBar = -1;
 
-final int button_editorUI_colorToggle = 2;
-final int button_editorUI_changeTileMap = 7;
+//final int button_editorUI_colorToggle = 2;
+//final int button_editorUI_changeTileMap = 7;
 
 
 //int menuBarButton = -1;//what menu button are we hovering over
@@ -29,6 +29,9 @@ GImageButton main_menu_button_TNS;
 GImageButton main_menu_button_RNP;
 GImageButton main_menu_button_OPTIONS;
 GImageButton main_menu_button_EXIT;
+
+GButton editor_button_coloredToggle;
+GButton editor_button_changeTileMap;
 
 GPanel menu_bar_button_panel;
 GImageButton menu_bar_button_FILE;
@@ -62,8 +65,8 @@ GImageButton menu_bar_VIEW_dropDown_OPTIONS;
 GPanel tilemap_button_panel;
 GImageButton tilemap_button_PREV;
 GImageButton tilemap_button_NEXT;
-GImageButton tilemap_button_LOADTILES;
-GImageButton tilemap_button_LOADMAP;
+GButton tilemap_button_LOADTILES;
+GButton tilemap_button_LOADMAP;
 
 GPanel editor_colorTools_panel;
 int editor_colorTools_panel_Width = scl * 10;
@@ -227,12 +230,12 @@ public void createGUI(){
   tilemap_button_panel.setOpaque(false);
   //main_menu_panel.addEventHandler(this, "main_menu_panel");
   tilemap_button_PREV = new GImageButton(this, 0, 0, new String[] {"assets/buttons/left_arrow_blue.png"});
-  tilemap_button_PREV.addEventHandler(this, "tilemap_button_handler");
+  tilemap_button_PREV.addEventHandler(this, "tilemap_imageButton_handler");
   tilemap_button_NEXT = new GImageButton(this, scl * 2, 0, new String[] {"assets/buttons/right_arrow.png"});
-  tilemap_button_NEXT.addEventHandler(this, "tilemap_button_handler");
-  tilemap_button_LOADTILES = new GImageButton(this, scl * 4, 0, new String[] {"assets/buttons/button_load.png"});
+  tilemap_button_NEXT.addEventHandler(this, "tilemap_imageButton_handler");
+  tilemap_button_LOADTILES = new GButton(this, scl * 4, 0, scl * 3 + 1, scl + 1, "Load Tile Map");
   tilemap_button_LOADTILES.addEventHandler(this, "tilemap_button_handler");
-  tilemap_button_LOADMAP = new GImageButton(this, scl * 7, 0, new String[] {"assets/buttons/button_load_map.png"});
+  tilemap_button_LOADMAP = new GButton(this, scl * 8, 0, scl * 2 + 1, scl + 1, "Load Map");
   tilemap_button_LOADMAP.addEventHandler(this, "tilemap_button_handler");
   tilemap_button_panel.addControl(tilemap_button_PREV);
   tilemap_button_panel.addControl(tilemap_button_NEXT);
@@ -306,9 +309,30 @@ public void createGUI(){
   editor_colorTools_panel.addControl(editor_slider_hue);
   editor_colorTools_panel.addControl(editor_slider_saturation);
   editor_colorTools_panel.addControl(editor_slider_brightness);
+  
+  editor_button_coloredToggle = new GButton(this, scl * 8, 0, scl + 8, scl + 1, "Color");
+  editor_button_coloredToggle.addEventHandler(this, "editor_button_handler");
+  editor_button_changeTileMap = new GButton(this, editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth() + scl * 2, 0, scl * 3 + 16, scl + 1, "Change Tile Map");
+  editor_button_changeTileMap.addEventHandler(this, "editor_button_handler");
 }
 
 //public void main_menu_panel(GImageButton source, GEvent event) {}
+
+public void editor_button_handler(GButton source, GEvent event){
+  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    if(source == editor_button_coloredToggle){
+      colorTiles = !colorTiles;//invert whether we're placing colored tile or not
+    }else if(source == editor_button_changeTileMap){
+      changeUI(_TILEMAPUI_);//tile map loading screen
+      tmpScreenX = screenX;//save our position
+      tmpScreenY = screenY;//save our position
+      screenX = 0;//go back to the top left for looking at tile maps
+      screenY = (UIBottom);//go back to the top left for looking at tile maps
+    }else{
+      //println("error");
+    }
+  }
+}
 
 boolean mouseOver_colorToolsPanel(){
   boolean Xinside = false;
@@ -621,7 +645,7 @@ boolean mouseOver_VIEWdropDownPanel(){
   return ((Xinside && Yinside) || inside) && menu_bar_VIEW_dropDown_panel.isVisible();
 }
 
-public void tilemap_button_handler(GImageButton source, GEvent event){
+public void tilemap_imageButton_handler(GImageButton source, GEvent event){
   if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
     if(source == tilemap_button_PREV){
       tileMapShow--;//go to previous tile map
@@ -633,7 +657,13 @@ public void tilemap_button_handler(GImageButton source, GEvent event){
       if(tileMapShow >= tileMaps.size()){//make sure we dont go above maximum tile map
         tileMapShow = 0;//set to 0
       }
-    }else if(source == tilemap_button_LOADTILES){
+    }
+  }
+}
+
+public void tilemap_button_handler(GButton source, GEvent event){
+  if(event == GEvent.CLICKED){//GEvent.RELEASED, GEvent.PRESSED
+    if(source == tilemap_button_LOADTILES){
       loadTileMap();//load selected tile map
       updateTileRow();//make sure we're on the correct row
       noTile = false;//allowed to place tiles
@@ -653,125 +683,6 @@ public void tilemap_button_handler(GImageButton source, GEvent event){
       loop();//allow drawing
     }
   }
-}
-
-class clickRect{
-  float x;//button x position
-  float y;//button y position
-  float h;//button height
-  float w;//button width
-  
-  int identifier;//button identifier
-  
-  clickRect(float x_, float y_, float w_, float h_, int identifier_){
-    this.x = x_;
-    this.y = y_;
-    this.h = h_;
-    this.w = w_;
-    this.identifier = identifier_;
-  }
-
-  boolean wasClicked(){//are we clicking on a visible button
-    return(mouseX > this.x + fudgeValue && mouseX < this.x + this.w - fudgeValue && mouseY > this.y + fudgeValue && mouseY < this.y + this.h - fudgeValue);//Are we clicking on the button
-  }
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-class button extends clickRect{
-  String t;//button text
-  float tSize = 0;//button text size
-  float tX;//button text x position
-  float tY;//button text y position
-  color bColor;//button background color
-  color tColor;//button text color
-  int image;//button image
-  
-  public button(float x_, float y_, float w_, float h_, color bC_, String t_, color tC_, float tS_, int identifier_, int image_){
-    super(x_, y_, w_, h_, identifier_);
-    
-    this.bColor = bC_;
-    
-    this.t = t_;
-    this.tColor = tC_;
-    this.tSize = tS_;
-
-    this.image = image_;
-  }
-  
-  void setup(){
-    if(this.tSize == 0){//if we've set text size to auto
-      this.tSize = (this.h - 4) / 2;//figure out the available size and set the text size accordingly
-    }
-    this.tY = this.y + (this.h / 2) + 4;//figure out the text y position
-
-    int tmp = floor((this.w - textWidth(this.t)) / 2);//try and figure out the text x position
-    if(tmp < 0){
-      this.tX = this.x - tmp;
-    }else{
-      this.tX = this.x + tmp;
-    }
-  }
-  
-  void draw(){
-    stroke(color(255 - red(this.bColor), 255 - green(this.bColor), 255 - blue(this.bColor)));//set the outline to red
-    strokeWeight(1);//small outline
-    fill(this.bColor);//Set button background color
-    rect(this.x, this.y, this.w, this.h);//draw button background
-    
-    textSize(this.tSize);//set text size
-    fill(this.tColor);//Set button text color
-    text(this.t, this.tX, this.tY);//draw button text
-      
-    //if(this.image != -1){//if the button has an image
-      //image(gui[this.image], this.x, this.y);//draw it
-    //}
-  }
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void setButtonColors(int button_, color bC_, color tC_){//set a buttons text color
-  for(button b : buttons_editorUI){//go through all the buttons
-    if(b.identifier == button_){//if we've found our button
-      b.bColor = bC_;//update its background color
-      b.tColor = tC_;//update its text color
-    }
-  }
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-boolean checkButtons(){
-  switch(currentUI){
-    case _MAINMENU_:
-      break;//_MAINMENU_ END
-
-    case _TILEMAPUI_:
-      break;//_TILEMAPUI_ END
-
-    case _EDITORUI_:
-      for(button b : buttons_editorUI){//go through all the buttons
-        if(b.wasClicked()){//if we clicked this button
-          switch(b.identifier){//go do whatever its function is
-            case button_editorUI_colorToggle:
-              colorTiles = !colorTiles;//invert whether we're placing colored tile or not
-              return true;
-          
-            case button_editorUI_changeTileMap:
-              changeUI(_TILEMAPUI_);//tile map loading screen
-              tmpScreenX = screenX;//save our position
-              tmpScreenY = screenY;//save our position
-              screenX = 0;//go back to the top left for looking at tile maps
-              screenY = (UIBottom);//go back to the top left for looking at tile maps
-              return true;
-          }
-        }
-      }
-      break;//_EDITORUI_ END
-  }
-  
-  return false;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------

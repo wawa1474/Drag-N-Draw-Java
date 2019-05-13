@@ -132,9 +132,6 @@ void draw(){//Draw the canvas
     case _EDITORUI_:
       updateEditorUI();//Update the Editors UI
       drawEditorUI();//Draw the Editor UI
-      for(button b : buttons_editorUI){//loop through all buttons
-        b.draw();//draw the button
-      }
       break;
     
     case _OPTIONSMENU_:
