@@ -7,6 +7,8 @@ int tmpScreenX = 0, tmpScreenY = 0;//saved Screen XY
 int mouseTileX = 0, mouseTileY = 0;//what tile is the mouse on
 final int fudgeValue = 1;//Fudge Value to make sure we're really clicking inside something
 
+final int tilePosition = scl;
+
 
 void updateMouseXY(){//Update the XY position of the mouse
   mouseTileX = floor(((mouseX - screenX) / zoom) / scl);
@@ -83,7 +85,7 @@ void mousePressed(){//We pressed a mouse button
     
       if(mouseY < UIBottom/* * scl*/){//Did we click on the UI
         for(int i = 0; i < rowLength; i++){//Go through all the tiles in the row
-          if(mouseX > (scl * i) + fudgeValue && mouseX < (scl * (i + 1)) - fudgeValue && mouseY > scl + fudgeValue && mouseY < (UIBottom/* * scl*/) - fudgeValue){//Are we clicking on the tile UI
+          if(mouseX > (scl * i) + fudgeValue && mouseX < (scl * (i + 1)) - fudgeValue && mouseY > tilePosition + fudgeValue && mouseY < tilePosition + scl - fudgeValue){//Are we clicking on the tile UI
             noTile = true;//Dont allow tile placement
             if(tileImages[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
             tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on

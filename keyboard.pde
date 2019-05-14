@@ -1,5 +1,5 @@
 boolean noKeyboard = false;//Are We Blocking keyTyped() and keyPressed()?
-int scrollAmount = 1;//How many squares to scroll when pressing WASD
+int scrollAmount = 5;//How many squares to scroll when pressing WASD
 boolean altHeld = false;
 boolean ctrlHeld = false;
 boolean shiftHeld = false;

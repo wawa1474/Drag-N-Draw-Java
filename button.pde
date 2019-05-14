@@ -299,7 +299,7 @@ public void editor_button_handler(GButton source, GEvent event){
       tmpScreenX = screenX;//save our position
       tmpScreenY = screenY;//save our position
       screenX = 0;//go back to the top left for looking at tile maps
-      screenY = (UIBottom);//go back to the top left for looking at tile maps
+      screenY = (0);//go back to the top left for looking at tile maps
     }else{
       //println("error");
     }

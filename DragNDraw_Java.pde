@@ -10,13 +10,8 @@ color currentTileColor = color(0,255,255);
 final String _magicText = "wawa1474DragDraw";//make sure the file is ours
 
 //PImage texttest1;
-PImage main_menu_button_background;
-PImage main_menu_text;
-PImage main_menu_button_selected;
 
 PImage options_menu_mockup;
-
-PImage menu_bar_mockup;
 
 PImage opening_mockup;
 
@@ -31,18 +26,8 @@ void setup(){//Setup everything
   noSmooth();//text looks 'nicer'
   
   //texttest1 = loadImage("assets/texttest1.png");
-  main_menu_button_background = loadImage("assets/main_menu_button_background.png");//main_menu_button_background
-  main_menu_text = loadImage("assets/main_menu_text.png");//main_menu_text
-  main_menu_button_selected = loadImage("assets/main_menu_button_selected.png");//main_menu_button_selected
   
   options_menu_mockup = loadImage("assets/options_menu_mockup_v2.png");//main_menu_button_selected
-  
-  menu_bar_mockup = loadImage("assets/menu_bar_mockup.png");//main_menu_button_selected
-  
-  menuBar_Images = new PImage[3];
-  menuBar_Images[button_menuBar_file] = loadImage("assets/menu_bar_file_mockup.png");
-  menuBar_Images[button_menuBar_edit] = loadImage("assets/menu_bar_edit_mockup.png");
-  menuBar_Images[button_menuBar_view] = loadImage("assets/menu_bar_view_mockup.png");
   
   opening_mockup = loadImage("assets/opening_mockup.png");//main_menu_button_selected
   

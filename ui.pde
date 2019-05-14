@@ -6,7 +6,6 @@ boolean colorTiles = true;//Are we placing colored tiles
 
 int fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
 
-final int UIRight = 22;//How many tiles long is the UI?
 final int UIBottom = scl * 3;//How many tiles tall is the UI?
 
 final color RED = color(255,0,0);
@@ -176,7 +175,7 @@ void updateEditorUI(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void setupUI(){
-  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth(), 0).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(0, 16).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth(), 0).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
   scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
   UIControls.addColorWheel("colorWheel").setVisible(false).setRGB(currentTileColor).setCaptionLabel("")//create ColorWheel
@@ -208,13 +207,6 @@ void setupUI(){
   colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
   colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
   
-  editor_slider_red.setValue(red(currentTileColor));
-  editor_slider_green.setValue(green(currentTileColor));
-  editor_slider_blue.setValue(blue(currentTileColor));
-  editor_slider_hue.setValue(hue(currentTileColor));
-  editor_slider_saturation.setValue(saturation(currentTileColor));
-  editor_slider_brightness.setValue(brightness(currentTileColor));
-
   //changeUI(_MAINMENU_);//go to tile map selection display
   changeUI(_OPENING_);//go to tile map selection display
 }//void setup() END
@@ -262,6 +254,12 @@ void changeUI(int ui_){//change screen
     editor_colorTools_panel.setVisible(true);
     editor_colorTools_panel.setDragArea();
     editor_colorTools_panel.setCollapsed(true);
+    editor_slider_red.setValue(red(currentTileColor));
+    editor_slider_green.setValue(green(currentTileColor));
+    editor_slider_blue.setValue(blue(currentTileColor));
+    editor_slider_hue.setValue(hue(currentTileColor));
+    editor_slider_saturation.setValue(saturation(currentTileColor));
+    editor_slider_brightness.setValue(brightness(currentTileColor));
     editor_button_coloredToggle.setVisible(true);//change visibility
     editor_button_changeTileMap.setVisible(true);//change visibility
     currentUI = _EDITORUI_;
