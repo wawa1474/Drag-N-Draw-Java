@@ -118,6 +118,9 @@ void draw(){//Draw the canvas
       updateEditorUI();//Update the Editors UI
       drawEditorUI();//Draw the Editor UI
       drawColorGradient();
+      drawRedGradient();
+      drawGreenGradient();
+      drawBlueGradient();
       break;
     
     case _OPTIONSMENU_:

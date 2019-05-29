@@ -39,3 +39,27 @@ void drawColorGradient(){
     rect(200 + (i*100), 200, 1, 20);
   }
 }
+
+void drawRedGradient(){
+  for(float i = 0; i <= 1; i+=0.01){
+    fill(lerpColor(color(0, green(currentTileColor), blue(currentTileColor)), color(255, green(currentTileColor), blue(currentTileColor)), i));
+    noStroke();
+    rect(200 + (i*100), 230, 1, 20);
+  }
+}
+
+void drawGreenGradient(){
+  for(float i = 0; i <= 1; i+=0.01){
+    fill(lerpColor(color(red(currentTileColor), 0, blue(currentTileColor)), color(red(currentTileColor), 255, blue(currentTileColor)), i));
+    noStroke();
+    rect(200 + (i*100), 250, 1, 20);
+  }
+}
+
+void drawBlueGradient(){
+  for(float i = 0; i <= 1; i+=0.01){
+    fill(lerpColor(color(red(currentTileColor), green(currentTileColor), 0), color(red(currentTileColor), green(currentTileColor), 255), i));
+    noStroke();
+    rect(200 + (i*100), 270, 1, 20);
+  }
+}

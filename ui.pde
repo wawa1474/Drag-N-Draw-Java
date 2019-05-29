@@ -159,9 +159,9 @@ void updateEditorUI(){
     editor_button_coloredToggle.setLocalColor(2, WHITE);
   }
   
-  //editor_slider_red.setLocalColor(5, color(red(currentTileColor), 0, 0));
-  //editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
-  //editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
+  editor_slider_red.setLocalColor(5, color(red(currentTileColor), 0, 0));
+  editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
+  editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
   
   color tmp;
   color tmp2;
