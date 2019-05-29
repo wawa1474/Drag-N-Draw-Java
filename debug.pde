@@ -17,3 +17,25 @@ void debug(){
     icons.add(new clickableIcon(scl * 13, scl * 15, scl * 7, scl, "maps/map10-3.ddj", "TEST4"));
   }
 }
+
+//color RED = new color(255,0,0);
+
+void drawColorGradient(){
+  for(float i = 0; i <= 1; i+=0.01){
+    if(i < 0.16){
+      fill(lerpColor(RED, YELLOW, map(i, 0.0, 0.16, 0.0, 1.0)));
+    }else if(i >= 0.16 && i < 0.32){
+      fill(lerpColor(YELLOW, GREEN, map(i, 0.16, 0.32, 0.0, 1.0)));
+    }else if(i >= 0.32 && i < 0.48){
+      fill(lerpColor(GREEN, CYAN, map(i, 0.32, 0.48, 0.0, 1.0)));
+    }else if(i >= 0.48 && i < 0.64){
+      fill(lerpColor(CYAN, BLUE, map(i, 0.48, 0.64, 0.0, 1.0)));
+    }else if(i >= 0.64 && i < 0.8){
+      fill(lerpColor(BLUE, MAGENTA, map(i, 0.64, 0.8, 0.0, 1.0)));
+    }else{
+      fill(lerpColor(MAGENTA, RED, map(i, 0.8, 1.0, 0.0, 1.0)));
+    }
+    noStroke();
+    rect(200 + (i*100), 200, 1, 20);
+  }
+}

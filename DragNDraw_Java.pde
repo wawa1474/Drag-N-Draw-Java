@@ -117,6 +117,7 @@ void draw(){//Draw the canvas
     case _EDITORUI_:
       updateEditorUI();//Update the Editors UI
       drawEditorUI();//Draw the Editor UI
+      drawColorGradient();
       break;
     
     case _OPTIONSMENU_:

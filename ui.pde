@@ -9,6 +9,11 @@ int fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1
 final int UIBottom = scl * 3;//How many tiles tall is the UI?
 
 final color RED = color(255,0,0);
+final color GREEN = color(0,255,0);
+final color BLUE = color(0,0,255);
+final color YELLOW = color(255,255,0);
+final color MAGENTA = color(255,0,255);
+final color CYAN = color(0,255,255);
 final color BLACK = color(0);
 final color WHITE = color(255);
 final color GREY = color(127);
@@ -154,9 +159,9 @@ void updateEditorUI(){
     editor_button_coloredToggle.setLocalColor(2, WHITE);
   }
   
-  editor_slider_red.setLocalColor(5, color(red(currentTileColor), 0, 0));
-  editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
-  editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
+  //editor_slider_red.setLocalColor(5, color(red(currentTileColor), 0, 0));
+  //editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
+  //editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
   
   color tmp;
   color tmp2;
@@ -164,6 +169,7 @@ void updateEditorUI(){
   colorMode(HSB, 255);
   tmp = color(hue(currentTileColor), 255, 255);
   tmp2 = color(hue(currentTileColor), saturation(currentTileColor), 255);
+  //lerpColor(color(255), color(0,255,0), vision[i])
   colorMode(RGB, 255);
   
   editor_slider_hue.setLocalColor(5, tmp);
