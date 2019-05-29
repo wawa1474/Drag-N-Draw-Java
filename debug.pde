@@ -20,7 +20,31 @@ void debug(){
 
 //color RED = new color(255,0,0);
 
-void drawColorGradient(){
+void drawRedGradient(){
+  for(float i = 0; i <= 1; i+=0.01){
+    fill(lerpColor(color(0, green(currentTileColor), blue(currentTileColor)), color(255, green(currentTileColor), blue(currentTileColor)), i));
+    noStroke();
+    rect(200 + (i*100), 200, 1, 20);
+  }
+}
+
+void drawGreenGradient(){
+  for(float i = 0; i <= 1; i+=0.01){
+    fill(lerpColor(color(red(currentTileColor), 0, blue(currentTileColor)), color(red(currentTileColor), 255, blue(currentTileColor)), i));
+    noStroke();
+    rect(200 + (i*100), 220, 1, 20);
+  }
+}
+
+void drawBlueGradient(){
+  for(float i = 0; i <= 1; i+=0.01){
+    fill(lerpColor(color(red(currentTileColor), green(currentTileColor), 0), color(red(currentTileColor), green(currentTileColor), 255), i));
+    noStroke();
+    rect(200 + (i*100), 240, 1, 20);
+  }
+}
+
+void drawHueGradient(){
   for(float i = 0; i <= 1; i+=0.01){
     if(i < 0.16){
       fill(lerpColor(RED, YELLOW, map(i, 0.0, 0.16, 0.0, 1.0)));
@@ -36,30 +60,30 @@ void drawColorGradient(){
       fill(lerpColor(MAGENTA, RED, map(i, 0.8, 1.0, 0.0, 1.0)));
     }
     noStroke();
-    rect(200 + (i*100), 200, 1, 20);
-  }
-}
-
-void drawRedGradient(){
-  for(float i = 0; i <= 1; i+=0.01){
-    fill(lerpColor(color(0, green(currentTileColor), blue(currentTileColor)), color(255, green(currentTileColor), blue(currentTileColor)), i));
-    noStroke();
-    rect(200 + (i*100), 230, 1, 20);
-  }
-}
-
-void drawGreenGradient(){
-  for(float i = 0; i <= 1; i+=0.01){
-    fill(lerpColor(color(red(currentTileColor), 0, blue(currentTileColor)), color(red(currentTileColor), 255, blue(currentTileColor)), i));
-    noStroke();
-    rect(200 + (i*100), 250, 1, 20);
-  }
-}
-
-void drawBlueGradient(){
-  for(float i = 0; i <= 1; i+=0.01){
-    fill(lerpColor(color(red(currentTileColor), green(currentTileColor), 0), color(red(currentTileColor), green(currentTileColor), 255), i));
-    noStroke();
     rect(200 + (i*100), 270, 1, 20);
+  }
+}
+
+void drawSaturationGradient(){
+  colorMode(HSB, 255);
+  color lowSat = color(hue(currentTileColor), 0, brightness(currentTileColor));
+  color highSat = color(hue(currentTileColor), 255, brightness(currentTileColor));
+  colorMode(RGB, 255);
+  for(float i = 0; i <= 1; i+=0.01){
+    fill(lerpColor(lowSat, highSat, i));
+    noStroke();
+    rect(200 + (i*100), 290, 1, 20);
+  }
+}
+
+void drawBrightnessGradient(){
+  colorMode(HSB, 255);
+  color lowBright = color(hue(currentTileColor), saturation(currentTileColor), 0);
+  color highBright = color(hue(currentTileColor), saturation(currentTileColor), 255);
+  colorMode(RGB, 255);
+  for(float i = 0; i <= 1; i+=0.01){
+    fill(lerpColor(lowBright, highBright, i));
+    noStroke();
+    rect(200 + (i*100), 310, 1, 20);
   }
 }
