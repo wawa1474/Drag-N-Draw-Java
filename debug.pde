@@ -46,19 +46,23 @@ void drawBlueGradient(){
 
 void drawHueGradient(){
   for(float i = 0; i <= 1; i+=0.01){
-    if(i < 0.16){
-      fill(lerpColor(RED, YELLOW, map(i, 0.0, 0.16, 0.0, 1.0)));
-    }else if(i >= 0.16 && i < 0.32){
-      fill(lerpColor(YELLOW, GREEN, map(i, 0.16, 0.32, 0.0, 1.0)));
-    }else if(i >= 0.32 && i < 0.48){
-      fill(lerpColor(GREEN, CYAN, map(i, 0.32, 0.48, 0.0, 1.0)));
-    }else if(i >= 0.48 && i < 0.64){
-      fill(lerpColor(CYAN, BLUE, map(i, 0.48, 0.64, 0.0, 1.0)));
-    }else if(i >= 0.64 && i < 0.8){
-      fill(lerpColor(BLUE, MAGENTA, map(i, 0.64, 0.8, 0.0, 1.0)));
-    }else{
-      fill(lerpColor(MAGENTA, RED, map(i, 0.8, 1.0, 0.0, 1.0)));
-    }
+    //if(i < 0.16){
+    //  fill(lerpColor(RED, YELLOW, map(i, 0.0, 0.16, 0.0, 1.0)));
+    //}else if(i >= 0.16 && i < 0.32){
+    //  fill(lerpColor(YELLOW, GREEN, map(i, 0.16, 0.32, 0.0, 1.0)));
+    //}else if(i >= 0.32 && i < 0.48){
+    //  fill(lerpColor(GREEN, CYAN, map(i, 0.32, 0.48, 0.0, 1.0)));
+    //}else if(i >= 0.48 && i < 0.64){
+    //  fill(lerpColor(CYAN, BLUE, map(i, 0.48, 0.64, 0.0, 1.0)));
+    //}else if(i >= 0.64 && i < 0.8){
+    //  fill(lerpColor(BLUE, MAGENTA, map(i, 0.64, 0.8, 0.0, 1.0)));
+    //}else{
+    //  fill(lerpColor(MAGENTA, RED, map(i, 0.8, 1.0, 0.0, 1.0)));
+    //}
+    colorMode(HSB, 255);
+    color hue = color(i*255, 255, 255);
+    colorMode(RGB, 255);
+    fill(hue);
     noStroke();
     rect(200 + (i*100), 270, 1, 20);
   }
