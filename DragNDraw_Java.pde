@@ -54,6 +54,9 @@ void setup(){//Setup everything
   debug();//run whatever debug option is set
   
   registerMethod("pre", this);
+  
+  alphaBack = loadImage("assets/alphaBack.png");
+  hueBack = loadImage("assets/hueBack.png");
 }//void setup() END
 
 void pre() {
@@ -125,6 +128,8 @@ void draw(){//Draw the canvas
       drawHueGradient();
       drawSaturationGradient();
       drawBrightnessGradient();
+      
+      drawAlphaGradient();
       break;
     
     case _OPTIONSMENU_:
