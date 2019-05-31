@@ -48,15 +48,17 @@ void setup(){//Setup everything
   //main_menu_button_OPTIONS.fireAllEvents(true);
   //main_menu_button_EXIT.fireAllEvents(true);
   
+  alphaBack = loadImage("assets/alphaBack.png");
+  hueBack = loadImage("assets/hueBack.png");
+  tmpGradient = createGraphics(100,16);
+  setupGradientLabels();
+  
   UIControls = new ControlP5(this);//set up all the control stuff
   setupUI();//Setup all of the UI stuff
   
   debug();//run whatever debug option is set
   
   registerMethod("pre", this);
-  
-  alphaBack = loadImage("assets/alphaBack.png");
-  hueBack = loadImage("assets/hueBack.png");
 }//void setup() END
 
 void pre() {
@@ -121,15 +123,15 @@ void draw(){//Draw the canvas
       updateEditorUI();//Update the Editors UI
       drawEditorUI();//Draw the Editor UI
       
-      drawRedGradient();
-      drawGreenGradient();
-      drawBlueGradient();
+      drawRedGradient();redLabel.setIcon(tmpGradient, 1, null, null);
+      drawGreenGradient();greenLabel.setIcon(tmpGradient, 1, null, null);
+      drawBlueGradient();blueLabel.setIcon(tmpGradient, 1, null, null);
       
-      drawHueGradient();
-      drawSaturationGradient();
-      drawBrightnessGradient();
+      //drawHueGradient();hueLabel.setIcon(tmpGradient, 1, null, null);
+      drawSaturationGradient();saturationLabel.setIcon(tmpGradient, 1, null, null);
+      drawBrightnessGradient();brightnessLabel.setIcon(tmpGradient, 1, null, null);
       
-      drawAlphaGradient();
+      drawAlphaGradient();alphaLabel.setIcon(tmpGradient, 1, null, null);
       break;
     
     case _OPTIONSMENU_:

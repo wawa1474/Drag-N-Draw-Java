@@ -319,6 +319,13 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     colorInputR.setVisible(false);//change visibility
     colorInputG.setVisible(false);//change visibility
     colorInputB.setVisible(false);//change visibility
+    redLabel.setVisible(false);//change visibility
+    greenLabel.setVisible(false);//change visibility
+    blueLabel.setVisible(false);//change visibility
+    hueLabel.setVisible(false);//change visibility
+    saturationLabel.setVisible(false);//change visibility
+    brightnessLabel.setVisible(false);//change visibility
+    alphaLabel.setVisible(false);//change visibility
   }else if(event == GEvent.EXPANDED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
     colorWheel.setVisible(true);
@@ -335,6 +342,13 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     colorInputR.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
     colorInputG.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
     colorInputB.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
+    redLabel.setVisible(true);//change visibility
+    greenLabel.setVisible(true);//change visibility
+    blueLabel.setVisible(true);//change visibility
+    hueLabel.setVisible(true);//change visibility
+    saturationLabel.setVisible(true);//change visibility
+    brightnessLabel.setVisible(true);//change visibility
+    alphaLabel.setVisible(true);//change visibility
   }else if(event == GEvent.DRAGGED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
     colorInputR.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 132);

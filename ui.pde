@@ -241,6 +241,13 @@ void changeUI(int ui_){//change screen
   colorInputB.setVisible(false);//change visibility
   editor_button_coloredToggle.setVisible(false);//change visibility
   editor_button_changeTileMap.setVisible(false);//change visibility
+  redLabel.setVisible(false);//change visibility
+  greenLabel.setVisible(false);//change visibility
+  blueLabel.setVisible(false);//change visibility
+  hueLabel.setVisible(false);//change visibility
+  saturationLabel.setVisible(false);//change visibility
+  brightnessLabel.setVisible(false);//change visibility
+  alphaLabel.setVisible(false);//change visibility
   
   if(ui_ == _OPENING_){//are we going to the tile map loading screen
     surface.setSize(800, 600);
