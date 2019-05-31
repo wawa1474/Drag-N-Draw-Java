@@ -222,6 +222,10 @@ void mouseReleased(){//We released the mouse button
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mouseWheel(MouseEvent event_){//We Scrolled The Mouse Wheel
+  if(mouseOver_colorToolsPanel() || mouseOver_FILEdropDownPanel() || mouseOver_EDITdropDownPanel() || mouseOver_VIEWdropDownPanel()){
+    return;
+  }
+
   switch(currentUI){
     case _TILEMAPUI_:
       break;

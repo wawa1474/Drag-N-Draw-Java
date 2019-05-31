@@ -58,18 +58,19 @@ GPanel editor_colorTools_panel;
 int editor_colorTools_panel_Width = scl * 10;
 int editor_colorTools_panel_Height = scl * 10;
 int currentColorSlider = -1;
-GSlider editor_slider_red;
-GSlider editor_slider_green;
-GSlider editor_slider_blue;
-GSlider editor_slider_hue;
-GSlider editor_slider_saturation;
-GSlider editor_slider_brightness;
+GCustomSlider editor_slider_red;
+GCustomSlider editor_slider_green;
+GCustomSlider editor_slider_blue;
+GCustomSlider editor_slider_hue;
+GCustomSlider editor_slider_saturation;
+GCustomSlider editor_slider_brightness;
 
 //GTextField textfield1;//GEvents.CHANGED, ENTERED, SELECTION_CHANGED, GETS_FOCUS, LOST_FOCUS
 
 public void createGUI(){
   G4P.messagesEnabled(false);
   GButton.useRoundCorners(false);
+  G4P.mouseWheelDirection(G4P.REVERSE);
   main_menu_button_panel = new GPanel(this, 0, 0, 1, 1, "");
   main_menu_button_panel.setCollapsible(false);
   main_menu_button_panel.setDraggable(false);
@@ -222,56 +223,50 @@ public void createGUI(){
   editor_colorTools_panel.addEventHandler(this, "editor_colorTools_panel_handler");
   editor_colorTools_panel.setCollapsed(true);
   
-  editor_slider_red = new GSlider(this, scl * 6.5, 20, scl * 3, 16, 16);
+  editor_slider_red = new GCustomSlider(this, scl * 6.5, 20, 100, 16, "assets/sliders/blank3");
   editor_slider_red.setLimits(127, 0, 255);
-  editor_slider_red.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
-  editor_slider_red.setLocalColor(3, screen_Amber);
-  editor_slider_red.setLocalColor(5, color(127, 0, 0));
+  //editor_slider_red.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
+  //editor_slider_red.setLocalColor(3, screen_Amber);
+  //editor_slider_red.setLocalColor(5, color(127, 0, 0));
   editor_slider_red.addEventHandler(this, "editor_RGBSlider_handler");
-  editor_slider_red.setVisible(false);
   
-  editor_slider_green = new GSlider(this, scl * 6.5, 36, scl * 3, 16, 16);
+  editor_slider_green = new GCustomSlider(this, scl * 6.5, 36, 100, 16, "assets/sliders/blank3");
   editor_slider_green.setLimits(127, 0, 255);
-  editor_slider_green.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
-  editor_slider_green.setLocalColor(3, screen_Amber);
-  editor_slider_green.setLocalColor(5, color(0, 127, 0));
+  //editor_slider_green.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
+  //editor_slider_green.setLocalColor(3, screen_Amber);
+  //editor_slider_green.setLocalColor(5, color(0, 127, 0));
   editor_slider_green.addEventHandler(this, "editor_RGBSlider_handler");
-  editor_slider_green.setVisible(false);
   
-  editor_slider_blue = new GSlider(this, scl * 6.5, 52, scl * 3, 16, 16);
+  editor_slider_blue = new GCustomSlider(this, scl * 6.5, 52, 100, 16, "assets/sliders/blank3");
   editor_slider_blue.setLimits(127, 0, 255);
-  editor_slider_blue.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
-  editor_slider_blue.setLocalColor(3, screen_Amber);
-  editor_slider_blue.setLocalColor(5, color(0, 0, 127));
+  //editor_slider_blue.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
+  //editor_slider_blue.setLocalColor(3, screen_Amber);
+  //editor_slider_blue.setLocalColor(5, color(0, 0, 127));
   editor_slider_blue.addEventHandler(this, "editor_RGBSlider_handler");
-  editor_slider_blue.setVisible(false);
   //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
   
   colorMode(HSB, 255);
   
-  editor_slider_hue = new GSlider(this, scl * 6.5, 84, scl * 3, 16, 16);
+  editor_slider_hue = new GCustomSlider(this, scl * 6.5, 84, 100, 16, "assets/sliders/blank3");
   editor_slider_hue.setLimits(127, 0, 255);
-  editor_slider_hue.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
-  editor_slider_hue.setLocalColor(3, screen_Amber);
-  editor_slider_hue.setLocalColor(5, color(127, 127, 127));
+  //editor_slider_hue.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
+  //editor_slider_hue.setLocalColor(3, screen_Amber);
+  //editor_slider_hue.setLocalColor(5, color(127, 127, 127));
   editor_slider_hue.addEventHandler(this, "editor_HSBSlider_handler");
-  editor_slider_hue.setVisible(false);
   
-  editor_slider_saturation = new GSlider(this, scl * 6.5, 100, scl * 3, 16, 16);
+  editor_slider_saturation = new GCustomSlider(this, scl * 6.5, 100, 100, 16, "assets/sliders/blank3");
   editor_slider_saturation.setLimits(127, 0, 255);
-  editor_slider_saturation.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
-  editor_slider_saturation.setLocalColor(3, screen_Amber);
-  editor_slider_saturation.setLocalColor(5, color(127, 127, 127));
+  //editor_slider_saturation.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
+  //editor_slider_saturation.setLocalColor(3, screen_Amber);
+  //editor_slider_saturation.setLocalColor(5, color(127, 127, 127));
   editor_slider_saturation.addEventHandler(this, "editor_HSBSlider_handler");
-  editor_slider_saturation.setVisible(false);
   
-  editor_slider_brightness = new GSlider(this, scl * 6.5, 116, scl * 3, 16, 16);
+  editor_slider_brightness = new GCustomSlider(this, scl * 6.5, 116, 100, 16, "assets/sliders/blank3");
   editor_slider_brightness.setLimits(127, 0, 255);
-  editor_slider_brightness.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
-  editor_slider_brightness.setLocalColor(3, screen_Amber);
-  editor_slider_brightness.setLocalColor(5, color(127, 127, 127));
+  //editor_slider_brightness.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
+  //editor_slider_brightness.setLocalColor(3, screen_Amber);
+  //editor_slider_brightness.setLocalColor(5, color(127, 127, 127));
   editor_slider_brightness.addEventHandler(this, "editor_HSBSlider_handler");
-  editor_slider_brightness.setVisible(false);
   
   colorMode(RGB, 255);
   
@@ -310,31 +305,12 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
   //GEvent.COLLAPSED, EXPANDED, DRAGGED
   if(event == GEvent.COLLAPSED){
     colorWheel.setVisible(false);
-    editor_slider_red.setVisible(false);
-    editor_slider_green.setVisible(false);
-    editor_slider_blue.setVisible(false);
-    editor_slider_hue.setVisible(false);
-    editor_slider_saturation.setVisible(false);
-    editor_slider_brightness.setVisible(false);
     colorInputR.setVisible(false);//change visibility
     colorInputG.setVisible(false);//change visibility
     colorInputB.setVisible(false);//change visibility
-    redLabel.setVisible(false);//change visibility
-    greenLabel.setVisible(false);//change visibility
-    blueLabel.setVisible(false);//change visibility
-    hueLabel.setVisible(false);//change visibility
-    saturationLabel.setVisible(false);//change visibility
-    brightnessLabel.setVisible(false);//change visibility
-    alphaLabel.setVisible(false);//change visibility
   }else if(event == GEvent.EXPANDED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
     colorWheel.setVisible(true);
-    editor_slider_red.setVisible(true);
-    editor_slider_green.setVisible(true);
-    editor_slider_blue.setVisible(true);
-    editor_slider_hue.setVisible(true);
-    editor_slider_saturation.setVisible(true);
-    editor_slider_brightness.setVisible(true);
     colorInputR.setVisible(true);//change visibility
     colorInputG.setVisible(true);//change visibility
     colorInputB.setVisible(true);//change visibility
@@ -342,13 +318,6 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     colorInputR.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
     colorInputG.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
     colorInputB.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
-    redLabel.setVisible(true);//change visibility
-    greenLabel.setVisible(true);//change visibility
-    blueLabel.setVisible(true);//change visibility
-    hueLabel.setVisible(true);//change visibility
-    saturationLabel.setVisible(true);//change visibility
-    brightnessLabel.setVisible(true);//change visibility
-    alphaLabel.setVisible(true);//change visibility
   }else if(event == GEvent.DRAGGED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
     colorInputR.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
@@ -357,7 +326,7 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
   }
 }
 
-public void editor_RGBSlider_handler(GSlider source, GEvent event){
+public void editor_RGBSlider_handler(GCustomSlider source, GEvent event){
   //GEvent.VALUE_STEADY
   //println(event);
   
@@ -391,7 +360,7 @@ public void editor_RGBSlider_handler(GSlider source, GEvent event){
   }
 }
 
-public void editor_HSBSlider_handler(GSlider source, GEvent event){
+public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
   //GEvent.VALUE_STEADY
   colorMode(HSB, 255);
   if(currentColorSlider == 0){

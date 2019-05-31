@@ -159,22 +159,22 @@ void updateEditorUI(){
     editor_button_coloredToggle.setLocalColor(2, WHITE);
   }
   
-  editor_slider_red.setLocalColor(5, color(red(currentTileColor), 0, 0));
-  editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
-  editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
+  //editor_slider_red.setLocalColor(5, color(red(currentTileColor), 0, 0));
+  //editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
+  //editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
   
   color tmp;
   color tmp2;
   
-  colorMode(HSB, 255);
-  tmp = color(hue(currentTileColor), 255, 255);
-  tmp2 = color(hue(currentTileColor), saturation(currentTileColor), 255);
+  //colorMode(HSB, 255);
+  //tmp = color(hue(currentTileColor), 255, 255);
+  //tmp2 = color(hue(currentTileColor), saturation(currentTileColor), 255);
   //lerpColor(color(255), color(0,255,0), vision[i])
-  colorMode(RGB, 255);
+  //colorMode(RGB, 255);
   
-  editor_slider_hue.setLocalColor(5, tmp);
-  editor_slider_saturation.setLocalColor(5, tmp2);
-  editor_slider_brightness.setLocalColor(5, (int)brightness(currentTileColor));
+  //editor_slider_hue.setLocalColor(5, tmp);
+  //editor_slider_saturation.setLocalColor(5, tmp2);
+  //editor_slider_brightness.setLocalColor(5, (int)brightness(currentTileColor));
   //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
 }//void update() END
 
@@ -241,13 +241,6 @@ void changeUI(int ui_){//change screen
   colorInputB.setVisible(false);//change visibility
   editor_button_coloredToggle.setVisible(false);//change visibility
   editor_button_changeTileMap.setVisible(false);//change visibility
-  redLabel.setVisible(false);//change visibility
-  greenLabel.setVisible(false);//change visibility
-  blueLabel.setVisible(false);//change visibility
-  hueLabel.setVisible(false);//change visibility
-  saturationLabel.setVisible(false);//change visibility
-  brightnessLabel.setVisible(false);//change visibility
-  alphaLabel.setVisible(false);//change visibility
   
   if(ui_ == _OPENING_){//are we going to the tile map loading screen
     surface.setSize(800, 600);
