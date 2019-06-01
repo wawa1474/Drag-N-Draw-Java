@@ -19,6 +19,7 @@ void updateMouseXY(){//Update the XY position of the mouse
 
 void mousePressed(){//We pressed a mouse button
   if(mouseOver_colorToolsPanel() || mouseOver_FILEdropDownPanel() || mouseOver_EDITdropDownPanel() || mouseOver_VIEWdropDownPanel()){
+    noTile = true;//disallow tile placement
     return;
   }
 
@@ -40,6 +41,19 @@ void mousePressed(){//We pressed a mouse button
     
       if(noTile){//if we're not allowed to place tiles
         return;//do nothing
+      }
+      
+      if(mouseY < UIBottom/* * scl*/){//Did we click on the UI
+        for(int i = 0; i < rowLength; i++){//Go through all the tiles in the row
+          if(mouseX > (scl * i) + fudgeValue && mouseX < (scl * (i + 1)) - fudgeValue && mouseY > tilePosition + fudgeValue && mouseY < tilePosition + scl - fudgeValue){//Are we clicking on the tile UI
+            noTile = true;//Dont allow tile placement
+            if(tileImages[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
+            tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on
+          }
+        }//Went through all the tiles in the row
+        
+        noTile = true;//Dont allow tile placement
+        return;//Don't do anything else
       }
     
       if(tileGroupStep == 3){//pasteing group of tiles
@@ -83,19 +97,6 @@ void mousePressed(){//We pressed a mouse button
         return;//Block normal action
       }
     
-      if(mouseY < UIBottom/* * scl*/){//Did we click on the UI
-        for(int i = 0; i < rowLength; i++){//Go through all the tiles in the row
-          if(mouseX > (scl * i) + fudgeValue && mouseX < (scl * (i + 1)) - fudgeValue && mouseY > tilePosition + fudgeValue && mouseY < tilePosition + scl - fudgeValue){//Are we clicking on the tile UI
-            noTile = true;//Dont allow tile placement
-            if(tileImages[rowLength*tileRow+i] == null){return;}//if image doesn't exist return
-            tileN = rowLength*tileRow+i;//Set the tile cursor to the tile we clicked on
-          }
-        }//Went through all the tiles in the row
-        
-        noTile = true;//Dont allow tile placement
-        return;//Don't do anything else
-      }
-    
       // Did I click on the rectangle?
       for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
@@ -125,6 +126,7 @@ void mousePressed(){//We pressed a mouse button
 
 void mouseDragged(){//We dragged the mouse while holding a button
   if(mouseOver_colorToolsPanel() || mouseOver_FILEdropDownPanel() || mouseOver_EDITdropDownPanel() || mouseOver_VIEWdropDownPanel()){
+    noTile = true;//disallow tile placement
     return;
   }
 

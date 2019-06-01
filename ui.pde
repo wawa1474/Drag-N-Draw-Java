@@ -200,6 +200,8 @@ void setupUI(){
         editor_slider_hue.setValue(hue(currentTileColor));
         editor_slider_saturation.setValue(saturation(currentTileColor));
         editor_slider_brightness.setValue(brightness(currentTileColor));
+        
+        //updateSliderBackgrounds();
       }
     }
   }

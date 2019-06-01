@@ -122,16 +122,7 @@ void draw(){//Draw the canvas
     case _EDITORUI_:
       updateEditorUI();//Update the Editors UI
       drawEditorUI();//Draw the Editor UI
-      
-      drawRedGradient();redLabel.setIcon(tmpGradient, 1, null, null);
-      drawGreenGradient();greenLabel.setIcon(tmpGradient, 1, null, null);
-      drawBlueGradient();blueLabel.setIcon(tmpGradient, 1, null, null);
-      
-      //drawHueGradient();hueLabel.setIcon(tmpGradient, 1, null, null);
-      drawSaturationGradient();saturationLabel.setIcon(tmpGradient, 1, null, null);
-      drawBrightnessGradient();brightnessLabel.setIcon(tmpGradient, 1, null, null);
-      
-      drawAlphaGradient();alphaLabel.setIcon(tmpGradient, 1, null, null);
+      updateSliderBackgrounds();//figure out how to only update this when the background need to be redrawn
       break;
     
     case _OPTIONSMENU_:

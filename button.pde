@@ -225,23 +225,14 @@ public void createGUI(){
   
   editor_slider_red = new GCustomSlider(this, 204, 20, 122, 16, "assets/sliders/blank3");
   editor_slider_red.setLimits(127, 0, 255);
-  //editor_slider_red.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
-  //editor_slider_red.setLocalColor(3, screen_Amber);
-  //editor_slider_red.setLocalColor(5, color(127, 0, 0));
   editor_slider_red.addEventHandler(this, "editor_RGBSlider_handler");
   
   editor_slider_green = new GCustomSlider(this, 204, 36, 122, 16, "assets/sliders/blank3");
   editor_slider_green.setLimits(127, 0, 255);
-  //editor_slider_green.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
-  //editor_slider_green.setLocalColor(3, screen_Amber);
-  //editor_slider_green.setLocalColor(5, color(0, 127, 0));
   editor_slider_green.addEventHandler(this, "editor_RGBSlider_handler");
   
   editor_slider_blue = new GCustomSlider(this, 204, 52, 122, 16, "assets/sliders/blank3");
   editor_slider_blue.setLimits(127, 0, 255);
-  //editor_slider_blue.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
-  //editor_slider_blue.setLocalColor(3, screen_Amber);
-  //editor_slider_blue.setLocalColor(5, color(0, 0, 127));
   editor_slider_blue.addEventHandler(this, "editor_RGBSlider_handler");
   //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
   
@@ -249,23 +240,14 @@ public void createGUI(){
   
   editor_slider_hue = new GCustomSlider(this, 204, 84, 122, 16, "assets/sliders/blank3");
   editor_slider_hue.setLimits(127, 0, 255);
-  //editor_slider_hue.setLocalColorScheme(0);//red = 0, green = 1, blue = 6
-  //editor_slider_hue.setLocalColor(3, screen_Amber);
-  //editor_slider_hue.setLocalColor(5, color(127, 127, 127));
   editor_slider_hue.addEventHandler(this, "editor_HSBSlider_handler");
   
   editor_slider_saturation = new GCustomSlider(this, 204, 100, 122, 16, "assets/sliders/blank3");
   editor_slider_saturation.setLimits(127, 0, 255);
-  //editor_slider_saturation.setLocalColorScheme(1);//red = 0, green = 1, blue = 6
-  //editor_slider_saturation.setLocalColor(3, screen_Amber);
-  //editor_slider_saturation.setLocalColor(5, color(127, 127, 127));
   editor_slider_saturation.addEventHandler(this, "editor_HSBSlider_handler");
   
   editor_slider_brightness = new GCustomSlider(this, 204, 116, 122, 16, "assets/sliders/blank3");
   editor_slider_brightness.setLimits(127, 0, 255);
-  //editor_slider_brightness.setLocalColorScheme(6);//red = 0, green = 1, blue = 6
-  //editor_slider_brightness.setLocalColor(3, screen_Amber);
-  //editor_slider_brightness.setLocalColor(5, color(127, 127, 127));
   editor_slider_brightness.addEventHandler(this, "editor_HSBSlider_handler");
   
   colorMode(RGB, 255);
@@ -358,6 +340,8 @@ public void editor_RGBSlider_handler(GCustomSlider source, GEvent event){
   if(source == editor_slider_blue && currentColorSlider == -1){
     currentColorSlider = 5;
   }
+  
+  //updateSliderBackgrounds();
 }
 
 public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
@@ -392,6 +376,20 @@ public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
   if(source == editor_slider_brightness && currentColorSlider == -1){
     currentColorSlider = 2;
   }
+  
+  //updateSliderBackgrounds();
+}
+
+void updateSliderBackgrounds(){
+  drawRedGradient();redLabel.setIcon(tmpGradient, 1, null, null);
+  drawGreenGradient();greenLabel.setIcon(tmpGradient, 1, null, null);
+  drawBlueGradient();blueLabel.setIcon(tmpGradient, 1, null, null);
+  
+  //drawHueGradient();hueLabel.setIcon(tmpGradient, 1, null, null);
+  drawSaturationGradient();saturationLabel.setIcon(tmpGradient, 1, null, null);
+  drawBrightnessGradient();brightnessLabel.setIcon(tmpGradient, 1, null, null);
+  
+  drawAlphaGradient();alphaLabel.setIcon(tmpGradient, 1, null, null);
 }
 
 public void main_menu_button_handler(GImageButton source, GEvent event){
