@@ -35,17 +35,17 @@ GLabel brightnessLabel;
 GLabel alphaLabel;
 
 void setupGradientLabels(){
-  redLabel = new GLabel(this, scl * 6.5, 20, 100, 16, "");
-  greenLabel = new GLabel(this, scl * 6.5, 36, 100, 16, "");
-  blueLabel = new GLabel(this, scl * 6.5, 52, 100, 16, "");
+  redLabel = new GLabel(this, 215, 20, 100, 16, "");
+  greenLabel = new GLabel(this, 215, 36, 100, 16, "");
+  blueLabel = new GLabel(this, 215, 52, 100, 16, "");
   
-  hueLabel = new GLabel(this, scl * 6.5, 84, 100, 16, "");
-  saturationLabel = new GLabel(this, scl * 6.5, 100, 100, 16, "");
-  brightnessLabel = new GLabel(this, scl * 6.5, 116, 100, 16, "");
+  hueLabel = new GLabel(this, 215, 84, 100, 16, "");
+  saturationLabel = new GLabel(this, 215, 100, 100, 16, "");
+  brightnessLabel = new GLabel(this, 215, 116, 100, 16, "");
   
   hueLabel.setIcon(hueBack, 1, null, null);
   
-  alphaLabel = new GLabel(this, scl * 6.5, 340, 100, 16, "");
+  alphaLabel = new GLabel(this, 215, 340, 100, 16, "");
   
   editor_colorTools_panel.addControl(redLabel);
   editor_colorTools_panel.addControl(greenLabel);
