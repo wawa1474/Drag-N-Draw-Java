@@ -21,7 +21,7 @@ void drawTileMapUI(){
 
 void loadTileMap(){
   if(tileMaps.size() != 0){//if a tile map exists
-    tileImages = tileMaps.get(tileMapShow).splitTiles();//split the tile map into individual tiles
+    tileImages = tileMaps.get(tileMapShow).splitTileMap();//split the tile map into individual tiles
     tileN = 0;//make sure we're on the first tile
   }
 }
@@ -73,28 +73,50 @@ class tileMap{
   }
   
   //ArrayList<PImage> splitTiles(){
-  PImage[] splitTiles(){
+  PImage[] splitTileMap(){
     //ArrayList<PImage> tmpTiles = new ArrayList<PImage>();
-    PImage[] tmpTiles = new PImage[this.numImages];
-    int total = 0;
-    for(int y = 0; y < this.tileMapRows; y++){//go through all tile map rows
-      for(int x = 0; x < this.tileMapCols; x++){//go through all tile map columns
-        PImage tmp = createImage(this.tileWidth, this.tileHeight, ARGB);//create a temporary image
-        tmp.copy(this.tileMapImage, x * scl, y * scl, this.tileWidth, this.tileHeight, 0, 0, this.tileWidth, this.tileHeight);//copy the tile at this xy position
-        //tmpTiles.add(tmp);
-        tmpTiles[total] = tmp;//copy the tile to the temporary array of tiles
-        total++;//next tile
-        if(total == this.numImages){//if we've gone through all the tiles
-          //println(((x + 1) * (y + 1)) - 1);
-          totalImages = this.numImages;
-          fullTotalImages = (ceil((float)(this.numImages) / rowLength) * rowLength) - 1;//make sure all tile rows are full
-          loadedTileMapName = this.tileMapName;//let's remember what tile map we loaded
-          return tmpTiles;//return the temporary tiles array
-        }
-      }
-    }
-    return tmpTiles;//gotta do this other wise processing isn't happy
+    //PImage[] tmpTiles = new PImage[this.numImages];
+    //int total = 0;
+    //for(int y = 0; y < this.tileMapRows; y++){//go through all tile map rows
+    //  for(int x = 0; x < this.tileMapCols; x++){//go through all tile map columns
+    //    PImage tmp = createImage(this.tileWidth, this.tileHeight, ARGB);//create a temporary image
+    //    tmp.copy(this.tileMapImage, x * scl, y * scl, this.tileWidth, this.tileHeight, 0, 0, this.tileWidth, this.tileHeight);//copy the tile at this xy position
+    //    //tmpTiles.add(tmp);
+    //    tmpTiles[total] = tmp;//copy the tile to the temporary array of tiles
+    //    total++;//next tile
+    //    if(total == this.numImages){//if we've gone through all the tiles
+    //      //println(((x + 1) * (y + 1)) - 1);
+    //      totalImages = this.numImages;
+    //      fullTotalImages = (ceil((float)(this.numImages) / rowLength) * rowLength) - 1;//make sure all tile rows are full
+    //      loadedTileMapName = this.tileMapName;//let's remember what tile map we loaded
+    //      return tmpTiles;//return the temporary tiles array
+    //    }
+    //  }
+    //}
+    //return null;//gotta do this other wise processing isn't happy
+    
+    totalImages = this.numImages;
+    fullTotalImages = (ceil((float)(this.numImages) / rowLength) * rowLength) - 1;//make sure all tile rows are full
+    loadedTileMapName = this.tileMapName;//let's remember what tile map we loaded
+    return splitTiles(this.tileMapImage, this.tileMapRows, this.tileMapCols);//return the temporary tiles array
   }
+}
+
+PImage[] splitTiles(PImage tileMap_, int rows_, int cols_){
+  int tileWidth = tileMap_.width / cols_;
+  int tileHeight = tileMap_.height / rows_;
+  PImage[] tmpTiles = new PImage[rows_ * cols_];
+  int total = 0;
+  for(int y = 0; y < rows_; y++){//go through all tile map rows
+    for(int x = 0; x < cols_; x++){//go through all tile map columns
+      PImage tmp = createImage(tileWidth, tileHeight, ARGB);//create a temporary image
+      tmp.copy(tileMap_, x * scl, y * scl, tileWidth, tileHeight, 0, 0, tileWidth, tileHeight);//copy the tile at this xy position
+      //tmpTiles.add(tmp);
+      tmpTiles[total] = tmp;//copy the tile to the temporary array of tiles
+      total++;//next tile
+    }
+  }
+  return tmpTiles;//gotta do this other wise processing isn't happy
 }
 
 void loadTileMapInfo(String directory_, String fileLocation_){

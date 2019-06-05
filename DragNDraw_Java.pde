@@ -44,12 +44,14 @@ void setup(){//Setup everything
   
   dir = sketchPath();
   File programDir = new File(dir);
+  File resourcesZip = new File(dir + "/res.zip");
   File assetsFolder = new File(dir + "/assets/");
   if (!assetsFolder.exists()){
     try {
       //assetsFolder.mkdir();
       println("resources not extracted, extracting");
-      copyResources(programDir);
+      //copyResources(programDir);
+      copyResources(programDir, resourcesZip);
       println("resources extracted");
     } catch (Exception e) {
       println("Exception caught in Setup");
