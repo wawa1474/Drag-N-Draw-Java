@@ -5,6 +5,8 @@ int tileGroupCols = 0;//how many columns of copied tiles
 int tileGroupRows = 0;//how many rows of copied tiles
 int X1,X2,Y1,Y2;//Setup Variables
 
+//boolean tilesInCopyBuffer = false;
+
 ArrayList<ArrayList<ArrayList<mTile>>> mapTilesCopy = new ArrayList<ArrayList<ArrayList<mTile>>>(0);//the hellish 3 dimensional ArrayList of tiles to copy, paste, or cut
 
 void tileGroup(String button_){//mess with tiles in square group
@@ -77,7 +79,7 @@ void tileGroupCutCopy(char button_){//mess with tiles in square group
     for(int j = 0; j < tileGroupRows; j++){//loop through all rows
       hadTile = false;//square does not have tile
       if(checkBounds(X1 + i, Y1 + j)){//if its a negetive number
-        if(button_ == 'd'){//we clicked middle button on a tile
+        if(button_ == 'd'){//we pressed the delete button
           for(int z = 0; z < mapTiles.get(X1 + i).get(Y1 + j).size(); z++){//go through all tiles in this space
             hadTile = true;//square has tile
           }

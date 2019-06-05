@@ -65,6 +65,21 @@ GCustomSlider editor_slider_hue;
 GCustomSlider editor_slider_saturation;
 GCustomSlider editor_slider_brightness;
 
+PImage alphaBack;
+PImage hueBack;
+
+PGraphics tmpGradient;
+
+GLabel redLabel;
+GLabel greenLabel;
+GLabel blueLabel;
+
+GLabel hueLabel;
+GLabel saturationLabel;
+GLabel brightnessLabel;
+
+GLabel alphaLabel;
+
 //GTextField textfield1;//GEvents.CHANGED, ENTERED, SELECTION_CHANGED, GETS_FOCUS, LOST_FOCUS
 
 public void createGUI(){
@@ -381,15 +396,25 @@ public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
 }
 
 void updateSliderBackgrounds(){
-  drawRedGradient();redLabel.setIcon(tmpGradient, 1, null, null);
-  drawGreenGradient();greenLabel.setIcon(tmpGradient, 1, null, null);
-  drawBlueGradient();blueLabel.setIcon(tmpGradient, 1, null, null);
+  drawRedGradient();
+  redLabel.setIcon(tmpGradient, 1, null, null);
   
-  //drawHueGradient();hueLabel.setIcon(tmpGradient, 1, null, null);
-  drawSaturationGradient();saturationLabel.setIcon(tmpGradient, 1, null, null);
-  drawBrightnessGradient();brightnessLabel.setIcon(tmpGradient, 1, null, null);
+  drawGreenGradient();
+  greenLabel.setIcon(tmpGradient, 1, null, null);
   
-  drawAlphaGradient();alphaLabel.setIcon(tmpGradient, 1, null, null);
+  drawBlueGradient();
+  blueLabel.setIcon(tmpGradient, 1, null, null);
+  
+  
+  drawSaturationGradient();
+  saturationLabel.setIcon(tmpGradient, 1, null, null);
+  
+  drawBrightnessGradient();
+  brightnessLabel.setIcon(tmpGradient, 1, null, null);
+  
+  
+  drawAlphaGradient();
+  alphaLabel.setIcon(tmpGradient, 1, null, null);
 }
 
 public void main_menu_button_handler(GImageButton source, GEvent event){
@@ -399,6 +424,7 @@ public void main_menu_button_handler(GImageButton source, GEvent event){
     }else if(source == main_menu_button_OPTIONS){
       changeUI(_OPTIONSMENU_);
     }else if(source == main_menu_button_EXIT){
+      _EXIT_ = true;
       exit();
     }else{
       //println("error");
@@ -443,6 +469,7 @@ public void menu_bar_FILE_dropDown_button_handler(GImageButton source, GEvent ev
     }else if(source == menu_bar_FILE_dropDown_EXPORT){
       selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
     }else if(source == menu_bar_FILE_dropDown_EXIT){
+      _EXIT_ = true;
       exit();
     }else{
       //println("error");
@@ -664,4 +691,97 @@ boolean changeDisplayedMenuBar(int bar_){
       break;
   }
   return false;
+}
+
+void setupGradientLabels(){
+  redLabel = new GLabel(this, 215, 20, 100, 16, "");
+  greenLabel = new GLabel(this, 215, 36, 100, 16, "");
+  blueLabel = new GLabel(this, 215, 52, 100, 16, "");
+  
+  hueLabel = new GLabel(this, 215, 84, 100, 16, "");
+  saturationLabel = new GLabel(this, 215, 100, 100, 16, "");
+  brightnessLabel = new GLabel(this, 215, 116, 100, 16, "");
+  
+  hueLabel.setIcon(hueBack, 1, null, null);
+  
+  alphaLabel = new GLabel(this, 215, 340, 100, 16, "");
+  
+  editor_colorTools_panel.addControl(redLabel);
+  editor_colorTools_panel.addControl(greenLabel);
+  editor_colorTools_panel.addControl(blueLabel);
+  editor_colorTools_panel.addControl(hueLabel);
+  editor_colorTools_panel.addControl(saturationLabel);
+  editor_colorTools_panel.addControl(brightnessLabel);
+  editor_colorTools_panel.addControl(alphaLabel);
+}
+
+void drawRedGradient(){
+  tmpGradient.beginDraw();
+  tmpGradient.noStroke();
+  for(float i = 0; i <= 1; i+=0.02){
+    tmpGradient.fill(lerpColor(color(0, green(currentTileColor), blue(currentTileColor)), color(255, green(currentTileColor), blue(currentTileColor)), i));
+    tmpGradient.rect((i*100), 0, 2, 16);
+  }
+  tmpGradient.endDraw();
+}
+
+void drawGreenGradient(){
+  tmpGradient.beginDraw();
+  tmpGradient.noStroke();
+  for(float i = 0; i <= 1; i+=0.02){
+    tmpGradient.fill(lerpColor(color(red(currentTileColor), 0, blue(currentTileColor)), color(red(currentTileColor), 255, blue(currentTileColor)), i));
+    tmpGradient.rect((i*100), 0, 2, 16);
+  }
+  tmpGradient.endDraw();
+}
+
+void drawBlueGradient(){
+  tmpGradient.beginDraw();
+  tmpGradient.noStroke();
+  for(float i = 0; i <= 1; i+=0.02){
+    tmpGradient.fill(lerpColor(color(red(currentTileColor), green(currentTileColor), 0), color(red(currentTileColor), green(currentTileColor), 255), i));
+    tmpGradient.rect((i*100), 0, 2, 16);
+  }
+  tmpGradient.endDraw();
+}
+
+void drawSaturationGradient(){
+  colorMode(HSB, 255);
+  color lowSat = color(hue(currentTileColor), 0, brightness(currentTileColor));
+  color highSat = color(hue(currentTileColor), 255, brightness(currentTileColor));
+  colorMode(RGB, 255);
+  tmpGradient.beginDraw();
+  tmpGradient.noStroke();
+  for(float i = 0; i <= 1; i+=0.02){
+    tmpGradient.fill(lerpColor(lowSat, highSat, i));
+    tmpGradient.rect((i*100), 0, 2, 16);
+  }
+  tmpGradient.endDraw();
+}
+
+void drawBrightnessGradient(){
+  colorMode(HSB, 255);
+  color lowBright = color(hue(currentTileColor), saturation(currentTileColor), 0);
+  color highBright = color(hue(currentTileColor), saturation(currentTileColor), 255);
+  colorMode(RGB, 255);
+  tmpGradient.beginDraw();
+  tmpGradient.noStroke();
+  for(float i = 0; i <= 1; i+=0.02){
+    tmpGradient.fill(lerpColor(lowBright, highBright, i));
+    tmpGradient.rect((i*100), 0, 2, 16);
+  }
+  tmpGradient.endDraw();
+}
+
+void drawAlphaGradient(){
+  tmpGradient.beginDraw();
+  tmpGradient.noStroke();
+  tmpGradient.clear();
+  tmpGradient.image(alphaBack, 0, 0);
+  for(float i = 0; i <= 1; i+=0.020001){
+    tmpGradient.fill(color(red(currentTileColor), green(currentTileColor), blue(currentTileColor), i*255));
+    tmpGradient.rect((i*100), 0, 2, 16);
+    //println(i*100);
+  }
+  tmpGradient.endDraw();
 }

@@ -3,6 +3,7 @@ int scrollAmount = 5;//How many squares to scroll when pressing WASD
 boolean altHeld = false;
 boolean ctrlHeld = false;
 boolean shiftHeld = false;
+//boolean deleteHeld = false;
 int lastKey = -1;
 
 //boolean[] pressedKeys = new boolean[65536];
@@ -39,6 +40,10 @@ void keyPressed(){//We pressed a key
         //key = 0;  // Fools! don't let them escape!
       }
       return;
+    
+    //case DELETE:
+    //  deleteHeld = true;
+    //  break;
   }
   lastKey = keyCode;
 }//void keyPressed() END
@@ -62,9 +67,22 @@ void keyReleased(){
         lastKey = -1;
       }
       break;
+
+    //case DELETE:
+    //  deleteHeld = false;
+    //  break;
   }
 }
 
+
+/*
+how do we support special keys all by themselves
+  i.e. DELETE
+
+what format do we save the keybinds in
+  for "config" files
+
+*/
 boolean keyHandler(int key_, String keybind_){
   String[] list = split(keybind_, " ");
   
@@ -72,8 +90,21 @@ boolean keyHandler(int key_, String keybind_){
     return false;
   }
   
+  if(list.length == 1){
+    if(list[0].length() > 1){
+      switch(list[0]){
+        case "DELETE":
+          if(key_ == DELETE){
+            return true;
+          }
+          break;
+      }
+      return false;
+    }
+  }
+  
   if(str(list[list.length - 1].charAt(0)).toLowerCase().equals(str(char(key_)).toLowerCase())){
-    for(int i = 0; i < list.length; i++){
+    for(int i = 0; i < list.length - 1; i++){
       boolean skip = false;
       String tmp = list[i].toLowerCase();
       if(tmp.equals("ctrl")){
@@ -144,6 +175,7 @@ void keyTyped(){//We typed a key
         }
         
         if(keyHandler(lastKey, "ALT + X")){
+          _EXIT_ = true;
           exit();
           return;
         }
@@ -227,118 +259,243 @@ void keyTyped(){//We typed a key
   displayedMenuBar = -1;
   
   if(noKeyboard == false){//are we blocking keyboard functions?
+    if(keyHandler(lastKey, "F")){
+      colorTiles = !colorTiles;
+      return;
+    }
+    
+    if(keyHandler(lastKey, "Q")){
+      if(tileGroupStep == 0){//set XY1
+        tileGroupStep = 1;//ready for next step
+        sx1 = mouseX - screenX;//set x1 to mouse x position
+        sy1 = mouseY - screenY - (UIBottom);//set y1 to mouse y position
+      }else if (tileGroupStep == 1){//set XY2
+        tileGroupStep = 2;//ready to do group tiles stuff
+        sx2 = mouseX - screenX;//set x1 to mouse x position
+        sy2 = mouseY - screenY - (UIBottom);//set y2 to mouse y position
+      }else if (tileGroupStep == 2){//set XY2
+        tileGroupStep = 0;//ready to do group tiles stuff
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "X")){
+      if(tileGroupStep == 2){//we're on step two of group selection
+        tileGroupCutCopy('x');//cut group selection
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "C")){
+      if(tileGroupStep == 2){//we're on step two of group selection
+        tileGroupCutCopy('c');//copy group selection
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "V")){
+      if(tileGroupStep != 3){//set it up for pasting
+        tileGroupStep = 3;//paste step is 3
+      }else if(tileGroupStep == 3){//cancel pasting
+        tileGroupStep = 0;//paste step is 0
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "R")){
+      for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+        for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
+          if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
+            mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
+            println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.getRed() + ", Green Amount: " + tmp.getGreen() + ", Blue Amount: " + tmp.getBlue() + ", Tile Image #: " + tmp.image + ", Is Tile Colored: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
+          }
+        }
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "E")){
+      for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+        for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
+          if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
+            mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
+            loadColors(tmp);
+          }
+        }
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "P")){
+      backgroundRed = red(currentTileColor);//set red
+      backgroundGreen = green(currentTileColor);//set green
+      backgroundBlue = blue(currentTileColor);//set blue
+      return;
+    }
+    
+    if(keyHandler(lastKey, "O")){
+      drawLines = !drawLines;//do we draw the background lines?
+      return;
+    }
+    
+    if(keyHandler(lastKey, "W")){
+      screenY += (scl * scrollAmount);//go up
+        
+      if(screenY > 0){//if we're to far up
+        screenY = 0;//make it not so
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "A")){
+      screenX += (scl * scrollAmount);//go left
+        
+      if(screenX > 0){//if we're to far left
+        screenX = 0;//make it not so
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "S")){
+      if(rows > height / scl || currentUI == _TILEMAPUI_){
+        screenY -= (scl * scrollAmount);//go down
+      
+        if(screenY < -((scl * (rows + 2)) - height) && currentUI != _TILEMAPUI_){//if we're to far down
+          screenY = -((scl * (rows + 2)) - height) + 1;//make it not so
+        }
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "D")){
+      if(cols > width / scl || currentUI == _TILEMAPUI_){
+        screenX -= (scl * scrollAmount);//go right
+      
+        if(screenX < -((scl * cols) - width) && currentUI != _TILEMAPUI_){//if we're to far right
+          screenX = -((scl * cols) - width) + 1;//make it not so
+        }
+      }
+      return;
+    }
+    
+    if(keyHandler(lastKey, "DELETE")){
+      if(tileGroupStep == 2){//we're on step two of group selection
+        tileGroupCutCopy('d');//cut group selection
+      }
+      return;
+    }
     switch(key){
-      case 'f'://We pressed 'F'
-        colorTiles = !colorTiles;
-        break;
+      //case 'f'://We pressed 'F'
+      //  colorTiles = !colorTiles;
+      //  break;
 
-      case 'q'://We pressed 'Q'
-        if(tileGroupStep == 0){//set XY1
-          tileGroupStep = 1;//ready for next step
-          sx1 = mouseX - screenX;//set x1 to mouse x position
-          sy1 = mouseY - screenY - (UIBottom);//set y1 to mouse y position
-        }else if (tileGroupStep == 1){//set XY2
-          tileGroupStep = 2;//ready to do group tiles stuff
-          sx2 = mouseX - screenX;//set x1 to mouse x position
-          sy2 = mouseY - screenY - (UIBottom);//set y2 to mouse y position
-        }else if (tileGroupStep == 2){//set XY2
-          tileGroupStep = 0;//ready to do group tiles stuff
-        }
-        break;
+      //case 'q'://We pressed 'Q'
+      //  if(tileGroupStep == 0){//set XY1
+      //    tileGroupStep = 1;//ready for next step
+      //    sx1 = mouseX - screenX;//set x1 to mouse x position
+      //    sy1 = mouseY - screenY - (UIBottom);//set y1 to mouse y position
+      //  }else if (tileGroupStep == 1){//set XY2
+      //    tileGroupStep = 2;//ready to do group tiles stuff
+      //    sx2 = mouseX - screenX;//set x1 to mouse x position
+      //    sy2 = mouseY - screenY - (UIBottom);//set y2 to mouse y position
+      //  }else if (tileGroupStep == 2){//set XY2
+      //    tileGroupStep = 0;//ready to do group tiles stuff
+      //  }
+      //  break;
 
-      case DELETE://we pressed 'DELETE'
-        if(tileGroupStep == 2){//we're on step two of group selection
-          tileGroupCutCopy('d');//cut group selection
-        }
-        break;
+      //case DELETE://we pressed 'DELETE'
+      //  if(tileGroupStep == 2){//we're on step two of group selection
+      //    tileGroupCutCopy('d');//cut group selection
+      //  }
+      //  break;
 
-      case 'x'://We pressed 'X'
-        if(tileGroupStep == 2){//we're on step two of group selection
-          tileGroupCutCopy('x');//cut group selection
-        }
-        break;
+      //case 'x'://We pressed 'X'
+      //  if(tileGroupStep == 2){//we're on step two of group selection
+      //    tileGroupCutCopy('x');//cut group selection
+      //  }
+      //  break;
 
-      case 'c'://We pressed 'C'
-        if(tileGroupStep == 2){//we're on step two of group selection
-          tileGroupCutCopy('c');//copy group selection
-        }
-        break;
+      //case 'c'://We pressed 'C'
+      //  if(tileGroupStep == 2){//we're on step two of group selection
+      //    tileGroupCutCopy('c');//copy group selection
+      //  }
+      //  break;
 
-      case 'v'://We pressed 'V'
-        if(tileGroupStep != 3){//set it up for pasting
-          tileGroupStep = 3;//paste step is 3
-        }else if(tileGroupStep == 3){//cancel pasting
-          tileGroupStep = 0;//paste step is 0
-        }
-        break;
+      //case 'v'://We pressed 'V'
+      //  if(tileGroupStep != 3){//set it up for pasting
+      //    tileGroupStep = 3;//paste step is 3
+      //  }else if(tileGroupStep == 3){//cancel pasting
+      //    tileGroupStep = 0;//paste step is 0
+      //  }
+      //  break;
 
-      case 'r'://We pressed 'R'
-        for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
-          for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-            if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
-              mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
-              println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.getRed() + ", Green Amount: " + tmp.getGreen() + ", Blue Amount: " + tmp.getBlue() + ", Tile Image #: " + tmp.image + ", Is Tile Colored: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
-            }
-          }
-        }
-        break;
+      //case 'r'://We pressed 'R'
+      //  for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+      //    for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
+      //      if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
+      //        mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
+      //        println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.getRed() + ", Green Amount: " + tmp.getGreen() + ", Blue Amount: " + tmp.getBlue() + ", Tile Image #: " + tmp.image + ", Is Tile Colored: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
+      //      }
+      //    }
+      //  }
+      //  break;
 
-      case 'e'://We pressed 'E'
-        for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
-          for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-            if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
-              mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
-              loadColors(tmp);
-            }
-          }
-        }
-        break;
+      //case 'e'://We pressed 'E'
+      //  for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
+      //    for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
+      //      if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
+      //        mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
+      //        loadColors(tmp);
+      //      }
+      //    }
+      //  }
+      //  break;
 
-      case 'p'://We pressed 'P'
-        backgroundRed = red(currentTileColor);//set red
-        backgroundGreen = green(currentTileColor);//set green
-        backgroundBlue = blue(currentTileColor);//set blue
-        break;
+      //case 'p'://We pressed 'P'
+      //  backgroundRed = red(currentTileColor);//set red
+      //  backgroundGreen = green(currentTileColor);//set green
+      //  backgroundBlue = blue(currentTileColor);//set blue
+      //  break;
 
-      case 'o'://We pressed 'O'
-        drawLines = !drawLines;//do we draw the background lines?
-        break;
+      //case 'o'://We pressed 'O'
+      //  drawLines = !drawLines;//do we draw the background lines?
+      //  break;
 
-      case 'w'://We pressed 'W'
-        screenY += (scl * scrollAmount);//go up
+      //case 'w'://We pressed 'W'
+      //  screenY += (scl * scrollAmount);//go up
         
-        if(screenY > 0){//if we're to far up
-          screenY = 0;//make it not so
-        }
-        break;
+      //  if(screenY > 0){//if we're to far up
+      //    screenY = 0;//make it not so
+      //  }
+      //  break;
 
-      case 'a'://We pressed 'A'
-        screenX += (scl * scrollAmount);//go left
+      //case 'a'://We pressed 'A'
+      //  screenX += (scl * scrollAmount);//go left
         
-        if(screenX > 0){//if we're to far left
-          screenX = 0;//make it not so
-        }
-        break;
+      //  if(screenX > 0){//if we're to far left
+      //    screenX = 0;//make it not so
+      //  }
+      //  break;
 
-      case 's'://We pressed 'S'
-        if(rows > height / scl || currentUI == _TILEMAPUI_){
-          screenY -= (scl * scrollAmount);//go down
+      //case 's'://We pressed 'S'
+      //  if(rows > height / scl || currentUI == _TILEMAPUI_){
+      //    screenY -= (scl * scrollAmount);//go down
         
-          if(screenY < -((scl * (rows + 2)) - height) && currentUI != _TILEMAPUI_){//if we're to far down
-            screenY = -((scl * (rows + 2)) - height) + 1;//make it not so
-          }
-        }
-        break;
+      //    if(screenY < -((scl * (rows + 2)) - height) && currentUI != _TILEMAPUI_){//if we're to far down
+      //      screenY = -((scl * (rows + 2)) - height) + 1;//make it not so
+      //    }
+      //  }
+      //  break;
 
-      case 'd'://We pressed 'D'
-        if(cols > width / scl || currentUI == _TILEMAPUI_){
-          screenX -= (scl * scrollAmount);//go right
+      //case 'd'://We pressed 'D'
+      //  if(cols > width / scl || currentUI == _TILEMAPUI_){
+      //    screenX -= (scl * scrollAmount);//go right
         
-          if(screenX < -((scl * cols) - width) && currentUI != _TILEMAPUI_){//if we're to far right
-            screenX = -((scl * cols) - width) + 1;//make it not so
-          }
-        }
-        break;
+      //    if(screenX < -((scl * cols) - width) && currentUI != _TILEMAPUI_){//if we're to far right
+      //      screenX = -((scl * cols) - width) + 1;//make it not so
+      //    }
+      //  }
+      //  break;
     }
   }
 }//void keyTyped() END

@@ -163,8 +163,8 @@ void updateEditorUI(){
   //editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
   //editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
   
-  color tmp;
-  color tmp2;
+  //color tmp;
+  //color tmp2;
   
   //colorMode(HSB, 255);
   //tmp = color(hue(currentTileColor), 255, 255);
