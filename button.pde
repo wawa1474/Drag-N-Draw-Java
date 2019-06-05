@@ -19,7 +19,7 @@ final int button_menuBar_tools = 4;
 final int button_menuBar_help = 5;
 
 GPanel menu_bar_button_panel;
-int displayedMenuBar = -1;
+int displayedMenuBar = button_menuBar_NONE;
 GImageButton menu_bar_button_FILE;
 GImageButton menu_bar_button_EDIT;
 GImageButton menu_bar_button_VIEW;
@@ -267,6 +267,13 @@ public void createGUI(){
   
   colorMode(RGB, 255);
   
+  editor_slider_red.setValue(red(currentTileColor));
+  editor_slider_green.setValue(green(currentTileColor));
+  editor_slider_blue.setValue(blue(currentTileColor));
+  editor_slider_hue.setValue(hue(currentTileColor));
+  editor_slider_saturation.setValue(saturation(currentTileColor));
+  editor_slider_brightness.setValue(brightness(currentTileColor));
+  
   editor_colorTools_panel.addControl(editor_slider_red);
   editor_colorTools_panel.addControl(editor_slider_green);
   editor_colorTools_panel.addControl(editor_slider_blue);
@@ -278,6 +285,32 @@ public void createGUI(){
   editor_button_coloredToggle.addEventHandler(this, "editor_button_handler");
   editor_button_changeTileMap = new GButton(this, editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth() + scl * 2, 0, scl * 3 + 16, scl + 1, "Change Tile Map");
   editor_button_changeTileMap.addEventHandler(this, "editor_button_handler");
+  
+  
+  
+  alphaBack = loadImage("assets/alphaBack.png");
+  hueBack = loadImage("assets/hueBack.png");
+  tmpGradient = createGraphics(100,16);
+  
+  redLabel = new GLabel(this, 215, 20, 100, 16, "");
+  greenLabel = new GLabel(this, 215, 36, 100, 16, "");
+  blueLabel = new GLabel(this, 215, 52, 100, 16, "");
+  
+  hueLabel = new GLabel(this, 215, 84, 100, 16, "");
+  saturationLabel = new GLabel(this, 215, 100, 100, 16, "");
+  brightnessLabel = new GLabel(this, 215, 116, 100, 16, "");
+  
+  hueLabel.setIcon(hueBack, 1, null, null);
+  
+  alphaLabel = new GLabel(this, 215, 340, 100, 16, "");
+  
+  editor_colorTools_panel.addControl(redLabel);
+  editor_colorTools_panel.addControl(greenLabel);
+  editor_colorTools_panel.addControl(blueLabel);
+  editor_colorTools_panel.addControl(hueLabel);
+  editor_colorTools_panel.addControl(saturationLabel);
+  editor_colorTools_panel.addControl(brightnessLabel);
+  editor_colorTools_panel.addControl(alphaLabel);
 }
 
 //public void main_menu_panel(GImageButton source, GEvent event) {}
@@ -673,7 +706,7 @@ boolean changeDisplayedMenuBar(int bar_){
   menu_bar_VIEW_dropDown_panel.setVisible(false);
   
   if(displayedMenuBar == bar_){
-    displayedMenuBar = -1;
+    displayedMenuBar = button_menuBar_NONE;
     return true;
   }
   displayedMenuBar = bar_;
@@ -691,28 +724,6 @@ boolean changeDisplayedMenuBar(int bar_){
       break;
   }
   return false;
-}
-
-void setupGradientLabels(){
-  redLabel = new GLabel(this, 215, 20, 100, 16, "");
-  greenLabel = new GLabel(this, 215, 36, 100, 16, "");
-  blueLabel = new GLabel(this, 215, 52, 100, 16, "");
-  
-  hueLabel = new GLabel(this, 215, 84, 100, 16, "");
-  saturationLabel = new GLabel(this, 215, 100, 100, 16, "");
-  brightnessLabel = new GLabel(this, 215, 116, 100, 16, "");
-  
-  hueLabel.setIcon(hueBack, 1, null, null);
-  
-  alphaLabel = new GLabel(this, 215, 340, 100, 16, "");
-  
-  editor_colorTools_panel.addControl(redLabel);
-  editor_colorTools_panel.addControl(greenLabel);
-  editor_colorTools_panel.addControl(blueLabel);
-  editor_colorTools_panel.addControl(hueLabel);
-  editor_colorTools_panel.addControl(saturationLabel);
-  editor_colorTools_panel.addControl(brightnessLabel);
-  editor_colorTools_panel.addControl(alphaLabel);
 }
 
 void drawRedGradient(){

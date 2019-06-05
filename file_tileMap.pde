@@ -1,4 +1,3 @@
-//import java.util.Date;
 final int _FILEVERSION_TILEMAP_ = 0;//what version of file saving and loading
 
 ArrayList<tileMap> tileMaps = new ArrayList<tileMap>(0);//arraylist of tile maps

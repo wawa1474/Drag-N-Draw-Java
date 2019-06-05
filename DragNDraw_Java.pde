@@ -11,10 +11,9 @@ import java.util.zip.ZipOutputStream;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedInputStream;
-//import java.io.FileInputStream;
-//import java.io.FileOutputStream;
-//import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+//import java.util.Date;
 
 final int scl = 32;//Square Scale
 color currentTileColor = color(0,255,255);
@@ -38,13 +37,11 @@ String dir;
 boolean _EXIT_ = false;
 
 void setup(){//Setup everything
-  //size(960,540);//make a canvas (X, Y)
   size(800, 600);
   surface.setResizable(true);//allow resizing of the window
   surface.setTitle("Drag 'N' Draw Java - " + VERSION);
   noSmooth();//text looks 'nicer'
   
-  //texttest1 = loadImage("assets/texttest1.png");
   dir = sketchPath();
   File programDir = new File(dir);
   File assetsFolder = new File(dir + "/assets/");
@@ -79,18 +76,6 @@ void setup(){//Setup everything
     loadTileMapInfo();//load tile map info files
     
     createGUI();
-    //main_menu_button_VP.fireAllEvents(true);
-    //main_menu_button_DND.fireAllEvents(true);
-    //main_menu_button_PF.fireAllEvents(true);
-    //main_menu_button_TNS.fireAllEvents(true);
-    //main_menu_button_RNP.fireAllEvents(true);
-    //main_menu_button_OPTIONS.fireAllEvents(true);
-    //main_menu_button_EXIT.fireAllEvents(true);
-    
-    alphaBack = loadImage("assets/alphaBack.png");
-    hueBack = loadImage("assets/hueBack.png");
-    tmpGradient = createGraphics(100,16);
-    setupGradientLabels();
     
     UIControls = new ControlP5(this);//set up all the control stuff
     setupUI();//Setup all of the UI stuff
@@ -101,9 +86,8 @@ void setup(){//Setup everything
   }
 }//void setup() END
 
-void pre() {
-  if (currentUI == _EDITORUI_ && (oldScreenW != width || oldScreenH != height)) {
-    // Sketch window has resized
+void pre(){
+  if (currentUI == _EDITORUI_ && (oldScreenW != width || oldScreenH != height)){//Sketch window has resized
     oldScreenW = width;
     oldScreenH = height;
     editor_colorTools_panel.setDragArea();
@@ -148,12 +132,10 @@ void draw(){//Draw the canvas
     
     switch(currentUI){
       case _OPENING_:
-        //background(137);//white background
         image(opening_mockup,0,0);
         break;
   
       case _MAINMENU_:
-        //background(137);//grayish background
         break;
   
       case _TILEMAPUI_:
@@ -167,7 +149,6 @@ void draw(){//Draw the canvas
         break;
       
       case _OPTIONSMENU_:
-        //background(137);//white background
         image(options_menu_mockup,scl,scl);
         break;
       

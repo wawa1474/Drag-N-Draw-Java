@@ -63,7 +63,7 @@ void keyReleased(){
     case ALT://alt(18)
       altHeld = false;
       if(lastKey == ALT){//alt
-        displayedMenuBar = -1;
+        changeDisplayedMenuBar(button_menuBar_NONE);
         lastKey = -1;
       }
       break;
@@ -256,7 +256,8 @@ void keyTyped(){//We typed a key
       return;
     }
   }
-  displayedMenuBar = -1;
+  //displayedMenuBar = -1;
+  changeDisplayedMenuBar(button_menuBar_NONE);
   
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(keyHandler(lastKey, "F")){

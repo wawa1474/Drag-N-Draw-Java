@@ -223,7 +223,7 @@ void setupUI(){
 
 void changeUI(int ui_){//change screen
   slidersSetVis(false);
-  displayedMenuBar = -1;
+  changeDisplayedMenuBar(button_menuBar_NONE);
   altHeld = false;
   ctrlHeld = false;
   shiftHeld = false;
@@ -232,9 +232,6 @@ void changeUI(int ui_){//change screen
   
   main_menu_button_panel.setVisible(false);
   menu_bar_button_panel.setVisible(false);
-  menu_bar_FILE_dropDown_panel.setVisible(false);
-  menu_bar_EDIT_dropDown_panel.setVisible(false);
-  menu_bar_VIEW_dropDown_panel.setVisible(false);
   tilemap_button_panel.setVisible(false);
   editor_colorTools_panel.setVisible(false);
   colorWheel.setVisible(false);
@@ -262,12 +259,6 @@ void changeUI(int ui_){//change screen
     editor_colorTools_panel.setVisible(true);
     editor_colorTools_panel.setDragArea();
     editor_colorTools_panel.setCollapsed(true);
-    editor_slider_red.setValue(red(currentTileColor));
-    editor_slider_green.setValue(green(currentTileColor));
-    editor_slider_blue.setValue(blue(currentTileColor));
-    editor_slider_hue.setValue(hue(currentTileColor));
-    editor_slider_saturation.setValue(saturation(currentTileColor));
-    editor_slider_brightness.setValue(brightness(currentTileColor));
     editor_button_coloredToggle.setVisible(true);//change visibility
     editor_button_changeTileMap.setVisible(true);//change visibility
     currentUI = _EDITORUI_;
