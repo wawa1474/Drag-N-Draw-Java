@@ -134,6 +134,7 @@ void copyResources(File resourcesDirectory) throws IOException {
     ZipEntry zipEntry = zipInputStream.getNextEntry();
     while (zipEntry != null) {
       File file = new File(resourcesDirectory, zipEntry.getName());
+      println(zipEntry.getName());//we can get the file name and location
 
       if (zipEntry.isDirectory()) {
         file.mkdir();
