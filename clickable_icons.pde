@@ -4,7 +4,7 @@ ArrayList<clickableIcon> icons = new ArrayList<clickableIcon>(0);//make the arra
 
 class clickableIcon{//clickableIcon Object
   int x, y;//Store XY Position
-  int WIDTH, HEIGHT;//store width and height
+  int w, h;//store width and height
   String file;//store what file to load
   String hoverText;//text to show when mouse is hovering over
   color borderColor = color(255,0,0);//what color is the border? (red)
@@ -13,8 +13,8 @@ class clickableIcon{//clickableIcon Object
   public clickableIcon(int x_, int y_, String file_, String hoverText_){//clickableIcon Object
     x = x_;//Store X Position
     y = y_;//Store Y Position
-    WIDTH = scl;
-    HEIGHT = scl;
+    w = scl;
+    h = scl;
     file = file_;//store what file to load
     hoverText = hoverText_;//text to show when mouse is hovering over
   }//public clickableIcon(int x, int y, String file) END
@@ -22,8 +22,8 @@ class clickableIcon{//clickableIcon Object
   public clickableIcon(int x_, int y_, int width_, int height_, String file_, String hoverText_){//clickableIcon Object
     x = x_;//Store X Position
     y = y_;//Store Y Position
-    WIDTH = width_;
-    HEIGHT = height_;
+    w = width_;
+    h = height_;
     file = file_;//store what file to load
     hoverText = hoverText_;//text to show when mouse is hovering over
   }//public clickableIcon(int x, int y, String file) END
@@ -32,10 +32,10 @@ class clickableIcon{//clickableIcon Object
     if(showBorder){
       stroke(borderColor);//set the outline to red
       strokeWeight(borderThickness); //Make the outline Thicker
-      line(x, y, x + WIDTH, y);//draw the top line
-      line(x, y, x, y + HEIGHT);//draw the left line
-      line(x, y + HEIGHT, x + WIDTH, y + HEIGHT);//draw the bottom line
-      line(x + WIDTH, y + HEIGHT, x + WIDTH, y);//draw the right line
+      line(x, y, x + w, y);//draw the top line
+      line(x, y, x, y + h);//draw the left line
+      line(x, y + h, x + w, y + h);//draw the bottom line
+      line(x + w, y + h, x + w, y);//draw the right line
       strokeWeight(1); //Set the outline back to normal
       stroke(0);//make the outline to black
     }
@@ -55,7 +55,7 @@ class clickableIcon{//clickableIcon Object
   boolean mouseOver(){//are we hovering over the icon
     int tmpX = mouseX - screenX;
     int tmpY = mouseY - screenY - UIBottom;
-    if(tmpX > x - borderThickness && tmpY > y - borderThickness && tmpX < x + WIDTH + borderThickness && tmpY < y + HEIGHT + borderThickness){//are we within the bounds of this icon?
+    if(tmpX > x - borderThickness && tmpY > y - borderThickness && tmpX < x + w + borderThickness && tmpY < y + h + borderThickness){//are we within the bounds of this icon?
       return true;//yes we're hovering over the icon
     }
     return false;//no we aren't hovering over the icon
