@@ -55,8 +55,8 @@ GButton tilemap_button_LOADTILES;
 GButton tilemap_button_LOADMAP;
 
 GPanel editor_colorTools_panel;
-int editor_colorTools_panel_Width = scl * 11;
-int editor_colorTools_panel_Height = scl * 10;
+int editor_colorTools_panel_Width = UIscl * 11;
+int editor_colorTools_panel_Height = UIscl * 10;
 int currentColorSlider = -1;
 GCustomSlider editor_slider_red;
 GCustomSlider editor_slider_green;
@@ -223,18 +223,18 @@ public void createGUI(){
   tilemap_button_panel.setOpaque(false);
   tilemap_button_PREV = new GImageButton(this, 0, 0, new String[] {"assets/buttons/left_arrow_blue.png"});
   tilemap_button_PREV.addEventHandler(this, "tilemap_imageButton_handler");
-  tilemap_button_NEXT = new GImageButton(this, scl * 2, 0, new String[] {"assets/buttons/right_arrow.png"});
+  tilemap_button_NEXT = new GImageButton(this, UIscl * 2, 0, new String[] {"assets/buttons/right_arrow.png"});
   tilemap_button_NEXT.addEventHandler(this, "tilemap_imageButton_handler");
-  tilemap_button_LOADTILES = new GButton(this, scl * 4, 0, scl * 3 + 1, scl + 1, "Load Tile Map");
+  tilemap_button_LOADTILES = new GButton(this, UIscl * 4, 0, UIscl * 3 + 1, UIscl + 1, "Load Tile Map");
   tilemap_button_LOADTILES.addEventHandler(this, "tilemap_button_handler");
-  tilemap_button_LOADMAP = new GButton(this, scl * 8, 0, scl * 2 + 1, scl + 1, "Load Map");
+  tilemap_button_LOADMAP = new GButton(this, UIscl * 8, 0, UIscl * 2 + 1, UIscl + 1, "Load Map");
   tilemap_button_LOADMAP.addEventHandler(this, "tilemap_button_handler");
   tilemap_button_panel.addControl(tilemap_button_PREV);
   tilemap_button_panel.addControl(tilemap_button_NEXT);
   tilemap_button_panel.addControl(tilemap_button_LOADTILES);
   tilemap_button_panel.addControl(tilemap_button_LOADMAP);
   
-  editor_colorTools_panel = new GPanel(this, scl * 16, 0, editor_colorTools_panel_Width, editor_colorTools_panel_Height, "color tools");
+  editor_colorTools_panel = new GPanel(this, UIscl * 16, 0, editor_colorTools_panel_Width, editor_colorTools_panel_Height, "color tools");
   editor_colorTools_panel.addEventHandler(this, "editor_colorTools_panel_handler");
   editor_colorTools_panel.setCollapsed(true);
   
@@ -281,9 +281,9 @@ public void createGUI(){
   editor_colorTools_panel.addControl(editor_slider_saturation);
   editor_colorTools_panel.addControl(editor_slider_brightness);
   
-  editor_button_coloredToggle = new GButton(this, scl * 8, 0, scl + 8, scl + 1, "Color");
+  editor_button_coloredToggle = new GButton(this, UIscl * 8, 0, UIscl + 8, UIscl + 1, "Color");
   editor_button_coloredToggle.addEventHandler(this, "editor_button_handler");
-  editor_button_changeTileMap = new GButton(this, editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth() + scl * 2, 0, scl * 3 + 16, scl + 1, "Change Tile Map");
+  editor_button_changeTileMap = new GButton(this, editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth() + UIscl * 2, 0, UIscl * 3 + 16, UIscl + 1, "Change Tile Map");
   editor_button_changeTileMap.addEventHandler(this, "editor_button_handler");
   
   
@@ -345,14 +345,14 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     colorInputG.setVisible(true);//change visibility
     colorInputB.setVisible(true);//change visibility
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
-    colorInputR.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
-    colorInputG.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
-    colorInputB.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
+    colorInputR.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
+    colorInputG.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
+    colorInputB.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
   }else if(event == GEvent.DRAGGED){
     colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
-    colorInputR.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
-    colorInputG.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
-    colorInputB.setPosition(editor_colorTools_panel.getX() + (scl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
+    colorInputR.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 132);
+    colorInputG.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 148);
+    colorInputB.setPosition(editor_colorTools_panel.getX() + (UIscl * 6.5), editor_colorTools_panel.getY() + 20 + 164);
   }
 }
 

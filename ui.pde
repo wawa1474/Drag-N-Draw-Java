@@ -6,7 +6,7 @@ boolean colorTiles = true;//Are we placing colored tiles
 
 int fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
 
-final int UIBottom = scl * 3;//How many tiles tall is the UI?
+final int UIBottom = UIscl * 3;//How many tiles tall is the UI?
 
 final color RED = color(255,0,0);
 final color GREEN = color(0,255,0);
@@ -59,10 +59,10 @@ void drawEditorBackground(){//Draw the background
 
   if(drawLines){//if the tile xy is not reset and we're should draw lines
     for(int i = screenX1; i < screenX2 + 2; i++){//for however many horizontal squares there are
-      line(i * scl, screenY1 * scl, i * scl, (screenY2 + 2) * scl);//draw lines
+      line(i * UIscl, screenY1 * UIscl, i * UIscl, (screenY2 + 2) * UIscl);//draw lines
     }
     for(int i = screenY1; i < screenY2 + 2; i++){//for however many vertical squares there are
-      line(screenX1 * scl, i * scl, (screenX2 + 2) * scl, i * scl);//draw lines
+      line(screenX1 * UIscl, i * UIscl, (screenX2 + 2) * UIscl, i * UIscl);//draw lines
     }
   }
 }//void draw() END
@@ -100,7 +100,7 @@ void drawEditorUI(){
       }
       if((rowLength*tileRow)+i == tileN){
         noFill();
-        rect(scl*i, scl, scl - 1, scl - 1);//Display color behind the tile
+        rect(scl*i, scl, scl - 1, scl - 1);//Display border around selected tile
       }
     }
   }//Went through all the tiles
@@ -181,7 +181,7 @@ void updateEditorUI(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void setupUI(){
-  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth(), 0).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth(), 0).setSliderMode(Slider.FLEXIBLE).setSize(UIscl * 2, UIscl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
   scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
   UIControls.addColorWheel("colorWheel").setVisible(false).setRGB(currentTileColor).setCaptionLabel("")//create ColorWheel
@@ -208,9 +208,9 @@ void setupUI(){
   );
   colorWheel = UIControls.getController("colorWheel");//make it easier to use ColorWheel
 
-  UIControls.addTextfield("colorInputR").setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
-  UIControls.addTextfield("colorInputG").setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
-  UIControls.addTextfield("colorInputB").setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
+  UIControls.addTextfield("colorInputR").setSize(UIscl, UIscl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
+  UIControls.addTextfield("colorInputG").setSize(UIscl, UIscl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
+  UIControls.addTextfield("colorInputB").setSize(UIscl, UIscl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
   colorInputR = UIControls.getController("colorInputR");//make it easier to use Textfield
   colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
   colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
@@ -245,7 +245,7 @@ void changeUI(int ui_){//change screen
     surface.setSize(800, 600);
     currentUI = _OPENING_;
   }else if(ui_ == _MAINMENU_){//are we going to the tile map loading screen
-    surface.setSize(298 + (scl * 2), 384 + 58 + (scl * 2));// 406 + (scl * 2));//298 x 406
+    surface.setSize(298 + (UIscl * 2), 384 + 58 + (UIscl * 2));// 406 + (scl * 2));//298 x 406
     main_menu_button_panel.setVisible(true);
     currentUI = _MAINMENU_;
   }else if(ui_ == _TILEMAPUI_){//are we going to the tile map loading screen
@@ -263,7 +263,7 @@ void changeUI(int ui_){//change screen
     editor_button_changeTileMap.setVisible(true);//change visibility
     currentUI = _EDITORUI_;
   }else if(ui_ == _OPTIONSMENU_){//are we going to the editor screen
-    surface.setSize(458 + (scl * 2), 254 + (scl * 2));//458 x 254 = 522 x 318
+    surface.setSize(458 + (UIscl * 2), 254 + (UIscl * 2));//458 x 254 = 522 x 318
     currentUI = _OPTIONSMENU_;
   }else{
     println("ERROR: UI DOES NOT EXIST");

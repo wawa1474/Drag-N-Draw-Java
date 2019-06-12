@@ -15,6 +15,7 @@ import java.util.zip.ZipInputStream;
 
 //import java.util.Date;
 
+final int UIscl = 32;
 final int scl = 32;//Square Scale
 color currentTileColor = color(0,255,255);
 
@@ -44,8 +45,8 @@ void setup(){//Setup everything
   
   dir = sketchPath();
   File programDir = new File(dir);
-  File resourcesZip = new File(dir + "/res.zip");
-  File assetsFolder = new File(dir + "/assets/");
+  File resourcesZip = new File(programDir + "/res.zip");
+  File assetsFolder = new File(programDir + "/assets/");
   if (!assetsFolder.exists()){
     try {
       //assetsFolder.mkdir();
@@ -60,6 +61,8 @@ void setup(){//Setup everything
       exit();
     }
   }
+  
+  FileLoadSettings();
   
   programDir = null;//necessary?
   assetsFolder = null;

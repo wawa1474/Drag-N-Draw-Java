@@ -6,6 +6,8 @@ boolean shiftHeld = false;
 //boolean deleteHeld = false;
 int lastKey = -1;
 
+String[] keyBinds = new String[19];
+
 //boolean[] pressedKeys = new boolean[65536];
 
 void keyPressed(){//We pressed a key
@@ -208,30 +210,30 @@ void keyTyped(){//We typed a key
         break;
     }
     
-    if(keyHandler(lastKey, "CTRL + SHIFT + E")){
+    if(keyHandler(lastKey, keyBinds[keyBind_saveCanvas])){//"CTRL + SHIFT + E"
       selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
       shiftHeld = false;
       return;
     }
     
-    if(keyHandler(lastKey, "CTRL + SHIFT + S")){
+    if(keyHandler(lastKey, keyBinds[keyBind_saveMapAs])){//"CTRL + SHIFT + S"
       selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
       shiftHeld = false;
       return;
     }
     
-    if(keyHandler(lastKey, "CTRL + N")){
+    if(keyHandler(lastKey, keyBinds[keyBind_newMap])){//"CTRL + N"
       clearMapTilesArray();//clear the map
       clearClickableTilesArray();//clear the map
       return;
     }
     
-    if(keyHandler(lastKey, "CTRL + O")){
+    if(keyHandler(lastKey, keyBinds[keyBind_openMap])){//"CTRL + O"
       selectInput("Select a file to load:", "FileLoadMapSelect");//map load dialog
       return;
     }
     
-    if(keyHandler(lastKey, "CTRL + S")){
+    if(keyHandler(lastKey, keyBinds[keyBind_saveMap])){//"CTRL + S"
       //selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
       if(fileName.equals("Error")){//if no file was selected
         selectOutput("Select a file to write to:", "fileSaveMapSelect");//map save dialog
@@ -260,12 +262,12 @@ void keyTyped(){//We typed a key
   changeDisplayedMenuBar(button_menuBar_NONE);
   
   if(noKeyboard == false){//are we blocking keyboard functions?
-    if(keyHandler(lastKey, "F")){
+    if(keyHandler(lastKey, keyBinds[keyBind_colorTiles])){//"F"
       colorTiles = !colorTiles;
       return;
     }
     
-    if(keyHandler(lastKey, "Q")){
+    if(keyHandler(lastKey, keyBinds[keyBind_tileGroup])){//"Q"
       if(tileGroupStep == 0){//set XY1
         tileGroupStep = 1;//ready for next step
         sx1 = mouseX - screenX;//set x1 to mouse x position
@@ -280,21 +282,21 @@ void keyTyped(){//We typed a key
       return;
     }
     
-    if(keyHandler(lastKey, "X")){
+    if(keyHandler(lastKey, keyBinds[keyBind_cut])){//"X"
       if(tileGroupStep == 2){//we're on step two of group selection
         tileGroupCutCopy('x');//cut group selection
       }
       return;
     }
     
-    if(keyHandler(lastKey, "C")){
+    if(keyHandler(lastKey, keyBinds[keyBind_copy])){//"C"
       if(tileGroupStep == 2){//we're on step two of group selection
         tileGroupCutCopy('c');//copy group selection
       }
       return;
     }
     
-    if(keyHandler(lastKey, "V")){
+    if(keyHandler(lastKey, keyBinds[keyBind_paste])){//"V"
       if(tileGroupStep != 3){//set it up for pasting
         tileGroupStep = 3;//paste step is 3
       }else if(tileGroupStep == 3){//cancel pasting
@@ -303,7 +305,7 @@ void keyTyped(){//We typed a key
       return;
     }
     
-    if(keyHandler(lastKey, "R")){
+    if(keyHandler(lastKey, keyBinds[keyBind_tileDebug])){//"R"
       for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
           if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
@@ -315,7 +317,7 @@ void keyTyped(){//We typed a key
       return;
     }
     
-    if(keyHandler(lastKey, "E")){
+    if(keyHandler(lastKey, keyBinds[keyBind_copyColor])){//"E"
       for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
         for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
           if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
@@ -327,19 +329,19 @@ void keyTyped(){//We typed a key
       return;
     }
     
-    if(keyHandler(lastKey, "P")){
+    if(keyHandler(lastKey, keyBinds[keyBind_setBackground])){//"P"
       backgroundRed = red(currentTileColor);//set red
       backgroundGreen = green(currentTileColor);//set green
       backgroundBlue = blue(currentTileColor);//set blue
       return;
     }
     
-    if(keyHandler(lastKey, "O")){
+    if(keyHandler(lastKey, keyBinds[keyBind_lines])){//"O"
       drawLines = !drawLines;//do we draw the background lines?
       return;
     }
     
-    if(keyHandler(lastKey, "W")){
+    if(keyHandler(lastKey, keyBinds[keyBind_moveUp])){//"W"
       screenY += (scl * scrollAmount);//go up
         
       if(screenY > 0){//if we're to far up
@@ -348,7 +350,7 @@ void keyTyped(){//We typed a key
       return;
     }
     
-    if(keyHandler(lastKey, "A")){
+    if(keyHandler(lastKey, keyBinds[keyBind_moveLeft])){//"A"
       screenX += (scl * scrollAmount);//go left
         
       if(screenX > 0){//if we're to far left
@@ -357,7 +359,7 @@ void keyTyped(){//We typed a key
       return;
     }
     
-    if(keyHandler(lastKey, "S")){
+    if(keyHandler(lastKey, keyBinds[keyBind_moveDown])){//"S"
       if(rows > height / scl || currentUI == _TILEMAPUI_){
         screenY -= (scl * scrollAmount);//go down
       
@@ -368,7 +370,7 @@ void keyTyped(){//We typed a key
       return;
     }
     
-    if(keyHandler(lastKey, "D")){
+    if(keyHandler(lastKey, keyBinds[keyBind_moveRight])){//"D"
       if(cols > width / scl || currentUI == _TILEMAPUI_){
         screenX -= (scl * scrollAmount);//go right
       
@@ -379,124 +381,11 @@ void keyTyped(){//We typed a key
       return;
     }
     
-    if(keyHandler(lastKey, "DELETE")){
+    if(keyHandler(lastKey, keyBinds[keyBind_delete])){//"DELETE"
       if(tileGroupStep == 2){//we're on step two of group selection
         tileGroupCutCopy('d');//cut group selection
       }
       return;
-    }
-    switch(key){
-      //case 'f'://We pressed 'F'
-      //  colorTiles = !colorTiles;
-      //  break;
-
-      //case 'q'://We pressed 'Q'
-      //  if(tileGroupStep == 0){//set XY1
-      //    tileGroupStep = 1;//ready for next step
-      //    sx1 = mouseX - screenX;//set x1 to mouse x position
-      //    sy1 = mouseY - screenY - (UIBottom);//set y1 to mouse y position
-      //  }else if (tileGroupStep == 1){//set XY2
-      //    tileGroupStep = 2;//ready to do group tiles stuff
-      //    sx2 = mouseX - screenX;//set x1 to mouse x position
-      //    sy2 = mouseY - screenY - (UIBottom);//set y2 to mouse y position
-      //  }else if (tileGroupStep == 2){//set XY2
-      //    tileGroupStep = 0;//ready to do group tiles stuff
-      //  }
-      //  break;
-
-      //case DELETE://we pressed 'DELETE'
-      //  if(tileGroupStep == 2){//we're on step two of group selection
-      //    tileGroupCutCopy('d');//cut group selection
-      //  }
-      //  break;
-
-      //case 'x'://We pressed 'X'
-      //  if(tileGroupStep == 2){//we're on step two of group selection
-      //    tileGroupCutCopy('x');//cut group selection
-      //  }
-      //  break;
-
-      //case 'c'://We pressed 'C'
-      //  if(tileGroupStep == 2){//we're on step two of group selection
-      //    tileGroupCutCopy('c');//copy group selection
-      //  }
-      //  break;
-
-      //case 'v'://We pressed 'V'
-      //  if(tileGroupStep != 3){//set it up for pasting
-      //    tileGroupStep = 3;//paste step is 3
-      //  }else if(tileGroupStep == 3){//cancel pasting
-      //    tileGroupStep = 0;//paste step is 0
-      //  }
-      //  break;
-
-      //case 'r'://We pressed 'R'
-      //  for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
-      //    for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-      //      if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
-      //        mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//grab the tile
-      //        println("Tile X Position: " + x + ", Y Position: " + y + ", Red Amount: " + tmp.getRed() + ", Green Amount: " + tmp.getGreen() + ", Blue Amount: " + tmp.getBlue() + ", Tile Image #: " + tmp.image + ", Is Tile Colored: " + tmp.colored);// + ", Tile Lore: " + mapTiles[i].lore);
-      //      }
-      //    }
-      //  }
-      //  break;
-
-      //case 'e'://We pressed 'E'
-      //  for(int x = screenX1; x < screenX2 + 1; x++){//loop through all columns
-      //    for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
-      //      if(x == mouseTileX && y == mouseTileY && mapTiles.get(x).get(y).size() != 0){//Are we clicking on the tile
-      //        mTile tmp = mapTiles.get(x).get(y).get(mapTiles.get(x).get(y).size() - 1);//copy the tile
-      //        loadColors(tmp);
-      //      }
-      //    }
-      //  }
-      //  break;
-
-      //case 'p'://We pressed 'P'
-      //  backgroundRed = red(currentTileColor);//set red
-      //  backgroundGreen = green(currentTileColor);//set green
-      //  backgroundBlue = blue(currentTileColor);//set blue
-      //  break;
-
-      //case 'o'://We pressed 'O'
-      //  drawLines = !drawLines;//do we draw the background lines?
-      //  break;
-
-      //case 'w'://We pressed 'W'
-      //  screenY += (scl * scrollAmount);//go up
-        
-      //  if(screenY > 0){//if we're to far up
-      //    screenY = 0;//make it not so
-      //  }
-      //  break;
-
-      //case 'a'://We pressed 'A'
-      //  screenX += (scl * scrollAmount);//go left
-        
-      //  if(screenX > 0){//if we're to far left
-      //    screenX = 0;//make it not so
-      //  }
-      //  break;
-
-      //case 's'://We pressed 'S'
-      //  if(rows > height / scl || currentUI == _TILEMAPUI_){
-      //    screenY -= (scl * scrollAmount);//go down
-        
-      //    if(screenY < -((scl * (rows + 2)) - height) && currentUI != _TILEMAPUI_){//if we're to far down
-      //      screenY = -((scl * (rows + 2)) - height) + 1;//make it not so
-      //    }
-      //  }
-      //  break;
-
-      //case 'd'://We pressed 'D'
-      //  if(cols > width / scl || currentUI == _TILEMAPUI_){
-      //    screenX -= (scl * scrollAmount);//go right
-        
-      //    if(screenX < -((scl * cols) - width) && currentUI != _TILEMAPUI_){//if we're to far right
-      //      screenX = -((scl * cols) - width) + 1;//make it not so
-      //    }
-      //  }
-      //  break;
     }
   }
 }//void keyTyped() END

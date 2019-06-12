@@ -7,13 +7,13 @@ int loadedTileMap = -1;//what tile map is loaded
 void drawTileMapUI(){
   fill(BLACK);//black box
   noStroke();//dont draw box around our black box
-  rect(scl * 11.5, 0, scl * 5, scl);//text box background
+  rect(UIscl * 11.5, 0, UIscl * 5, UIscl);//text box background
   
   fill(WHITE);//white text
   if(tileMaps.size() != 0){//if there a tile map to show
-    text(tileMaps.get(tileMapShow).tileMapName, scl * 12, scl / 2);//display tile map name
+    text(tileMaps.get(tileMapShow).tileMapName, UIscl * 12, UIscl / 2);//display tile map name
   }else{
-    text("No Tile Maps Exist!", scl * 12, scl / 2);//display an error message
+    text("No Tile Maps Exist!", UIscl * 12, UIscl / 2);//display an error message
   }
 }
 
