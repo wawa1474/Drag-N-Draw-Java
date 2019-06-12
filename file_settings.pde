@@ -9,7 +9,7 @@ file format:
 two (2) bytes - file format version
 two (2) bytes - header length
 
-three (3) bytes - background color (red, green, blue)
+three (3) bytes - background color (red, 0xgreen, 0xblue)
 
 key binds
 ???!?!?!?!?!?!?!?
@@ -18,7 +18,7 @@ sixteen (16) bytes - application version
 sixteen (16) bytes - magic text ("wawa1474DragDraw")
 */
 
-final int keyBind_saveCanvas = 0;
+final int keyBind_exportCanvas = 0;
 final int keyBind_saveMapAs = 1;
 final int keyBind_newMap = 2;
 final int keyBind_openMap = 3;
@@ -39,6 +39,34 @@ final int keyBind_moveRight = 17;
 final int keyBind_delete = 18;
 
 final int _FILEVERSION_SETTINGS_ = 0;//what version of file saving and loading
+
+void FileCreateSettings(File settingsFile){
+  byte[] tmpFile = {
+    0x00, 0x00,//file version 0
+    //all strings are null (0) terminated
+    0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x53, 0x48, 0x49, 0x46, 0x54, 0x20, 0x2B, 0x20, 0x45, 0x00,//export canvas - CTRL + SHIFT + E
+    0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x53, 0x48, 0x49, 0x46, 0x54, 0x20, 0x2B, 0x20, 0x53, 0x00,//save map as - CTRL + SHIFT + S
+    0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x4E, 0x00,//new map - CTRL + N
+    0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x4F, 0x00,//open map - CTRL + O
+    0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x53, 0x00,//save map - CTRL + S
+    0x46, 0x00,//color tiles - F
+    0x51, 0x00,//tile group - Q
+    0x58, 0x00,//cut - X
+    0x43, 0x00,//copy - C
+    0x56, 0x00,//paste - V
+    0x52, 0x00,//tile debug - R
+    0x45, 0x00,//copy color - E
+    0x50, 0x00,//set background color - P
+    0x4F, 0x00,//background lins - O
+    0x57, 0x00,//up - W
+    0x41, 0x00,//left - A
+    0x53, 0x00,//down - S
+    0x44, 0x00,//right - D
+    0x44, 0x45, 0x4C, 0x45, 0x54, 0x45, 0x00,//delete tiles - DELETE
+    0x77, 0x61, 0x77, 0x61, 0x31, 0x34, 0x37, 0x34, 0x44, 0x72, 0x61, 0x67, 0x44, 0x72, 0x61, 0x77//_magicText
+  };
+  saveBytes(settingsFile, tmpFile);//save the file
+}
 
 void FileLoadSettings(){//load map from file
   noLoop();//dont allow drawing
@@ -66,7 +94,7 @@ void FileLoadSettings(){//load map from file
   //println("Settings Version - " + fileVersion);
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////FILE METADATA
   
-  if(fileVersion == 0){//whats the file version{//we don't know that file version
+  if(fileVersion == 0){//whats the file version
     int position = 2;
     
     //Load Map Tiles
@@ -81,7 +109,7 @@ void FileLoadSettings(){//load map from file
       position++;
       //println();
     }
-  }else{
+  }else{//we don't know that file version
     println("Settings Version Error (Loading).");//throw error
   }
   //printArray(keyBinds);

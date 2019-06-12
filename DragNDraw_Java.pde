@@ -62,6 +62,11 @@ void setup(){//Setup everything
     }
   }
   
+  File settingsFile = new File(programDir + "/settings.set");
+  if(!settingsFile.exists()){
+    println("Settings File does not exist, creating it...");
+    FileCreateSettings(settingsFile);
+  }
   FileLoadSettings();
   
   programDir = null;//necessary?

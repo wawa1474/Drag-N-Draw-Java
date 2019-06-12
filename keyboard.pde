@@ -210,7 +210,7 @@ void keyTyped(){//We typed a key
         break;
     }
     
-    if(keyHandler(lastKey, keyBinds[keyBind_saveCanvas])){//"CTRL + SHIFT + E"
+    if(keyHandler(lastKey, keyBinds[keyBind_exportCanvas])){//"CTRL + SHIFT + E"
       selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
       shiftHeld = false;
       return;
