@@ -33,7 +33,7 @@ int oldScreenW = 0;
 int oldScreenH = 0;
 
 final int BUFFER_SIZE = 2048;
-String dir;
+File programDir;
 
 boolean _EXIT_ = false;
 
@@ -43,15 +43,15 @@ void setup(){//Setup everything
   surface.setTitle("Drag 'N' Draw Java - " + VERSION);
   noSmooth();//text looks 'nicer'
   
-  dir = sketchPath();
-  File programDir = new File(dir);
-  File resourcesZip = new File(programDir + "/res.zip");
+  programDir = new File(sketchPath());
+  
   File assetsFolder = new File(programDir + "/assets/");
   if (!assetsFolder.exists()){
     try {
       //assetsFolder.mkdir();
       println("resources not extracted, extracting");
       //copyResources(programDir);
+      File resourcesZip = new File(programDir + "/res.zip");
       copyResources(programDir, resourcesZip);
       println("resources extracted");
     } catch (Exception e) {
@@ -69,8 +69,7 @@ void setup(){//Setup everything
   }
   FileLoadSettings();
   
-  programDir = null;//necessary?
-  assetsFolder = null;
+  assetsFolder = null;//necessary?
   
   if(_EXIT_ == false){
     options_menu_mockup = loadImage("assets/options_menu_mockup_v2.png");//main_menu_button_selected

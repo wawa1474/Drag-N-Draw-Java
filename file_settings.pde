@@ -9,7 +9,7 @@ file format:
 two (2) bytes - file format version
 two (2) bytes - header length
 
-three (3) bytes - background color (red, 0xgreen, 0xblue)
+three (3) bytes - background color (red, green, blue)
 
 key binds
 ???!?!?!?!?!?!?!?
@@ -42,7 +42,7 @@ final int _FILEVERSION_SETTINGS_ = 0;//what version of file saving and loading
 
 void FileCreateSettings(File settingsFile){
   byte[] tmpFile = {
-    0x00, 0x00,//file version 0
+    0x00, 0x00,//file version
     //all strings are null (0) terminated
     0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x53, 0x48, 0x49, 0x46, 0x54, 0x20, 0x2B, 0x20, 0x45, 0x00,//export canvas - CTRL + SHIFT + E
     0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x53, 0x48, 0x49, 0x46, 0x54, 0x20, 0x2B, 0x20, 0x53, 0x00,//save map as - CTRL + SHIFT + S
@@ -63,8 +63,13 @@ void FileCreateSettings(File settingsFile){
     0x53, 0x00,//down - S
     0x44, 0x00,//right - D
     0x44, 0x45, 0x4C, 0x45, 0x54, 0x45, 0x00,//delete tiles - DELETE
-    0x77, 0x61, 0x77, 0x61, 0x31, 0x34, 0x37, 0x34, 0x44, 0x72, 0x61, 0x67, 0x44, 0x72, 0x61, 0x77//_magicText
   };
+  
+  tmpFile[0] = (byte)(_FILEVERSION_SETTINGS_ >> 8);//upper byte
+  tmpFile[1] = (byte)_FILEVERSION_SETTINGS_;//lower byte
+  
+  tmpFile = concat(tmpFile, magicToArray());
+
   saveBytes(settingsFile, tmpFile);//save the file
 }
 
