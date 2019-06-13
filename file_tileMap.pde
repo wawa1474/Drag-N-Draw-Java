@@ -1,5 +1,3 @@
-final int _FILEVERSION_TILEMAP_ = 0;//what version of file saving and loading
-
 ArrayList<tileMap> tileMaps = new ArrayList<tileMap>(0);//arraylist of tile maps
 PImage[] tileImages = new PImage[0];//Tile Images Array
 int loadedTileMap = -1;//what tile map is loaded

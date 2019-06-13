@@ -1,23 +1,3 @@
-/*
-load and save program settings
-  key binds
-
-
-
-file format:
-
-two (2) bytes - file format version
-two (2) bytes - header length
-
-three (3) bytes - background color (red, green, blue)
-
-key binds
-???!?!?!?!?!?!?!?
-
-sixteen (16) bytes - application version
-sixteen (16) bytes - magic text ("wawa1474DragDraw")
-*/
-
 final int keyBind_exportCanvas = 0;
 final int keyBind_saveMapAs = 1;
 final int keyBind_newMap = 2;
@@ -38,8 +18,6 @@ final int keyBind_moveDown = 16;
 final int keyBind_moveRight = 17;
 final int keyBind_delete = 18;
 
-final int _FILEVERSION_SETTINGS_ = 0;//what version of file saving and loading
-
 void FileCreateSettings(File settingsFile){
   byte[] tmpFile = {
     0x00, 0x00,//file version
@@ -57,7 +35,7 @@ void FileCreateSettings(File settingsFile){
     0x52, 0x00,//tile debug - R
     0x45, 0x00,//copy color - E
     0x50, 0x00,//set background color - P
-    0x4F, 0x00,//background lins - O
+    0x4F, 0x00,//background lines - O
     0x57, 0x00,//up - W
     0x41, 0x00,//left - A
     0x53, 0x00,//down - S
@@ -68,6 +46,7 @@ void FileCreateSettings(File settingsFile){
   tmpFile[0] = (byte)(_FILEVERSION_SETTINGS_ >> 8);//upper byte
   tmpFile[1] = (byte)_FILEVERSION_SETTINGS_;//lower byte
   
+  tmpFile = concat(tmpFile, _PROGRAMVERSION_FILE_);
   tmpFile = concat(tmpFile, magicToArray());
 
   saveBytes(settingsFile, tmpFile);//save the file
@@ -77,15 +56,20 @@ void FileLoadSettings(){//load map from file
   noLoop();//dont allow drawing
   byte[] settingsFile = loadBytes("settings.set");//temporary array
   
-  String magic = "";
-  //println(mapFile.length);
-  for(int l = 0; l < _magicText.length(); l++){
-    magic += (char)settingsFile[(settingsFile.length - _magicText.length()) + l];
-  }
+  //String magic = "";
+  ////println(mapFile.length);
+  //for(int l = 0; l < _magicText.length(); l++){
+  //  magic += (char)settingsFile[(settingsFile.length - _magicText.length()) + l];
+  //}
   
-  if(!magic.equals(_magicText)){//is the file ours
-    //loadingMap = false;//since this file was not ours we're no longer loading a map
-    //println("not ours");
+  //if(!magic.equals(_magicText)){//is the file ours
+  //  //loadingMap = false;//since this file was not ours we're no longer loading a map
+  //  //println("not ours");
+  //  loop();
+  //  return;//file was not one of ours
+  //}
+  
+  if(!checkMagic(subset(settingsFile, settingsFile.length - _magicText.length()))){
     loop();
     return;//file was not one of ours
   }
@@ -127,6 +111,19 @@ byte[] magicToArray(){
     tmpMagic[i] = byte(_magicText.charAt(i));
   }
   return tmpMagic;
+}
+
+boolean checkMagic(byte[] test){
+  String magic = "";
+  //println(mapFile.length);
+  for(int l = 0; l < _magicText.length(); l++){
+    magic += (char)test[l];
+  }
+  
+  if(!magic.equals(_magicText)){//is the file ours
+    return false;//file was not one of ours
+  }
+  return true;
 }
 
 void copyResources(File outputDirectory, File inputFile) throws IOException {
