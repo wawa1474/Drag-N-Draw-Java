@@ -128,6 +128,7 @@ void resetLHXY(){//reset the lower/higher xy for background drawing
 void loadTile(int x_, int y_, int z_){//Set current image to tile image
   if(mapTiles.get(x_).get(y_).size() != 0){//if there are tiles in this spot
     tileN = mapTiles.get(x_).get(y_).get(z_).image;//Set current image to tile image
+    updateTileRow();//make sure we're on the right tile row
   }
 }//void loadTile() END
 

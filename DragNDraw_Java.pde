@@ -159,6 +159,15 @@ void draw(){//Draw the canvas
       
       case _OPTIONSMENU_:
         image(options_menu_mockup,scl,scl);
+        if(ctrlHeld){
+          text("CTRL", 50,50);
+        }
+        if(altHeld){
+          text("ALT", 90,50);
+        }
+        if(shiftHeld){
+          text("SHIFT", 120,50);
+        }
         break;
       
     }
