@@ -66,8 +66,10 @@ void setup(){//Setup everything
   if(!settingsFile.exists()){
     println("Settings File does not exist, creating it...");
     FileCreateSettings(settingsFile);
+    keyBinds = defaultKeyBinds;
+  }else{
+    FileLoadSettings(settingsFile);
   }
-  FileLoadSettings(settingsFile);
   
   assetsFolder = null;//necessary?
   
