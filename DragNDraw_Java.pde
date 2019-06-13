@@ -67,7 +67,7 @@ void setup(){//Setup everything
     println("Settings File does not exist, creating it...");
     FileCreateSettings(settingsFile);
   }
-  FileLoadSettings();
+  FileLoadSettings(settingsFile);
   
   assetsFolder = null;//necessary?
   
