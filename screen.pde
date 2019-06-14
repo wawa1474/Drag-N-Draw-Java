@@ -12,15 +12,17 @@ void drawTilesAndIcons(){
     for(int y = screenY1; y < screenY2 + 1; y++){//loop through rows
       boolean skip = false;//do we skip drawing the rest of the tiles in this spot?
       if(checkBounds(x, y)){
-        for(int z = mapTiles.get(x).get(y).size() - tileDepth; z < mapTiles.get(x).get(y).size() && !skip; z++){//loop through all drawn tiles in this xy position
-          if(z >= 0){//if there's a tile to be drawn
-            mapTiles.get(x).get(y).get(z).draw(x * scl, y * scl);//draw it
-            drawnTiles++;//how many tiles are being drawn?
-            //if(!mapTiles.get(x).get(y).get(z).clear){//if there's a non-clear tile thats not at the bottom
-            //  skip = true;//don't draw anything below it
-            //}
+        //if(mapTiles != null){
+          for(int z = mapTiles.get(x).get(y).size() - tileDepth; z < mapTiles.get(x).get(y).size() && !skip; z++){//loop through all drawn tiles in this xy position
+            if(z >= 0){//if there's a tile to be drawn
+              mapTiles.get(x).get(y).get(z).draw(x * scl, y * scl);//draw it
+              drawnTiles++;//how many tiles are being drawn?
+              //if(!mapTiles.get(x).get(y).get(z).clear){//if there's a non-clear tile thats not at the bottom
+              //  skip = true;//don't draw anything below it
+              //}
+            }
           }
-        }
+        //}
       }
     }
   }
@@ -41,7 +43,7 @@ void drawTilesAndIcons(){
   
   if (dragging){//Are we dragging a tile
     if(tmpTile != null){//If tile exists
-      if(mouseY < UIBottom * scl){
+      if(mouseY < UIBottom/* * scl*/){
         //do nothing
       }else{
         tmpTile.draw(mouseTileX * scl, mouseTileY * scl);//draw the tile on the mouse snapped to the grid
@@ -54,6 +56,12 @@ void drawTilesAndIcons(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateScreenBounds(){
+  if (currentUI == _EDITORUI_ && (oldScreenW != width || oldScreenH != height)){//Sketch window has resized
+    oldScreenW = width;
+    oldScreenH = height;
+    editor_colorTools_panel.setDragArea();
+  }
+  
   screenX2 = floor(width - screenX)/scl;
   screenY2 = floor(height - screenY)/scl;
 
@@ -67,12 +75,10 @@ void updateScreenBounds(){
   if(screenY2 > rows){
     screenY2 = rows;
   }
-
-  //println(screenX1 + ", " + screenY1 + ", " + screenX2 + ", " + screenY2);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean checkBounds(int x, int y){
-  return !(x >= cols || y >= rows || x < 0 || y < 0);//true if within bounds
+boolean checkBounds(int x_, int y_){
+  return !(x_ >= cols || y_ >= rows || x_ < 0 || y_ < 0);//true if within bounds
 }

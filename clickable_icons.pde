@@ -4,26 +4,38 @@ ArrayList<clickableIcon> icons = new ArrayList<clickableIcon>(0);//make the arra
 
 class clickableIcon{//clickableIcon Object
   int x, y;//Store XY Position
+  int w, h;//store width and height
   String file;//store what file to load
   String hoverText;//text to show when mouse is hovering over
   color borderColor = color(255,0,0);//what color is the border? (red)
   boolean showBorder = true;//do we show the border
 
-  public clickableIcon(int x, int y, String file, String hoverText){//clickableIcon Object
-    this.x = x;//Store X Position
-    this.y = y;//Store Y Position
-    this.file = file;//store what file to load
-    this.hoverText = hoverText;//text to show when mouse is hovering over
+  public clickableIcon(int x_, int y_, String file_, String hoverText_){//clickableIcon Object
+    x = x_;//Store X Position
+    y = y_;//Store Y Position
+    w = scl;
+    h = scl;
+    file = file_;//store what file to load
+    hoverText = hoverText_;//text to show when mouse is hovering over
+  }//public clickableIcon(int x, int y, String file) END
+  
+  public clickableIcon(int x_, int y_, int width_, int height_, String file_, String hoverText_){//clickableIcon Object
+    x = x_;//Store X Position
+    y = y_;//Store Y Position
+    w = width_;
+    h = height_;
+    file = file_;//store what file to load
+    hoverText = hoverText_;//text to show when mouse is hovering over
   }//public clickableIcon(int x, int y, String file) END
   
   void draw(){//draw the icon
     if(showBorder){
       stroke(borderColor);//set the outline to red
       strokeWeight(borderThickness); //Make the outline Thicker
-      line(x, y, x + scl, y);//draw the top line
-      line(x, y, x, y + scl);//draw the left line
-      line(x, y + scl, x + scl, y + scl);//draw the bottom line
-      line(x + scl, y + scl, x + scl, y);//draw the right line
+      line(x, y, x + w, y);//draw the top line
+      line(x, y, x, y + h);//draw the left line
+      line(x, y + h, x + w, y + h);//draw the bottom line
+      line(x + w, y + h, x + w, y);//draw the right line
       strokeWeight(1); //Set the outline back to normal
       stroke(0);//make the outline to black
     }
@@ -32,16 +44,18 @@ class clickableIcon{//clickableIcon Object
   void drawText(){//draw the hovering text
     fill(BLACK);//black
     textSize(24);//larger
-    text(this.hoverText, mouseX - screenX, mouseY - screenY - (scl * 2));//tie the text to the mouse
+    text(hoverText, mouseX - screenX, mouseY - screenY - (UIBottom));//tie the text to the mouse
   }
   
   void loadMap(){
-    fileName = this.file;//setup the file we want to load
+    fileName = file;//setup the file we want to load
     FileLoadMap();//and load it
   }
   
   boolean mouseOver(){//are we hovering over the icon
-    if(mouseX - screenX > this.x - 5 && mouseY - screenY - (scl * 2) > this.y - 5 && mouseX - screenX < this.x + scl + 5 && mouseY - screenY - (scl * 2) < this.y + scl + 5){//are we within the bounds of this icon?
+    int tmpX = mouseX - screenX;
+    int tmpY = mouseY - screenY - UIBottom;
+    if(tmpX > x - borderThickness && tmpY > y - borderThickness && tmpX < x + w + borderThickness && tmpY < y + h + borderThickness){//are we within the bounds of this icon?
       return true;//yes we're hovering over the icon
     }
     return false;//no we aren't hovering over the icon
@@ -56,13 +70,13 @@ void clearClickableTilesArray(){//delete all the icons
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-boolean checkMouseOverIcon(boolean loadMap){
+boolean checkMouseOverIcon(boolean loadMap_){
   if(dragging || deleting){//were we dragging or deleting a tile or were we dragging the mouse
     //do nothing
   }else{
     for(int i = 0; i < icons.size(); i++){//go through all icons
       if(icons.get(i).mouseOver()){//if we clicked on one
-        if(loadMap == true){ icons.get(i).loadMap(); }
+        if(loadMap_ == true){ icons.get(i).loadMap(); }
         return true;//do nothing
       }
     }

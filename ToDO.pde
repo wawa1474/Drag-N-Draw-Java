@@ -1,6 +1,56 @@
 /*
+do we compress and uncompress files for smaller sizes?
+
+do we switch all custom buttons and sliders to G4P
+or redo custom image buttons with controlP5
+
+label color sliders
+add alpha slider
+add hex color number input/output
+add hsv color number input/output
+
+
 redo how context switching is done
   make a menu system
+
+make it so the user can resize the map field
+
+add menu bar in order to clean up ui
+  file, edit, view, history?, tools, help
+
+change file drop down "exit" to "quit"
+add edit drop down "delete"
+
+add zoom? theres some "problems"
+  clickable icons mouse over
+  update mouse XY
+  update screen bouds
+  check bounds
+  tile on screen?
+  setupXXYY
+  mouse to XXYY
+
+get rid of number things in ui?
+  total tiles
+  drawn tiles
+  mouse xy
+  screen xy
+
+clean up keyboard mappings
+  dont use ctrl + alt as that messes up international key boards
+  figure out how to make them remappable
+  have alt + key binds
+    file = alt + f
+    edit = alt + e
+    etc.
+  have complex key binds
+    save map = ctrl + s
+    export image ?= ctrl + shift + e
+    new map = ctrl + n
+    open map = ctrl + o
+    cut = ctrl + x
+    copy = ctrl + c
+    paste = ctrl + v
 
 Player Flayer will be a character creator
 Tile N' Style will make tile maps and the necessary meta data files
@@ -17,7 +67,7 @@ make "tool" system
   recolor tool (currently right-click) would be a selectable tool
   place tile (currently left-click) would be a selectable tool
   place color tile (currently middle-click) would be a selectable tool
-  anything else? group selection maybe instead of a button?
+  anything else? group selection tool maybe instead of a button?
 
 use a pallette based color system to compress color data?
   256 or 65536 color pallette

@@ -6,28 +6,37 @@ boolean colorTiles = true;//Are we placing colored tiles
 
 int fullTotalImages = ceil((float)(totalImages + 1) / rowLength) * rowLength - 1;//make sure all tile rows are full
 
-final int UIRight = 22;//How many tiles long is the UI?
-final int UIBottom = 2;//How many tiles tall is the UI?
+final int UIBottom = UIscl * 3;//How many tiles tall is the UI?
 
 final color RED = color(255,0,0);
+final color GREEN = color(0,255,0);
+final color BLUE = color(0,0,255);
+final color YELLOW = color(255,255,0);
+final color MAGENTA = color(255,0,255);
+final color CYAN = color(0,255,255);
 final color BLACK = color(0);
 final color WHITE = color(255);
 final color GREY = color(127);
+final color screen_Amber = #FFCC00;
 
-int backgroundRed = 255;//red
-int backgroundGreen = 255;//green
-int backgroundBlue = 255;//blue
+float backgroundRed = 255;//red
+float backgroundGreen = 255;//green
+float backgroundBlue = 255;//blue
 
-import controlP5.*;//import the library
-ControlP5 UIControls;//ui controls
-Controller RSlider, GSlider, BSlider;//sliders
+//Controller RSlider, GSlider, BSlider;//sliders
 Controller scrollSlider;//slider
 Controller colorInputR, colorInputG, colorInputB;//number input
 Controller colorWheel;//color wheel
 boolean RGBInputVis = false;//are the rgb number inputs visible
 
-final int _TILEMAPUI_ = 0;//UI defines?
-final int _EDITORUI_ = 1;//UI defines?
+final int _OPENING_ = -1;
+final int _MAINMENU_ = 0;
+final int _TILEMAPUI_ = 1;//UI defines?
+final int _EDITORUI_ = 2;//UI defines?
+final int _OPTIONSMENU_ = 3;//UI defines?
+
+int currentUI = _OPENING_;
+int previousUI = -1;
 
 final int borderThickness = 4;//how thick is the canvas border
 
@@ -50,23 +59,23 @@ void drawEditorBackground(){//Draw the background
 
   if(drawLines){//if the tile xy is not reset and we're should draw lines
     for(int i = screenX1; i < screenX2 + 2; i++){//for however many horizontal squares there are
-      line(i * scl, screenY1 * scl, i * scl, (screenY2 + 2) * scl);//draw lines
+      line(i * UIscl, screenY1 * UIscl, i * UIscl, (screenY2 + 2) * UIscl);//draw lines
     }
     for(int i = screenY1; i < screenY2 + 2; i++){//for however many vertical squares there are
-      line(screenX1 * scl, i * scl, (screenX2 + 2) * scl, i * scl);//draw lines
+      line(screenX1 * UIscl, i * UIscl, (screenX2 + 2) * UIscl, i * UIscl);//draw lines
     }
   }
 }//void draw() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void drawBorder(int x1, int x2, int y1, int y2){//draw the red border
-  strokeWeight(borderThickness);//Thicker
+void drawBorder(int x1_, int x2_, int y1_, int y2_, float thiccc_){//draw the red border
+  strokeWeight(thiccc_);//Thicker
   stroke(255, 0, 0);//RED
-  line(x1 + 1, y1, x1 + 1, y2);//Draw Left line
-  line(x2 - 2, y1, x2 - 2, y2);//Draw Right line
-  line(x1, y1 + 1, x2, y1 + 1);//Draw Top Line
-  line(x1, y2 - 2, x2, y2 - 2);//Draw Bottom Line
+  line(x1_, y1_, x1_, y2_);//Draw Left line
+  line(x2_, y1_, x2_, y2_);//Draw Right line
+  line(x1_, y1_, x2_, y1_);//Draw Top Line
+  line(x1_, y2_, x2_, y2_);//Draw Bottom Line
 }//void border() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -74,160 +83,188 @@ void drawBorder(int x1, int x2, int y1, int y2){//draw the red border
 void drawEditorUI(){
   fill(BLACK);//black
   noStroke();//no line around the ui background
-  rect(0, 0, width, scl * 2);//ui background
+  rect(0, 0, width, UIBottom);//ui background
 
   strokeWeight(1);//default
   stroke(0);
   fill(WHITE);//Set background color to white
-  rect(0, 0, scl*rowLength, scl);//Create rectangle behind tiles UI
+  rect(0, scl, scl*rowLength, scl);//Create rectangle behind tiles UI
   for(int i = 0; i < rowLength && tileImages.length != 0; i++){//Go through all the tiles
     if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
       if((rowLength*tileRow)+i == tileN){//If displaying selected tile
-        fill(RSlider.getValue(), GSlider.getValue(), BSlider.getValue());//Set background color to the RGB value set by user
-        rect(scl*i, 0, scl, scl);//Display color behind the tile
+        fill(currentTileColor);//Set background color to the RGB value set by user
+        rect(scl*i, scl, scl, scl);//Display color behind the tile
       }
       if(tileImages[(rowLength*tileRow)+i] != null){
-        image(tileImages[(rowLength*tileRow)+i], scl*i, 0);//Draw tile
+        image(tileImages[(rowLength*tileRow)+i], scl*i, scl);//Draw tile
       }
       if((rowLength*tileRow)+i == tileN){
         noFill();
-        rect(scl*i, 0, scl - 1, scl - 1);//Display color behind the tile
+        rect(scl*i, scl, scl - 1, scl - 1);//Display border around selected tile
       }
     }
   }//Went through all the tiles
 
-  fill(RED);//red text
-  stroke(0);//no outline
-  textSize(24);//larger text size
+  //fill(RED);//red text
+  //stroke(0);//no outline
+  //textSize(24);//larger text size
 
-  int tmp = 0;//how many tiles are there total
+  //int tmp = 0;//how many tiles are there total
 
-  for(int x = 0; x < mapTiles.size(); x++){//go through all columns
-    for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
-      tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
-    }
-  }
-  if(tmpTile != null){//if we're dragging a tile
-    tmp += 1;//count it too
-  }
+  //for(int x = 0; x < mapTiles.size(); x++){//go through all columns
+  //  for(int y = 0; y < mapTiles.get(x).size(); y++){//go through all rows
+  //    tmp += mapTiles.get(x).get(y).size();//add the number of tiles in the space
+  //  }
+  //}
+  //if(tmpTile != null){//if we're dragging a tile
+  //  tmp += 1;//count it too
+  //}
       
-  float tmpX1 = (scl * 16) + (scl / 8);
-  float tmpX2 = scl * 25;
-  float tmpX3 = (scl * 27) + (scl / 2);
+  //float tmpX1 = (scl * 16) + (scl / 8);
+  //float tmpX2 = scl * 25;
+  //float tmpX3 = (scl * 27) + (scl / 2);
       
-  float tmpY1 = (scl / 1.25);
-  float tmpY2 = (scl * 1.75);
+  //float tmpY1 = (scl / 1.25);
+  //float tmpY2 = (scl * 1.75);
 
-  text("Tiles: " + tmp, tmpX1, tmpY1);//Tiles:(tmp)
-  text("Drawn: " + drawnTiles, tmpX1, tmpY2);//Drawn:(drawnTiles)
+  //text("Tiles: " + tmp, tmpX1, tmpY1);//Tiles:(tmp)
+  //text("Drawn: " + drawnTiles, tmpX1, tmpY2);//Drawn:(drawnTiles)
 
-  text("X:" + floor(-screenX/scl), tmpX2, tmpY1);//X:(screenX)
-  text("Y:" + floor(-screenY/scl), tmpX2, tmpY2);//Y:(screenY)
+  //text("X:" + floor(-screenX/scl), tmpX2, tmpY1);//X:(screenX)
+  //text("Y:" + floor(-screenY/scl), tmpX2, tmpY2);//Y:(screenY)
 
-  if(mouseY < UIBottom * scl){
-    text("X:UI", tmpX3, tmpY1);//X:UI
-    text("Y:UI", tmpX3, tmpY2);//Y:UI
-  }else{
-    text("X:" + mouseTileX, tmpX3, tmpY1);//X:(mouseTileX)
-    text("Y:" + mouseTileY, tmpX3, tmpY2);//Y:(mouseTileY)
-  }
+  //if(mouseY < UIBottom * scl){
+  //  text("X:UI", tmpX3, tmpY1);//X:UI
+  //  text("Y:UI", tmpX3, tmpY2);//Y:UI
+  //}else{
+  //  text("X:" + mouseTileX, tmpX3, tmpY1);//X:(mouseTileX)
+  //  text("Y:" + mouseTileY, tmpX3, tmpY2);//Y:(mouseTileY)
+  //}
 
-  textSize(12);//Default text size
+  //textSize(12);//Default text size
 }//void draw() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateEditorUI(){
-  if(colorWheel.isVisible() || colorInputR.isVisible()){//if using color wheel or color inputs
-    noTile = true;//disallow tile placement
-  }
-
   scrollAmount = (int)scrollSlider.getValue();//update scroll amount
 
-  RSlider.setColorBackground(color(RSlider.getValue(), 0, 0));//update background color (Red)
-  GSlider.setColorBackground(color(0, GSlider.getValue(), 0));//update background color (Green)
-  BSlider.setColorBackground(color(0, 0, BSlider.getValue()));//update background color (Blue)
-
-  setButtonColorBack(btnIDs.hueWheelVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-  setButtonColorBack(btnIDs.rgbInputVis, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-
   int tmpVal = 150;
-  setButtonColorText(btnIDs.hueWheelVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
-  setButtonColorText(btnIDs.rgbInputVis, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
 
   if(colorTiles){
-    setButtonColorBack(btnIDs.colorToggle, color(RSlider.getValue(), GSlider.getValue(), BSlider.getValue()));
-    setButtonColorText(btnIDs.colorToggle, color(tmpVal - RSlider.getValue(), tmpVal - GSlider.getValue(), tmpVal - BSlider.getValue()));
+    editor_button_coloredToggle.setLocalColor(4, currentTileColor);
+    editor_button_coloredToggle.setLocalColor(2, color(tmpVal - red(currentTileColor), tmpVal - green(currentTileColor), blue(currentTileColor)));
   }else{
-    setButtonColorBack(btnIDs.colorToggle, BLACK);
-    setButtonColorText(btnIDs.colorToggle, WHITE);
+    editor_button_coloredToggle.setLocalColor(4, BLACK);
+    editor_button_coloredToggle.setLocalColor(2, WHITE);
   }
+  
+  //editor_slider_red.setLocalColor(5, color(red(currentTileColor), 0, 0));
+  //editor_slider_green.setLocalColor(5, color(0, green(currentTileColor), 0));
+  //editor_slider_blue.setLocalColor(5, color(0, 0, blue(currentTileColor)));
+  
+  //color tmp;
+  //color tmp2;
+  
+  //colorMode(HSB, 255);
+  //tmp = color(hue(currentTileColor), 255, 255);
+  //tmp2 = color(hue(currentTileColor), saturation(currentTileColor), 255);
+  //lerpColor(color(255), color(0,255,0), vision[i])
+  //colorMode(RGB, 255);
+  
+  //editor_slider_hue.setLocalColor(5, tmp);
+  //editor_slider_saturation.setLocalColor(5, tmp2);
+  //editor_slider_brightness.setLocalColor(5, (int)brightness(currentTileColor));
+  //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
 }//void update() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void setupUI(){
-  //loadButtonImages();
-
-  UIControls.addSlider("RSlider").setDecimalPrecision(0).setPosition(scl, (scl + 1.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-  UIControls.addSlider("GSlider").setDecimalPrecision(0).setPosition(scl, (scl + 12.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-  UIControls.addSlider("BSlider").setDecimalPrecision(0).setPosition(scl, (scl + 23.3) - 1).setSliderMode(Slider.FLEXIBLE).setSize(scl * 3, 10).setRange(0, 255).setValue(127).setCaptionLabel("");//create Slider
-  RSlider = UIControls.getController("RSlider");//make it easier to use Slider
-  GSlider = UIControls.getController("GSlider");//make it easier to use Slider
-  BSlider = UIControls.getController("BSlider");//make it easier to use Slider
-
-  UIControls.addSlider("scrollSlider").setDecimalPrecision(0).setPosition(scl * 6.05, scl).setSliderMode(Slider.FLEXIBLE).setSize(scl * 2, scl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
+  UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth(), 0).setSliderMode(Slider.FLEXIBLE).setSize(UIscl * 2, UIscl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
   scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
-  UIControls.addColorWheel("colorWheel").setPosition(0, scl * 2).setVisible(false).setRGB(color(127, 127, 127)).setCaptionLabel("")//create ColorWheel
+  UIControls.addColorWheel("colorWheel").setVisible(false).setRGB(currentTileColor).setCaptionLabel("")//create ColorWheel
     .onChange(new CallbackListener(){//when changed
     public void controlEvent(CallbackEvent theEvent){
-      RSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").r());//make sure all values are the same
-      GSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").g());//make sure all values are the same
-      BSlider.setValue(UIControls.get(ColorWheel.class, "colorWheel").b());//make sure all values are the same
+      if(currentColorSlider == -1){
+        currentColorSlider = 99;
+      }
+      
+      if(currentColorSlider == 99){
+        currentTileColor = UIControls.get(ColorWheel.class, "colorWheel").getRGB();
+        
+        editor_slider_red.setValue(red(currentTileColor));
+        editor_slider_green.setValue(green(currentTileColor));
+        editor_slider_blue.setValue(blue(currentTileColor));
+        editor_slider_hue.setValue(hue(currentTileColor));
+        editor_slider_saturation.setValue(saturation(currentTileColor));
+        editor_slider_brightness.setValue(brightness(currentTileColor));
+        
+        //updateSliderBackgrounds();
+      }
     }
   }
   );
   colorWheel = UIControls.getController("colorWheel");//make it easier to use ColorWheel
 
-  UIControls.addTextfield("colorInputR").setPosition(scl * 4, scl * 2).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
-  UIControls.addTextfield("colorInputG").setPosition(scl * 4, scl * 2.5).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
-  UIControls.addTextfield("colorInputB").setPosition(scl * 4, scl * 3).setSize(scl, scl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
+  UIControls.addTextfield("colorInputR").setSize(UIscl, UIscl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(255, 0, 0));
+  UIControls.addTextfield("colorInputG").setSize(UIscl, UIscl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 255, 0));
+  UIControls.addTextfield("colorInputB").setSize(UIscl, UIscl / 2).setVisible(false).setCaptionLabel("");//.setColorLabel(color(0, 0, 255));
   colorInputR = UIControls.getController("colorInputR");//make it easier to use Textfield
   colorInputG = UIControls.getController("colorInputG");//make it easier to use Textfield
   colorInputB = UIControls.getController("colorInputB");//make it easier to use Textfield
-
-  buttons.add(new button(0, scl, scl - 1, scl, BLACK, "HUE", WHITE, 12, false, btnIDs.hueWheelVis, -1));
-  buttons.add(new button(scl * 4, scl, scl - 1, scl, BLACK, "RGB", WHITE, 12, false, btnIDs.rgbInputVis, -1));
-  buttons.add(new button(scl * 5, scl, scl, scl, BLACK, "Color", WHITE, 12, false, btnIDs.colorToggle, -1));
-
-  buttons.add(new button(scl * 8.1, scl, scl, scl, BLACK, "New", WHITE, 12, false, btnIDs.newMap, 0));//5
-  buttons.add(new button(scl * 9.1, scl, scl * 1.1, scl, BLACK, "Save", WHITE, 12, false, btnIDs.saveMap, 4));
-  buttons.add(new button(scl * 10.2, scl, scl * 1.1, scl, BLACK, "Load", WHITE, 12, false, btnIDs.loadMap, 2));
-  buttons.add(new button(scl * 11.3, scl, scl * 1.3, scl, BLACK, "Image", WHITE, 12, false, btnIDs.saveImage, -1));
-  buttons.add(new button(scl * 12.6, scl, scl * 3.3, scl, BLACK, "Change Tile Map", WHITE, 12, true, btnIDs.changeTileMap, -1));
-
-  buttons.add(new button(0, 0, scl * 1.5, scl, BLACK, "Prev", WHITE, 12, true, btnIDs.prevTileMap, 10));
-  buttons.add(new button(scl * 2, 0, scl * 1.5, scl, BLACK, "Next", WHITE, 12, true, btnIDs.nextTileMap, 11));
-  buttons.add(new button(scl * 4, 0, scl * 1.5, scl, BLACK, "Load", WHITE, 12, true, btnIDs.loadTileMap, -1));
-  buttons.add(new button(scl * 7, 0, scl * 2, scl, BLACK, "Load Map", WHITE, 12, true, btnIDs.loadMapAndTileMap, 2));
-
-  for(button b : buttons){
-    b.setup();
-  }
-
-  changeUI(_TILEMAPUI_);//go to tile map selection display
+  
+  //changeUI(_MAINMENU_);//go to tile map selection display
+  changeUI(_OPENING_);//go to tile map selection display
 }//void setup() END
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void changeUI(int ui){//change screen
-  if(ui == _TILEMAPUI_){//are we going to the tile map loading screen
-    tilemapUIButtonsSetVis(true);
-    editorUIButtonsSetVis(false);
-  }else if(ui == _EDITORUI_){//are we going to the editor screen
-    tilemapUIButtonsSetVis(false);
-    editorUIButtonsSetVis(true);
+void changeUI(int ui_){//change screen
+  slidersSetVis(false);
+  changeDisplayedMenuBar(button_menuBar_NONE);
+  altHeld = false;
+  ctrlHeld = false;
+  shiftHeld = false;
+  lastKey = -1;
+  previousUI = currentUI;
+  
+  main_menu_button_panel.setVisible(false);
+  menu_bar_button_panel.setVisible(false);
+  tilemap_button_panel.setVisible(false);
+  editor_colorTools_panel.setVisible(false);
+  colorWheel.setVisible(false);
+  colorInputR.setVisible(false);//change visibility
+  colorInputG.setVisible(false);//change visibility
+  colorInputB.setVisible(false);//change visibility
+  editor_button_coloredToggle.setVisible(false);//change visibility
+  editor_button_changeTileMap.setVisible(false);//change visibility
+  
+  if(ui_ == _OPENING_){//are we going to the tile map loading screen
+    surface.setSize(800, 600);
+    currentUI = _OPENING_;
+  }else if(ui_ == _MAINMENU_){//are we going to the tile map loading screen
+    surface.setSize(298 + (UIscl * 2), 384 + 58 + (UIscl * 2));// 406 + (scl * 2));//298 x 406
+    main_menu_button_panel.setVisible(true);
+    currentUI = _MAINMENU_;
+  }else if(ui_ == _TILEMAPUI_){//are we going to the tile map loading screen
+    surface.setSize(960, 960);//458 x 254
+    tilemap_button_panel.setVisible(true);
+    currentUI = _TILEMAPUI_;
+  }else if(ui_ == _EDITORUI_){//are we going to the editor screen
+    surface.setSize(960, 960);//458 x 254
+    slidersSetVis(true);
+    menu_bar_button_panel.setVisible(true);
+    editor_colorTools_panel.setVisible(true);
+    editor_colorTools_panel.setDragArea();
+    editor_colorTools_panel.setCollapsed(true);
+    editor_button_coloredToggle.setVisible(true);//change visibility
+    editor_button_changeTileMap.setVisible(true);//change visibility
+    currentUI = _EDITORUI_;
+  }else if(ui_ == _OPTIONSMENU_){//are we going to the editor screen
+    surface.setSize(458 + (UIscl * 2), 254 + (UIscl * 2));//458 x 254 = 522 x 318
+    currentUI = _OPTIONSMENU_;
   }else{
     println("ERROR: UI DOES NOT EXIST");
   }
@@ -235,56 +272,16 @@ void changeUI(int ui){//change screen
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void tilemapUIButtonsSetVis(boolean vis){//set visibility for all items on the tile map selection UI
-  setButtonVis(btnIDs.prevTileMap, vis);
-  setButtonVis(btnIDs.nextTileMap, vis);
-  setButtonVis(btnIDs.loadTileMap, vis);
-  setButtonVis(btnIDs.loadMapAndTileMap, vis);
+void slidersSetVis(boolean vis_){//set visibility for all items on the editors UI
+  scrollSlider.setVisible(vis_);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-void editorUIButtonsSetVis(boolean vis){//set visibility for all items on the editors UI
-  setButtonVis(btnIDs.hueWheelVis, vis);
-  setButtonVis(btnIDs.rgbInputVis, vis);
-  setButtonVis(btnIDs.colorToggle, vis);
-  setButtonVis(btnIDs.newMap, vis);
-  setButtonVis(btnIDs.saveMap, vis);
-  setButtonVis(btnIDs.loadMap, vis);
-  setButtonVis(btnIDs.saveImage, vis);
-  setButtonVis(btnIDs.changeTileMap, vis);
-  scrollSlider.setVisible(vis);
-  RSlider.setVisible(vis);
-  GSlider.setVisible(vis);
-  BSlider.setVisible(vis);
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void colorInputR(String value){//called when colorInputR updates
-  RSlider.setValue(int(value));//make sure all values are the same
-}//void colorInputR(String value) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void colorInputG(String value){//called when colorInputG updates
-  GSlider.setValue(int(value));//make sure all values are the same
-}//void colorInputG(String value) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void colorInputB(String value){//called when colorInputB updates
-  BSlider.setValue(int(value));//make sure all values are the same
-}//void colorInputB(String value) END
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-void loadColors(mTile tmp){//Load RGB Sliders and RGB Inputs with value from tile
-  if(tmp != null){
-    if(tmp.colored){//----------------------------------------------------------------------------do we want to check this?
-      RSlider.setValue(tmp.r);//Set Red Slider value to Red value of the tile
-      GSlider.setValue(tmp.g);//Set Green Slider value to Green value of the tile
-      BSlider.setValue(tmp.b);//Set Blue Slider value to Blue value of the tile
+void loadColors(mTile tile_){//Load RGB Sliders and RGB Inputs with value from tile
+  if(tile_ != null){
+    if(tile_.colored){//----------------------------------------------------------------------------do we want to check this?
+      currentTileColor = tile_.tileColor;
     }
   }
 }//void loadColors(int tile) END
