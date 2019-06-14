@@ -56,6 +56,12 @@ void drawTilesAndIcons(){
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void updateScreenBounds(){
+  if (currentUI == _EDITORUI_ && (oldScreenW != width || oldScreenH != height)){//Sketch window has resized
+    oldScreenW = width;
+    oldScreenH = height;
+    editor_colorTools_panel.setDragArea();
+  }
+  
   screenX2 = floor(width - screenX)/scl;
   screenY2 = floor(height - screenY)/scl;
 
@@ -69,8 +75,6 @@ void updateScreenBounds(){
   if(screenY2 > rows){
     screenY2 = rows;
   }
-
-  //println(screenX1 + ", " + screenY1 + ", " + screenX2 + ", " + screenY2);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------

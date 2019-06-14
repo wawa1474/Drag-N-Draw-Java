@@ -40,8 +40,6 @@ void loadTileMapInfo(){
       loadTileMapInfo(directory, f.getAbsolutePath());//load the tile maps
     }
   }
-  
-  missingTexture = loadImage("assets/missingTexture.png");//load the missing texture file
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------

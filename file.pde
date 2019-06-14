@@ -155,6 +155,43 @@ void FileLoadSettings(File settingsFile){//load map from file
   loop();//allow drawing
 }//void FileLoadMap() END
 
+void loadAssets(){
+  File assetsFolder = new File(programDirectory + "/assets/");
+  if (!assetsFolder.exists()){
+    try {
+      //assetsFolder.mkdir();
+      println("resources not extracted, extracting");
+      //copyResources(programDir);
+      File resourcesZip = new File(programDirectory + "/res.zip");
+      copyResources(programDirectory, resourcesZip);
+      println("resources extracted");
+    } catch (Exception e) {
+      println("Exception caught in Setup");
+      println(e);
+      _EXIT_ = true;
+      exit();
+    }
+  }
+  
+  missingTexture = loadImage(assetsFolder + "/missingTexture.png");//load the missing texture file
+  alphaBack = loadImage(assetsFolder + "/alphaBack.png");
+  hueBack = loadImage(assetsFolder + "/hueBack.png");
+  
+  options_menu_mockup = loadImage(assetsFolder + "/options_menu_mockup_v2.png");//main_menu_button_selected
+  opening_mockup = loadImage(assetsFolder + "/opening_mockup.png");//main_menu_button_selected
+}
+
+void loadSettings(){
+  File settingsFile = new File(programDirectory + "/settings.set");
+  if(!settingsFile.exists()){
+    println("Settings File does not exist, creating it...");
+    FileCreateSettings(settingsFile);
+    keyBinds = defaultKeyBinds;
+  }else{
+    FileLoadSettings(settingsFile);
+  }
+}
+
 byte[] stringToBytes(String input){
   byte[] tmpArray = new byte[input.length()];
   for(int i = 0; i < input.length(); i++){

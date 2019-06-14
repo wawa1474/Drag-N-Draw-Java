@@ -23,17 +23,14 @@ color currentTileColor = color(0,255,255);
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
 final String _magicText = "wawa1474DragDraw";//make sure the file is ours
 
-//PImage texttest1;
-
 PImage options_menu_mockup;
-
 PImage opening_mockup;
 
 int oldScreenW = 0;
 int oldScreenH = 0;
 
 final int BUFFER_SIZE = 2048;
-File programDir;
+File programDirectory;
 
 boolean _EXIT_ = false;
 
@@ -43,44 +40,13 @@ void setup(){//Setup everything
   surface.setTitle("Drag 'N' Draw Java - " + _PROGRAMVERSION_TITLE_);
   noSmooth();//text looks 'nicer'
   
-  programDir = new File(sketchPath());
-  
-  File assetsFolder = new File(programDir + "/assets/");
-  if (!assetsFolder.exists()){
-    try {
-      //assetsFolder.mkdir();
-      println("resources not extracted, extracting");
-      //copyResources(programDir);
-      File resourcesZip = new File(programDir + "/res.zip");
-      copyResources(programDir, resourcesZip);
-      println("resources extracted");
-    } catch (Exception e) {
-      println("Exception caught in Setup");
-      println(e);
-      _EXIT_ = true;
-      exit();
-    }
-  }
-  
-  File settingsFile = new File(programDir + "/settings.set");
-  if(!settingsFile.exists()){
-    println("Settings File does not exist, creating it...");
-    FileCreateSettings(settingsFile);
-    keyBinds = defaultKeyBinds;
-  }else{
-    FileLoadSettings(settingsFile);
-  }
-  
-  assetsFolder = null;//necessary?
+  programDirectory = new File(sketchPath());
+  loadAssets();
+  loadSettings();
   
   if(_EXIT_ == false){
-    options_menu_mockup = loadImage("assets/options_menu_mockup_v2.png");//main_menu_button_selected
-    
-    opening_mockup = loadImage("assets/opening_mockup.png");//main_menu_button_selected
-    
-    //set title bar icon
-    //PImage titlebaricon = loadImage("myicon.png");
-    //surface.setIcon(titlebaricon);
+    //PImage titlebaricon = loadImage("myicon.png");//get title bar icon
+    //surface.setIcon(titlebaricon);//set title bar icon
     
     clearMapTilesArray();//setup map tiles array
     clearClickableTilesArray();//setup clickable tiles array
@@ -92,18 +58,8 @@ void setup(){//Setup everything
     setupUI();//Setup all of the UI stuff
     
     debug();//run whatever debug option is set
-    
-    registerMethod("pre", this);
   }
 }//void setup() END
-
-void pre(){
-  if (currentUI == _EDITORUI_ && (oldScreenW != width || oldScreenH != height)){//Sketch window has resized
-    oldScreenW = width;
-    oldScreenH = height;
-    editor_colorTools_panel.setDragArea();
-  }
-}
 
 float zoom = 1;
 
