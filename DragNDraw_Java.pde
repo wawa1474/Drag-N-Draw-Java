@@ -54,6 +54,8 @@ void setup(){//Setup everything
     
     createGUI();
     
+    //control p5 stuff must be setup AFTER G4P otherwise
+    //control p5 will be drawn UNDER G4P elements
     UIControls = new ControlP5(this);//set up all the control stuff
     setupUI();//Setup all of the UI stuff
     

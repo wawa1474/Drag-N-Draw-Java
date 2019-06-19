@@ -347,7 +347,6 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
     colorInputG.setVisible(false);//change visibility
     colorInputB.setVisible(false);//change visibility
   }else if(event == GEvent.EXPANDED){
-    colorWheel.setPosition(editor_colorTools_panel.getX() + 1, editor_colorTools_panel.getY() + 20);
     colorWheel.setVisible(true);
     colorInputR.setVisible(true);//change visibility
     colorInputG.setVisible(true);//change visibility
