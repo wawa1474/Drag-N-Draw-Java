@@ -302,18 +302,6 @@ void FileLoadMap(){//load map from file
   noLoop();//dont allow drawing
   byte[] mapFile = loadBytes(fileName);//temporary array
   
-  //String magic = "";
-  ////println(mapFile.length);
-  //for(int l = 0; l < _magicText.length(); l++){
-  //  magic += (char)mapFile[(mapFile.length - _magicText.length()) + l];
-  //}
-  
-  //if(!magic.equals(_magicText)){//is the file ours
-  //  loadingMap = false;//since this file was not ours we're no longer loading a map
-  //  loop();
-  //  return;//file was not one of ours
-  //}
-  
   if(!checkMagic(subset(mapFile, mapFile.length - _magicText.length()))){
     loadingMap = false;//since this file was not ours we're no longer loading a map
     loop();

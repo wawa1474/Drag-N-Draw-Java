@@ -41,34 +41,7 @@ final String[] defaultKeyBinds = {
   "DELETE"//delete tiles
 };
 
-void FileCreateSettings(File settingsFile){
-  //byte[] tmpFile = {
-  //  0x00, 0x00,//file version
-  //  //all strings are null (0) terminated
-  //  0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x53, 0x48, 0x49, 0x46, 0x54, 0x20, 0x2B, 0x20, 0x45, 0x00,//export canvas - CTRL + SHIFT + E
-  //  0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x53, 0x48, 0x49, 0x46, 0x54, 0x20, 0x2B, 0x20, 0x53, 0x00,//save map as - CTRL + SHIFT + S
-  //  0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x4E, 0x00,//new map - CTRL + N
-  //  0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x4F, 0x00,//open map - CTRL + O
-  //  0x43, 0x54, 0x52, 0x4C, 0x20, 0x2B, 0x20, 0x53, 0x00,//save map - CTRL + S
-  //  0x46, 0x00,//color tiles - F
-  //  0x51, 0x00,//tile group - Q
-  //  0x58, 0x00,//cut - X
-  //  0x43, 0x00,//copy - C
-  //  0x56, 0x00,//paste - V
-  //  0x52, 0x00,//tile debug - R
-  //  0x45, 0x00,//copy color - E
-  //  0x50, 0x00,//set background color - P
-  //  0x4F, 0x00,//toggle background lines - O
-  //  0x57, 0x00,//up - W
-  //  0x41, 0x00,//left - A
-  //  0x53, 0x00,//down - S
-  //  0x44, 0x00,//right - D
-  //  0x44, 0x45, 0x4C, 0x45, 0x54, 0x45, 0x00,//delete tiles - DELETE
-  //};
-  
-  //tmpFile[0] = (byte)(_FILEVERSION_SETTINGS_ >> 8);//upper byte
-  //tmpFile[1] = (byte)_FILEVERSION_SETTINGS_;//lower byte
-  
+void FileCreateSettings(File settingsFile){  
   byte[] tmpFile = new byte[0];
   
   //file version
@@ -78,25 +51,6 @@ void FileCreateSettings(File settingsFile){
   for(int i = 0; i < defaultKeyBinds.length; i++){
     tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[i]));
   }
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_exportCanvas]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_saveMapAs]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_newMap]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_openMap]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_saveMap]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_colorTiles]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_tileGroup]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_cut]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_copy]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_paste]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_tileDebug]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_copyColor]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_setBackground]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_lines]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveUp]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveLeft]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveDown]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveRight]));
-  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_delete]));
   
   //program version and magic text
   tmpFile = concat(tmpFile, _PROGRAMVERSION_FILE_);
@@ -108,19 +62,6 @@ void FileCreateSettings(File settingsFile){
 void FileLoadSettings(File settingsFile){//load map from file
   noLoop();//dont allow drawing
   byte[] settingsArray = loadBytes(settingsFile);//temporary array
-  
-  //String magic = "";
-  ////println(mapFile.length);
-  //for(int l = 0; l < _magicText.length(); l++){
-  //  magic += (char)settingsFile[(settingsFile.length - _magicText.length()) + l];
-  //}
-  
-  //if(!magic.equals(_magicText)){//is the file ours
-  //  //loadingMap = false;//since this file was not ours we're no longer loading a map
-  //  //println("not ours");
-  //  loop();
-  //  return;//file was not one of ours
-  //}
   
   if(!checkMagic(subset(settingsArray, settingsArray.length - _magicText.length()))){
     loop();
