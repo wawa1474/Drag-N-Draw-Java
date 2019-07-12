@@ -1,5 +1,7 @@
 /*
 do we compress and uncompress files for smaller sizes?
+how about have just the necessary images and generate everything else from them
+  buttons mainly
 
 do we switch all custom buttons and sliders to G4P
 or redo custom image buttons with controlP5

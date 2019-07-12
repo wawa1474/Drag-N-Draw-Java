@@ -75,25 +75,28 @@ void FileCreateSettings(File settingsFile){
   tmpFile = concat(tmpFile, versionToBytes(_FILEVERSION_SETTINGS_));
   
   //all strings are null (0) terminated
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_exportCanvas]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_saveMapAs]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_newMap]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_openMap]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_saveMap]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_colorTiles]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_tileGroup]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_cut]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_copy]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_paste]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_tileDebug]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_copyColor]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_setBackground]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_lines]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveUp]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveLeft]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveDown]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveRight]));
-  tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_delete]));
+  for(int i = 0; i < defaultKeyBinds.length; i++){
+    tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[i]));
+  }
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_exportCanvas]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_saveMapAs]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_newMap]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_openMap]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_saveMap]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_colorTiles]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_tileGroup]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_cut]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_copy]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_paste]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_tileDebug]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_copyColor]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_setBackground]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_lines]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveUp]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveLeft]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveDown]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_moveRight]));
+  //tmpFile = concat(tmpFile, stringToBytesNull(defaultKeyBinds[keyBind_delete]));
   
   //program version and magic text
   tmpFile = concat(tmpFile, _PROGRAMVERSION_FILE_);

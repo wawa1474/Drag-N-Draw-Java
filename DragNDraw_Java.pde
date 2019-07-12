@@ -37,7 +37,7 @@ boolean _EXIT_ = false;
 void setup(){//Setup everything
   size(800, 600);
   surface.setResizable(true);//allow resizing of the window
-  surface.setTitle("Drag 'N' Draw Java - " + _PROGRAMVERSION_TITLE_);
+  surface.setTitle(_PROGRAM_TITLE_ + " - " + _PROGRAMVERSION_TITLE_);
   noSmooth();//text looks 'nicer'
   
   programDirectory = new File(sketchPath());
@@ -67,7 +67,7 @@ float zoom = 1;
 
 void draw(){//Draw the canvas
   if(_EXIT_ == false){
-    surface.setTitle("Drag 'N' Draw Java - " + _PROGRAMVERSION_TITLE_ + " - FPS:" + padFPS());// + " : " + mapTiles.length);
+    surface.setTitle(_PROGRAM_TITLE_ + " - " + _PROGRAMVERSION_TITLE_ + " - FPS:" + padFPS());// + " : " + mapTiles.length);
     
     updateScreenBounds();//where on the map is the screen
     updateMouseXY();//Update the XY position of the mouse

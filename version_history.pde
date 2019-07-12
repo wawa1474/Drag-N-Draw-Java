@@ -1,3 +1,4 @@
+final String _PROGRAM_TITLE_ = "Drag 'N' Draw Java";//what are we calling ourselves?
 final String _PROGRAMVERSION_TITLE_ = "PRE_ALPHA";//what version do we display
 //_PROGRAMVERSION_FILE_ range is 0-255
 //used to figure out what version of our program the save file came from
@@ -5,6 +6,7 @@ final byte[] _PROGRAMVERSION_FILE_ = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x
 
 
 /*
+final String _PROGRAM_TITLE_ = "Drag 'N' Draw Java";//what are we calling ourselves?
 VERSION = "PRE_ALPHA";//what version do we display
 _PROGRAMVERSION_FILE_ = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//<- = pre-alpha
   all the things
