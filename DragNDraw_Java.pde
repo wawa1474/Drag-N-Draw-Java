@@ -60,6 +60,8 @@ void setup(){//Setup everything
     setupUI();//Setup all of the UI stuff
     
     debug();//run whatever debug option is set
+    
+    icons.add(new clickableIcon(scl * 10, scl * 10, "maps/map10.ddj", loadImage("test.png")));
   }
 }//void setup() END
 
@@ -67,7 +69,11 @@ float zoom = 1;
 
 void draw(){//Draw the canvas
   if(_EXIT_ == false){
-    surface.setTitle(_PROGRAM_TITLE_ + " - " + _PROGRAMVERSION_TITLE_ + " - FPS:" + padFPS());// + " : " + mapTiles.length);
+    String tmpFPS = padFPS();
+    if(tmpFPS != prevFPS){
+      prevFPS = tmpFPS;
+      surface.setTitle(_PROGRAM_TITLE_ + " - " + _PROGRAMVERSION_TITLE_ + " - FPS:" + tmpFPS);// + " : " + mapTiles.length);
+    }
     
     updateScreenBounds();//where on the map is the screen
     updateMouseXY();//Update the XY position of the mouse

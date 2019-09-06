@@ -373,6 +373,8 @@ void prevRowC(){//Previous Row
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
+String prevFPS = "";
+
 String padFPS(){
   String FPS = String.valueOf(frameRate);//grab the frame rate
   if(FPS.length() > 4){//if the frame rate has more than 2 decimal places
@@ -382,6 +384,6 @@ String padFPS(){
   }else{//if it has no decimal places
     FPS = FPS.substring(0, 2) + ".00";//XX.00 pad it
   }
-
+  
   return FPS;
 }

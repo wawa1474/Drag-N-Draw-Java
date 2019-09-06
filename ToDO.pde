@@ -1,4 +1,15 @@
 /*
+localization
+  languages
+
+
+interpreted? compiled? scripting language
+  lua?
+  forth?
+  tcl?
+  python?
+
+
 do we compress and uncompress files for smaller sizes?
 how about have just the necessary images and generate everything else from them
   buttons mainly

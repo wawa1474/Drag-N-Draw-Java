@@ -6,9 +6,10 @@ class clickableIcon{//clickableIcon Object
   int x, y;//Store XY Position
   int w, h;//store width and height
   String file;//store what file to load
-  String hoverText;//text to show when mouse is hovering over
+  String hoverText = null;//text to show when mouse is hovering over
   color borderColor = color(255,0,0);//what color is the border? (red)
   boolean showBorder = true;//do we show the border
+  PImage hoverImage = null;
 
   public clickableIcon(int x_, int y_, String file_, String hoverText_){//clickableIcon Object
     x = x_;//Store X Position
@@ -19,6 +20,15 @@ class clickableIcon{//clickableIcon Object
     hoverText = hoverText_;//text to show when mouse is hovering over
   }//public clickableIcon(int x, int y, String file) END
   
+  public clickableIcon(int x_, int y_, String file_, PImage hoverImage_){//clickableIcon Object
+    x = x_;//Store X Position
+    y = y_;//Store Y Position
+    w = scl;
+    h = scl;
+    file = file_;//store what file to load
+    hoverImage = hoverImage_;//text to show when mouse is hovering over
+  }//public clickableIcon(int x, int y, String file) END
+  
   public clickableIcon(int x_, int y_, int width_, int height_, String file_, String hoverText_){//clickableIcon Object
     x = x_;//Store X Position
     y = y_;//Store Y Position
@@ -26,6 +36,15 @@ class clickableIcon{//clickableIcon Object
     h = height_;
     file = file_;//store what file to load
     hoverText = hoverText_;//text to show when mouse is hovering over
+  }//public clickableIcon(int x, int y, String file) END
+  
+  public clickableIcon(int x_, int y_, int width_, int height_, String file_, PImage hoverImage_){//clickableIcon Object
+    x = x_;//Store X Position
+    y = y_;//Store Y Position
+    w = width_;
+    h = height_;
+    file = file_;//store what file to load
+    hoverImage = hoverImage_;//text to show when mouse is hovering over
   }//public clickableIcon(int x, int y, String file) END
   
   void draw(){//draw the icon
@@ -42,9 +61,13 @@ class clickableIcon{//clickableIcon Object
   }
   
   void drawText(){//draw the hovering text
-    fill(BLACK);//black
-    textSize(24);//larger
-    text(hoverText, mouseX - screenX, mouseY - screenY - (UIBottom));//tie the text to the mouse
+    if(hoverText != null){
+      fill(BLACK);//black
+      textSize(24);//larger
+      text(hoverText, mouseX - screenX, mouseY - screenY - (UIBottom));//tie the text to the mouse
+    } else {
+      image(hoverImage, x, y - hoverImage.height);
+    }
   }
   
   void loadMap(){
