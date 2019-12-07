@@ -34,6 +34,7 @@ final int _MAINMENU_ = 0;
 final int _TILEMAPUI_ = 1;//UI defines?
 final int _EDITORUI_ = 2;//UI defines?
 final int _OPTIONSMENU_ = 3;//UI defines?
+final int _TILENSTYLE_ = 4;
 
 int currentUI = _OPENING_;
 int previousUI = -1;
@@ -242,18 +243,18 @@ void changeUI(int ui_){//change screen
   editor_button_changeTileMap.setVisible(false);//change visibility
   
   if(ui_ == _OPENING_){//are we going to the tile map loading screen
-    surface.setSize(800, 600);
+    //surface.setSize(800, 600);
     currentUI = _OPENING_;
   }else if(ui_ == _MAINMENU_){//are we going to the tile map loading screen
-    surface.setSize(298 + (UIscl * 2), 384 + 58 + (UIscl * 2));// 406 + (scl * 2));//298 x 406
+    //surface.setSize(298 + (UIscl * 2), 384 + 58 + (UIscl * 2));// 406 + (scl * 2));//298 x 406
     main_menu_button_panel.setVisible(true);
     currentUI = _MAINMENU_;
   }else if(ui_ == _TILEMAPUI_){//are we going to the tile map loading screen
-    surface.setSize(960, 960);//458 x 254
+    //surface.setSize(960, 960);//458 x 254
     tilemap_button_panel.setVisible(true);
     currentUI = _TILEMAPUI_;
   }else if(ui_ == _EDITORUI_){//are we going to the editor screen
-    surface.setSize(960, 960);//458 x 254
+    //surface.setSize(960, 960);//458 x 254
     slidersSetVis(true);
     menu_bar_button_panel.setVisible(true);
     editor_colorTools_panel.setVisible(true);
@@ -263,8 +264,11 @@ void changeUI(int ui_){//change screen
     editor_button_changeTileMap.setVisible(true);//change visibility
     currentUI = _EDITORUI_;
   }else if(ui_ == _OPTIONSMENU_){//are we going to the editor screen
-    surface.setSize(458 + (UIscl * 2), 254 + (UIscl * 2));//458 x 254 = 522 x 318
+    //surface.setSize(458 + (UIscl * 2), 254 + (UIscl * 2));//458 x 254 = 522 x 318
     currentUI = _OPTIONSMENU_;
+  }else if(ui_ == _TILENSTYLE_){
+    //surface.setSize(width, height);
+    currentUI = _TILENSTYLE_;
   }else{
     println("ERROR: UI DOES NOT EXIST");
   }

@@ -35,7 +35,8 @@ File programDirectory;
 boolean _EXIT_ = false;
 
 void setup(){//Setup everything
-  size(800, 600);
+  //size(800, 600);
+  fullScreen();
   surface.setResizable(true);//allow resizing of the window
   surface.setTitle(_PROGRAM_TITLE_ + " - " + _PROGRAMVERSION_TITLE_);
   noSmooth();//text looks 'nicer'
@@ -101,6 +102,10 @@ void draw(){//Draw the canvas
         drawBorder(1, (cols * scl) - 2, 1, (rows * scl) - 2, borderThickness);//Draw the RED border
         drawTileGroupOutlines();//draw the necessary outlines
         break;
+      
+      case _TILENSTYLE_:
+        background(255);//white background
+        break;
     }
     
     popMatrix();//go back to normal space?
@@ -121,6 +126,10 @@ void draw(){//Draw the canvas
         updateEditorUI();//Update the Editors UI
         drawEditorUI();//Draw the Editor UI
         updateSliderBackgrounds();//figure out how to only update this when the background need to be redrawn
+        break;
+      
+      case _TILENSTYLE_:
+        text("Tile 'N' Style",scl,scl);
         break;
       
       case _OPTIONSMENU_:

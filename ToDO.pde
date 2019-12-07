@@ -8,6 +8,7 @@ interpreted? compiled? scripting language
   forth?
   tcl?
   python?
+  javascript?
 
 
 do we compress and uncompress files for smaller sizes?

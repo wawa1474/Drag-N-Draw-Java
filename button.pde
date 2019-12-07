@@ -463,11 +463,13 @@ public void main_menu_button_handler(GImageButton source, GEvent event){
       changeUI(_TILEMAPUI_);
     }else if(source == main_menu_button_OPTIONS){
       changeUI(_OPTIONSMENU_);
+    }else if(source == main_menu_button_TNS){
+      changeUI(_TILENSTYLE_);
     }else if(source == main_menu_button_EXIT){
       _EXIT_ = true;
       exit();
     }else{
-      //println("error");
+      println("Error: Main Menu Button Does Not Exist");
     }
   }
 }
@@ -550,7 +552,7 @@ public void menu_bar_VIEW_dropDown_button_handler(GImageButton source, GEvent ev
     }else if(source == menu_bar_VIEW_dropDown_PF){
       
     }else if(source == menu_bar_VIEW_dropDown_TNS){
-      
+      changeUI(_TILENSTYLE_);
     }else if(source == menu_bar_VIEW_dropDown_RNP){
       
     }else if(source == menu_bar_VIEW_dropDown_OPTIONS){

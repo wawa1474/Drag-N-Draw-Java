@@ -28,6 +28,9 @@ void mousePressed(){//We pressed a mouse button
   }
 
   switch(currentUI){
+    case _TILENSTYLE_:
+      break;
+    
     case _TILEMAPUI_:
       break;//_TILEMAPUI_ END
 
@@ -131,6 +134,9 @@ void mouseDragged(){//We dragged the mouse while holding a button
   }
 
   switch(currentUI){
+    case _TILENSTYLE_:
+      break;
+    
     case _TILEMAPUI_:
       break;
 
@@ -194,6 +200,9 @@ void mouseReleased(){//We released the mouse button
   currentColorSlider = -1;
 
   switch(currentUI){
+    case _TILENSTYLE_:
+      break;
+    
     case _TILEMAPUI_:
       break;
 
@@ -229,6 +238,9 @@ void mouseWheel(MouseEvent event_){//We Scrolled The Mouse Wheel
   }
 
   switch(currentUI){
+    case _TILENSTYLE_:
+      break;
+    
     case _TILEMAPUI_:
       break;
 
