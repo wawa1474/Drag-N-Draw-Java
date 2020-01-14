@@ -1,4 +1,13 @@
 /*
+log file
+  date-time
+  script name
+  unzipping assets
+  errors
+  etc.
+
+
+
 localization
   languages
 

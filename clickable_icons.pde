@@ -2,6 +2,7 @@ boolean clickdrag = false;//are we dragging the mouse?
 
 ArrayList<clickableIcon> icons = new ArrayList<clickableIcon>(0);//make the array
 
+//make clickableIcon extend mTile?
 class clickableIcon{//clickableIcon Object
   int x, y;//Store XY Position
   int w, h;//store width and height
@@ -11,7 +12,7 @@ class clickableIcon{//clickableIcon Object
   boolean showBorder = true;//do we show the border
   PImage hoverImage = null;
 
-  public clickableIcon(int x_, int y_, String file_, String hoverText_){//clickableIcon Object
+  clickableIcon(int x_, int y_, String file_, String hoverText_){//clickableIcon Object
     x = x_;//Store X Position
     y = y_;//Store Y Position
     w = scl;
@@ -20,7 +21,7 @@ class clickableIcon{//clickableIcon Object
     hoverText = hoverText_;//text to show when mouse is hovering over
   }//public clickableIcon(int x, int y, String file) END
   
-  public clickableIcon(int x_, int y_, String file_, PImage hoverImage_){//clickableIcon Object
+  clickableIcon(int x_, int y_, String file_, PImage hoverImage_){//clickableIcon Object
     x = x_;//Store X Position
     y = y_;//Store Y Position
     w = scl;
@@ -29,7 +30,7 @@ class clickableIcon{//clickableIcon Object
     hoverImage = hoverImage_;//text to show when mouse is hovering over
   }//public clickableIcon(int x, int y, String file) END
   
-  public clickableIcon(int x_, int y_, int width_, int height_, String file_, String hoverText_){//clickableIcon Object
+  clickableIcon(int x_, int y_, int width_, int height_, String file_, String hoverText_){//clickableIcon Object
     x = x_;//Store X Position
     y = y_;//Store Y Position
     w = width_;
@@ -38,7 +39,7 @@ class clickableIcon{//clickableIcon Object
     hoverText = hoverText_;//text to show when mouse is hovering over
   }//public clickableIcon(int x, int y, String file) END
   
-  public clickableIcon(int x_, int y_, int width_, int height_, String file_, PImage hoverImage_){//clickableIcon Object
+  clickableIcon(int x_, int y_, int width_, int height_, String file_, PImage hoverImage_){//clickableIcon Object
     x = x_;//Store X Position
     y = y_;//Store Y Position
     w = width_;
