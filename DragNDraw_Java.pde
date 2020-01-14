@@ -41,7 +41,10 @@ void setup(){//Setup everything
   surface.setTitle(_PROGRAM_TITLE_ + " - " + _PROGRAMVERSION_TITLE_);
   noSmooth();//text looks 'nicer'
   
+  startLog();
+  
   programDirectory = new File(sketchPath());
+  logPrintln("Program Directory is: " + programDirectory, true);
   loadAssets();
   loadSettings();
   
@@ -146,5 +149,7 @@ void draw(){//Draw the canvas
         break;
       
     }
+  }else{
+    //program is exiting finalize anything that needs it.
   }
 }//void draw() END

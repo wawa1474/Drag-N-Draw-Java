@@ -41,6 +41,7 @@ void keyPressed(){//We pressed a key
         //changeUI(previousUI);
         //key = 0;  // Fools! don't let them escape!
       }
+      closeLog();
       return;
     
     //case DELETE:

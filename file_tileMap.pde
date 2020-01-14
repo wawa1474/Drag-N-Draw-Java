@@ -31,6 +31,8 @@ void loadTileMapInfo(){
   ArrayList<File> allFiles = listFilesRecursive(path);//get all the files
   String directory = "";//what is the tile maps directory
 
+  logPrintln("Loading Tile Maps Info", true);
+
   for(File f : allFiles) {//go through all files
     if(f.isDirectory()){//if its a directory
       directory = f.getAbsolutePath();//remember it
@@ -40,6 +42,8 @@ void loadTileMapInfo(){
       loadTileMapInfo(directory, f.getAbsolutePath());//load the tile maps
     }
   }
+  
+  logPrintln("Finished Loading Tile Maps Info", true);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -90,6 +94,7 @@ class tileMap{
     //  }
     //}
     //return null;//gotta do this other wise processing isn't happy
+    logPrintln("User Loaded Tile Map: " + tileMapName, true);
     
     totalImages = this.numImages;
     fullTotalImages = (ceil((float)(this.numImages) / rowLength) * rowLength) - 1;//make sure all tile rows are full
@@ -147,9 +152,11 @@ void loadTileMapInfo(String directory_, String fileLocation_){
                                tileInfoTable.getInt(i,"tileWidth"), tileInfoTable.getInt(i,"tileHeight"),//how many pixels wide and tall are the tiles
                                tileInfoTable.getInt(i,"images"), tileInfoTable.getInt(i,"colortile"),//how many images are there and what is the 'clear' tile
                                tileInfoTable.getString(i,"name")));//what is the tile maps name
+      logPrintln("Found Tile Map: " + tileInfoTable.getString(i,"name"), true);
     }
   }else{//we don't know that file version
     println("File Version Error (Loading).");//throw error
+    logPrintln("Tile Map Version Is Unknown: " + fileVersion, true);
   }
 }
 

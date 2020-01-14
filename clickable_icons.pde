@@ -2,7 +2,6 @@ boolean clickdrag = false;//are we dragging the mouse?
 
 ArrayList<clickableIcon> icons = new ArrayList<clickableIcon>(0);//make the array
 
-//make clickableIcon extend mTile?
 class clickableIcon{//clickableIcon Object
   int x, y;//Store XY Position
   int w, h;//store width and height

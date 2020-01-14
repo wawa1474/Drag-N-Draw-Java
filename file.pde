@@ -57,9 +57,11 @@ void FileCreateSettings(File settingsFile){
   tmpFile = concat(tmpFile, stringToBytes(_magicText));
 
   saveBytes(settingsFile, tmpFile);//save the file
+  logPrintln("Settings File Created", true);
 }
 
 void FileLoadSettings(File settingsFile){//load map from file
+  logPrintln("Loading Settings", true);
   noLoop();//dont allow drawing
   byte[] settingsArray = loadBytes(settingsFile);//temporary array
   
@@ -94,24 +96,31 @@ void FileLoadSettings(File settingsFile){//load map from file
     }
   }else{//we don't know that file version
     println("Settings Version Error (Loading).");//throw error
+    logPrintln("Settings File is Unknown Version: " + fileVersion, true);
   }
   //printArray(keyBinds);
   loop();//allow drawing
+  logPrintln("Settings Loaded", true);
 }//void FileLoadMap() END
 
 void loadAssets(){
   File assetsFolder = new File(programDirectory + "/assets/");
+  logPrintln("Assets Directory is: " + assetsFolder, true);
   if (!assetsFolder.exists()){
     try {
       //assetsFolder.mkdir();
       println("resources not extracted, extracting");
+      logPrintln("Resources Not Extracted, Extracting", true);
       //copyResources(programDir);
       File resourcesZip = new File(programDirectory + "/res.zip");
       copyResources(programDirectory, resourcesZip);
       println("resources extracted");
+      logPrintln("Resources Extracted", true);
     } catch (Exception e) {
       println("Exception caught in Setup");
       println(e);
+      logPrintln("Failed To Extract Resources: " + e, true);
+      closeLog();
       _EXIT_ = true;
       exit();
     }
@@ -129,6 +138,7 @@ void loadSettings(){
   File settingsFile = new File(programDirectory + "/settings.set");
   if(!settingsFile.exists()){
     println("Settings File does not exist, creating it...");
+    logPrintln("Settings File Does Not Exist, Creating It...", true);
     FileCreateSettings(settingsFile);
     keyBinds = defaultKeyBinds;
   }else{
