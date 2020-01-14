@@ -1,9 +1,9 @@
 boolean clickdrag = false;//are we dragging the mouse?
 
-ArrayList<clickableIcon> icons = new ArrayList<clickableIcon>(0);//make the array
+//ArrayList<clickableIcon> icons = new ArrayList<clickableIcon>(0);//make the array
 
 //make clickableIcon extend mTile?
-class clickableIcon{//clickableIcon Object
+class clickableIcon extends mTile{//clickableIcon Object
   int x, y;//Store XY Position
   int w, h;//store width and height
   String file;//store what file to load
@@ -11,42 +11,50 @@ class clickableIcon{//clickableIcon Object
   color borderColor = color(255,0,0);//what color is the border? (red)
   boolean showBorder = true;//do we show the border
   PImage hoverImage = null;
+  
+  clickableIcon(int w_, int h_, String file_, String hoverText_){
+    super();
+    w = w_;
+    h = h_;
+    file = file_;
+    hoverText = hoverText_;
+  }
 
-  clickableIcon(int x_, int y_, String file_, String hoverText_){//clickableIcon Object
-    x = x_;//Store X Position
-    y = y_;//Store Y Position
-    w = scl;
-    h = scl;
-    file = file_;//store what file to load
-    hoverText = hoverText_;//text to show when mouse is hovering over
-  }//public clickableIcon(int x, int y, String file) END
+  //clickableIcon(int x_, int y_, String file_, String hoverText_){//clickableIcon Object
+  //  x = x_;//Store X Position
+  //  y = y_;//Store Y Position
+  //  w = scl;
+  //  h = scl;
+  //  file = file_;//store what file to load
+  //  hoverText = hoverText_;//text to show when mouse is hovering over
+  //}//public clickableIcon(int x, int y, String file) END
   
-  clickableIcon(int x_, int y_, String file_, PImage hoverImage_){//clickableIcon Object
-    x = x_;//Store X Position
-    y = y_;//Store Y Position
-    w = scl;
-    h = scl;
-    file = file_;//store what file to load
-    hoverImage = hoverImage_;//text to show when mouse is hovering over
-  }//public clickableIcon(int x, int y, String file) END
+  //clickableIcon(int x_, int y_, String file_, PImage hoverImage_){//clickableIcon Object
+  //  x = x_;//Store X Position
+  //  y = y_;//Store Y Position
+  //  w = scl;
+  //  h = scl;
+  //  file = file_;//store what file to load
+  //  hoverImage = hoverImage_;//text to show when mouse is hovering over
+  //}//public clickableIcon(int x, int y, String file) END
   
-  clickableIcon(int x_, int y_, int width_, int height_, String file_, String hoverText_){//clickableIcon Object
-    x = x_;//Store X Position
-    y = y_;//Store Y Position
-    w = width_;
-    h = height_;
-    file = file_;//store what file to load
-    hoverText = hoverText_;//text to show when mouse is hovering over
-  }//public clickableIcon(int x, int y, String file) END
+  //clickableIcon(int x_, int y_, int width_, int height_, String file_, String hoverText_){//clickableIcon Object
+  //  x = x_;//Store X Position
+  //  y = y_;//Store Y Position
+  //  w = width_;
+  //  h = height_;
+  //  file = file_;//store what file to load
+  //  hoverText = hoverText_;//text to show when mouse is hovering over
+  //}//public clickableIcon(int x, int y, String file) END
   
-  clickableIcon(int x_, int y_, int width_, int height_, String file_, PImage hoverImage_){//clickableIcon Object
-    x = x_;//Store X Position
-    y = y_;//Store Y Position
-    w = width_;
-    h = height_;
-    file = file_;//store what file to load
-    hoverImage = hoverImage_;//text to show when mouse is hovering over
-  }//public clickableIcon(int x, int y, String file) END
+  //clickableIcon(int x_, int y_, int width_, int height_, String file_, PImage hoverImage_){//clickableIcon Object
+  //  x = x_;//Store X Position
+  //  y = y_;//Store Y Position
+  //  w = width_;
+  //  h = height_;
+  //  file = file_;//store what file to load
+  //  hoverImage = hoverImage_;//text to show when mouse is hovering over
+  //}//public clickableIcon(int x, int y, String file) END
   
   void draw(){//draw the icon
     if(showBorder){

@@ -62,7 +62,7 @@ void setup(){//Setup everything
     
     debug();//run whatever debug option is set
     
-    icons.add(new clickableIcon(scl * 10, scl * 10, "maps/map10.ddj", loadImage("test.png")));
+    //icons.add(new clickableIcon(scl * 10, scl * 10, "maps/map10.ddj", loadImage("test.png")));
   }
 }//void setup() END
 

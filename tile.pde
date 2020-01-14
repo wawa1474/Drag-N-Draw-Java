@@ -18,7 +18,9 @@ class mTile{//Tile Object
   //  //this.lore = lore || 0;//The LORE? of the tile
   //}//public mTile(int x, int y, int image, int r, int g, int b, boolean clear) END
   
-  public mTile(int image_, color tileColor_, boolean colored_){//Tile Object
+  mTile(){}
+  
+  mTile(int image_, color tileColor_, boolean colored_){//Tile Object
     this.image = image_;//Store Image Number
     this.tileColor = tileColor_;
     this.colored = colored_;//Is the tile clear

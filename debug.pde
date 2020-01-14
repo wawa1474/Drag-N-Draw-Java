@@ -10,10 +10,10 @@ void debug(){
   }
   
   if(_DEBUG_ == 1){
-    icons.add(new clickableIcon(scl * 13, scl * 13, "maps/map10.ddj", "TEST"));
-    icons.add(new clickableIcon(scl * 15, scl * 13, "maps/map10-1.ddj", "TEST2"));
-    icons.add(new clickableIcon(scl * 17, scl * 13, "maps/map10-2.ddj", "TEST3"));
-    icons.add(new clickableIcon(scl * 19, scl * 13, "maps/map10-3.ddj", "TEST4"));
-    icons.add(new clickableIcon(scl * 13, scl * 15, scl * 7, scl, "maps/map10-3.ddj", "TEST4"));
+    //icons.add(new clickableIcon(scl * 13, scl * 13, "maps/map10.ddj", "TEST"));
+    //icons.add(new clickableIcon(scl * 15, scl * 13, "maps/map10-1.ddj", "TEST2"));
+    //icons.add(new clickableIcon(scl * 17, scl * 13, "maps/map10-2.ddj", "TEST3"));
+    //icons.add(new clickableIcon(scl * 19, scl * 13, "maps/map10-3.ddj", "TEST4"));
+    //icons.add(new clickableIcon(scl * 13, scl * 15, scl * 7, scl, "maps/map10-3.ddj", "TEST4"));
   }
 }
