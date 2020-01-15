@@ -77,10 +77,10 @@ void placeTile(){//Place a tile at the mouses location
   if(mouseY > (UIBottom/* * scl*/) + fudgeValue && mouseY < height - fudgeValue && mouseX < width - fudgeValue && mouseX > 0 + fudgeValue && checkBounds(mouseTileX, mouseTileY)){//We're not on the UI and we're within the screen bounds
     if(mouseButton == CENTER && !deleting){//We're dragging with the middle button and not deleting
       //.get(x).get(y).add(new mTile(color tile, red, green, blue, tile is clear));
-      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileMaps.get(tileMapShow).colorTile, currentTileColor, false));//Place a colored tile with no image
+      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileMaps.get(tileMapShow).colorTile, currentTileColor.getColor(), false));//Place a colored tile with no image
     }else if(mouseButton == LEFT){//We're dragging with the left button
       //.get(x).get(y).add(new mTile(selected tile image number, red, green, blue, is tile clear?));
-      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileN, currentTileColor, colorTiles));//Place a tile
+      mapTiles.get(mouseTileX).get(mouseTileY).add(new mTile(tileN, currentTileColor.getColor(), colorTiles));//Place a tile
     }else if(mouseButton == RIGHT){//We clicked with the right button
       //do nothing
     }
@@ -261,7 +261,7 @@ class tileColor{
     return color(hue(COLOR), saturation(COLOR), 255);
   }
   
-  color getDiffAlpha(int i_){
+  color getDiffAlpha(float i_){
     return color(red(COLOR), green(COLOR), blue(COLOR), i_);
   }
 }

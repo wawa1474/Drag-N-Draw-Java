@@ -25,7 +25,7 @@ void tileGroup(String button_){//mess with tiles in square group
       }
       
       if(button_ == "left" && !skip){//we clicked left button
-        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileN, currentTileColor, colorTiles));//Place a tile
+        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileN, currentTileColor.getColor(), colorTiles));//Place a tile
       }else if(button_ == "center" && tileGroupDeleting == true && !skip){//we clicked middle button on a tile
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
@@ -35,14 +35,14 @@ void tileGroup(String button_){//mess with tiles in square group
           }
         }
       }else if(button_ == "center" && !skip){//we clicked middle button
-        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileMaps.get(tileMapShow).colorTile, currentTileColor, true));//Place a tile
+        mapTiles.get(X1 + i).get(Y1 + j).add(new mTile(tileMaps.get(tileMapShow).colorTile, currentTileColor.getColor(), true));//Place a tile
       }else if(button_ == "right" && !skip){//we clicked right button
         for(int x = X1; x < X1 + XLines; x++){//go through the selected columns
           for(int y = Y1; y < Y1 + YLines; y++){//go through the selected rows
             if(x == X1 + i && y == Y1 + j){//Are we clicking on the tile
               for(int z = 0; z < mapTiles.get(x).get(y).size(); z++){//go through all the tiles in this space
                 mTile tmp = mapTiles.get(x).get(y).get(0);//grab the tile
-                tmp.tileColor = currentTileColor;
+                tmp.tileColor = currentTileColor.getColor();
                 deleteTile(x, y, 0);//Delete a tile;//delete the old tile
                 mapTiles.get(x).get(y).add(tmp);//and readd it
               }

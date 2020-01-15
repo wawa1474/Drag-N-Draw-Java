@@ -93,7 +93,7 @@ void drawEditorUI(){
   for(int i = 0; i < rowLength && tileImages.length != 0; i++){//Go through all the tiles
     if((rowLength*tileRow)+i <= fullTotalImages){//If tile exists
       if((rowLength*tileRow)+i == tileN){//If displaying selected tile
-        fill(currentTileColor);//Set background color to the RGB value set by user
+        fill(currentTileColor.getColor());//Set background color to the RGB value set by user
         rect(scl*i, scl, scl, scl);//Display color behind the tile
       }
       if(tileImages[(rowLength*tileRow)+i] != null){
@@ -153,8 +153,8 @@ void updateEditorUI(){
   int tmpVal = 150;
 
   if(colorTiles){
-    editor_button_coloredToggle.setLocalColor(4, currentTileColor);
-    editor_button_coloredToggle.setLocalColor(2, color(tmpVal - red(currentTileColor), tmpVal - green(currentTileColor), blue(currentTileColor)));
+    editor_button_coloredToggle.setLocalColor(4, currentTileColor.getColor());
+    editor_button_coloredToggle.setLocalColor(2, color(tmpVal - currentTileColor.getRed(), tmpVal - currentTileColor.getGreen(), currentTileColor.getBlue()));
   }else{
     editor_button_coloredToggle.setLocalColor(4, BLACK);
     editor_button_coloredToggle.setLocalColor(2, WHITE);
@@ -185,7 +185,7 @@ void setupUI(){
   UIControls.addSlider("scrollSlider").setVisible(false).setDecimalPrecision(0).setPosition(editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth(), 0).setSliderMode(Slider.FLEXIBLE).setSize(UIscl * 2, UIscl).setRange(1, 10).setValue(5).setColorBackground(color(50)).setCaptionLabel("");//create Slider
   scrollSlider = UIControls.getController("scrollSlider");//make it easier to use Slider
 
-  UIControls.addColorWheel("colorWheel").setVisible(false).setRGB(currentTileColor).setCaptionLabel("")//create ColorWheel
+  UIControls.addColorWheel("colorWheel").setVisible(false).setRGB(currentTileColor.getColor()).setCaptionLabel("")//create ColorWheel
     .onChange(new CallbackListener(){//when changed
     public void controlEvent(CallbackEvent theEvent){
       if(currentColorSlider == editor_slider_NONE){
@@ -193,14 +193,14 @@ void setupUI(){
       }
       
       if(currentColorSlider == 99){
-        currentTileColor = UIControls.get(ColorWheel.class, "colorWheel").getRGB();
+        currentTileColor.setColor(UIControls.get(ColorWheel.class, "colorWheel").getRGB());
         
-        editor_sliders[editor_slider_red].setValue(red(currentTileColor));
-        editor_sliders[editor_slider_green].setValue(green(currentTileColor));
-        editor_sliders[editor_slider_blue].setValue(blue(currentTileColor));
-        editor_sliders[editor_slider_hue].setValue(hue(currentTileColor));
-        editor_sliders[editor_slider_saturation].setValue(saturation(currentTileColor));
-        editor_sliders[editor_slider_brightness].setValue(brightness(currentTileColor));
+        editor_sliders[editor_slider_red].setValue(currentTileColor.getRed());
+        editor_sliders[editor_slider_green].setValue(currentTileColor.getGreen());
+        editor_sliders[editor_slider_blue].setValue(currentTileColor.getBlue());
+        editor_sliders[editor_slider_hue].setValue(currentTileColor.getHue());
+        editor_sliders[editor_slider_saturation].setValue(currentTileColor.getSaturation());
+        editor_sliders[editor_slider_brightness].setValue(currentTileColor.getBrightness());
         
         //updateSliderBackgrounds();
       }
@@ -285,7 +285,8 @@ void slidersSetVis(boolean vis_){//set visibility for all items on the editors U
 void loadColors(mTile tile_){//Load RGB Sliders and RGB Inputs with value from tile
   if(tile_ != null){
     if(tile_.colored){//----------------------------------------------------------------------------do we want to check this?
-      currentTileColor = tile_.tileColor;
+      currentTileColor.setColor(tile_.tileColor);
+      oldTileColor = null;
     }
   }
 }//void loadColors(int tile) END

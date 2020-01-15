@@ -17,8 +17,9 @@ import java.util.zip.ZipInputStream;
 
 final int UIscl = 32;
 final int scl = 32;//Square Scale
-color currentTileColor = color(0,255,255);
-//tileColor currentTileColor = new tileColor(0, 255, 255);
+//color currentTileColor = color(0,255,255);
+tileColor currentTileColor = new tileColor(0, 255, 255);
+tileColor oldTileColor = currentTileColor;
 
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
@@ -129,7 +130,10 @@ void draw(){//Draw the canvas
       case _EDITORUI_:
         updateEditorUI();//Update the Editors UI
         drawEditorUI();//Draw the Editor UI
-        updateSliderBackgrounds();//figure out how to only update this when the background need to be redrawn
+        if(currentTileColor != oldTileColor){
+          updateColorTools();//figure out how to only update this when the background need to be redrawn
+          oldTileColor = currentTileColor;
+        }
         break;
       
       case _TILENSTYLE_:

@@ -242,12 +242,12 @@ public void createGUI(){
     editor_sliders[i].addEventHandler(this, "editor_HSBSlider_handler");
     editor_colorTools_panel.addControl(editor_sliders[i]);
     switch(i){
-      case editor_slider_red:editor_sliders[i].setValue(red(currentTileColor));
-      case editor_slider_green:editor_sliders[i].setValue(green(currentTileColor));
-      case editor_slider_blue:editor_sliders[i].setValue(blue(currentTileColor));
-      case editor_slider_hue:editor_sliders[i].setValue(hue(currentTileColor));
-      case editor_slider_saturation:editor_sliders[i].setValue(saturation(currentTileColor));
-      case editor_slider_brightness:editor_sliders[i].setValue(brightness(currentTileColor));
+      case editor_slider_red:editor_sliders[i].setValue(currentTileColor.getRed());
+      case editor_slider_green:editor_sliders[i].setValue(currentTileColor.getGreen());
+      case editor_slider_blue:editor_sliders[i].setValue(currentTileColor.getBlue());
+      case editor_slider_hue:editor_sliders[i].setValue(currentTileColor.getHue());
+      case editor_slider_saturation:editor_sliders[i].setValue(currentTileColor.getSaturation());
+      case editor_slider_brightness:editor_sliders[i].setValue(currentTileColor.getBrightness());
     }
   }
   colorMode(RGB, 255);
@@ -328,38 +328,28 @@ public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
   //GEvent.VALUE_STEADY
   colorMode(HSB, 255);
   if(currentColorSlider == editor_slider_hue){
-    currentTileColor = color(editor_sliders[editor_slider_hue].getValueF(),saturation(currentTileColor),brightness(currentTileColor));
+    currentTileColor.setHue(editor_sliders[editor_slider_hue].getValueF());
   }
   if(currentColorSlider == editor_slider_saturation){
-    currentTileColor = color(hue(currentTileColor),editor_sliders[editor_slider_saturation].getValueF(),brightness(currentTileColor));
+
+    currentTileColor.setSaturation(editor_sliders[editor_slider_saturation].getValueF());
   }
   if(currentColorSlider == editor_slider_brightness){
-    currentTileColor = color(hue(currentTileColor),saturation(currentTileColor),editor_sliders[editor_slider_brightness].getValueF());
+
+    currentTileColor.setBrightness(editor_sliders[editor_slider_brightness].getValueF());
   }
   colorMode(RGB, 255);
   
   if(currentColorSlider == editor_slider_red){
-    currentTileColor = color(editor_sliders[editor_slider_red].getValueF(),green(currentTileColor),blue(currentTileColor));
+
+    currentTileColor.setRed(editor_sliders[editor_slider_red].getValueF());
   }
   if(currentColorSlider == editor_slider_green){
-    currentTileColor = color(red(currentTileColor),editor_sliders[editor_slider_green].getValueF(),blue(currentTileColor));
+
+    currentTileColor.setGreen(editor_sliders[editor_slider_green].getValueF());
   }
   if(currentColorSlider == editor_slider_blue){
-    currentTileColor = color(red(currentTileColor),green(currentTileColor),editor_sliders[editor_slider_blue].getValueF());
-  }
-  
-  if(currentColorSlider == editor_slider_hue || currentColorSlider == editor_slider_saturation || currentColorSlider == editor_slider_brightness){
-    editor_sliders[editor_slider_red].setValue(red(currentTileColor));
-    editor_sliders[editor_slider_green].setValue(green(currentTileColor));
-    editor_sliders[editor_slider_blue].setValue(blue(currentTileColor));
-    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
-  }
-  
-  if(currentColorSlider == editor_slider_red || currentColorSlider == editor_slider_green || currentColorSlider == editor_slider_blue){
-    editor_sliders[editor_slider_hue].setValue(hue(currentTileColor));
-    editor_sliders[editor_slider_saturation].setValue(saturation(currentTileColor));
-    editor_sliders[editor_slider_brightness].setValue(brightness(currentTileColor));
-    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
+    currentTileColor.setBlue(editor_sliders[editor_slider_blue].getValueF());
   }
   
   if(currentColorSlider == editor_slider_NONE){
@@ -371,9 +361,10 @@ public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
   }
   
   //updateSliderBackgrounds();
+  oldTileColor = null;
 }
 
-void updateSliderBackgrounds(){
+void updateColorTools(){
   drawRedGradient();
   redLabel.setIcon(tmpGradient, 1, null, null);
   
@@ -393,6 +384,20 @@ void updateSliderBackgrounds(){
   
   drawAlphaGradient();
   alphaLabel.setIcon(tmpGradient, 1, null, null);
+  
+  if(currentColorSlider == editor_slider_red || currentColorSlider == editor_slider_green || currentColorSlider == editor_slider_blue || currentColorSlider == editor_slider_NONE){
+    editor_sliders[editor_slider_hue].setValue(currentTileColor.getHue());
+    editor_sliders[editor_slider_saturation].setValue(currentTileColor.getSaturation());
+    editor_sliders[editor_slider_brightness].setValue(currentTileColor.getBrightness());
+    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor.getColor());
+  }
+  
+  if(currentColorSlider == editor_slider_hue || currentColorSlider == editor_slider_saturation || currentColorSlider == editor_slider_brightness || currentColorSlider == editor_slider_NONE){
+    editor_sliders[editor_slider_red].setValue(currentTileColor.getRed());
+    editor_sliders[editor_slider_green].setValue(currentTileColor.getGreen());
+    editor_sliders[editor_slider_blue].setValue(currentTileColor.getBlue());
+    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor.getColor());
+  }
 }
 
 public void main_menu_button_handler(GImageButton source, GEvent event){
@@ -676,8 +681,10 @@ boolean changeDisplayedMenuBar(int bar_){
 void drawRedGradient(){
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
+  color minRed = currentTileColor.getMinRed();
+  color maxRed = currentTileColor.getMaxRed();
   for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(color(0, green(currentTileColor), blue(currentTileColor)), color(255, green(currentTileColor), blue(currentTileColor)), i));
+    tmpGradient.fill(lerpColor(minRed, maxRed, i));
     tmpGradient.rect((i*100), 0, 2, 16);
   }
   tmpGradient.endDraw();
@@ -686,8 +693,10 @@ void drawRedGradient(){
 void drawGreenGradient(){
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
+  color minGreen = currentTileColor.getMinGreen();
+  color maxGreen = currentTileColor.getMaxGreen();
   for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(color(red(currentTileColor), 0, blue(currentTileColor)), color(red(currentTileColor), 255, blue(currentTileColor)), i));
+    tmpGradient.fill(lerpColor(minGreen, maxGreen, i));
     tmpGradient.rect((i*100), 0, 2, 16);
   }
   tmpGradient.endDraw();
@@ -696,8 +705,10 @@ void drawGreenGradient(){
 void drawBlueGradient(){
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
+  color minBlue = currentTileColor.getMinBlue();
+  color maxBlue = currentTileColor.getMaxBlue();
   for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(color(red(currentTileColor), green(currentTileColor), 0), color(red(currentTileColor), green(currentTileColor), 255), i));
+    tmpGradient.fill(lerpColor(minBlue, maxBlue, i));
     tmpGradient.rect((i*100), 0, 2, 16);
   }
   tmpGradient.endDraw();
@@ -705,8 +716,8 @@ void drawBlueGradient(){
 
 void drawSaturationGradient(){
   colorMode(HSB, 255);
-  color lowSat = color(hue(currentTileColor), 0, brightness(currentTileColor));
-  color highSat = color(hue(currentTileColor), 255, brightness(currentTileColor));
+  color lowSat = currentTileColor.getMinSaturation();
+  color highSat = currentTileColor.getMaxSaturation();
   colorMode(RGB, 255);
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
@@ -719,8 +730,8 @@ void drawSaturationGradient(){
 
 void drawBrightnessGradient(){
   colorMode(HSB, 255);
-  color lowBright = color(hue(currentTileColor), saturation(currentTileColor), 0);
-  color highBright = color(hue(currentTileColor), saturation(currentTileColor), 255);
+  color lowBright = currentTileColor.getMinBrightness();
+  color highBright = currentTileColor.getMaxBrightness();
   colorMode(RGB, 255);
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
@@ -737,7 +748,7 @@ void drawAlphaGradient(){
   tmpGradient.clear();
   tmpGradient.image(alphaBack, 0, 0);
   for(float i = 0; i <= 1; i+=0.020001){
-    tmpGradient.fill(color(red(currentTileColor), green(currentTileColor), blue(currentTileColor), i*255));
+    tmpGradient.fill(currentTileColor.getDiffAlpha(i * 255));
     tmpGradient.rect((i*100), 0, 2, 16);
     //println(i*100);
   }

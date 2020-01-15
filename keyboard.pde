@@ -331,9 +331,9 @@ void keyTyped(){//We typed a key
     }
     
     if(keyHandler(lastKey, keyBinds[keyBind_setBackground])){//"P"
-      backgroundRed = red(currentTileColor);//set red
-      backgroundGreen = green(currentTileColor);//set green
-      backgroundBlue = blue(currentTileColor);//set blue
+      backgroundRed = currentTileColor.getRed();//set red
+      backgroundGreen = currentTileColor.getGreen();//set green
+      backgroundBlue = currentTileColor.getBlue();//set blue
       return;
     }
     
