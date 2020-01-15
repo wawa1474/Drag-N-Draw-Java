@@ -224,7 +224,7 @@ void setupUI(){
 
 void changeUI(int ui_){//change screen
   slidersSetVis(false);
-  changeDisplayedMenuBar(button_menuBar_NONE);
+  changeDisplayedMenuBar(menu_bar_button_NONE);
   altHeld = false;
   ctrlHeld = false;
   shiftHeld = false;

@@ -66,7 +66,7 @@ void keyReleased(){
     case ALT://alt(18)
       altHeld = false;
       if(lastKey == ALT){//alt
-        changeDisplayedMenuBar(button_menuBar_NONE);
+        changeDisplayedMenuBar(menu_bar_button_NONE);
         lastKey = -1;
       }
       break;
@@ -155,7 +155,7 @@ void keyTyped(){//We typed a key
   
   if(currentUI == _EDITORUI_){
     switch(displayedMenuBar){
-      case button_menuBar_file:
+      case menu_bar_button_FILE:
         if(keyHandler(lastKey, "ALT + E")){
           selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
           return;
@@ -183,7 +183,7 @@ void keyTyped(){//We typed a key
           return;
         }
 
-      case button_menuBar_edit:
+      case menu_bar_button_EDIT:
         if(keyHandler(lastKey, "ALT + T")){
           if(tileGroupStep == 2){//we're on step two of group selection
             tileGroupCutCopy('x');//cut group selection
@@ -207,7 +207,7 @@ void keyTyped(){//We typed a key
           return;
         }
 
-      case button_menuBar_view:
+      case menu_bar_button_VIEW:
         break;
     }
     
@@ -245,22 +245,22 @@ void keyTyped(){//We typed a key
     }
     
     if(keyHandler(lastKey, "ALT + F")){
-      changeDisplayedMenuBar(button_menuBar_file);
+      changeDisplayedMenuBar(menu_bar_button_FILE);
       return;
     }
     
     if(keyHandler(lastKey, "ALT + E")){
-      changeDisplayedMenuBar(button_menuBar_edit);
+      changeDisplayedMenuBar(menu_bar_button_EDIT);
       return;
     }
     
     if(keyHandler(lastKey, "ALT + V")){
-      changeDisplayedMenuBar(button_menuBar_view);
+      changeDisplayedMenuBar(menu_bar_button_VIEW);
       return;
     }
   }
   //displayedMenuBar = -1;
-  changeDisplayedMenuBar(button_menuBar_NONE);
+  changeDisplayedMenuBar(menu_bar_button_NONE);
   
   if(noKeyboard == false){//are we blocking keyboard functions?
     if(keyHandler(lastKey, keyBinds[keyBind_colorTiles])){//"F"
