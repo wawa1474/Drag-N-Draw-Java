@@ -94,13 +94,15 @@ GButton tilemap_button_LOADMAP;
 GPanel editor_colorTools_panel;
 int editor_colorTools_panel_Width = UIscl * 11;
 int editor_colorTools_panel_Height = UIscl * 10;
-int currentColorSlider = -1;
-GCustomSlider editor_slider_red;
-GCustomSlider editor_slider_green;
-GCustomSlider editor_slider_blue;
-GCustomSlider editor_slider_hue;
-GCustomSlider editor_slider_saturation;
-GCustomSlider editor_slider_brightness;
+final int editor_slider_NONE = -1;
+final int editor_slider_red = 0;
+final int editor_slider_green = 1;
+final int editor_slider_blue = 2;
+final int editor_slider_hue = 3;
+final int editor_slider_saturation = 4;
+final int editor_slider_brightness = 5;
+GCustomSlider[] editor_sliders;
+int currentColorSlider = editor_slider_NONE;
 
 PImage alphaBack;
 PImage hueBack;
@@ -205,6 +207,7 @@ public void createGUI(){
     menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_buttons[i]);
   }
   
+  
   tilemap_button_panel = new GPanel(this, 0, 0, 1, 1, "");
   tilemap_button_panel.setCollapsible(false);
   tilemap_button_panel.setDraggable(false);
@@ -222,61 +225,38 @@ public void createGUI(){
   tilemap_button_panel.addControl(tilemap_button_LOADTILES);
   tilemap_button_panel.addControl(tilemap_button_LOADMAP);
   
+  
   editor_colorTools_panel = new GPanel(this, UIscl * 16, 0, editor_colorTools_panel_Width, editor_colorTools_panel_Height, "color tools");
   editor_colorTools_panel.addEventHandler(this, "editor_colorTools_panel_handler");
   editor_colorTools_panel.setCollapsed(true);
   
   File customSlider = new File(programDirectory + "/assets/sliders/blank3/");
-  String customSliderPath = customSlider.getAbsolutePath();
-  
-  editor_slider_red = new GCustomSlider(this, 204, 20, 122, 16, customSliderPath);
-  editor_slider_red.setLimits(127, 0, 255);
-  editor_slider_red.addEventHandler(this, "editor_RGBSlider_handler");
-  
-  editor_slider_green = new GCustomSlider(this, 204, 36, 122, 16, customSliderPath);
-  editor_slider_green.setLimits(127, 0, 255);
-  editor_slider_green.addEventHandler(this, "editor_RGBSlider_handler");
-  
-  editor_slider_blue = new GCustomSlider(this, 204, 52, 122, 16, customSliderPath);
-  editor_slider_blue.setLimits(127, 0, 255);
-  editor_slider_blue.addEventHandler(this, "editor_RGBSlider_handler");
-  //1 = ticks, 2 = text color, 3 = thumb/border, 4 = ticks, 5 = surface, 6 = background, 11 = thumb, 14 = thumb, 15 = thumb
-  
-  colorMode(HSB, 255);
-  
-  editor_slider_hue = new GCustomSlider(this, 204, 84, 122, 16, customSliderPath);
-  editor_slider_hue.setLimits(127, 0, 255);
-  editor_slider_hue.addEventHandler(this, "editor_HSBSlider_handler");
-  
-  editor_slider_saturation = new GCustomSlider(this, 204, 100, 122, 16, customSliderPath);
-  editor_slider_saturation.setLimits(127, 0, 255);
-  editor_slider_saturation.addEventHandler(this, "editor_HSBSlider_handler");
-  
-  editor_slider_brightness = new GCustomSlider(this, 204, 116, 122, 16, customSliderPath);
-  editor_slider_brightness.setLimits(127, 0, 255);
-  editor_slider_brightness.addEventHandler(this, "editor_HSBSlider_handler");
-  
+  editor_sliders = new GCustomSlider[editor_slider_brightness + 1];
+  for(int i = 0; i < editor_sliders.length; i++){
+    if(i >= editor_slider_hue){
+      colorMode(HSB, 255);
+    }
+    int tmpY = 20 + (i * 16) + ((i >= editor_slider_hue)?16:0);
+    editor_sliders[i] = new GCustomSlider(this, 204, tmpY, 122, 16, customSlider.getAbsolutePath());
+    editor_sliders[i].setLimits(127, 0, 255);
+    editor_sliders[i].addEventHandler(this, "editor_HSBSlider_handler");
+    editor_colorTools_panel.addControl(editor_sliders[i]);
+    switch(i){
+      case editor_slider_red:editor_sliders[i].setValue(red(currentTileColor));
+      case editor_slider_green:editor_sliders[i].setValue(green(currentTileColor));
+      case editor_slider_blue:editor_sliders[i].setValue(blue(currentTileColor));
+      case editor_slider_hue:editor_sliders[i].setValue(hue(currentTileColor));
+      case editor_slider_saturation:editor_sliders[i].setValue(saturation(currentTileColor));
+      case editor_slider_brightness:editor_sliders[i].setValue(brightness(currentTileColor));
+    }
+  }
   colorMode(RGB, 255);
   
-  editor_slider_red.setValue(red(currentTileColor));
-  editor_slider_green.setValue(green(currentTileColor));
-  editor_slider_blue.setValue(blue(currentTileColor));
-  editor_slider_hue.setValue(hue(currentTileColor));
-  editor_slider_saturation.setValue(saturation(currentTileColor));
-  editor_slider_brightness.setValue(brightness(currentTileColor));
-  
-  editor_colorTools_panel.addControl(editor_slider_red);
-  editor_colorTools_panel.addControl(editor_slider_green);
-  editor_colorTools_panel.addControl(editor_slider_blue);
-  editor_colorTools_panel.addControl(editor_slider_hue);
-  editor_colorTools_panel.addControl(editor_slider_saturation);
-  editor_colorTools_panel.addControl(editor_slider_brightness);
   
   editor_button_coloredToggle = new GButton(this, UIscl * 8, 0, UIscl + 8, UIscl + 1, "Color");
   editor_button_coloredToggle.addEventHandler(this, "editor_button_handler");
   editor_button_changeTileMap = new GButton(this, editor_button_coloredToggle.getX() + editor_button_coloredToggle.getWidth() + UIscl * 2, 0, UIscl * 3 + 16, UIscl + 1, "Change Tile Map");
   editor_button_changeTileMap.addEventHandler(this, "editor_button_handler");
-  
   
   
   tmpGradient = createGraphics(100,16);
@@ -344,73 +324,50 @@ public void editor_colorTools_panel_handler(GPanel source, GEvent event){
   }
 }
 
-public void editor_RGBSlider_handler(GCustomSlider source, GEvent event){
-  //GEvent.VALUE_STEADY
-  //println(event);
-  
-  if(currentColorSlider == 3){
-    currentTileColor = color(editor_slider_red.getValueF(),green(currentTileColor),blue(currentTileColor));
-  }
-  if(currentColorSlider == 4){
-    currentTileColor = color(red(currentTileColor),editor_slider_green.getValueF(),blue(currentTileColor));
-  }
-  if(currentColorSlider == 5){
-    currentTileColor = color(red(currentTileColor),green(currentTileColor),editor_slider_blue.getValueF());
-  }
-  
-  if(currentColorSlider == 3 || currentColorSlider == 4 || currentColorSlider == 5){
-    editor_slider_hue.setValue(hue(currentTileColor));
-    editor_slider_saturation.setValue(saturation(currentTileColor));
-    editor_slider_brightness.setValue(brightness(currentTileColor));
-    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
-  }
-  
-  if(source == editor_slider_red && currentColorSlider == -1){
-    currentColorSlider = 3;
-  }
-  
-  if(source == editor_slider_green && currentColorSlider == -1){
-    currentColorSlider = 4;
-  }
-  
-  if(source == editor_slider_blue && currentColorSlider == -1){
-    currentColorSlider = 5;
-  }
-  
-  //updateSliderBackgrounds();
-}
-
 public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
   //GEvent.VALUE_STEADY
   colorMode(HSB, 255);
-  if(currentColorSlider == 0){
-    currentTileColor = color(editor_slider_hue.getValueF(),saturation(currentTileColor),brightness(currentTileColor));
+  if(currentColorSlider == editor_slider_hue){
+    currentTileColor = color(editor_sliders[editor_slider_hue].getValueF(),saturation(currentTileColor),brightness(currentTileColor));
   }
-  if(currentColorSlider == 1){
-    currentTileColor = color(hue(currentTileColor),editor_slider_saturation.getValueF(),brightness(currentTileColor));
+  if(currentColorSlider == editor_slider_saturation){
+    currentTileColor = color(hue(currentTileColor),editor_sliders[editor_slider_saturation].getValueF(),brightness(currentTileColor));
   }
-  if(currentColorSlider == 2){
-    currentTileColor = color(hue(currentTileColor),saturation(currentTileColor),editor_slider_brightness.getValueF());
+  if(currentColorSlider == editor_slider_brightness){
+    currentTileColor = color(hue(currentTileColor),saturation(currentTileColor),editor_sliders[editor_slider_brightness].getValueF());
   }
   colorMode(RGB, 255);
   
-  if(currentColorSlider == 0 || currentColorSlider == 1 || currentColorSlider == 2){
-    editor_slider_red.setValue(red(currentTileColor));
-    editor_slider_green.setValue(green(currentTileColor));
-    editor_slider_blue.setValue(blue(currentTileColor));
+  if(currentColorSlider == editor_slider_red){
+    currentTileColor = color(editor_sliders[editor_slider_red].getValueF(),green(currentTileColor),blue(currentTileColor));
+  }
+  if(currentColorSlider == editor_slider_green){
+    currentTileColor = color(red(currentTileColor),editor_sliders[editor_slider_green].getValueF(),blue(currentTileColor));
+  }
+  if(currentColorSlider == editor_slider_blue){
+    currentTileColor = color(red(currentTileColor),green(currentTileColor),editor_sliders[editor_slider_blue].getValueF());
+  }
+  
+  if(currentColorSlider == editor_slider_hue || currentColorSlider == editor_slider_saturation || currentColorSlider == editor_slider_brightness){
+    editor_sliders[editor_slider_red].setValue(red(currentTileColor));
+    editor_sliders[editor_slider_green].setValue(green(currentTileColor));
+    editor_sliders[editor_slider_blue].setValue(blue(currentTileColor));
     UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
   }
   
-  if(source == editor_slider_hue && currentColorSlider == -1){
-    currentColorSlider = 0;
+  if(currentColorSlider == editor_slider_red || currentColorSlider == editor_slider_green || currentColorSlider == editor_slider_blue){
+    editor_sliders[editor_slider_hue].setValue(hue(currentTileColor));
+    editor_sliders[editor_slider_saturation].setValue(saturation(currentTileColor));
+    editor_sliders[editor_slider_brightness].setValue(brightness(currentTileColor));
+    UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor);
   }
   
-  if(source == editor_slider_saturation && currentColorSlider == -1){
-    currentColorSlider = 1;
-  }
-  
-  if(source == editor_slider_brightness && currentColorSlider == -1){
-    currentColorSlider = 2;
+  if(currentColorSlider == editor_slider_NONE){
+    for(int i = 0; i < editor_sliders.length; i++){
+      if(source == editor_sliders[i]){
+        currentColorSlider = i;
+      }
+    }
   }
   
   //updateSliderBackgrounds();

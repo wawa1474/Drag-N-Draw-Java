@@ -157,3 +157,111 @@ boolean checkImage(int tile_){//check if tile about to place has same image as t
   }
   return true;//Place tile
 }//boolean checkImage(int tile) END
+
+class tileColor{
+  color COLOR;
+  
+  tileColor(int r_, int g_, int b_){
+    COLOR = color(r_, g_, b_);
+  }
+  
+  void setColor(color c_){
+    COLOR = c_;
+  }
+  
+  void setRed(float r_){
+    COLOR = color(r_,green(COLOR),blue(COLOR));
+  }
+  
+  void setGreen(float g_){
+    COLOR = color(red(COLOR),g_,blue(COLOR));
+  }
+  
+  void setBlue(float b_){
+    COLOR = color(red(COLOR),green(COLOR),b_);
+  }
+  
+  void setHue(float h_){
+    COLOR = color(h_,saturation(COLOR),brightness(COLOR));
+  }
+  
+  void setSaturation(float s_){
+    COLOR = color(hue(COLOR),s_,brightness(COLOR));
+  }
+  
+  void setBrightness(float b_){
+    COLOR = color(hue(COLOR),saturation(COLOR),b_);
+  }
+  
+  color getColor(){
+    return COLOR;
+  }
+  
+  float getRed(){
+    return red(COLOR);
+  }
+  
+  float getGreen(){
+    return green(COLOR);
+  }
+  
+  float getBlue(){
+    return blue(COLOR);
+  }
+  
+  float getHue(){
+    return hue(COLOR);
+  }
+  
+  float getSaturation(){
+    return saturation(COLOR);
+  }
+  
+  float getBrightness(){
+    return brightness(COLOR);
+  }
+  
+  color getMinRed(){
+    return color(0, green(COLOR), blue(COLOR));
+  }
+  
+  color getMaxRed(){
+    return color(255, green(COLOR), blue(COLOR));
+  }
+  
+  color getMinGreen(){
+    return color(red(COLOR), 0, blue(COLOR));
+  }
+  
+  color getMaxGreen(){
+    return color(red(COLOR), 255, blue(COLOR));
+  }
+  
+  color getMinBlue(){
+    return color(red(COLOR), green(COLOR), 0);
+  }
+  
+  color getMaxBlue(){
+    return color(red(COLOR), green(COLOR), 255);
+  }
+  
+  color getMinSaturation(){
+    return color(hue(COLOR), 0, brightness(COLOR));
+  }
+  
+  color getMaxSaturation(){
+    return color(hue(COLOR), 255, brightness(COLOR));
+  }
+  
+  color getMinBrightness(){
+    return color(hue(COLOR), saturation(COLOR), 0);
+  }
+  
+  color getMaxBrightness(){
+    return color(hue(COLOR), saturation(COLOR), 255);
+  }
+  
+  color getDiffAlpha(int i_){
+    return color(red(COLOR), green(COLOR), blue(COLOR), i_);
+  }
+}

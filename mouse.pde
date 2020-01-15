@@ -197,7 +197,7 @@ void mouseDragged(){//We dragged the mouse while holding a button
 //---------------------------------------------------------------------------------------------------------------------------------------
 
 void mouseReleased(){//We released the mouse button
-  currentColorSlider = -1;
+  currentColorSlider = editor_slider_NONE;
 
   switch(currentUI){
     case _TILENSTYLE_:

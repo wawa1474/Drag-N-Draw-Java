@@ -188,19 +188,19 @@ void setupUI(){
   UIControls.addColorWheel("colorWheel").setVisible(false).setRGB(currentTileColor).setCaptionLabel("")//create ColorWheel
     .onChange(new CallbackListener(){//when changed
     public void controlEvent(CallbackEvent theEvent){
-      if(currentColorSlider == -1){
+      if(currentColorSlider == editor_slider_NONE){
         currentColorSlider = 99;
       }
       
       if(currentColorSlider == 99){
         currentTileColor = UIControls.get(ColorWheel.class, "colorWheel").getRGB();
         
-        editor_slider_red.setValue(red(currentTileColor));
-        editor_slider_green.setValue(green(currentTileColor));
-        editor_slider_blue.setValue(blue(currentTileColor));
-        editor_slider_hue.setValue(hue(currentTileColor));
-        editor_slider_saturation.setValue(saturation(currentTileColor));
-        editor_slider_brightness.setValue(brightness(currentTileColor));
+        editor_sliders[editor_slider_red].setValue(red(currentTileColor));
+        editor_sliders[editor_slider_green].setValue(green(currentTileColor));
+        editor_sliders[editor_slider_blue].setValue(blue(currentTileColor));
+        editor_sliders[editor_slider_hue].setValue(hue(currentTileColor));
+        editor_sliders[editor_slider_saturation].setValue(saturation(currentTileColor));
+        editor_sliders[editor_slider_brightness].setValue(brightness(currentTileColor));
         
         //updateSliderBackgrounds();
       }

@@ -18,6 +18,7 @@ import java.util.zip.ZipInputStream;
 final int UIscl = 32;
 final int scl = 32;//Square Scale
 color currentTileColor = color(0,255,255);
+//tileColor currentTileColor = new tileColor(0, 255, 255);
 
 //Drag N' Draw Javascript Started April 9th, 2018 at 11:13:08am
 //Drag N' Draw Java Started August 16, 2018 at ~4:30 PM
