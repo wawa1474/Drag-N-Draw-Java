@@ -37,8 +37,8 @@ File programDirectory;
 boolean _EXIT_ = false;
 
 void setup(){//Setup everything
-  //size(800, 600);
-  fullScreen();
+  size(800, 600);
+  //fullScreen();
   surface.setResizable(true);//allow resizing of the window
   surface.setTitle(_PROGRAM_TITLE_ + " - " + _PROGRAMVERSION_TITLE_);
   noSmooth();//text looks 'nicer'

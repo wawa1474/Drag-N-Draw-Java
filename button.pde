@@ -127,10 +127,7 @@ public void createGUI(){
   G4P.mouseWheelDirection(G4P.REVERSE);
   
   
-  main_menu_button_panel = new GPanel(this, 0, 0, 1, 1, "");
-  main_menu_button_panel.setCollapsible(false);
-  main_menu_button_panel.setDraggable(false);
-  main_menu_button_panel.setOpaque(false);
+  main_menu_button_panel = buildPanel(0, 0, 1, 1, "");
   //main_menu_panel.addEventHandler(this, "main_menu_panel");
   
   File menuButtonsDir = new File(programDirectory + "/assets/buttons/main menu/");
@@ -142,10 +139,7 @@ public void createGUI(){
   }
   
   
-  menu_bar_button_panel = new GPanel(this, 0, 0, 1, 1, "");
-  menu_bar_button_panel.setCollapsible(false);
-  menu_bar_button_panel.setDraggable(false);
-  menu_bar_button_panel.setOpaque(false);
+  menu_bar_button_panel = buildPanel(0, 0, 1, 1, "");
   
   File barButtonsDir = new File(programDirectory + "/assets/buttons/menu bar/");
   menu_bar_buttons = new GImageButton[menu_bar_button_HELP + 1];
@@ -165,10 +159,7 @@ public void createGUI(){
     menu_bar_FILE_dropDown_buttons[i].addEventHandler(this, "menu_bar_FILE_dropDown_button_handler");
   }
   
-  menu_bar_FILE_dropDown_panel = new GPanel(this, 0, menu_bar_buttons[menu_bar_button_FILE].getHeight(), menu_bar_FILE_dropDown_buttons[menu_bar_FILE_dropDown_EXPORT].getX() + menu_bar_FILE_dropDown_buttons[menu_bar_FILE_dropDown_EXPORT].getWidth(), menu_bar_FILE_dropDown_buttons[menu_bar_FILE_dropDown_EXPORT].getY() + menu_bar_FILE_dropDown_buttons[menu_bar_FILE_dropDown_EXPORT].getHeight() + scl, "");
-  menu_bar_FILE_dropDown_panel.setCollapsible(false);
-  menu_bar_FILE_dropDown_panel.setDraggable(false);
-  menu_bar_FILE_dropDown_panel.setOpaque(false);
+  menu_bar_FILE_dropDown_panel = buildPanel(0, menu_bar_buttons[menu_bar_button_FILE].getHeight(), menu_bar_FILE_dropDown_buttons[menu_bar_FILE_dropDown_EXPORT].getX() + menu_bar_FILE_dropDown_buttons[menu_bar_FILE_dropDown_EXPORT].getWidth(), menu_bar_FILE_dropDown_buttons[menu_bar_FILE_dropDown_EXPORT].getY() + menu_bar_FILE_dropDown_buttons[menu_bar_FILE_dropDown_EXPORT].getHeight() + scl, "");
   for(int i = 0; i < menu_bar_buttons.length; i++){
     menu_bar_FILE_dropDown_panel.addControl(menu_bar_FILE_dropDown_buttons[i]);
   }
@@ -182,10 +173,7 @@ public void createGUI(){
     menu_bar_EDIT_dropDown_buttons[i].addEventHandler(this, "menu_bar_EDIT_dropDown_button_handler");
   }
   
-  menu_bar_EDIT_dropDown_panel = new GPanel(this, menu_bar_buttons[menu_bar_button_FILE].getWidth(), menu_bar_buttons[menu_bar_button_EDIT].getHeight(), menu_bar_EDIT_dropDown_buttons[menu_bar_EDIT_dropDown_PASTE].getX() + menu_bar_EDIT_dropDown_buttons[menu_bar_EDIT_dropDown_PASTE].getWidth(), menu_bar_EDIT_dropDown_buttons[menu_bar_EDIT_dropDown_PASTE].getY() + menu_bar_EDIT_dropDown_buttons[menu_bar_EDIT_dropDown_PASTE].getHeight() + scl, "");
-  menu_bar_EDIT_dropDown_panel.setCollapsible(false);
-  menu_bar_EDIT_dropDown_panel.setDraggable(false);
-  menu_bar_EDIT_dropDown_panel.setOpaque(false);
+  menu_bar_EDIT_dropDown_panel = buildPanel(menu_bar_buttons[menu_bar_button_FILE].getWidth(), menu_bar_buttons[menu_bar_button_EDIT].getHeight(), menu_bar_EDIT_dropDown_buttons[menu_bar_EDIT_dropDown_PASTE].getX() + menu_bar_EDIT_dropDown_buttons[menu_bar_EDIT_dropDown_PASTE].getWidth(), menu_bar_EDIT_dropDown_buttons[menu_bar_EDIT_dropDown_PASTE].getY() + menu_bar_EDIT_dropDown_buttons[menu_bar_EDIT_dropDown_PASTE].getHeight() + scl, "");
   for(int i = 0; i < menu_bar_EDIT_dropDown_buttons.length; i++){
     menu_bar_EDIT_dropDown_panel.addControl(menu_bar_EDIT_dropDown_buttons[i]);
   }
@@ -199,19 +187,13 @@ public void createGUI(){
     menu_bar_VIEW_dropDown_buttons[i].addEventHandler(this, "menu_bar_VIEW_dropDown_button_handler");
   }
   
-  menu_bar_VIEW_dropDown_panel = new GPanel(this, menu_bar_buttons[menu_bar_button_FILE].getWidth() + menu_bar_buttons[menu_bar_button_EDIT].getWidth(), menu_bar_buttons[menu_bar_button_VIEW].getHeight(), menu_bar_VIEW_dropDown_buttons[menu_bar_VIEW_dropDown_OPTIONS].getX() + menu_bar_VIEW_dropDown_buttons[menu_bar_VIEW_dropDown_OPTIONS].getWidth(), menu_bar_VIEW_dropDown_buttons[menu_bar_VIEW_dropDown_OPTIONS].getY() + menu_bar_VIEW_dropDown_buttons[menu_bar_VIEW_dropDown_OPTIONS].getHeight() + scl, "");
-  menu_bar_VIEW_dropDown_panel.setCollapsible(false);
-  menu_bar_VIEW_dropDown_panel.setDraggable(false);
-  menu_bar_VIEW_dropDown_panel.setOpaque(false);
+  menu_bar_VIEW_dropDown_panel = buildPanel(menu_bar_buttons[menu_bar_button_FILE].getWidth() + menu_bar_buttons[menu_bar_button_EDIT].getWidth(), menu_bar_buttons[menu_bar_button_VIEW].getHeight(), menu_bar_VIEW_dropDown_buttons[menu_bar_VIEW_dropDown_OPTIONS].getX() + menu_bar_VIEW_dropDown_buttons[menu_bar_VIEW_dropDown_OPTIONS].getWidth(), menu_bar_VIEW_dropDown_buttons[menu_bar_VIEW_dropDown_OPTIONS].getY() + menu_bar_VIEW_dropDown_buttons[menu_bar_VIEW_dropDown_OPTIONS].getHeight() + scl, "");
   for(int i = 0; i < menu_bar_VIEW_dropDown_buttons.length; i++){
     menu_bar_VIEW_dropDown_panel.addControl(menu_bar_VIEW_dropDown_buttons[i]);
   }
   
   
-  tilemap_button_panel = new GPanel(this, 0, 0, 1, 1, "");
-  tilemap_button_panel.setCollapsible(false);
-  tilemap_button_panel.setDraggable(false);
-  tilemap_button_panel.setOpaque(false);
+  tilemap_button_panel = buildPanel(0, 0, 1, 1, "");
   tilemap_button_PREV = new GImageButton(this, 0, 0, new String[] {"assets/buttons/left_arrow_blue.png"});
   tilemap_button_PREV.addEventHandler(this, "tilemap_imageButton_handler");
   tilemap_button_NEXT = new GImageButton(this, UIscl * 2, 0, new String[] {"assets/buttons/right_arrow.png"});
@@ -282,6 +264,14 @@ public void createGUI(){
   editor_colorTools_panel.addControl(alphaLabel);
 }
 
+GPanel buildPanel(float x_, float y_, float w_, float h_, String t_){
+  GPanel tmp = new GPanel(this, x_, y_, w_, h_, t_);
+  tmp.setCollapsible(false);
+  tmp.setDraggable(false);
+  tmp.setOpaque(false);
+  return tmp;
+}
+
 //public void main_menu_panel(GImageButton source, GEvent event) {}
 
 public void editor_button_handler(GButton source, GEvent event){
@@ -331,21 +321,17 @@ public void editor_HSBSlider_handler(GCustomSlider source, GEvent event){
     currentTileColor.setHue(editor_sliders[editor_slider_hue].getValueF());
   }
   if(currentColorSlider == editor_slider_saturation){
-
     currentTileColor.setSaturation(editor_sliders[editor_slider_saturation].getValueF());
   }
   if(currentColorSlider == editor_slider_brightness){
-
     currentTileColor.setBrightness(editor_sliders[editor_slider_brightness].getValueF());
   }
   colorMode(RGB, 255);
   
   if(currentColorSlider == editor_slider_red){
-
     currentTileColor.setRed(editor_sliders[editor_slider_red].getValueF());
   }
   if(currentColorSlider == editor_slider_green){
-
     currentTileColor.setGreen(editor_sliders[editor_slider_green].getValueF());
   }
   if(currentColorSlider == editor_slider_blue){
@@ -398,6 +384,14 @@ void updateColorTools(){
     editor_sliders[editor_slider_blue].setValue(currentTileColor.getBlue());
     UIControls.get(ColorWheel.class,"colorWheel").setRGB(currentTileColor.getColor());
   }
+  
+  updateTextFields();
+}
+
+void updateTextFields(){
+  UIControls.get(Textfield.class,"colorInputR").setText(splitTokens(str(currentTileColor.getRed()),".")[0]);
+  UIControls.get(Textfield.class,"colorInputG").setText(splitTokens(str(currentTileColor.getGreen()),".")[0]);
+  UIControls.get(Textfield.class,"colorInputB").setText(splitTokens(str(currentTileColor.getBlue()),".")[0]);
 }
 
 public void main_menu_button_handler(GImageButton source, GEvent event){
@@ -679,64 +673,30 @@ boolean changeDisplayedMenuBar(int bar_){
 }
 
 void drawRedGradient(){
-  tmpGradient.beginDraw();
-  tmpGradient.noStroke();
-  color minRed = currentTileColor.getMinRed();
-  color maxRed = currentTileColor.getMaxRed();
-  for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(minRed, maxRed, i));
-    tmpGradient.rect((i*100), 0, 2, 16);
-  }
-  tmpGradient.endDraw();
+  updateGradient(currentTileColor.getMinRed(), currentTileColor.getMaxRed());
 }
 
 void drawGreenGradient(){
-  tmpGradient.beginDraw();
-  tmpGradient.noStroke();
-  color minGreen = currentTileColor.getMinGreen();
-  color maxGreen = currentTileColor.getMaxGreen();
-  for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(minGreen, maxGreen, i));
-    tmpGradient.rect((i*100), 0, 2, 16);
-  }
-  tmpGradient.endDraw();
+  updateGradient(currentTileColor.getMinGreen(), currentTileColor.getMaxGreen());
 }
 
 void drawBlueGradient(){
-  tmpGradient.beginDraw();
-  tmpGradient.noStroke();
-  color minBlue = currentTileColor.getMinBlue();
-  color maxBlue = currentTileColor.getMaxBlue();
-  for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(minBlue, maxBlue, i));
-    tmpGradient.rect((i*100), 0, 2, 16);
-  }
-  tmpGradient.endDraw();
+  updateGradient(currentTileColor.getMinBlue(), currentTileColor.getMaxBlue());
 }
 
 void drawSaturationGradient(){
-  colorMode(HSB, 255);
-  color lowSat = currentTileColor.getMinSaturation();
-  color highSat = currentTileColor.getMaxSaturation();
-  colorMode(RGB, 255);
-  tmpGradient.beginDraw();
-  tmpGradient.noStroke();
-  for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(lowSat, highSat, i));
-    tmpGradient.rect((i*100), 0, 2, 16);
-  }
-  tmpGradient.endDraw();
+  updateGradient(currentTileColor.getMinSaturation(), currentTileColor.getMaxSaturation());
 }
 
 void drawBrightnessGradient(){
-  colorMode(HSB, 255);
-  color lowBright = currentTileColor.getMinBrightness();
-  color highBright = currentTileColor.getMaxBrightness();
-  colorMode(RGB, 255);
+  updateGradient(currentTileColor.getMinBrightness(), currentTileColor.getMaxBrightness());
+}
+
+void updateGradient(color min_, color max_){
   tmpGradient.beginDraw();
   tmpGradient.noStroke();
   for(float i = 0; i <= 1; i+=0.02){
-    tmpGradient.fill(lerpColor(lowBright, highBright, i));
+    tmpGradient.fill(lerpColor(min_, max_, i));
     tmpGradient.rect((i*100), 0, 2, 16);
   }
   tmpGradient.endDraw();

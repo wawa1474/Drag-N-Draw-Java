@@ -246,19 +246,31 @@ class tileColor{
   }
   
   color getMinSaturation(){
-    return color(hue(COLOR), 0, brightness(COLOR));
+    colorMode(HSB);
+    color tmp = color(hue(COLOR), 0, brightness(COLOR));
+    colorMode(RGB);
+    return tmp;
   }
   
   color getMaxSaturation(){
-    return color(hue(COLOR), 255, brightness(COLOR));
+    colorMode(HSB);
+    color tmp = color(hue(COLOR), 255, brightness(COLOR));
+    colorMode(RGB);
+    return tmp;
   }
   
   color getMinBrightness(){
-    return color(hue(COLOR), saturation(COLOR), 0);
+    colorMode(HSB);
+    color tmp = color(hue(COLOR), saturation(COLOR), 0);
+    colorMode(RGB);
+    return tmp;
   }
   
   color getMaxBrightness(){
-    return color(hue(COLOR), saturation(COLOR), 255);
+    colorMode(HSB);
+    color tmp = color(hue(COLOR), saturation(COLOR), 255);
+    colorMode(RGB);
+    return tmp;
   }
   
   color getDiffAlpha(float i_){
