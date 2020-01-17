@@ -224,12 +224,29 @@ public void createGUI(){
     editor_sliders[i].addEventHandler(this, "editor_HSBSlider_handler");
     editor_colorTools_panel.addControl(editor_sliders[i]);
     switch(i){
-      case editor_slider_red:editor_sliders[i].setValue(currentTileColor.getRed());
-      case editor_slider_green:editor_sliders[i].setValue(currentTileColor.getGreen());
-      case editor_slider_blue:editor_sliders[i].setValue(currentTileColor.getBlue());
-      case editor_slider_hue:editor_sliders[i].setValue(currentTileColor.getHue());
-      case editor_slider_saturation:editor_sliders[i].setValue(currentTileColor.getSaturation());
-      case editor_slider_brightness:editor_sliders[i].setValue(currentTileColor.getBrightness());
+      case editor_slider_red:
+        editor_sliders[i].setValue(currentTileColor.getRed());
+        break;
+      
+      case editor_slider_green:
+        editor_sliders[i].setValue(currentTileColor.getGreen());
+        break;
+      
+      case editor_slider_blue:
+        editor_sliders[i].setValue(currentTileColor.getBlue());
+        break;
+      
+      case editor_slider_hue:
+        editor_sliders[i].setValue(currentTileColor.getHue());
+        break;
+      
+      case editor_slider_saturation:
+        editor_sliders[i].setValue(currentTileColor.getSaturation());
+        break;
+      
+      case editor_slider_brightness:
+        editor_sliders[i].setValue(currentTileColor.getBrightness());
+        break;
     }
   }
   colorMode(RGB, 255);

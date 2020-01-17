@@ -211,6 +211,11 @@ void keyTyped(){//We typed a key
         break;
     }
     
+    //if(keyHandler(lastKey, "CTRL + q")){//"CTRL + ;"
+    //  println(drawnTiles);
+    //  return;
+    //}
+    
     if(keyHandler(lastKey, keyBinds[keyBind_exportCanvas])){//"CTRL + SHIFT + E"
       selectOutput("Select a PNG to write to:", "FileSaveCanvasSelect");//canvas save dialog
       shiftHeld = false;

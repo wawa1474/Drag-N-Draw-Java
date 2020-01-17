@@ -138,20 +138,21 @@ void drawGroupPasteOutline(){//Draw Red Outline Showing Amount Of Tiles To Be Pl
   X2 = X1 + (tileGroupCols * scl);
   Y2 = Y1 + (tileGroupRows * scl);
   
-  for(int i = 0; i < tileGroupCols; i++){//loop through all columns
-    for(int j = 0; j < tileGroupRows; j++){//loop through all rows
-      boolean skip = false;//do we skip drawing the rest of the tiles in this spot?
-      for(int z = mapTilesCopy.get(i).get(j).size() - tileDepth; z < mapTilesCopy.get(i).get(j).size() && !skip; z++){//loop through all drawn tiles in this xy position
-        if(z >= 0){//if there's a tile to be drawn
-          mapTilesCopy.get(i).get(j).get(z).draw((i * scl) + X1, (j * scl) + Y1);//draw it
-          drawnTiles++;//how many tiles are being drawn?
-          if(mapTilesCopy.get(i).get(j).get(z).colored){//if there's a non-clear tile thats not at the bottom
-            skip = true;//don't draw anything below it
-          }
-        }
-      }
-    }
-  }
+  //for(int i = 0; i < tileGroupCols; i++){//loop through all columns
+  //  for(int j = 0; j < tileGroupRows; j++){//loop through all rows
+  //    boolean skip = false;//do we skip drawing the rest of the tiles in this spot?
+  //    for(int z = mapTilesCopy.get(i).get(j).size() - tileDepth; z < mapTilesCopy.get(i).get(j).size() && !skip; z++){//loop through all drawn tiles in this xy position
+  //      if(z >= 0){//if there's a tile to be drawn
+  //        mapTilesCopy.get(i).get(j).get(z).draw((i * scl) + X1, (j * scl) + Y1);//draw it
+  //        drawnTiles++;//how many tiles are being drawn?
+  //        //if(mapTilesCopy.get(i).get(j).get(z).colored){//if there's a non-clear tile thats not at the bottom
+  //        //  skip = true;//don't draw anything below it
+  //        //}
+  //      }
+  //    }
+  //  }
+  //}
+  drawTiles(mapTilesCopy, 0, 0, tileGroupCols, tileGroupRows, X1, Y1);
   
   strokeWeight(borderThickness);//Thicker
   stroke(255,0,0);//RED
